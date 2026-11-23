@@ -46,6 +46,25 @@ RSpec.describe Api::V0::ApiController, :clean_db_with_truncation do
     end
   end
 
+  describe 'GET #incidents_search' do
+    let!(:resolved_incident) { create(:incident, :resolved) }
+    let!(:pending_incident) { create(:incident) }
+
+    before { Rails.cache.delete_matched 'search/Incident*' }
+
+    it "finds only resolved incidents" do
+      get :incidents_search, params: { q: "Incident" }
+      expect(response.parsed_body["result"].pluck("id")).to contain_exactly(resolved_incident.id)
+    end
+
+    it "finds pending incidents for incident managers" do
+      sign_in create(:user, :wrc_member)
+
+      get :incidents_search, params: { q: "Incident" }
+      expect(response.parsed_body["result"].pluck("id")).to contain_exactly(resolved_incident.id, pending_incident.id)
+    end
+  end
+
   describe 'GET #users_search' do
     before :each do
       # We cache search results, which is a very good thing in production because we have an Omnisearch bar.

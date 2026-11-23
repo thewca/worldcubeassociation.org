@@ -134,6 +134,15 @@ variable "shared" {
     })
     next_url: string
     account_id: string
+    redis_subnet_group: object({
+      name: string
+    })
+    valkey_cache_parameter_group: object({
+      name: string
+    })
+    valkey_sidekiq_parameter_group: object({
+      name: string
+    })
     # These are booth arrays
     private_subnets: any
     rails-production: any

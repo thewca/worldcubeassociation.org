@@ -4,10 +4,7 @@ import Link from "next/link";
 import {
   Badge,
   Box,
-  CloseButton,
   Collapsible,
-  Drawer,
-  IconButton,
   Link as ChakraLink,
   Separator,
   Tabs,
@@ -25,26 +22,24 @@ import {
 } from "@/lib/wca/competitions/tabs";
 import { useState } from "react";
 import { TFunction } from "i18next";
-import { LuAlignJustify, LuArrowLeft } from "react-icons/lu";
+import { LuArrowLeft } from "react-icons/lu";
 import type { RouteLiteral } from "nextjs-routes";
 import IconDisplay from "@/components/IconDisplay";
 import TabTarget from "@/components/ui/tabTarget";
 import { route } from "nextjs-routes";
 import { Tooltip } from "@/components/ui/tooltip";
 
-function activityCodeFromPath(path: string) {
+export function activityCodeFromPath(path: string) {
   // Matches the eventId out of the path
   return path.match(/^([a-z0-9_]+)(?:-|$)/)?.[1] ?? null;
 }
 
 export default function TabMenu({
   competitionInfo,
-  children,
   tabs,
   backHref,
   customTabs = [],
 }: {
-  children: React.ReactNode;
   competitionInfo: components["schemas"]["CompetitionInfo"];
   tabs: CompetitionNavTab[];
   backHref?: RouteLiteral;
@@ -60,23 +55,9 @@ export default function TabMenu({
   const eventId = activityCodeFromPath(currentPath!);
 
   const [openGroup, setOpenGroup] = useState<string | null>(eventId);
-  // The drawer stays open only while the route it was opened on is still current, so any
-  //   navigation closes it. Until tab navigation became client-side the page reload did that
-  //   for us; hanging an onClick on the links instead would mean threading a callback three
-  //   components down, past two `asChild` merges that are known to drop handlers.
-  const [drawerOpenedAt, setDrawerOpenedAt] = useState<string | null>(null);
-  const drawerOpen = drawerOpenedAt === pathName;
 
   return (
-    <Tabs.Root
-      variant="enclosed"
-      width="full"
-      value={currentPath}
-      orientation="vertical"
-      sideNav
-      lazyMount
-      unmountOnExit
-    >
+    <>
       <Tabs.List
         width="fit-content"
         minW="3xs"
@@ -105,82 +86,7 @@ export default function TabMenu({
           currentPath={currentPath}
         />
       </Tabs.List>
-      <Box hideFrom="md">
-        <Drawer.Root
-          open={drawerOpen}
-          onOpenChange={(e) => setDrawerOpenedAt(e.open ? pathName : null)}
-          placement="start"
-        >
-          <Drawer.Trigger asChild>
-            <IconButton
-              aria-label="Open menu"
-              colorPalette="blue"
-              size="xl"
-              position="fixed"
-              insetEnd="4"
-              bottom="4"
-              zIndex="docked"
-              rounded="full"
-              shadow="lg"
-            >
-              <LuAlignJustify />
-            </IconButton>
-          </Drawer.Trigger>
-
-          <Drawer.Backdrop />
-          <Drawer.Positioner>
-            <Drawer.Content>
-              <Drawer.Header>
-                <Drawer.Title>
-                  {backHref ? (
-                    <BackLink
-                      href={backHref}
-                      label={competitionInfo.name}
-                      onClick={() => setDrawerOpenedAt(null)}
-                    />
-                  ) : (
-                    competitionInfo.name
-                  )}
-                </Drawer.Title>
-                <Drawer.CloseTrigger asChild>
-                  <CloseButton />
-                </Drawer.CloseTrigger>
-              </Drawer.Header>
-
-              <Drawer.Body>
-                <Tabs.List
-                  flexDirection="column"
-                  gap="1"
-                  borderInlineEnd="none"
-                  w="100%"
-                  bg="none"
-                >
-                  <TabList
-                    tabs={tabs}
-                    t={t}
-                    isAdminRoute={isAdminRoute}
-                    openGroup={openGroup}
-                    onToggle={(tab: CompetitionNavTab) =>
-                      setOpenGroup((prev) =>
-                        prev === tab.menuKey ? null : tab.menuKey,
-                      )
-                    }
-                    customTabs={customTabs}
-                    competitionId={competitionInfo.id}
-                    currentPath={currentPath}
-                  />
-                </Tabs.List>
-              </Drawer.Body>
-            </Drawer.Content>
-          </Drawer.Positioner>
-        </Drawer.Root>
-      </Box>
-      {/* Tabs.Content is a flex item, which has `min-width: auto`.
-       It will grow as wide as the table if not set to 0 so the Table scrolling will never trigger */}
-      <Tabs.Content width="full" minWidth="0" value={currentPath!}>
-        {children}
-      </Tabs.Content>
-    </Tabs.Root>
+    </>
   );
 }
 
@@ -285,6 +191,22 @@ function BackLink({
   );
 }
 
+export const renderLabel = (
+  renderTab: CompetitionNavTab,
+  t: TFunction,
+  isAdminRoute: boolean,
+) =>
+  // i18n-tasks-use t('competitions.nav.general')
+  // i18n-tasks-use t('competitions.nav.more')
+  // i18n-tasks-use t('competitions.nav.admin')
+  // i18n-tasks-use t('competitions.nav.results')
+  // i18n-tasks-use t('competitions.nav.events')
+  t(
+    isAdminRoute && renderTab.i18nKeyAdmin
+      ? renderTab.i18nKeyAdmin
+      : renderTab.i18nKey,
+  );
+
 function TabLink({
   tab,
   t,
@@ -296,13 +218,6 @@ function TabLink({
   isAdminRoute: boolean;
   currentPath?: string;
 }) {
-  const renderLabel = (renderTab: TabWithLink) =>
-    t(
-      isAdminRoute && renderTab.i18nKeyAdmin
-        ? renderTab.i18nKeyAdmin
-        : renderTab.i18nKey,
-    );
-
   const trigger = (
     <Tabs.Trigger
       value={tab.menuKey}
@@ -320,7 +235,7 @@ function TabLink({
           textStyle="bodyEmphasis"
         >
           {tab.icon !== undefined && <IconDisplay name={tab.icon} />}
-          {renderLabel(tab)}
+          {renderLabel(tab, t, isAdminRoute)}
         </ChakraLink>
       ) : (
         <TabTarget
@@ -331,7 +246,7 @@ function TabLink({
           textStyle="bodyEmphasis"
         >
           {tab.icon !== undefined && <IconDisplay name={tab.icon} />}
-          {renderLabel(tab)}
+          {renderLabel(tab, t, isAdminRoute)}
         </TabTarget>
       )}
     </Tabs.Trigger>

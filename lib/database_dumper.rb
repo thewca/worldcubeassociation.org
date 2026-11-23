@@ -389,6 +389,7 @@ module DatabaseDumper
           fee_lowest_denomination
           qualification
           qualification_latest_date
+          qualification_earliest_date
           qualification_condition
         ],
       ),

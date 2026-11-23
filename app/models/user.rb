@@ -527,6 +527,10 @@ class User < ApplicationRecord
     had_birthday_this_year ? years_since_birth_year : years_since_birth_year - 1
   end
 
+  def minor?
+    age.present? && age < 18
+  end
+
   def below_forum_age_requirement?
     (Date.today - FORUM_AGE_REQUIREMENT.years) < dob
   end
@@ -872,6 +876,9 @@ class User < ApplicationRecord
       },
       can_access_cms: {
         scope: can_access_cms? ? "*" : [],
+      },
+      can_see_admin_competitions: {
+        scope: can_see_admin_competitions? ? "*" : [],
       },
     }
     if banned?
@@ -1373,7 +1380,7 @@ class User < ApplicationRecord
     end
   end
 
-  private def deprecated_team_roles
+  def team_roles
     # Reuse the already-loaded association (with its metadata/group preloaded) when the
     # caller eager loaded it; otherwise build the query with the includes we need. Calling
     # `.includes` unconditionally would discard any preloaded `active_roles` and re-query.
@@ -1388,7 +1395,10 @@ class User < ApplicationRecord
         ].include?(role.group_type)
       end
       .reject { |role| role.group.is_hidden }
-      .map(&:deprecated_team_role)
+  end
+
+  private def deprecated_team_roles
+    team_roles.map(&:deprecated_team_role)
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

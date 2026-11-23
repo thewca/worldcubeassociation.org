@@ -2,12 +2,12 @@ import { GlobalConfig } from "payload";
 import { markdownConvertedField } from "@/collections/helpers";
 import { colorPaletteSelect } from "@/blocks/utils";
 import { revalidateGlobal } from "@/globals/revalidateGlobal";
-import { marketingTeamAccess } from "@/payload.access";
+import { assistantsTeamAccess } from "@/payload.access";
 
 export const ExecutivesPage: GlobalConfig = {
   slug: "executives-page",
   access: {
-    update: marketingTeamAccess,
+    update: assistantsTeamAccess,
   },
   label: "Executives Page",
   fields: [

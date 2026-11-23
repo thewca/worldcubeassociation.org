@@ -2280,6 +2280,16 @@ it:
       no_delegates_found: Nessun Delegato trovato.
       show_cancelled: Mostra competizioni cancellate
       championship_only: Mostra solo campionati
+      sort:
+        order: Ordina per
+        start_date_asc: "Data di inizio: crescente"
+        start_date_desc: "Data di inizio: decrescente"
+        end_date_asc: "Data di fine: crescente"
+        end_date_desc: "Data di fine: decrescente"
+        announced_at_asc: "Data di annuncio: crescente"
+        announced_at_desc: "Data di annuncio: decrescente"
+        name_asc: "Nome: A-Z"
+        name_desc: "Nome: Z-A"
       show_registration_status: Mostra icona status iscrizioni
       use_admin_view: Usa vista amministratore
       titles:
@@ -2329,10 +2339,6 @@ it:
         open: Aperte
         not_open: Non ancora aperte
         closed: Chiuse
-      currently_displaying:
-        one: 'Attualmente visualizzata: %{count} competizione'
-        many: 'Attualmente visualizzate: %{count} competizioni'
-        other: 'Attualmente visualizzate: %{count} competizioni'
       register_now: Iscriviti ora
       view_competition: Vedi competizione
       why_compete_description_html: |-
@@ -3309,12 +3315,12 @@ it:
         register: Registrati
         competitors: Partecipanti
         scrambles: Scramble
+      general: "Generale"
+      more: "Di più"
+      admin: "Admin"
+      results: "Risultati"
+      events: "Eventi"
     results_table:
-      h2h_results_disclaimer: >-
-        I risultati sono stati determinati tramite una finale testa a testa.
-        Sono riportati solo l'ordine di piazzamento e il miglior tempo. La
-        visualizzazione completa dei risultati testa a testa è ancora in fase di
-        sviluppo.
       wca_profile: Profilo WCA
       event: Evento
       round: Turno

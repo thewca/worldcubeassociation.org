@@ -11,7 +11,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Get recent and future competitions using internal live results, grouped by status */
+        /** Get recent and future competitions using Integrated Live Results, grouped by status */
         get: operations["getLiveCompetitions"];
         put?: never;
         post?: never;
@@ -143,6 +143,28 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/registrations/{registrationId}/payment_ticket": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Open a payment intent for a registration
+         * @description Creates a payment intent with the competition's payment provider and hands back the client
+         *     secret needed to confirm it from the browser. The amount charged is the registration's entry
+         *     fee plus the donation asked for here - the client does not get to name a price.
+         */
+        get: operations["registrationPaymentTicket"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/competitions/{competitionId}/results": {
         parameters: {
             query?: never;
@@ -175,6 +197,23 @@ export interface paths {
          * @description The first three placed competitors of every event, by `global_pos`. Public: no authentication required. Returns an empty array while results have not been posted.
          */
         get: operations["v1CompetitionPodiums"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/competitions/{competitionId}/head-to-head": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Returns head-to-head matches for all head-to-head rounds */
+        get: operations["headToHeadByCompetition"];
         put?: never;
         post?: never;
         delete?: never;
@@ -546,6 +585,26 @@ export interface paths {
         };
         /** Gets Information about the Competitors's live result */
         get: operations["liveByPerson"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/persons/{wca_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get information for a person
+         * @description The person's profile: their public details, personal records, medal and record counts, and championship podiums. Public: no authentication required.
+         */
+        get: operations["v1PersonInfo"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1210,6 +1269,11 @@ export interface components {
             base_entry_fee_lowest_denomination: number;
             /** @example USD */
             currency_code: string;
+            /**
+             * @description How many of the currency's lowest denomination make up one unit
+             * @example 100
+             */
+            currency_subunit_to_unit: number;
             competitor_limit: number | null;
             championship_types: string[];
             /** Format: date-time */
@@ -1253,6 +1317,7 @@ export interface components {
                 payment_status?: string;
                 paid_amount_iso: number;
                 currency_code: string;
+                currency_subunit_to_unit: number;
                 /** Format: datetime */
                 updated_at?: string;
             };
@@ -1451,6 +1516,37 @@ export interface components {
             /** @description The competitors placed first to third by `global_pos`, ties included, so this can hold more or fewer than three results. `pos` is the position within whichever round holds the competitor's better result and does not order this list. */
             results: components["schemas"]["V1RoundResult"][];
         };
+        H2hMatchCompetitor: {
+            user_id: number;
+            name: string;
+            wca_id: string | null;
+            country_iso2: string;
+            final_pos: number | null;
+        };
+        H2hAttempt: {
+            user_id: number;
+            set_attempt_number: number;
+            value: number | null;
+        };
+        H2hSet: {
+            set_number: number;
+            attempts: components["schemas"]["H2hAttempt"][];
+        };
+        H2hMatch: {
+            /** @example 1 */
+            match_number: number;
+            competitors: components["schemas"]["H2hMatchCompetitor"][];
+            sets: components["schemas"]["H2hSet"][];
+        };
+        H2hRound: {
+            /** @example 333-r1 */
+            wcif_id: string;
+            /** @example 333 */
+            event_id: string;
+            /** @example f */
+            round_type_id: string;
+            matches: components["schemas"]["H2hMatch"][];
+        };
         Scoretaker: {
             user_id: number;
             name: string;
@@ -1646,6 +1742,40 @@ export interface components {
         LivePerson: components["schemas"]["WcifPerson"] & {
             results: components["schemas"]["ByPersonLiveResult"][];
         };
+        /** @description A team, committee or council that the person is currently a part of (including the WCA Board). */
+        V1TeamMembership: {
+            /** @example wst */
+            friendly_id: string;
+            /**
+             * @description Null for the board, which has no ranks among its members.
+             * @example senior_member
+             * @enum {string|null}
+             */
+            status: "leader" | "senior_member" | "member" | null;
+        };
+        /** @description The person's best result in an event and where it places them in the rankings. */
+        V1Rank: {
+            /** @example 452 */
+            best: number;
+            /** @example 12 */
+            world_rank: number;
+            /** @example 3 */
+            continent_rank: number;
+            /** @example 1 */
+            country_rank: number;
+        };
+        Medals: {
+            gold: number;
+            silver: number;
+            bronze: number;
+            total: number;
+        };
+        Records: {
+            national: number;
+            continental: number;
+            world: number;
+            total: number;
+        };
         V1Result: components["schemas"]["V1RoundResult"] & {
             /** @example HangzhouOpen2024 */
             competition_id: string;
@@ -1666,6 +1796,66 @@ export interface components {
             /** @example a */
             format_id: string;
             ranking_mode: components["schemas"]["RankingMode"];
+        };
+        /** @description The person's podium finishes at championships, by championship level. Positions are recomputed among the competitors eligible for that championship, so they can differ from the position in the round. A level the person never podiumed at is an empty array. */
+        V1ChampionshipPodiums: {
+            world: components["schemas"]["V1Result"][];
+            continental: components["schemas"]["V1Result"][];
+            national: components["schemas"]["V1Result"][];
+            greater_china: components["schemas"]["V1Result"][];
+        };
+        /** @description General information about a person, along with a summary of their results. */
+        V1PersonInfo: {
+            /** @example 2005REYN01 */
+            wca_id: string;
+            /** @example Tim Reynolds */
+            name: string;
+            /** @example m */
+            gender: string;
+            /** @example US */
+            country_iso2: string;
+            /**
+             * @description Null for a person who is not a delegate, or who has no WCA account at all.
+             * @example delegate
+             */
+            delegate_status: string | null;
+            teams: components["schemas"]["V1TeamMembership"][];
+            /**
+             * Format: uri
+             * @example https://www.worldcubeassociation.org/persons/2005REYN01
+             */
+            url: string;
+            avatar: components["schemas"]["UserAvatar"];
+            /** @example 42 */
+            competition_count: number;
+            /**
+             * @description Every event the person has a result in, including events they never had a successful solve in, ordered by event rank.
+             * @example [
+             *       "333",
+             *       "222",
+             *       "444"
+             *     ]
+             */
+            event_ids_with_results: string[];
+            /** @description The person's ranks in official events, keyed by event id. An event the person has no single for is absent. */
+            ranks_by_event: {
+                [key: string]: {
+                    single: components["schemas"]["V1Rank"];
+                    average?: components["schemas"]["V1Rank"];
+                };
+            };
+            medals: components["schemas"]["Medals"];
+            records: components["schemas"]["Records"];
+            /** @example 1337 */
+            completed_solves_count: number;
+            championship_podium_results: components["schemas"]["V1ChampionshipPodiums"];
+            /** @description The names and regions the person competed under before their current ones, most recent first. */
+            previous_persons: {
+                /** @example Tim Reynolds */
+                name: string;
+                /** @example CA */
+                country_iso2: string;
+            }[];
         };
         V1Results: components["schemas"]["V1Result"][];
         GeocodedLocation: {
@@ -1756,6 +1946,11 @@ export interface components {
             base_entry_fee_lowest_denomination: number;
             /** @example USD */
             currency_code: string;
+            /**
+             * @description How many of the currency's lowest denomination make up one unit
+             * @example 100
+             */
+            currency_subunit_to_unit: number;
             /**
              * Format: date
              * @example 2025-07-03
@@ -1860,6 +2055,12 @@ export interface components {
                 id: number;
                 name: string;
             }[];
+            /**
+             * @example [
+             *       "333-r1"
+             *     ]
+             */
+            h2h_rounds?: string[];
             delegates: components["schemas"]["Person"][];
             organizers: components["schemas"]["Organizer"][];
         };
@@ -2191,18 +2392,6 @@ export interface components {
             continent_rank: number;
             country_rank: number;
         };
-        Medals: {
-            gold: number;
-            silver: number;
-            bronze: number;
-            total: number;
-        };
-        Records: {
-            national: number;
-            continental: number;
-            world: number;
-            total: number;
-        };
         SingleAndAverageRank: {
             average: components["schemas"]["Rank"];
             single: components["schemas"]["Rank"];
@@ -2332,6 +2521,9 @@ export interface components {
                 scope: components["schemas"]["CompetitionPermissions"];
             };
             can_access_cms: {
+                scope: components["schemas"]["CompetitionPermissions"];
+            };
+            can_see_admin_competitions: {
                 scope: components["schemas"]["CompetitionPermissions"];
             };
             can_request_to_edit_others_profile: {
@@ -2675,6 +2867,35 @@ export interface operations {
             400: components["responses"]["RegistrationError"];
         };
     };
+    registrationPaymentTicket: {
+        parameters: {
+            query?: {
+                /** @description Optional donation on top of the entry fee, in the currency's lowest denomination */
+                iso_donation_amount?: number;
+            };
+            header?: never;
+            path: {
+                registrationId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @description The provider-issued secret that confirms this payment from the browser */
+                        client_secret: string;
+                    };
+                };
+            };
+            "4XX": components["responses"]["RegistrationError"];
+        };
+    };
     v1CompetitionResults: {
         parameters: {
             query?: never;
@@ -2719,6 +2940,28 @@ export interface operations {
                 };
             };
             404: components["responses"]["CompetitionNotFound"];
+        };
+    };
+    headToHeadByCompetition: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["H2hRound"][];
+                };
+            };
         };
     };
     listScoretakers: {
@@ -3224,6 +3467,35 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["LivePerson"];
                 };
+            };
+        };
+    };
+    v1PersonInfo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                wca_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["V1PersonInfo"];
+                };
+            };
+            /** @description No person with this WCA ID */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

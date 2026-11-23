@@ -183,6 +183,21 @@ pl:
     deadline:
       description: Termin osiągania kwalifikacji
       by_date: 'do %{date}'
+    preview: Podgląd kwalifikacji
+    earliest_date:
+      description: Data Rozpoczęcia Okresu Kwalifikacyjnego
+      from_date: od %{date} włącznie
+      window_too_short: Data rozpoczęcia okresu musi przypadać co najmniej 
+        %{days} dni przed datą zakończenia okresu.
+      explanation:
+        '1': Data rozpoczęcia okresu kwalifikacyjnego jest opcjonalna. Jeśli 
+          pole to pozostanie puste, liczy się każdy wynik osiągnięty przed 
+          upływem terminu.
+        '2': Jeśli podano datę rozpoczęcia okresu, do kwalifikacji zaliczane są 
+          wyłącznie wyniki osiągnięte w dniu rozpoczęcia tego okresu lub 
+          później.
+        '3': Data rozpoczęcia okresu musi przypadać co najmniej %{days} dni 
+          przed datą zakończenia okresu.
   activity:
     registration: Rejestracja na miejscu
     checkin: Rejestracja
@@ -240,6 +255,10 @@ pl:
       secret: Secret
       scopes: Zakresy
       callback_urls: Adresy Wywołania Zwrotnego
+      confidential: Poufne?
+      confidentiality:
+        'yes': Tak
+        'no': Nie
   helpers:
     submit:
       competition_medium:
@@ -597,6 +616,8 @@ pl:
     passwords:
       edit:
         new_password_confirmation: Potwierdź nowe hasło
+      send_paranoid_instructions: Link do zresetowania hasła zostanie wysłany na
+        adres e-mail, o ile został on użyty do stworzenia konta WCA.
     sessions:
       new:
         sign_in: Zaloguj się
@@ -708,6 +729,8 @@ pl:
         use_classic: Przełącz się na starą stronę logowania
       destroy_other:
         success: Wylogowanie z pozostałych urządzeń zakończyło się sukcesem.
+      destroy:
+        success: Zostałeś wylogowany.
     shared:
       links:
         sign_in: Zaloguj się
@@ -759,6 +782,9 @@ pl:
             zakresu/zakresów. Spójrz <a
             href="https://github.com/thewca/worldcubeassociation.org/blob/main/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">tutaj</a>, aby zobaczyć listę wspieranych zakresów.
+          confidential: Aplikacja będzie wykorzystywana w sytuacjach, w których 
+            można zapewnić poufność klucza tajnego klienta. Natywne aplikacje 
+            mobilne oraz aplikacje jednostronicowe uznaje się za niepoufne.
       scopes:
         public: >-
           Mieć dostęp do twoich publicznych danych (imię i nazwisko, WCA ID,
@@ -766,6 +792,9 @@ pl:
         dob: Mieć dostęp do twojej daty urodzin
         email: Mieć dostęp do twojego adresu email
         manage_competitions: 'Zarządzać nadchodzącymi zawodami, które organizujesz.'
+        manage_registrations: Rejestruj się na zawody, edytuj lub anuluj swoje 
+          rejestrację
+        translations: Przejdź do listy języków, w których jesteś tłumaczem WCA
     devise:
       no_account: Nie posiadasz konta?
       have_competed: Brałem udział w zawodach WCA.
@@ -776,11 +805,11 @@ pl:
         Witaj ponownie! Aby utworzyć twoje konto, musimy znać WCA ID, z którym
         brałeś udział w zawodach.
       welcome_html: >-
-        Witaj! Zanim będziesz mógł wziąć udział w swoich pierwszych zawodach
-        WCA, potrzebujemy kilka dodatkowych informacji. Pamiętaj, że twoja data
-        urodzin nigdy nie zostanie ujawniona bez twojej zgody.<br/><br/>Jeżeli
-        rejestrujesz się w czyimś imieniu, podaj dane
-        <strong>zawodnika</strong>.
+        Witaj! Zanim będziesz mógł wziąć udział w swoich pierwszych zawodach WCA,
+        potrzebujemy kilka dodatkowych informacji.<br/><br/>Jeżeli rejestrujesz się
+        w czyimś imieniu, podaj dane <strong>zawodnika</strong>.
+      dob_privacy: Ta informacja nigdy nie zostanie udostępniona bez Twojej 
+        zgody.
   layouts:
     navigation:
       information: Informacje
@@ -842,6 +871,22 @@ pl:
       privacy: Prywatność
       disclaimer: Zastrzeżenie
       find_us: Znajdź nas
+      panels:
+        admin: Panel Administratora
+        volunteer: Panel Wolontariusza
+        delegate: Panel Delegata
+        wapc: Panel WAC
+        wfc: Panel WFC
+        wrt: Panel WRT
+        wst: Panel WST
+        board: Panel zarządu
+        leader: Panel lidera
+        senior_delegate: Panel Starszego Delegata
+        wic: Panel WIC
+        weat: Panel WEAT
+        wqac: Panel WQAC
+      switch_to_dark_mode: Przełącz na tryb ciemny
+      switch_to_light_mode: Przełącz na tryb jasny
   page:
     translators:
       title: Tłumacz
@@ -960,6 +1005,8 @@ pl:
           dotyczące decyzji podjętych przez resztę Wolontariuszy WCA. WAC
           zapewnia niezależny i bezstronny proces przeglądu, aby zapewnić, że
           decyzje są uczciwe, rozsądne i zgodne z Politykami i Regulaminem WCA.
+      empty: Nie znaleziono zespołów ani komitetów. Prosimy o ponowne 
+        sprawdzenie później.
     contacts:
       title: Formularz kontaktowy WCA
       faq_note_html: >-
@@ -1086,6 +1133,13 @@ pl:
       success_message_with_ticket_link_html: >-
         Prośba wysłana - odpowiemy na nią wkrótce. Aby sprawdzić status tej
         prośby odwiedź <a href="%{link}">ten link</a>.
+    executives:
+      joined_wca: Dołączono do WCA
+      more_information: Więcej Informacji
+      close: Zamknij
+      person_not_found: Nie znaleziono osoby posiadającej WCA ID %{wca_id}
+      title: Kierownictwo
+      joined_executives: Dołączył(a) do kierownictwa
   homepage:
     learn_more: Dowiedz się więcej
     title: Witamy w World Cube Association
@@ -1438,6 +1492,7 @@ pl:
         Zespołem do Spraw Wyników WCA za pomocą <a href="%{dob_form_path}">tego
         formularza</a>.
       unknown_wca_id_html: 'WCA ID %{link_id} nie istnieje.'
+      search_for_delegate: Wyszukaj Delegata
   user_roles:
     email:
       role_metadata:
@@ -1446,6 +1501,9 @@ pl:
         locale: Język
         group_name: Nazwa Zespołu/Komitetu
         delegated_competitions_count: Liczba przedelegowanych zawodów
+        wca_id: WCA ID
+        location: Lokacja
+        email: Email
   user_groups:
     group_types:
       board: Zarząd WCA
@@ -1485,6 +1543,7 @@ pl:
         Musisz napisać komentarz. Przeczytaj Wymagania Rejestracyjne powyżej
         żeby dowiedzieć się co powinno się tam znaleźć (np. dla wielolokacyjnych
         zawodów FMC, napisz lokalizację w której będziesz startować)
+      banned_until: Twój ban kończy się dnia %{date}.
     registration_info_people:
       newcomer:
         one: nowicjusz
@@ -1584,6 +1643,11 @@ pl:
       payment_requested_on: 'Data realizacji płatności: %{date}'
       series_registrations: Rejestracje w Serii
       total: Łącznie
+      export_to_csv:
+        one: Eksportuj %{count} rejestrację do CSV
+        few: Eksportuj %{count} rejestracje do CSV
+        many: Eksportuj %{count} rejestracji do CSV
+      export_all_to_csv: Eksportuj wszystkie rejestracje do CSV
     new_registration:
       title: 'Zarejestruj się na %{comp}'
     sign_in: Zaloguj
@@ -1722,9 +1786,9 @@ pl:
         zapisane do bazy danych.
       registrations_file_label: Plik z rejestracjami
       registrations_file_hint: >-
-        Plik CSV musi zawierać następujące kolumny: Status, Name, Region, WCA
-        ID, Birth Date, Gender, Email, oraz jedną kolumnę dla każdej
-        konkurencji.
+        Plik CSV musi zawierać następujące kolumny: Status, Name, Region, WCA ID,
+        Birth Date, Gender, Email oraz jedną kolumnę dla każdej konkurencji, lub plik
+        JSON zawierający dane WCIF.
       preview: Podgląd danych rejestracji
       import: Importuj
       cancel: Anuluj
@@ -1756,6 +1820,10 @@ pl:
           (rok-miesiąc-dzień, na przykład 1944-07-13), znaleziono poniższe daty
           które nie mogły być odczytane: %{raw_dobs}.
         empty_file: Ten plik jest pusty
+        invalid_country: 'Nieprawidłowy kraj: %{country}.'
+        invalid_wcif: Plik JSON nie zawiera prawidłowych danych WCIF.
+        unsupported_file_format: Nieobsługiwany format pliku. Prześlij plik JSON
+          lub CSV.
     add:
       title: 'Dodaj rejestrację dla %{comp}'
       info: >-
@@ -1872,6 +1940,8 @@ pl:
         few: Zostało %{count} miejsc
         many: Zostało %{count} miejsc
       no_spots_left: Zawody są pełne
+      provisional_live_results: 'W międzyczasie możesz zobaczyć wyniki tymczasowe
+        tutaj:'
     live:
       title: Wyniki Live
       manage_rounds: Zarządzaj Rundami
@@ -1953,6 +2023,7 @@ pl:
             menu: Usuń wielu
             id: ID
             name: Imię i nazwisko
+            select_all: Zaznacz wszystko
           quit_menu: Usuń
           no_next: Brak kolejnego zawodnika do awansu.
           cancel: Anuluj
@@ -1963,6 +2034,9 @@ pl:
           in_batch: >-
             Nie można usunąć zawodnika którego wyniki są częścią nieprzesłanej
             serii
+          scoresheet_warning: Pamiętaj, aby usuwać zawodnika tylko wtedy, gdy 
+            masz fizycznie w ręku jego pustą kartę startową. Nie możesz dodać 
+            zawodnika z powrotem do zamkniętej rundy.
         add_competitor:
           single_round: Dodaj Zawodnika do Rundy
           multiple_rounds:
@@ -1973,11 +2047,21 @@ pl:
             Zawodnik nie jest zarejestrowany na tę konkurencję, a zawody nie
             pozwalają już na zmiany w konkurencjach. Dodanie zawodnika nadal
             zadziała, ale upewnij się, że jest to celowe działanie.
+          round_closed: Nie możesz dodać zawodnika do rundy, która jest już 
+            zamknięta
+        first_timer: Nowicjusz
       results:
         competitor: Zawodnik
         mean: Średnia
       errors:
         round_closed: Runda nie jest jeszcze otwarta
+      combined_title: Połączone rundy podwójne
+      overview:
+        upcoming: Nadchodzące
+        in_progress: Teraz
+        past_month: Ostatni miesiąc
+        no_upcoming: Brak nadchodzących zawodów z wynikami na żywo.
+        search: Szukaj zawodów
     my_competitions:
       title: Moje zawody
       disclaimer: >-
@@ -1997,6 +2081,8 @@ pl:
         cutoff: 'Cutoff: %{short_cutoff}'
         download_html: 'Pobierz wszystkie szczegóły dotyczące zawodów w formacie PDF
           %{here}.'
+        download_pdf: Pobierz tutaj harmonogram w formacie PDF
+        download: Pobierz
       date: Data
       add_to_calendar: Dodaj do kalendarza
       name: Nazwa
@@ -2153,6 +2239,9 @@ pl:
       bookmark: Dodaj do zakładek
       is_bookmarked: Dodałeś te zawody do zakładek
       number_of_bookmarks: Dodano do zakładek
+      view_more_members: Zobacz %{count} kolejnych członków zespołu
+      see_more: + %{count} więcej
+      waiting_list_size: Rozmiar listy rezerwowej
     index:
       title: Zawody
       all_events: Wszystkie
@@ -2216,6 +2305,43 @@ pl:
             umieszczane na liście rezerwowej
       no_more_comps: Brak dalszych zawodów.
       no_comp_found: Nie znaleziono żadnych zawodów.
+      all_competitions: Wszystkie zawody
+      event: Konkurencja
+      name: Nazwa
+      location: Lokalizacja
+      location_placeholder: Wpisz adres
+      use_my_location: Użyj mojej lokalizacji
+      location_sign_in_required: Zaloguj się, aby wyszukać adres
+      location_not_found: Nie znaleziono lokalizacji dla tego adresu
+      location_search_failed: Wyszukiwanie adresu nie powiodło się, spróbuj 
+        ponownie za chwilę
+      distance: Odległość
+      distance_units:
+        km: km
+        mi: mil
+      advanced_filters: Filtry zaawansowane
+      championship_only: Pokaż tylko mistrzostwa
+      sort:
+        order: Kolejność sortowania
+        start_date_asc: 'Data rozpoczęcia: rosnąco'
+        start_date_desc: 'Data rozpoczęcia: malejąco'
+        end_date_asc: 'Data zakończenia: rosnąco'
+        end_date_desc: 'Data zakończenia: malejąco'
+        announced_at_asc: 'Data ogłoszenia: rosnąco'
+        announced_at_desc: 'Data ogłoszenia: malejąco'
+        name_asc: 'Nazwa: A-Z'
+        name_desc: 'Nazwa: Z-A'
+      date_and_city: '%{date} – %{city}'
+      registration_key: 'Klucz rejestracji:'
+      registration_status:
+        open: Otwarte
+        not_open: Jeszcze nieotwarte
+        closed: Zamknięte
+      register_now: Zarejestruj się
+      view_competition: Zobacz zawody
+      why_compete_description_html: |-
+        <p>Zawody to nie tylko rywalizacja o to, kto jest najszybszy – to wydarzenia towarzyskie! Każdy, kto potrafi ułożyć kostkę, jest mile widziany i może pobić własny rekord osobisty. Łatwo tu poznać nowych ludzi, bo wszyscy współpracują, aby zawody przebiegły sprawnie.</p>
+        <p>Skorzystaj z poniższego narzędzia, aby znaleźć zawody w swojej okolicy i rozpocząć swoją przygodę z kostką!</p>
     my_competitions_table:
       edit: Edytuj
       registrations: Zarejestrowani
@@ -2475,8 +2601,8 @@ pl:
           external_registration_page: >-
             Strona na której zawodnicy muszą się zarejestrować na zawody. Musi
             być poprawnym adresem url, zawierającym protokół http(s).
-          scoretaking_software: 'Wybierz "%{choice_ilr}" jeżeli chcesz używać Rund
-            Podwójnych'
+          scoretaking_software: 'Wybierz ''%{choice_ilr}'' lub narzędzie zewnętrzne,
+            jeżeli chcesz używać Rund Podwójnych'
         entry_fees:
           currency_code: Kod waluty w której wyrażone są opłaty wpisowe.
           base_entry_fee: >-
@@ -2641,6 +2767,10 @@ pl:
           Nie planuj podróży, ale nie porzucaj też nadziei. Zawody są pełne, ale
           zostałeś umieszczony na liście rezerwowej i otrzymasz email jeżeli
           zwolni się wystarczająco dużo miejsc abyś mógł startować.
+        additional: Pamiętaj o dodatkowych instrukcjach powyżej dotyczących 
+          płatności lub innych wymagań rejestracyjnych.
+        email: Otrzymasz e-mail, gdy status Twojej rejestracji zostanie 
+          zaktualizowany.
       list:
         empty: Brak
         spots_remaining_plural:
@@ -2677,6 +2807,8 @@ pl:
             Pominąłeś %{count} wcześniejszych oczekujących / będących na liście
             rezerwowej rejestracji. Czy na pewno chcesz zaakceptować wybrane
             rejestracje?
+          information: Zatwierdzeni zawodnicy mają potwierdzony udział w 
+            zawodach w konkurencjach, na które się zarejestrowali.
         cancelled:
           title: Anulowane Rejestracje
           information: Anulowani zawodnicy mogą się zarejestrować ponownie.
@@ -2708,6 +2840,7 @@ pl:
           "Zarejestruj się", włącznie z opłatą wpisową, polityką zwrotów i
           dodatkowymi wymaganiami powyżej.
         next_step: Kontynnuj do następnego kroku
+        accept: Akceptuj
       update:
         being_updated: Rejestracja jest aktualizowana...
         being_deleted: Rejestracja jest usuwana...
@@ -2728,9 +2861,9 @@ pl:
         no_changes: Nie ma zmian
         email_message: Skopiowano do schowka. Pamiętaj o użyciu UDW!
         move_to:
-          one: Przenieś %{count} do
-          few: Przenieś %{count} do
-          many: Przenieś %{count} do
+          one: Przenieś %{count} rejestrację do
+          few: Przenieś %{count} rejestracje do
+          many: Przenieś %{count} rejestracji do
         move_to_none_selected: Przenieś do
         pending: Oczekujące
         waitlist: Lista Rezerwowa
@@ -2742,6 +2875,16 @@ pl:
         no_self_update: >-
           Skontaktuj się z zespołem organizacyjnym aby zaktualizować twoją
           rejestrację.
+        send_email:
+          one: Wyślij e-mail do %{count} adresu e-mail
+          few: Wyślij e-mail do %{count} adresów e-mail
+          many: Wyślij e-mail do %{count} adresów e-mail
+        copy_emails:
+          one: Kopiuj %{count} adres e-mail
+          few: Kopiuj %{count} adresy e-mail
+          many: Kopiuj %{count} adresów e-mail
+        scroll_to: Przewiń do
+        non_competing: Nieukładające
       register:
         will_open_countdown: >-
           Rejestracja otworzy się za %{minutes} minut %{seconds} sekund. Ta
@@ -2759,6 +2902,7 @@ pl:
           competing:
             title: Zarejestruj
             description: Wybierz swoje konkurencje
+            summary_title: Rejestracja
           requirements:
             title: Wymagania
             description: Zaakceptuj warunki zawodów
@@ -2788,6 +2932,11 @@ pl:
         event_limit: >-
           Te zawody ograniczają liczbę konkurencji na które możesz się
           zarejestrować do %{max_events}.
+        comment_overview: Twoje komentarze
+        waiting_list_count:
+          one: Na liście rezerwowej jest %{count} zawodnik.
+          few: Na liście rezerwowej jest %{count} zawodników.
+          many: Na liście rezerwowej jest %{count} zawodników.
       errors:
         events: 'Ładowanie konkurencji zakończyło się niepowodzeniem, spróbuj ponownie'
         '-1': >-
@@ -2849,8 +2998,8 @@ pl:
         Automatyczna akceptacja może być używana jedynie jeżeli używasz strony
         WCA do rejestracji
       must_use_payment_integration: >-
-        Musisz włączyc integrację płatności (np. Stripe) aby używać
-        automatycznej akceptacji
+        Musisz włączyć integrację płatności (np. Stripe) aby używać automatycznej
+        akceptacji
       auto_accept_limit: >-
         Limit dla automatycznie zaakceptowanych rejestracji musi być mniejszy
         niż limit zawodników
@@ -2942,6 +3091,8 @@ pl:
       edited_deadline_not_in_future: >-
         Możesz ustawiać jedynie przyszłe terminy, a %{new_timestamp} nie jest w
         przyszłości.
+      fto_requires_internal_scoretaking: musi być ustawione na Integrated Live 
+        Results w przypadku Face Turning Octahedron.
     new:
       create_competition: Utwórz zawody
       note_clone: >-
@@ -3126,11 +3277,13 @@ pl:
         register: Zarejestruj się
         competitors: Zawodnicy
         scrambles: Scramble
+        competitor_results: Wyniki zawodników
+      general: Ogólne
+      more: Więcej
+      admin: Administracja
+      results: Wyniki
+      events: Konkurencje
     results_table:
-      h2h_results_disclaimer: >-
-        Wyniki ustalone na podstawie finału Jeden na Jeden. Pokazana jest
-        jedynie kolejność i najlepsze ułożenie ze względu na to, że prace nad
-        pokazywaniem wyników Jeden na Jeden nadal trwają.
       wca_profile: Profil WCA
       event: Konkurencja
       round: Runda
@@ -3139,12 +3292,28 @@ pl:
         national: Ranking krajowy
         continent: Ranking Kontynentalny
         world: Ranking światowy
+      h2h_results_disclaimer_html: Wyniki ustalone w finale Jeden na Jeden. 
+        Pokazane są tutaj tylko kolejność miejsc i najlepszy wynik; pełna 
+        drabinka pojedynków Jeden na Jeden jest dostępna na <a 
+        href="%{results_url}">nowej stronie z wynikami</a>.
+      show_all_linked_results: Pokaż wyniki z obu rund
+      linked_results_disclaimer_html: Ta runda jest częścią Rundy Podwójnej. 
+        Wyniki poniżej są pokazane dla każdej rundy osobno; połączone wyniki z 
+        obu rund są dostępne na <a href="%{results_url}">nowej stronie z 
+        wynikami</a>.
     scrambles_table:
       group: Grupa
       scramble: Scramble
     competition_series_fields:
       add_series: Dodaj do Serii
       remove_series: Usuń z Serii
+    h2h:
+      set_number: Zestaw %{number}
+      stage_of: Etap %{number}
+      quarterfinal_stage: Ćwierćfinał
+      semifinal_stage: Półfinał
+      final_stage: Finał
+      third_place: Trzecie miejsce
   competition_tabs:
     headers:
       tabs: Zakładki
@@ -3176,6 +3345,7 @@ pl:
         lub "by region"
     records:
       title: Rekordy
+      load_error: Błąd pobierania rekordów
     last_updated_html: 'Ostatnio aktualizowane: %{timestamp}'
     filters_fixes_underway: >-
       Należy pamiętać, że niektóre filtry (takie jak wyniki z poprzednich lat)
@@ -3214,6 +3384,7 @@ pl:
       date_circa: Data
   notifications:
     connect_wca_id: Połącz swoje WCA ID ze swoim kontem!
+    copied_to_clipboard: Skopiowano do schowka
   payments:
     header: Historia płatności
     messages:
@@ -3356,6 +3527,9 @@ pl:
     announcement_info_html: 'Ogłoszone przez %{author_name}, %{date_time}'
     errors:
       unstick_at_future: musi być w przyszłości
+    search: Szukaj ogłoszeń
+    no_announcements: Nie ma jeszcze żadnych ogłoszeń.
+    no_search_results: Żadne ogłoszenie nie pasuje do Twojego wyszukiwania.
   contacts:
     dob:
       title: Formularz Prośby o Zmianę Daty Urodzenia
@@ -3633,23 +3807,21 @@ pl:
         WCA.'
       teams_committees: Zespoły i Komitety
       delegates_html: >-
-        <p><strong>Delegat WCA</strong> to rola zdefiniowana we Wnioskach WCA
-        oraz przedstawiona w Regulaminie WCA. Podstawowym obowiązkiem delegata
-        jest nadzorowanie zawodów w imieniu WCA. Delegat WCA jest odpowiedzialny
-        ze dopilnowanie, aby wszystkie zawody WCA były przeprowadzane zgodnie z
-        opisanym wcześniej Celem, Wartościami i Regulaminem WCA. WCA rozróżnia
-        <strong>Starszych Delegatów</strong>,<strong>Regionalnych
-        Delegatów</strong>, <strong>Pełnych Delegatów</strong> oraz
-        <strong>Młodszych Delegatów</strong> oraz <strong> Delegatów
-        Praktykantów</strong>, %{see_link}.</p> <p>Poza obowiązkami Delegata
-        WCA, Starszy Delegat WCA jest odpowiedzialny za nadzór nad Delegatami na
-        swoim obszarze. Społeczność może kontaktować się z nim w regionalnych
-        sprawach.</p> <p>Nowi Delegaci uzyskują początkowo status Młodszego
-        Delegata, następnie muszą wykazać swoją zdolność sprawnego zarządzania
-        zawodami, zanim zostaną awansowani na Pełnego Delegata
-        WCA.</p><p>Delegaci Praktykanci szkolą się aby przyjąć pozycję Delegata
-        WCA i mogę nadzorować tylko zawody na których jest obecny inny Delegat
-        WCA.</p>
+        <p><strong>Delegat WCA</strong> to rola zdefiniowana we Wnioskach WCA i opisana
+        w Regulaminie WCA. Głównym obowiązkiem Delegata jest nadzorowanie zawodów
+        w imieniu WCA. Delegat WCA odpowiada za dopilnowanie, aby wszystkie zawody
+        WCA odbywały się zgodnie z Celem, Wartościami i Regulaminem WCA. WCA rozróżnia
+        <strong>Starszych Delegatów</strong>, <strong>Delegatów Regionalnych</strong>,
+        <strong>Pełnych Delegatów</strong>, <strong>Młodszych Delegatów</strong> oraz
+        <strong>Delegatów Praktykantów</strong>%{see_link}.</p> <p>Oprócz obowiązków
+        Delegata WCA Starszy Delegat lub Delegat Regionalny odpowiada za zarządzanie
+        Delegatami WCA na swoim obszarze, a społeczność może kontaktować się z nim
+        w sprawach regionalnych.</p> <p>Nowi Delegaci są początkowo wpisani jako Młodsi
+        Delegaci; następnie muszą wykazać się biegłością w zarządzaniu zawodami WCA,
+        zanim zostaną awansowani na Delegatów WCA.</p> <p>Delegaci Praktykanci szkolą
+        się na stanowisko Delegata WCA i mogą nadzorować wyłącznie zawody, na których
+        obecny jest Delegat WCA.</p> <p>Jeśli chcesz zostać Delegatem Praktykantem,
+        skontaktuj się ze swoim Delegatem Regionalnym, aby ustalić, czy się kwalifikujesz.</p>
       see_link_html: '(zobacz %{link})'
       members_html: >-
         Wszyscy zawodnicy stają się automatycznie <strong>członkami</strong> WCA
@@ -3667,6 +3839,9 @@ pl:
     codeofconduct: Kodeks postępowania
     finances: Finanse
     strategic_plan: Plan Strategiczny
+    motion_not_found: Nie znaleziono wniosku
+    motion_not_found_action: Nie znaleziono wniosku o numerze "%{motion_id}". 
+      Mógł zostać uchylony.
   education:
     title: Dokumenty szkoleniowe WCA
     description: >-
@@ -3676,6 +3851,7 @@ pl:
     judge_tutorial: Poradnik sędziowania dla nowych zawodników
     competition_templates: Szablony zawodów
     certificates: Szablony certyfikatów WCT
+    orga_handbook: Wytyczne dla organizatora
   delegates_page:
     title: Delegaci WCA
     acknowledges: 'WCA uznaje następujących Delegatów WCA:'
@@ -3690,6 +3866,7 @@ pl:
       total_delegated: Suma przedelegowanych
       lead_delegated: Zawodów jako Wiodący Delegat
       history: Historia
+    copy_email: Kopiuj e-mail
   regional_organizations:
     title: Organizacje Regionalne
     content: 'WCA rozpoznaje następujące Organizacje Regionalne:'
@@ -3898,11 +4075,52 @@ pl:
         incidents: Nie znaleziono incydentów dla
         regulations_and_guidelines: Nie znaleziono żadnych punktów Regulaminu 
           dla
+      empty_query: Spróbuj coś wyszukać!
   incidents_log:
     i18n_disclaimer: >-
       Zauważ, że sekcja incydentów jest dostępna jedynie w języku angielskim,
       zatem poniższa zawartość nie jest przetłumaczona.
     incident: 'Incydent:'
+    title: Rejestr incydentów
+    page_title: 'Incydent: %{title}'
+    not_found: Nie znaleziono incydentu
+    back_to_log: Powrót do rejestru incydentów
+    search_placeholder: Szukaj
+    status: Status
+    resolved: Rozwiązany
+    pending: Oczekujący
+    sent_in_digest: Wysłane w przeglądzie
+    sent: Wysłane
+    showing_entries: Wyświetlanie wpisów od %{first} do %{last} z %{total} 
+      wpisów, <select></select> na stronę
+    not_public_warning: 'Uwaga: ten incydent nie został jeszcze rozwiązany, więc nie
+      jest publicznie widoczny.'
+    public_summary: Opis incydentu i rozwiązanie
+    private_description: Opis (tylko dla delegatów)
+    private_wrc_decision: Decyzja WRC (tylko dla delegatów)
+    tags:
+      regulation: Regulamin
+      guideline: Wytyczna
+      search_with_tag: Szukaj incydentów z tym tagiem
+      filter_by_tag: Filtruj po tym tagu
+      competition_page: Strona zawodów
+      delegate_report: Raport delegata
+    admin:
+      publish: Opublikuj
+      unpublish: Cofnij publikację
+      edit: Edytuj
+      destroy: Usuń
+      cancel: Anuluj
+      confirm: Potwierdź
+      change_status: Zmień status
+      destroy_title: Usuń incydent
+      confirm_publish: Czy na pewno chcesz upublicznić ten wpis o incydencie?
+      confirm_unpublish: Czy na pewno chcesz cofnąć publikację tego wpisu o 
+        incydencie?
+      confirm_destroy: Czy na pewno chcesz usunąć ten incydent?
+      publish_error: Nie udało się opublikować tego incydentu.
+      unpublish_error: Nie udało się cofnąć publikacji tego incydentu.
+      destroy_error: Nie udało się usunąć tego incydentu.
   about_regulations:
     title: O Regulaminie
     panel1:
@@ -4283,6 +4501,10 @@ pl:
       wrong_position_in_results_error: >-
         [%{round_id}] %{person_name} jest na złej pozycji: spodziewana
         %{expected_pos}, ale jest %{pos}.
+      automatically_global_position_fixed_info: '[%{round_id}] Automatycznie poprawiono
+        pozycję ogólną %{person_name} z %{pos} na %{expected_pos}.'
+      wrong_global_position_in_results_error: '[%{round_id}] %{person_name} jest na
+        złej pozycji ogólnej: oczekiwano %{expected_pos}, a jest %{pos}.'
     rounds:
       too_many_qualified_warning: >-
         Runda %{round_id}: więcej zawodników zakwalifikowało się niż jest podane
@@ -4387,4 +4609,95 @@ pl:
     stakeholder_role:
       actioner: Wykonawca
       requester: Wnioskodawca
-  trainee_delegate_application: {}
+  trainee_delegate_application:
+    title: Wniosek o przyjęcie na stanowisko Delegata Praktykanta
+    introduction: Ten formularz jest przeznaczony dla zarejestrowanych 
+      speedcuberów, którzy ubiegają się o status delegata praktykanta. Twoje 
+      zgłoszenie zostanie przesłane do delegatów odpowiedzialnych za wybrany 
+      przez Ciebie region.
+    success_title: Wniosek złożony
+    success: Twój wniosek został pomyślnie wysłany. Kopia została wysłana na 
+      adres e-mail powiązany z Twoim kontem WCA.
+    eligibility:
+      title: Nie można jeszcze złożyć tego wniosku
+      missing_wca_id: Twoje konto WCA musi być powiązane z WCA ID.
+      missing_date_of_birth: Twoje konto WCA musi posiadać zweryfikowaną datę 
+        urodzenia.
+      underage: Kandydaci muszą mieć co najmniej %{minimum_age} lat.
+      claim_wca_id: Odbierz swoje WCA ID.
+      edit_profile: Poproś o aktualizację profilu.
+    errors:
+      invalid_region: Wybierz odpowiedni, aktywny region Delegacki.
+      missing_reviewer: Wybrany region nie posiada obecnie Regionalnego Delegata
+        lub Starszego Delegata, który mógłby otrzymać wniosek.
+      recommender_required: Wybierz przynajmniej jednego rekomendującego 
+        Delegata.
+      invalid_recommender: Jeden lub więcej wybranych rekomendujących Delegatów 
+        nie spełnia już warunków dla wybranego regionu.
+      spoken_delegate_required: Wybierz przynajmniej jednego Młodszego Delegata 
+        lub Delegata, z którym rozmawiałeś/aś.
+      invalid_spoken_delegate: Jeden lub więcej wybranych delegatów, z którymi 
+        rozmawiałeś/aś, nie jest już aktywnym młodszym Delegatem ani Delegatem w
+        wybranym regionie.
+      declarations_required: Wszystkie deklaracje muszą zostać potwierdzone.
+      business_involvement_required: Wybierz, czy prowadzisz działalność 
+        związaną z kostkami Rubika.
+      business_involvement_explanation_required: Opisz swoją działalność 
+        związaną z kostką Rubika.
+    form:
+      declaration_and_basic_information: Deklaracja i podstawowe informacje
+      name: Imie
+      wca_id: WCA ID
+      email: Email
+      age: Wiek
+      competition_count: Liczba zawodów
+      region_and_references: Region i referencje
+      region: W jakim regionie delegackim obecnie mieszkasz?
+      region_placeholder: Wybierz swój region
+      subregion: W którym podregionie Delegacji obecnie mieszkasz?
+      subregion_placeholder: Wybierz swój podregion
+      reviewing_delegate: Delegat rozpatrujący
+      spoken_delegates: Z którymi Młodszymi Delegatami lub Delegatami 
+        rozmawiałeś na temat zostania delegatem praktykantem?
+      recommenders: Którzy Młodsi Delegaci lub Delegaci z Twojego regionu 
+        zgodzili się zarekomendować Cię jako kandydata na stanowisko delegata 
+        praktykanta?
+      delegates_placeholder: Wybierz co najmniej jednego delegata
+      experience_and_motivation: Doświadczenie i motywacja
+      introduction: Przedstaw się krótko, używając od dwóch do czterech zdań.
+      competition_contributions: Opisz w skrócie, w jaki sposób wspierałeś 
+        lokalne zawody wykraczając poza to, czego oczekuje się od wszystkich 
+        zawodników.
+      volunteer_history: Jeśli pełniłeś funkcje wolontariusza WCA, podaj je 
+        tutaj chronologicznie (opcjonalnie).
+      role_history_warning: Historia ról z tej strony internetowej zostanie 
+        automatycznie uwzględniona w Twoim podaniu. Starsze stanowiska nie 
+        zostały w pełni uzupełnione, więc poniżej dodaj brakujące pozycje lub 
+        wprowadź poprawki.
+      present: Obecnie
+      board_member: Członek zarządu
+      motivation: W dwóch do czterech zdaniach krótko opisz, co skłoniło Cię do 
+        złożenia podania o przyjęcie na stanowisko delegata praktykanta.
+      relevant_skills: Proszę przedstawić listę najważniejszych umiejętności i 
+        doświadczeń, które pomogą odnieść sukces na stanowisku delegata 
+        praktykanta.
+      declaration_understands_application: Rozumiem, że ten formularz jest 
+        przeznaczony dla zarejestrowanych speedcuberów, którzy ubiegają się o 
+        zostanie delegatem praktykantem.
+      declaration_has_delegate_support: Potwierdzam, że rozmawiałem z 
+        uprawnionym delegatem z mojego regionu, który popiera moją kandydaturę.
+      declaration_proficient_in_english: Potwierdzam, że biegle posługuję się 
+        językiem angielskim w mowie i piśmie.
+      declaration_read_regulations_html: Potwierdzam, że przeczytałem <a 
+        href="%{regulations_url}" target="_blank" rel="noreferrer">Regulacje 
+        WCA</a>.
+      regulations_note: 'Uwaga: Nie oczekuje się, że delegaci będą znali wszystkie
+        punkty regulaminu. Oczekuje się jednak, że będą znali podstawowe zasady i
+        w razie wątpliwości będą szukać informacji.'
+      cubing_business_involvement: Czy prowadzisz działalność związaną z kostką 
+        Rubika?
+      cubing_business_involvement_details: Proszę opisać twoją działalność 
+        związana z koską Rubika.
+      "yes": Tak
+      "no": Nie
+      submit: Wyślij aplikacje

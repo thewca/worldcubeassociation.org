@@ -1,6 +1,8 @@
 "use client";
 
-import { Heading, Table, VStack } from "@chakra-ui/react";
+import { Box, Heading, Table, VStack } from "@chakra-ui/react";
+import { useState } from "react";
+import { useOnInView } from "react-intersection-observer";
 import { components } from "@/types/openapi";
 import _ from "lodash";
 import {
@@ -95,52 +97,67 @@ export default function RecordsTable({ records, show }: WrapperTableProps) {
   }
 }
 
+const HISTORY_BATCH_SIZE = 100;
+const HISTORY_LOAD_MARGIN = "0px 0px 600px 0px";
+
 function MixedHistoryTable({ records }: MixedHistoryTableProps) {
   const { t } = useT();
+  const [visibleCount, setVisibleCount] = useState(HISTORY_BATCH_SIZE);
+  const loadMoreRef = useOnInView<HTMLDivElement>(
+    (inView) => {
+      if (inView) setVisibleCount((count) => count + HISTORY_BATCH_SIZE);
+    },
+    { rootMargin: HISTORY_LOAD_MARGIN },
+  );
 
   return (
-    <Table.ScrollArea rounded="md">
-      <Table.Root size="xs" striped>
-        <Table.Header>
-          <Table.Row>
-            <Table.ColumnHeader>
-              {t("results.table_elements.date_circa")}
-            </Table.ColumnHeader>
-            <Table.ColumnHeader>
-              {t("results.table_elements.event")}
-            </Table.ColumnHeader>
-            <Table.ColumnHeader>
-              {t("results.table_elements.name")}
-            </Table.ColumnHeader>
-            <Table.ColumnHeader>
-              {t("results.selector_elements.type_selector.single")}
-            </Table.ColumnHeader>
-            <Table.ColumnHeader>
-              {t("results.selector_elements.type_selector.average")}
-            </Table.ColumnHeader>
-            <Table.ColumnHeader>
-              {t("results.table_elements.region")}
-            </Table.ColumnHeader>
-            <Table.ColumnHeader>
-              {t("results.table_elements.competition")}
-            </Table.ColumnHeader>
-            <Table.ColumnHeader colSpan={5}>
-              {t("results.table_elements.solves")}
-            </Table.ColumnHeader>
-          </Table.Row>
-        </Table.Header>
-        <Table.Body>
-          {records.map((record, index) => (
-            <HistoryRow
-              key={`${record.id}-${index}`}
-              record={record}
-              mixed
-              t={t}
-            />
-          ))}
-        </Table.Body>
-      </Table.Root>
-    </Table.ScrollArea>
+    <>
+      <Table.ScrollArea rounded="md">
+        <Table.Root size="xs" striped>
+          <Table.Header>
+            <Table.Row>
+              <Table.ColumnHeader>
+                {t("results.table_elements.date_circa")}
+              </Table.ColumnHeader>
+              <Table.ColumnHeader>
+                {t("results.table_elements.event")}
+              </Table.ColumnHeader>
+              <Table.ColumnHeader>
+                {t("results.table_elements.name")}
+              </Table.ColumnHeader>
+              <Table.ColumnHeader>
+                {t("results.selector_elements.type_selector.single")}
+              </Table.ColumnHeader>
+              <Table.ColumnHeader>
+                {t("results.selector_elements.type_selector.average")}
+              </Table.ColumnHeader>
+              <Table.ColumnHeader>
+                {t("results.table_elements.region")}
+              </Table.ColumnHeader>
+              <Table.ColumnHeader>
+                {t("results.table_elements.competition")}
+              </Table.ColumnHeader>
+              <Table.ColumnHeader colSpan={5}>
+                {t("results.table_elements.solves")}
+              </Table.ColumnHeader>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {records.slice(0, visibleCount).map((record, index) => (
+              <HistoryRow
+                key={`${record.id}-${index}`}
+                record={record}
+                mixed
+                t={t}
+              />
+            ))}
+          </Table.Body>
+        </Table.Root>
+      </Table.ScrollArea>
+      {visibleCount < records.length && (
+        <Box ref={loadMoreRef} h="1" aria-hidden="true" />
+      )}
+    </>
   );
 }
 
@@ -318,7 +335,22 @@ function MixedRecordsTable({ records }: RecordsTableProps) {
 
   return (
     <Table.ScrollArea rounded="md">
-      <Table.Root size="xs" striped>
+      <Table.Root
+        size="xs"
+        striped
+        tableLayout="fixed"
+        minW="6xl"
+        whiteSpace="normal"
+        overflowWrap="anywhere"
+      >
+        <Table.ColumnGroup>
+          <Table.Column w="16" />
+          <Table.Column w={{ base: "3xs", md: "2xs" }} />
+          <Table.Column w="24" />
+          <Table.Column w="32" />
+          <Table.Column w="64" />
+          <Table.Column span={5} />
+        </Table.ColumnGroup>
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeader>

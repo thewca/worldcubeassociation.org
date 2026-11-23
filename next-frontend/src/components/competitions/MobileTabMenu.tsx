@@ -1,0 +1,465 @@
+"use client";
+
+import {
+  Box,
+  Card,
+  Button,
+  Icon,
+  Link as ChakraLink,
+  Menu,
+  Portal,
+  Stack,
+  type SystemStyleObject,
+  Text,
+} from "@chakra-ui/react";
+import {
+  LuBox,
+  LuChevronLeft,
+  LuChevronUp,
+  LuClipboardList,
+  LuEllipsis,
+  LuFileQuestion,
+  LuLock,
+  LuTrophy,
+} from "react-icons/lu";
+import IconDisplay from "../IconDisplay";
+import {
+  CompetitionNavTab,
+  TabWithChildren,
+  TabWithLink,
+} from "@/lib/wca/competitions/tabs";
+import { TFunction } from "i18next";
+import { route } from "nextjs-routes";
+import events from "@/lib/wca/data/events";
+import { usePathname } from "next/navigation";
+import _ from "lodash";
+import { useT } from "@/lib/i18n/useI18n";
+import { renderLabel } from "./TabMenu";
+
+const groupTabsMap = new Map([
+  ["general", "general"],
+  ["register", "register"],
+  ["competitors", "general"],
+  ["events", "general"],
+  ["schedule", "general"],
+  ["podiums", "results"],
+  ["all", "results"],
+  ["scrambles", "results"],
+  ["by-person", "results"],
+  ["live", "live"],
+  ["live_events", "events"],
+]);
+
+const groupIcons: Record<string, React.ReactNode> = {
+  general: <LuClipboardList />,
+  register: null,
+  more: <LuEllipsis />,
+  admin: <LuLock />,
+  results: <LuTrophy />,
+  events: <LuBox />,
+};
+
+const NAV_COLOR_PALETTE = "blue";
+
+const itemStyle: SystemStyleObject = {
+  flex: "1",
+  minW: "0",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  gap: "1",
+  py: "2",
+  px: "1",
+  rounded: "2xl",
+  fontSize: "xs",
+  fontWeight: "medium",
+  cursor: "pointer",
+  _hover: { bg: "bg.muted" },
+  _selected: {
+    bg: "colorPalette.emphasized",
+    color: "colorPalette.contrast",
+    fontWeight: "bold",
+  },
+  _open: { bg: "colorPalette.subtle", color: "colorPalette.contrast" },
+};
+
+type GroupedTab = Record<string, CompetitionNavTab[]>;
+
+export default function MobileTabMenu({
+  tabs,
+  customTabs = [],
+  competitionId,
+}: {
+  tabs: CompetitionNavTab[];
+  customTabs?: string[];
+  competitionId: string;
+}) {
+  const { t } = useT();
+  const pathName = usePathname();
+  const isAdminRoute = pathName.includes("/admin");
+
+  const path = _.last(pathName.split("/")) || "";
+  const activeMenuKey = path === competitionId ? "general" : path;
+
+  const resolveGroup = (tab: CompetitionNavTab): string | undefined =>
+    groupTabsMap.get(tab.menuKey) ??
+    (tab.i18nKey.includes("events") ? "events" : undefined);
+
+  const hasCustomTabs = !_.isEmpty(customTabs);
+
+  const customNavTabs: CompetitionNavTab[] = _.map(customTabs, (tab) => ({
+    menuKey: tab,
+    i18nKey: tab,
+    href: route({
+      pathname: "/competitions/[competitionId]/custom-tabs/[tabName]",
+      query: { competitionId, tabName: encodeURIComponent(tab) },
+    }),
+  }));
+
+  const grouped: GroupedTab = _.chain(tabs)
+    .map((tab) => ({ group: resolveGroup(tab), tab }))
+    .filter(
+      ({ group }) =>
+        !_.isUndefined(group) && !(hasCustomTabs && group === "more"),
+    )
+    .concat(_.map(customNavTabs, (tab) => ({ group: "more", tab })))
+    .groupBy("group")
+    .mapValues((entries) => _.map(entries, "tab"))
+    .value();
+
+  const resolveActiveGroup = (key: string): string => {
+    if (groupTabsMap.has(key)) return groupTabsMap.get(key)!;
+    if (
+      _.some(
+        customTabs,
+        (tab) => tab === key || encodeURIComponent(tab) === key,
+      )
+    )
+      return "more";
+    if (_.has(events.byId, [key])) return "events";
+    return "";
+  };
+
+  const activeGroup = resolveActiveGroup(activeMenuKey);
+
+  return (
+    <Box
+      as="nav"
+      aria-label={t("competition_tabs.headers.tabs")}
+      position="fixed"
+      insetInline="3"
+      bottom="4"
+      mb="env(safe-area-inset-bottom)"
+      hideFrom="md"
+      zIndex="sticky"
+    >
+      <Card.Root
+        variant="elevated"
+        rounded="3xl"
+        colorPalette={NAV_COLOR_PALETTE}
+      >
+        <Card.Body p="1.5" flexDirection="row" gap="1">
+          {_.map(grouped, (groupTabs, group) =>
+            groupTabs.length === 1 && group !== "more" ? (
+              <LinkItem
+                key={group}
+                tab={groupTabs[0]}
+                selected={group === activeGroup}
+                t={t}
+                isAdminRoute={isAdminRoute}
+              />
+            ) : (
+              <GroupItem
+                key={group}
+                group={group}
+                tabs={groupTabs}
+                selected={group === activeGroup}
+                activeMenuKey={activeMenuKey}
+                t={t}
+                isAdminRoute={isAdminRoute}
+              />
+            ),
+          )}
+        </Card.Body>
+      </Card.Root>
+    </Box>
+  );
+}
+
+const getHref = (tab: TabWithLink, isAdminRoute: boolean): string => {
+  return isAdminRoute && tab.hrefAdmin
+    ? tab.hrefAdmin
+    : tab.externalHref || tab.href;
+};
+
+interface ItemProps {
+  tab: CompetitionNavTab;
+  selected: boolean;
+  t: TFunction;
+  isAdminRoute: boolean;
+}
+
+function LinkItem({ tab, selected, t, isAdminRoute }: ItemProps) {
+  if (!("href" in tab)) return null;
+  const href = getHref(tab, isAdminRoute);
+  return (
+    <ChakraLink
+      unstyled
+      href={tab.disabled ? undefined : href}
+      aria-disabled={tab.disabled || undefined}
+      data-disabled={tab.disabled ? "" : undefined}
+      tabIndex={tab.disabled ? -1 : undefined}
+      target={tab.externalHref ? "_blank" : undefined}
+      rel={tab.externalHref ? "noopener noreferrer" : undefined}
+      css={itemStyle}
+      data-selected={selected ? "" : undefined}
+      aria-current={selected ? "page" : undefined}
+      onClick={tab.disabled ? (e) => e.preventDefault() : undefined}
+      _disabled={{ opacity: 0.5, cursor: "not-allowed", pointerEvents: "none" }}
+    >
+      <ItemLabel
+        text={renderLabel(tab, t, isAdminRoute)}
+        icon={tab.icon && <IconDisplay name={tab.icon} size="1.5em" />}
+      />
+    </ChakraLink>
+  );
+}
+
+interface GroupProps {
+  group: string;
+  tabs: CompetitionNavTab[];
+  selected: boolean;
+  activeMenuKey: string;
+  t: TFunction;
+  isAdminRoute: boolean;
+}
+
+function GroupItem({
+  group,
+  tabs,
+  selected,
+  activeMenuKey,
+  t,
+  isAdminRoute,
+}: GroupProps) {
+  const groupIcon = groupIcons[group] || <LuFileQuestion />;
+  return (
+    <Menu.Root positioning={{ placement: "top", gutter: 12 }}>
+      <Menu.Trigger asChild>
+        <Button
+          unstyled
+          type="button"
+          css={itemStyle}
+          data-selected={selected ? "" : undefined}
+          outline="none"
+        >
+          <ItemLabel
+            text={t(`competitions.nav.${group}`)}
+            icon={<Icon boxSize="1.5em">{groupIcon}</Icon>}
+            chevron
+          />
+        </Button>
+      </Menu.Trigger>
+      <Portal>
+        <Menu.Positioner>
+          <Menu.Content
+            colorPalette={NAV_COLOR_PALETTE}
+            minW="56"
+            maxW="min(20rem, calc(100vw - 2rem))"
+          >
+            {tabs.map((tab) => {
+              const isLink = "href" in tab;
+              const isActive =
+                tab.menuKey === activeMenuKey ||
+                encodeURIComponent(tab.menuKey) === activeMenuKey ||
+                (group === "events" && activeMenuKey === tab.menuKey);
+
+              const label = isLink ? renderLabel(tab, t, isAdminRoute) : "";
+              return (
+                <Menu.Item
+                  key={tab.menuKey}
+                  value={tab.menuKey}
+                  asChild={!isLink}
+                  disabled={tab.disabled}
+                  bg={isActive ? "colorPalette.subtle" : undefined}
+                  color={isActive ? "colorPalette.fg" : undefined}
+                  fontWeight={isActive ? "bold" : undefined}
+                  h="10"
+                  fontSize="sm"
+                  _highlighted={{
+                    bg: isActive ? "colorPalette.muted" : "bg.muted",
+                  }}
+                >
+                  {isLink ? (
+                    <SingleItem
+                      tab={tab}
+                      label={label}
+                      isActive={isActive}
+                      isAdminRoute={isAdminRoute}
+                    />
+                  ) : (
+                    <ItemWithChildren
+                      tab={tab}
+                      isItemActive={isActive}
+                      activeMenuKey={activeMenuKey}
+                      t={t}
+                      isAdminRoute={isAdminRoute}
+                    />
+                  )}
+                </Menu.Item>
+              );
+            })}
+          </Menu.Content>
+        </Menu.Positioner>
+      </Portal>
+    </Menu.Root>
+  );
+}
+
+function ItemLabel({
+  text,
+  icon,
+  chevron,
+}: {
+  text: string;
+  icon?: React.ReactNode;
+  chevron?: boolean;
+}) {
+  return (
+    <Stack justify="center" alignItems="center" h="full" gap={1}>
+      <Stack direction="row" alignItems="start" gap={0} flex={1}>
+        {icon}{" "}
+        {chevron && (
+          <Icon size="xs">
+            <LuChevronUp />
+          </Icon>
+        )}
+      </Stack>
+      <Stack flex={1} justify="center">
+        <Box
+          textStyle="mobileTabItem"
+          textAlign="center"
+          lineHeight="1.2"
+          overflowWrap="anywhere"
+          hyphens="auto"
+          lineClamp={2}
+        >
+          {text}
+        </Box>
+      </Stack>
+    </Stack>
+  );
+}
+
+function SingleItem({
+  tab,
+  label,
+  isActive,
+  isAdminRoute,
+}: {
+  tab: TabWithLink;
+  label: string;
+  isActive: boolean;
+  isAdminRoute: boolean;
+}) {
+  const href = getHref(tab, isAdminRoute);
+  return (
+    <ChakraLink
+      unstyled
+      w="full"
+      minW={0}
+      href={tab.disabled ? undefined : href}
+      rel={tab.externalHref ? "noopener noreferrer" : undefined}
+      aria-disabled={tab.disabled || undefined}
+      data-disabled={tab.disabled ? "" : undefined}
+      tabIndex={tab.disabled ? -1 : undefined}
+      target={tab.externalHref ? "_blank" : undefined}
+      onClick={tab.disabled ? (e) => e.preventDefault() : undefined}
+      _disabled={{ opacity: 0.5, cursor: "not-allowed", pointerEvents: "none" }}
+      aria-current={isActive ? "page" : undefined}
+      outline="none"
+    >
+      <Stack direction="row" alignItems="center" gap={2} minW={0}>
+        {tab.icon && (
+          <Box as="span" flexShrink={0} display="inline-flex">
+            <IconDisplay name={tab.icon} size="1.25em" />
+          </Box>
+        )}
+        <Text as="span" truncate minW={0} title={label}>
+          {label}
+        </Text>
+      </Stack>
+    </ChakraLink>
+  );
+}
+
+function ItemWithChildren({
+  tab,
+  activeMenuKey,
+  isItemActive,
+  t,
+  isAdminRoute,
+}: {
+  tab: TabWithChildren;
+  activeMenuKey: string;
+  isItemActive: boolean;
+  t: TFunction;
+  isAdminRoute: boolean;
+}) {
+  return (
+    <Menu.Root positioning={{ placement: "left", gutter: 2 }}>
+      <Menu.TriggerItem
+        color={isItemActive ? "colorPalette.border" : undefined}
+      >
+        <Box as="span" flexShrink={0} display="inline-flex">
+          <LuChevronLeft />
+        </Box>
+        {tab.icon && (
+          <Box as="span" flexShrink={0} display="inline-flex">
+            <IconDisplay name={tab.icon} size="1.25em" />
+          </Box>
+        )}
+        <Text
+          as="span"
+          truncate
+          minW={0}
+          title={renderLabel(tab, t, isAdminRoute)}
+        >
+          {renderLabel(tab, t, isAdminRoute)}
+        </Text>
+      </Menu.TriggerItem>
+      <Portal>
+        <Menu.Positioner>
+          <Menu.Content
+            colorPalette={NAV_COLOR_PALETTE}
+            maxW="min(20rem, calc(100vw - 2rem))"
+          >
+            {tab.children.map((tab) => {
+              const isActive = tab.menuKey === activeMenuKey;
+              return (
+                <Menu.Item
+                  key={tab.menuKey}
+                  value={tab.menuKey}
+                  disabled={tab.disabled}
+                  bg={isActive ? "colorPalette.subtle" : undefined}
+                  color={isActive ? "colorPalette.fg" : undefined}
+                  fontWeight={isActive ? "bold" : undefined}
+                  _highlighted={{
+                    bg: isActive ? "colorPalette.muted" : "bg.muted",
+                  }}
+                >
+                  <SingleItem
+                    tab={tab}
+                    isActive={isActive}
+                    label={renderLabel(tab, t, isAdminRoute)}
+                    isAdminRoute={isAdminRoute}
+                  />
+                </Menu.Item>
+              );
+            })}
+          </Menu.Content>
+        </Menu.Positioner>
+      </Portal>
+    </Menu.Root>
+  );
+}

@@ -372,6 +372,7 @@ Rails.application.routes.draw do
     get '/', to: redirect('/help/api', status: 302)
 
     namespace :v1 do
+      get '/persons/:wca_id' => 'persons#show', as: :person
       get '/persons/:wca_id/results' => 'persons#results', as: :person_results
       get '/persons/:wca_id/records' => 'persons#records', as: :person_records
       get '/geocoding/search' => 'geocoding#search', as: :geocoding_search
@@ -380,6 +381,7 @@ Rails.application.routes.draw do
       resources :competitions, only: [] do
         get '/results' => 'competitions#results', as: :results
         get '/podiums' => 'competitions#podiums', as: :podiums
+        get '/head-to-head' => 'competitions#head_to_head', as: :head_to_head
 
         resources :scoretakers, only: %i[index create destroy], controller: 'scoretakers'
         resource :bookmark, only: %i[show create destroy]

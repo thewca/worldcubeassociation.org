@@ -101,6 +101,10 @@ class UserRole < ApplicationRecord
     self.end_date.nil? || self.end_date > Date.today
   end
 
+  def active_on?(date)
+    self.start_date <= date && (self.end_date.nil? || self.end_date > date)
+  end
+
   def lead?
     status = metadata ? metadata[:status] : nil
     case group_type
@@ -155,7 +159,8 @@ class UserRole < ApplicationRecord
     return true unless group.is_hidden # Roles of non-hidden groups are public
     return false if user.nil? # Roles of hidden groups are visible only to a set of users based on permisssions.
 
-    role_permission = active? ? :can_read_groups_current : :can_read_groups_past
+    hidden_from_current_readers = group.banned_competitors? && metadata.minor_competing_ban?
+    role_permission = active? && !hidden_from_current_readers ? :can_read_groups_current : :can_read_groups_past
     user.has_permission?(role_permission, group.id)
   end
 
@@ -191,21 +196,36 @@ class UserRole < ApplicationRecord
     sort(roles, sort_param, SORT_WEIGHT_LAMBDAS)
   end
 
-  def deprecated_team_role
-    friendly_id = if group_type == UserGroup.group_types[:board]
-                    UserGroup.group_types[:board]
-                  else
-                    group.metadata.friendly_id
-                  end
+  private def team_friendly_id
+    if group_type == UserGroup.group_types[:board]
+      UserGroup.group_types[:board]
+    else
+      group.metadata.friendly_id
+    end
+  end
+
+  def team_membership
     {
       id: self.id,
-      friendly_id: friendly_id,
+      friendly_id: team_friendly_id,
       leader: metadata&.status == "leader",
       senior_member: metadata&.status == "senior_member",
+    }
+  end
+
+  def v1_team_membership
+    {
+      friendly_id: team_friendly_id,
+      status: metadata&.status,
+    }
+  end
+
+  def deprecated_team_role
+    team_membership.merge(
       name: user.name,
       wca_id: user.wca_id,
       avatar: user.avatar,
-    }
+    )
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

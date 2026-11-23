@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_30_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_13_120806) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -320,6 +320,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_30_120000) do
     t.text "qualification"
     t.json "qualification_condition"
     t.date "qualification_latest_date"
+    t.date "qualification_earliest_date"
     t.index ["competition_id", "event_id"], name: "index_competition_events_on_competition_id_and_event_id", unique: true
     t.index ["event_id"], name: "fk_rails_ba6cfdafb1"
   end
@@ -902,6 +903,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_30_120000) do
     t.datetime "revoked_at", precision: nil
     t.string "scopes", limit: 255
     t.string "token", null: false
+    t.string "code_challenge"
+    t.string "code_challenge_method"
     t.index ["token"], name: "index_oauth_access_grants_on_token", unique: true
   end
 

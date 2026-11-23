@@ -10,13 +10,13 @@ import EventIcon from "@/components/EventIcon";
 import { TFunction } from "i18next";
 
 interface RecordsProps {
-  records: components["schemas"]["PersonInfo"]["personal_records"];
+  records: components["schemas"]["V1PersonInfo"]["ranks_by_event"];
   t: TFunction;
 }
 
 const PersonalRecordsTable: React.FC<RecordsProps> = ({ records, t }) => {
-  const getColor = (pr: number) => {
-    if (pr === 0) return undefined;
+  const getColor = (pr?: number) => {
+    if (!pr) return undefined;
     if (pr === 1) return "recordMarkers.personal";
     if (pr < 11) return "recordMarkers.national";
     return undefined;
