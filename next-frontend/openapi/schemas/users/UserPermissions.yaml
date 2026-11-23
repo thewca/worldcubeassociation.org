@@ -20,6 +20,7 @@ required:
   - can_create_posts
   - can_manage_regional_organizations
   - can_access_cms
+  - can_see_admin_competitions
 properties:
   can_attend_competitions:
     type: object
@@ -163,6 +164,13 @@ properties:
       scope:
         $ref: "./CompetitionPermissions.yaml"
   can_access_cms:
+    type: object
+    required:
+      - scope
+    properties:
+      scope:
+        $ref: "./CompetitionPermissions.yaml"
+  can_see_admin_competitions:
     type: object
     required:
       - scope

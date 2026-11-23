@@ -1326,10 +1326,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.29.14":
-  version: 7.29.14
-  resolution: "@babel/runtime@npm:7.29.14"
-  checksum: 10c0/dd809ac74c2154a549c9a9fbe73a3da84927c987d1291a1f1618f9263fa372a0de0d575c2616b3b420586a9974114c81ee47953c5d25074da66b58bf9d33d870
+"@babel/runtime@npm:^7.29.15":
+  version: 7.29.15
+  resolution: "@babel/runtime@npm:7.29.15"
+  checksum: 10c0/dd0aeddff9aa61c64431229ef243a5c08d662708c27cc6d5a3e0d90062caa243d1a72fa494f30568e87de21b4d4667092ede858e4eebc63c9c457a02ae4a0274
   languageName: node
   linkType: hard
 
@@ -1477,6 +1477,18 @@ __metadata:
     css-tree:
       optional: true
   checksum: 10c0/3d53a03ccfe4df4b4fe828aff15fd54ee9118f732a200b2bd6f52f67c274064a927a73a80d7b62a355eed3ba4abb90a1e21516368f131a71c06272bfbf4d33ca
+  languageName: node
+  linkType: hard
+
+"@csstools/css-syntax-patches-for-csstree@npm:^1.1.16":
+  version: 1.1.17
+  resolution: "@csstools/css-syntax-patches-for-csstree@npm:1.1.17"
+  peerDependencies:
+    css-tree: ^3.2.1
+  peerDependenciesMeta:
+    css-tree:
+      optional: true
+  checksum: 10c0/c39db1f7cfc82348819a66a7f6e5cb568c5bdda7f0b4593b975f81963d32dedeb021befe55913b6c40bd00b646965d8eaef1cd99c5881f3fb27143f84867884a
   languageName: node
   linkType: hard
 
@@ -3189,10 +3201,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stripe/stripe-js@npm:^10.2.1":
-  version: 10.2.1
-  resolution: "@stripe/stripe-js@npm:10.2.1"
-  checksum: 10c0/a5e70d093fe17e1668d3f985d95dd6e03e5fd99a1e3f950d8135d94b45036aebc71079e6849c4fd2daf76eade22336b4e7ecac22b9e13a6f57b6d06fafe3eb35
+"@stripe/stripe-js@npm:^10.3.0":
+  version: 10.3.0
+  resolution: "@stripe/stripe-js@npm:10.3.0"
+  checksum: 10c0/a271d0374c5aae246a4df637456a20d1cb6e7cd73538fcc4358ed8dfb92bbea4f2a354435b18268dc9cc4da82de7fd7e4a555a6a7d72d4b668c46ed219731a7e
   languageName: node
   linkType: hard
 
@@ -4600,7 +4612,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"colord@npm:^2.10.0, colord@npm:^2.9.3":
+"colord@npm:^2.13.0":
+  version: 2.14.0
+  resolution: "colord@npm:2.14.0"
+  checksum: 10c0/e16b472899b8958881375a0cf4db259bae35e36f1de1ba00af908e5896fdc3d3f5d7d801baf54942a404c1de5275f9e7433daf4e86ca5bd703f9894570ef319e
+  languageName: node
+  linkType: hard
+
+"colord@npm:^2.9.3":
   version: 2.10.0
   resolution: "colord@npm:2.10.0"
   checksum: 10c0/2f5d1d1759124f593deca17bbbab8a88bdc3ab68bbcc88db76c1192d9a5d575db202badde044bf61789561fa0ed7a9eb895382becad1af27ec65934c216e9e04
@@ -5341,12 +5360,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dotenv@npm:^18.0.9":
-  version: 18.0.9
-  resolution: "dotenv@npm:18.0.9"
+"dotenv@npm:^18.0.10":
+  version: 18.0.10
+  resolution: "dotenv@npm:18.0.10"
   bin:
-    dotenv: dist/index.cjs
-  checksum: 10c0/62a70960e611f1d26bf5ade0e0baa7850513f65d56789ba282c8ae7f690411d364457d33d4302b2611cc18157d03dea589ac7e33f1aa85b8f69737b8c05cf726
+    dotenv: dist/cli.cjs
+  checksum: 10c0/f07945aeb35f78fe54495025fb10c155cbefa15bdd04a4063aba8519d2756c647ce43f3e0cacbab1e5a7200376f740cbe3e4e7432571ecf4d99eeade7c1dd3a7
   languageName: node
   linkType: hard
 
@@ -8891,9 +8910,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-loader@npm:^8.2.1":
-  version: 8.2.1
-  resolution: "postcss-loader@npm:8.2.1"
+"postcss-loader@npm:^8.2.2":
+  version: 8.2.2
+  resolution: "postcss-loader@npm:8.2.2"
   dependencies:
     cosmiconfig: "npm:^9.0.0"
     jiti: "npm:^2.5.1"
@@ -8907,7 +8926,7 @@ __metadata:
       optional: true
     webpack:
       optional: true
-  checksum: 10c0/8ef4687f05972a85b4ad8e714f692fceec16f334d99edaa09c222dc08d01afcdcf7bed2b3a45f7888900cb9fd3324b9741d98ce694e33e87bebdc038dd17e30b
+  checksum: 10c0/14db3626993fc653f0667ab1f36abd9c97facbbac5f13b664ccf7e321a5b63dd49e7ad9c2032cdcc4b4f89ba7d7c8652d3bf3add0c95539d1649c6e790961cc5
   languageName: node
   linkType: hard
 
@@ -9398,13 +9417,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-selector-parser@npm:^7.1.7":
-  version: 7.1.7
-  resolution: "postcss-selector-parser@npm:7.1.7"
+"postcss-selector-parser@npm:^7.2.1":
+  version: 7.2.1
+  resolution: "postcss-selector-parser@npm:7.2.1"
   dependencies:
-    cssesc: "npm:^3.0.0"
     util-deprecate: "npm:^1.0.2"
-  checksum: 10c0/94db1cfb838957729dd632a229f86cc631cee98f0418026a8460ba3d24feb47da0a28f295a2ae4be37b548ffa6e61eff0f74fbc2ae309c48a6dd3fe1cb25e396
+  checksum: 10c0/bb82454497a6d2c8ec302cb53fbdc5c4ca36b8874c5c1b61acc6f9a0d6699135b7de6b1852d8d57c0d3404500e14fa9995595cd5d73b3fcdf48d717c2264784c
   languageName: node
   linkType: hard
 
@@ -9446,17 +9464,6 @@ __metadata:
     picocolors: "npm:^1.1.1"
     source-map-js: "npm:^1.2.2"
   checksum: 10c0/52f94c6655f86f568a803ce9c8eb3c749e109cc711d26644c4cde953b30c1b947a2f25af3b9453de68584ac655572f46ed8e830b8ab2f21dd226b3f640992e00
-  languageName: node
-  linkType: hard
-
-"postcss@npm:^8.5.31":
-  version: 8.5.32
-  resolution: "postcss@npm:8.5.32"
-  dependencies:
-    nanoid: "npm:^3.3.20"
-    picocolors: "npm:^1.1.1"
-    source-map-js: "npm:^1.2.2"
-  checksum: 10c0/5fa6cad84e277c2ced965dc7e8e7c0b8d7e5b76a6835591b57a43fde46e671d0c8428d365e9141c080abaae5441d495ed77ffd7472c5bd41d6c2154bd03c01d7
   languageName: node
   linkType: hard
 
@@ -10127,7 +10134,7 @@ __metadata:
     "@babel/plugin-transform-runtime": "npm:^7.29.7"
     "@babel/preset-env": "npm:^7.29.14"
     "@babel/preset-react": "npm:^7.29.7"
-    "@babel/runtime": "npm:^7.29.14"
+    "@babel/runtime": "npm:^7.29.15"
     "@cubing/icons": "npm:^3.0.5"
     "@fullcalendar/core": "npm:^6.1.22"
     "@fullcalendar/interaction": "npm:^6.1.22"
@@ -10139,7 +10146,7 @@ __metadata:
     "@pmmmwh/react-refresh-webpack-plugin": "npm:^0.6.3"
     "@rails/ujs": "npm:^7.1.600"
     "@stripe/react-stripe-js": "npm:^7.1.0"
-    "@stripe/stripe-js": "npm:^10.2.1"
+    "@stripe/stripe-js": "npm:^10.3.0"
     "@tanstack/react-query": "npm:^5.105.0"
     "@tanstack/react-table": "npm:^8.21.3"
     autonumeric: "npm:^4.10.10"
@@ -10155,7 +10162,7 @@ __metadata:
     css-minimizer-webpack-plugin: "npm:^8.0.0"
     date-fns: "npm:^4.4.0"
     dompurify: "npm:^3.4.18"
-    dotenv: "npm:^18.0.9"
+    dotenv: "npm:^18.0.10"
     easymde: "npm:^2.21.0"
     eslint: "npm:^8.57.0"
     eslint-config-airbnb: "npm:^19.0.4"
@@ -10181,7 +10188,7 @@ __metadata:
     postcss: "npm:^8.5.33"
     postcss-flexbugs-fixes: "npm:^5.0.2"
     postcss-import: "npm:^17.0.1"
-    postcss-loader: "npm:^8.2.1"
+    postcss-loader: "npm:^8.2.2"
     postcss-preset-env: "npm:^11.6.2"
     rails-erb-loader: "npm:^5.5.2"
     react: "npm:^18.3.1"
@@ -10198,18 +10205,18 @@ __metadata:
     react-spinners: "npm:^0.17.1"
     react-textarea-autosize: "npm:^8.5.9"
     regenerator-runtime: "npm:^0.14.1"
-    sass: "npm:^1.108.1"
+    sass: "npm:^1.108.2"
     sass-loader: "npm:^17.1.0"
     semantic-ui-react: "npm:^2.1.5"
     shakapacker: "npm:10.3.2"
     shakapacker-webpack: "npm:10.3.2"
     style-loader: "npm:^4.0.0"
-    stylelint: "npm:^18.0.0"
+    stylelint: "npm:^18.1.0"
     stylelint-config-recommended-scss: "npm:^18.0.0"
-    stylelint-scss: "npm:^7.4.0"
+    stylelint-scss: "npm:^7.5.0"
     terser-webpack-plugin: "npm:^5.6.1"
     webpack: "npm:^5.112.2"
-    webpack-assets-manifest: "npm:^6.5.5"
+    webpack-assets-manifest: "npm:^6.5.6"
     webpack-bundle-analyzer: "npm:^5.4.2"
     webpack-cli: "npm:^7.3.1"
     webpack-dev-server: "npm:^5.2.7"
@@ -10310,9 +10317,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:^1.108.1":
-  version: 1.108.1
-  resolution: "sass@npm:1.108.1"
+"sass@npm:^1.108.2":
+  version: 1.108.2
+  resolution: "sass@npm:1.108.2"
   dependencies:
     "@parcel/watcher": "npm:^2.4.1"
     chokidar: "npm:^5.0.0"
@@ -10323,7 +10330,7 @@ __metadata:
       optional: true
   bin:
     sass: sass.js
-  checksum: 10c0/4a7bc41997b0a3b5ec14947571babb84a56587fab155f26af12a4dadf359139e642c1c368e9bbacc7ba874283e821bc600c5d85e1aeb103fb5462cce2491d0a5
+  checksum: 10c0/957bc1d19bf06e2f5d9e6df3a6dc287aedc6b24ce5f343eaaba14a56c0fbe6c4fbfb536040a2e6b02076ccf0fc629c9c9947115157318c343ea416ad938012de
   languageName: node
   linkType: hard
 
@@ -10370,6 +10377,25 @@ __metadata:
   bin:
     schema-utils: bin/schema-utils.js
   checksum: 10c0/b18b816e5628adb6a703883dbbb672aa3368e6462e16097c9df16d9ca192e41191b98c1b63b6cf18b0ee17a7223268ec9ca76935e8c50337cfa8484d3d289eea
+  languageName: node
+  linkType: hard
+
+"schema-utils@npm:^4.8.3":
+  version: 4.8.5
+  resolution: "schema-utils@npm:4.8.5"
+  dependencies:
+    "@types/json-schema": "npm:^7.0.15"
+    ajv: "npm:^8.20.0"
+    ajv-formats: "npm:^3.0.1"
+    ajv-keywords: "npm:^5.1.0"
+  peerDependencies:
+    webpack: ^5.0.0
+  peerDependenciesMeta:
+    webpack:
+      optional: true
+  bin:
+    schema-utils: bin/schema-utils.js
+  checksum: 10c0/fc8b01eef99310cb51efdc7af01d3c00a663f3f1a8f5971165a108ff27a7d1e2eb9300e947456de60bfcd5384a0892ce14054ab64b692fc9c1f60aef97c30d56
   languageName: node
   linkType: hard
 
@@ -11148,27 +11174,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stylelint-scss@npm:^7.4.0":
-  version: 7.4.0
-  resolution: "stylelint-scss@npm:7.4.0"
-  dependencies:
-    "@csstools/css-calc": "npm:^3.4.3"
-    "@csstools/css-parser-algorithms": "npm:^4.0.0"
-    "@csstools/css-syntax-patches-for-csstree": "npm:^1.1.15"
-    "@csstools/css-tokenizer": "npm:^4.0.0"
-    css-tree: "npm:^3.2.1"
-    is-plain-object: "npm:^5.1.0"
-    known-css-properties: "npm:^0.37.0"
-    postcss-media-query-parser: "npm:^0.2.3"
-    postcss-resolve-nested-selector: "npm:^0.1.7"
-    postcss-selector-parser: "npm:^7.1.6"
-    postcss-value-parser: "npm:^4.2.0"
-  peerDependencies:
-    stylelint: ^16.8.2 || ^17.0.0
-  checksum: 10c0/eb1885618f621f6964dc2eb16cc9a2cb04575b359b29c18759761feb57aafcae1e0321608b0d683dc065daba89e004daa74f2e06b1d18ea2111cdac313ad69f0
-  languageName: node
-  linkType: hard
-
 "stylelint-scss@npm:^7.5.0":
   version: 7.5.0
   resolution: "stylelint-scss@npm:7.5.0"
@@ -11190,32 +11195,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stylelint@npm:^18.0.0":
-  version: 18.0.0
-  resolution: "stylelint@npm:18.0.0"
+"stylelint@npm:^18.1.0":
+  version: 18.1.0
+  resolution: "stylelint@npm:18.1.0"
   dependencies:
     "@csstools/css-calc": "npm:^3.4.3"
     "@csstools/css-parser-algorithms": "npm:^4.0.2"
-    "@csstools/css-syntax-patches-for-csstree": "npm:^1.1.15"
+    "@csstools/css-syntax-patches-for-csstree": "npm:^1.1.16"
     "@csstools/css-tokenizer": "npm:^4.0.2"
     "@csstools/media-query-list-parser": "npm:^5.0.2"
     "@csstools/selector-resolve-nested": "npm:^4.0.2"
     "@csstools/selector-specificity": "npm:^6.0.1"
-    colord: "npm:^2.10.0"
+    colord: "npm:^2.13.0"
     cosmiconfig: "npm:^10.0.1"
     css-tree: "npm:^3.2.1"
     ignore: "npm:^7.0.14"
     import-meta-resolve: "npm:^4.2.0"
     picomatch: "npm:^4.0.7"
-    postcss: "npm:^8.5.31"
+    postcss: "npm:^8.5.33"
     postcss-safe-parser: "npm:^7.1.0"
-    postcss-selector-parser: "npm:^7.1.7"
+    postcss-selector-parser: "npm:^7.2.1"
     postcss-value-parser: "npm:^4.2.0"
     tinyglobby: "npm:^0.2.17"
     write-file-atomic: "npm:^8.0.0"
   bin:
     stylelint: bin/stylelint.mjs
-  checksum: 10c0/e5465ea0db70c500c367dd55a5564a37639154c26f48f8ebb5b375a9f26c3cf27300fed4c919f876edd2e0dea73139eaf062c26a0786e63c8b23273a3f12ac8f
+  checksum: 10c0/ca932128f391952131820580ec42b26c49c011cc56f6243e4447677d910bea9233225b0a48aca1fb3183684ee21d24accbaccd3405d6580b3935d9b1ae670421
   languageName: node
   linkType: hard
 
@@ -11272,6 +11277,13 @@ __metadata:
   version: 2.3.3
   resolution: "tapable@npm:2.3.3"
   checksum: 10c0/47992e861053f861154e92fb4a98ac4ab47b6463717e60792dd1e8c755da0c4964cd8bb68c308a9066d6da89000b6310457b4d5d985c30de4ccc29066068cc17
+  languageName: node
+  linkType: hard
+
+"tapable@npm:^2.3.4":
+  version: 2.3.4
+  resolution: "tapable@npm:2.3.4"
+  checksum: 10c0/63be31c49fabdcf51bba1ba9b5864ec2b60e50b67b23b510f664e3df3e337899e66797198a722bf03240ab96732f327619672ce3c5402439fd9fa3079be2db06
   languageName: node
   linkType: hard
 
@@ -11741,17 +11753,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-assets-manifest@npm:^6.5.5":
-  version: 6.5.5
-  resolution: "webpack-assets-manifest@npm:6.5.5"
+"webpack-assets-manifest@npm:^6.5.6":
+  version: 6.5.6
+  resolution: "webpack-assets-manifest@npm:6.5.6"
   dependencies:
     deepmerge: "npm:^4.3.1"
     proper-lockfile: "npm:^4.1.2"
-    schema-utils: "npm:^4.8.1"
-    tapable: "npm:^2.3.3"
+    schema-utils: "npm:^4.8.3"
+    tapable: "npm:^2.3.4"
   peerDependencies:
     webpack: ^5.61.0
-  checksum: 10c0/780605c8571e4331df6a2fca18445be60aa7667c02bb99a75cbe633b86117ef0ff346a7e0adfd1a787e74ee46ad9489af46a3fa377fbc16971d9016d3bf0b026
+  checksum: 10c0/9ede2bf0ae07731d547bc0fc44b09b83c3910eb7ead24a4b48cdc0fd4471b501131334a99c8e4a1594f22b30cd1508d28262b3764fb0357aaf17fe316eb8bc6b
   languageName: node
   linkType: hard
 

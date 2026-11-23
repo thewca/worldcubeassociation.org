@@ -4,8 +4,6 @@ import { Tabs } from "@chakra-ui/react";
 import { useParams, usePathname } from "next/navigation";
 import _ from "lodash";
 
-// Holds the tab chrome without any competition data, so the menu can stream in separately from
-//   the content instead of the two blocking each other.
 export default function TabShell({
   menu,
   children,

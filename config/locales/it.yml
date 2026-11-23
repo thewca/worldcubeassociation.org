@@ -2339,10 +2339,6 @@ it:
         open: Aperte
         not_open: Non ancora aperte
         closed: Chiuse
-      currently_displaying:
-        one: 'Attualmente visualizzata: %{count} competizione'
-        many: 'Attualmente visualizzate: %{count} competizioni'
-        other: 'Attualmente visualizzate: %{count} competizioni'
       register_now: Iscriviti ora
       view_competition: Vedi competizione
       why_compete_description_html: |-
@@ -3319,6 +3315,11 @@ it:
         register: Registrati
         competitors: Partecipanti
         scrambles: Scramble
+      general: "Generale"
+      more: "Di più"
+      admin: "Admin"
+      results: "Risultati"
+      events: "Eventi"
     results_table:
       wca_profile: Profilo WCA
       event: Evento

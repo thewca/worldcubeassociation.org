@@ -1,30 +1,13 @@
-import { components } from "@/types/openapi";
-import { hasPassed, hasPassedEndOfDay } from "@/lib/wca/dates";
-import {
-  afterCompetitionTabs,
-  beforeCompetitionTabs,
-  liveTab,
-} from "@/lib/wca/competitions/tabs";
+import { liveTab } from "@/lib/wca/competitions/tabs";
 import TabMenu from "@/components/competitions/TabMenu";
-import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import { getT } from "@/lib/i18n/get18n";
 import OpenapiError from "@/components/ui/openapiError";
 import { Alert, Link } from "@chakra-ui/react";
-
-const LIVE_RESULT_BETA = !!process.env.LIVE_RESULT_BETA;
-
-function competitionStatus(
-  competitionInfo: components["schemas"]["CompetitionInfo"],
-) {
-  const hasEnded =
-    hasPassedEndOfDay(competitionInfo.end_date) && !LIVE_RESULT_BETA;
-
-  const isOngoing = !hasEnded && hasPassed(competitionInfo.start_date);
-
-  const isAwaitingResults = hasEnded && !competitionInfo.results_posted_at;
-
-  return { hasEnded, isOngoing, isAwaitingResults };
-}
+import {
+  competitionStatus,
+  getCompetitionMenuData,
+} from "@/lib/competitionMenu/getCompetitionMenuData";
+import MobileTabMenu from "./MobileTabMenu";
 
 export default async function CompetitionMenu({
   params,
@@ -33,29 +16,26 @@ export default async function CompetitionMenu({
 }) {
   const { competitionId } = await params;
   const { t } = await getT();
-  const {
-    data: competitionInfo,
-    error,
-    response,
-  } = await getCompetitionInfo(competitionId);
 
-  if (error) return <OpenapiError t={t} response={response} />;
+  const menu = await getCompetitionMenuData(competitionId);
 
-  const { hasEnded, isOngoing, isAwaitingResults } =
-    competitionStatus(competitionInfo);
+  if (!menu.ok) return <OpenapiError t={t} response={menu.response} />;
 
-  const baseTabs = hasEnded
-    ? afterCompetitionTabs(competitionInfo, isAwaitingResults)
-    : beforeCompetitionTabs(competitionInfo);
-
-  const tabs = isOngoing ? [...baseTabs, liveTab(competitionInfo)] : baseTabs;
+  const customTabs = menu.competitionInfo.tabs.map((tab) => tab.name);
 
   return (
-    <TabMenu
-      competitionInfo={competitionInfo}
-      tabs={tabs}
-      customTabs={competitionInfo.tabs.map((tab) => tab.name)}
-    />
+    <>
+      <TabMenu
+        competitionInfo={menu.competitionInfo}
+        tabs={menu.tabs}
+        customTabs={customTabs}
+      />
+      <MobileTabMenu
+        tabs={menu.tabs}
+        customTabs={customTabs}
+        competitionId={competitionId}
+      />
+    </>
   );
 }
 
@@ -66,16 +46,15 @@ export async function AwaitingResultsAlert({
   params: Promise<{ competitionId: string }>;
 }) {
   const { competitionId } = await params;
-  const { data: competitionInfo, error } =
-    await getCompetitionInfo(competitionId);
+  const menu = await getCompetitionMenuData(competitionId);
 
   // `CompetitionMenu` already renders the error for this same cached request.
-  if (error) return null;
+  if (!menu.ok) return null;
 
-  if (!competitionStatus(competitionInfo).isAwaitingResults) return null;
+  if (!competitionStatus(menu.competitionInfo).isAwaitingResults) return null;
 
   const { t } = await getT();
-  const competitionLiveTab = liveTab(competitionInfo);
+  const competitionLiveTab = liveTab(menu.competitionInfo);
   const liveResultsHref =
     competitionLiveTab.externalHref ?? competitionLiveTab.href;
 

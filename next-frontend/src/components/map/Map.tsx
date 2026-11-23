@@ -72,7 +72,9 @@ export default function Map({ competitions, isLoading = false }: MapProps) {
     "white",
   ]);
 
-  const shownCompetitions = competitions.slice(0, MAP_DISPLAY_LIMIT);
+  const shownCompetitions = competitions
+    .slice(0, MAP_DISPLAY_LIMIT)
+    .filter((c) => !c.city.toLowerCase().includes("multiple"));
 
   const competitionPins: FeatureCollection<Point> = {
     type: "FeatureCollection",
@@ -141,11 +143,15 @@ export default function Map({ competitions, isLoading = false }: MapProps) {
 
   return (
     <Box h="lg" w="full" position="relative">
-      {isLoading && (
-        <Box position="absolute" top="0" insetX="0" zIndex="1">
-          <Loading />
-        </Box>
-      )}
+      <Box
+        hidden={!isLoading}
+        position="absolute"
+        top="0"
+        insetX="0"
+        zIndex="1"
+      >
+        <Loading />
+      </Box>
       <MapContainer
         initialViewState={{ longitude: 0, latitude: 0, zoom: 2 }}
         mapStyle={TILE_STYLE}

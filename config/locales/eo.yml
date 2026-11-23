@@ -174,7 +174,7 @@ eo:
       ranking: 'Unuaj %{ranking} per averaĝo'
       any_result: Ajna averaĝo
     deadline:
-      description: Kvalifika limdato
+      description: Periodo-limdato por kvalifiki
       by_date: 'per %{date}'
   activity:
     registration: Surloka registriĝo
@@ -219,6 +219,7 @@ eo:
       unit_seconds: sekundoj
       unit_moves: movoj
     back_to_top: Reen al supro
+    back: Reen
   oauth:
     applications:
       your_apps: Viaj OAuth-aplikaĵoj
@@ -231,6 +232,10 @@ eo:
       secret: Sekreto
       scopes: Ampleksoj
       callback_urls: Retejaj adresoj vokitaj per referenco
+      confidential: Ĉu konfidenca?
+      confidentiality:
+        'yes': Jes
+        'no': Ne
   helpers:
     submit:
       competition_medium:
@@ -423,12 +428,11 @@ eo:
           Tuta priskribo de la incidento kaj ĝia decido, por publikigi ĝin.
           Bonvolu plenigi ĝin en la angla.
       user:
-        dob: Enigu la naskiĝdaton de la konkursanto kiel JJJJ-MM-TT
+        dob: Enigu la naskiĝdaton de la konkursanto kiel JJJJ-MM-TT.
         name: >-
-          Enigu la tutan nomon de konkursanto ĝuste, ekzemple <strong>Stefan
-          Pochmann</strong>. Ne neglekteme kiel <strong>s pochman</strong> aŭ
-          <strong>POCHMAN Stefan</strong>. Mezaj nomoj eblas (aŭ tute skribitaj
-          aŭ per komencliteroj).
+          Enigu la tutan nomon de konkursanto ĝuste, ekzemple <strong>Stefan Pochmann</strong>.
+          Ne neglekteme kiel <strong>s pochman</strong>.<br/>Mezaj nomoj eblas (aŭ
+          tute skribitaj aŭ per komencliteroj).
         pending_avatar: >-
           Kiam via nova profilbildo estas alŝutita, vi devas atendi la aprobon
           de la Rezulta Teamo de la WCA.
@@ -514,15 +518,14 @@ eo:
           bonvolu ekskludi ĉiujn detalojn de la raporto kaj kontaktu la WIC
           private.
         remarks: >-
-          Parolu pri ajna alia detalo kiun vi ŝatus diskonigi (ekz.,
-          plibonigo/malplibonigo ene de la komunumo, estontaj projektoj por tiu
-          ĉi regiono). Se vi ne diris ion pro la volo esti konciza antaŭe, diru
-          ĝin tie!
+          Parolu pri ajna alia detalo kiun vi ŝatus diskonigi (ekz., plibonigo/malplibonigo
+          ene de la komunumo, estontaj projektoj por tiu ĉi regiono). Se vi ne diris
+          ion pro la volo esti konciza antaŭe, diru ĝin tie.
       competition_tab:
         name: 'Ekzemploj: Vojaĝo, Pagoj, Premioj, Tranoktejo'
       regional_organization:
         website: Devas esti valida http(s) reteja adreso. HTTPS estas 
-          rekomendita.
+          rekomendita
         logo: 'Devas esti PNG-dosiero, bonkvalite kaj kun travidebla fono'
         email: Devus esti dissendolisto kiu enhavas ĉiujn Direktorojn kaj 
           Oficistojn
@@ -610,8 +613,7 @@ eo:
               aŭ eblas ke via pasvorto estas kompromita.
           name: Dufaza Aŭtentigo (2FA)
           support_desc_html: >-
-            La retejo de la WCA subtenas %{two_factor_link} uzante unufojan
-            pasvorton.
+            La retejo de la WCA subtenas %{two_factor_link} uzante unufojan pasvorton:
           options:
             app: >-
               generita per dediĉita 2FA poŝtelefona apo (ekzemple Authy, Google
@@ -692,8 +694,8 @@ eo:
     errors:
       messages:
         form_error:
-          one: La formularo enhavas unu eraron
-          other: 'La formularo enhavas %{count} erarojn'
+          one: 'La formularo enhavas unu eraron:'
+          other: 'La formularo enhavas %{count} erarojn:'
       error_pages:
         500_error: Pardonu sed io fuŝiĝis.
         500_contact_html: '<a href=%{contact_url}>Alklaku ĉi tie</a> por sciigi ĝin.'
@@ -740,10 +742,9 @@ eo:
         Rebonvenon! Por krei vian WCA-konton, ni bezonas koni la WCA-ID kun kiu
         vi konkursis.
       welcome_html: >-
-        Bonvenon! Antaŭ ol konkursi en via unua konkurso de la WCA, ni bezonas
-        kromajn informaciojn por datumrikordaj celoj. Atentu ke via naskiĝtago
-        neniam estos publikigita sen via konsento.<br/><br/>Se vi aliĝas nome de
-        iu alia, bonvolu doni la detalojn de la <strong>konkursanto</strong>.
+        Bonvenon! Antaŭ ol konkursi en via unua konkurso de la WCA, ni bezonas kromajn
+        informaciojn por datumrikordaj celoj.<br/><br/>Se vi aliĝas nome de iu alia,
+        bonvolu doni la detalojn de la <strong>konkursanto</strong>.
   layouts:
     navigation:
       information: Informo
@@ -818,8 +819,8 @@ eo:
         dokumentojn de la organizo, kaj la Kasisto administras financajn aferojn
         de la WCA.
       board_description: >-
-        La WCA-Estraro respondecas pri gvidado de la organizo kiel tutaĵo, kaj
-        plenumado de ajnaj devoj ne plenumitaj de aliaj Teamoj kaj komitatoj.
+        La WCA-Estraro respondecas pri gvidado de la organizo kiel tutaĵo, kaj plenumado
+        de ajnaj devoj ne plenumitaj de aliaj Teamoj kaj komitatoj
     teams_committees_councils:
       title: Teamoj kaj komitatoj de la WCA
       description: >-
@@ -862,12 +863,11 @@ eo:
           pozitivan kulturon de amikeco, travidebleco, inkluziveco, malfermiteco
           kaj respondeco.
         wcat: >-
-          La  Konkurs-anonca Teamo de la WCA (WCAT) aprobas kaj anoncas la
-          WCA-konkursojn submetitajn de WCA-delegitoj, kaj certigas ke tiuj
-          anoncoj sekvas la WCA-kvalitajn normojn. Ĉi tiu teamo ankaŭ
-          respondecas pri prizorgado de protokolo de submetiĝo de konkurso en
-          dokumentoj kiel la Politiko pri Postuloj de Konkursoj de la WCA. La
-          WCAT NE respondecas pri organizado kaj delegado de unuopaj konkursoj.
+          La Konkurs-anonca Teamo de la WCA (WCAT) aprobas kaj anoncas la WCA-konkursojn
+          submetitajn de WCA-delegitoj, kaj certigas ke tiuj anoncoj sekvas la WCA-kvalitajn
+          normojn. Ĉi tiu teamo ankaŭ respondecas pri prizorgado de protokolo de submetiĝo
+          de konkurso en dokumentoj kiel la Politiko pri Postuloj de Konkursoj de
+          la WCA. La WCAT NE respondecas pri organizado kaj delegado de unuopaj konkursoj.
         wic: >-
           La Integreca Komitato de la WCA (WIC) plenumas sendependajn enketojn
           pri membroj de la WCA-komunumo kaj incidentoj dum WCA-konkursoj aŭ en
@@ -906,8 +906,8 @@ eo:
           subtenas la WCA-delegitoj por ajnaj aferoj kiuj okazas dum konkursoj
           kaj ili decidas kiam incidentoj estas nesolvitaj aŭ nekovritaj.
         wrt: >-
-          La Rezulta Teamo de la WCA  (WRT) administras ĉiujn datumojn en la
-          WCA-datumbazoj, inkluzive de konkursaj rezultoj kaj personaj datumoj.
+          La Rezulta Teamo de la WCA (WRT) administras ĉiujn datumojn en la WCA-datumbazoj,
+          inkluzive de konkursaj rezultoj kaj personaj datumoj.
         wst: >-
           La Programara Teamo de la WCA (WST) administras la WCA-programaroj
           (retejo, miksgeneriloj, administriloj).
@@ -1045,6 +1045,8 @@ eo:
       success_message_with_ticket_link_html: Peto sendita - ni baldaŭ respondos 
         al vi. Por vidi la staton de ĉi tiu peto, bonvolu viziti <a 
         href="%{link}">ĉi tiun ligilon</a>.
+    executives:
+      close: Fermi
   homepage:
     learn_more: Lernu pli
     title: Bonvenon ĉe la World Cube Association
@@ -1110,20 +1112,20 @@ eo:
         header: Konfirmaciaj instrukcioj
         welcome: 'Bonvenon %{user_email}!'
         confirm: >-
-          Via konto estis kreita kaj devas esti aktivigita antaŭ ol esti uzebla.
-          Bonvolu konfirmi vian konton per la malsupra ligilo:
+          Via konto estis kreita kaj devas esti aktivigita antaŭ ol esti uzebla. Bonvolu
+          konfirmi vian konton per la malsupra ligilo: 
         confirmation_link: Konfirmi mian konton.
         activate: >-
-          Post aktivigo, vi eble devos ensaluti je la retejo de la Word Cube
-          Association:
+          Post aktivigo, vi eble devos ensaluti je la retejo de la Word Cube Association:
+
         login_form: ensaluta formularo
         addendum: >-
           Tiu retmesaĝo estas aŭtomate produktita. Se vi ne kreis konton ĉe la
           retejo de la Word Cube Association kaj vi ricevas tiun mesaĝon erare,
           bonvole ignoru kaj forigu ĝin.
         questions: >-
-          Ĉu vi havas pliajn demandojn? Ni ĝoje respondos ilin! Ne hezitu sendi
-          retmesaĝon al %{contact_link}
+          Ĉu vi havas pliajn demandojn? Ni ĝoje respondos ilin! Ne hezitu sendi retmesaĝon
+          al %{contact_link}.
       reconfirmation_mail:
         welcome: 'Saluton %{user_email}!'
         confirm: 'Vi povas konfirmi vian novan retpoŝtadreson per la malsupra ligilo:'
@@ -1136,8 +1138,8 @@ eo:
           submetiĝis ĝin al la WCAT. Vi ricevos alian sciigon tuj kiam la WCAT
           publike anoncos tiun konkurson.
         contact: >-
-          Se vi havas pliajn demandojn, bonvolu kontakti la Delegito de la
-          konkurso per retmesaĝo:
+          Se vi havas pliajn demandojn, bonvolu kontakti la Delegito de la konkurso
+          per retmesaĝo: 
       competition_announcement_email:
         header: 'La WCAT anoncis %{competition}'
         announced: La WCAT akceptis vian konkurson kaj oficiale anoncis ĝin 
@@ -1175,7 +1177,7 @@ eo:
         intro_html: 'Viaj rezultoj ĉe %{competition_link} ĵus estis enrete poŝtitaj.'
         information_html: 'Kontrolu ĉiujn viajn rezultojn %{result_link}.'
         more_info_html: 'Vi povas ŝanĝi viajn retpoŝtajn agordojn %{preferences_link}.'
-        regards_html: 'Amike, la Rezulta Teamo de la WCA en la nomo de %{managers}.'
+        regards_html: 'Amike,<br/>la Rezulta Teamo de la WCA en la nomo de %{managers}.'
       reset_password_instructions:
         subject: Restarigi pasvorton de via WCA-konto
         greeting: 'Saluton,'
@@ -1190,7 +1192,7 @@ eo:
     claim_wca_id:
       title: Pretendi WCA-ID-n
       competition: konkurso
-      already_have_html: 'Vi jam havas WCA-ID %{wca_id}'
+      already_have_html: 'Vi jam havas la WCA-ID-n %{wca_id}.'
       already_claimed_html: 'Vi pretendis WCA-ID-n %{wca_id}. Kontaktu %{delegate}
         se vi havas demandojn.'
       info_competed_before: 'Se vi konkursis antaŭe, vi povas peti ligon de via WCA-ID
@@ -1465,8 +1467,8 @@ eo:
       accepted:
         mail_subject: 'Registriĝo Akceptata: %{comp_name}'
         message_html: >-
-          Via registriĝo por %{comp_name} ĵus estis akceptita. Kiel ĉiam, vi
-          povas kontroli la staton de via registriĝo %{here}
+          Via registriĝo por %{comp_name} ĵus estis akceptita. Kiel ĉiam, vi povas
+          kontroli la staton de via registriĝo %{here}.
         see_you_soon: 'Ni antaŭĝojas vidi vin ĉe %{comp_name}!'
       waiting_list:
         mail_subject: 'Vi estas en atendolisto: %{comp_name}'
@@ -1531,7 +1533,7 @@ eo:
     delete_registration: Forigi registriĝon
     will_open_html: 'Registriĝperiodo malfermiĝos post <strong>%{days}</strong> je
       %{time}.'
-    will_close_html: 'Registriĝperiodo finiĝos post <strong>%{days}</strong> je %{time}'
+    will_close_html: 'Registriĝperiodo finiĝos post <strong>%{days}</strong> je %{time}.'
     closed_html: 'Registriĝperiodo finiĝis antaŭ <strong>%{days}</strong> je %{time}.'
     please_sign_in_past_html: >-
       %{sign_in} por kontroli vian registriĝan staton. Se vi ankoraŭ ne havas
@@ -1563,7 +1565,7 @@ eo:
       Viaj registriĝkostoj estis tute repagitaj. Se vi bezonas pagi denove, vi
       povas fari tion sube
     entry_fees_pay_again: Mi volas pagi denove
-    will_pay_here: Vi pagos ilin tie post submetiĝo de via registriĝo.
+    will_pay_here: Vi pagos ilin tie post submetiĝo de via registriĝo
     wont_pay_here: Bonvolu kontroli konkursajn informojn por scii kiel pagi
     refund_form:
       labels:
@@ -1997,12 +1999,11 @@ eo:
         search: Nomo aŭ urbo
         recent: 'Lastaj %{count} tagoj'
         registration:
-          opens_in: 'Registriĝperiodo malfermiĝos %{relativeDate}'
-          closed: 'Registriĝperiodo finiĝis. La konkurso komenciĝos %{relativeDate}'
+          opens_in: 'Registriĝperiodo malfermiĝos %{relativeDate}.'
+          closed: 'Registriĝperiodo finiĝis. La konkurso komenciĝos %{relativeDate}.'
           open: Registriĝi nuntempe eblas!
           full: >-
-            Limo de konkursantoj estis atingita, novaj registriĝoj iros al la
-            atendolisto
+            Limo de konkursantoj estis atingita, novaj registriĝoj iros al la atendolisto.
       no_more_comps: Neniu alia konkurso.
       no_comp_found: Neniu konkurso trovita.
     my_competitions_table:
@@ -2069,7 +2070,7 @@ eo:
         admin:
           is_confirmed: Malpermesi redakton de tiu konkurso al organizantoj
           is_visible: Videbliĝu tiu konkurso publike
-          uses_new_registration_system: Uzi la novan registriĝ-sistemon.
+          uses_new_registration_system: Uzi la novan registriĝ-sistemon
         competition_id: ID
         name: Nomo
         short_name: Kromnomo de la konkurso
@@ -2124,7 +2125,7 @@ eo:
           opening_date_time: Malfermo de registriĝperiodo
           closing_date_time: Fino de registriĝperiodo
           waiting_list_deadline_date: Limdato por akcepti konkursantojn de la 
-            atendolisto.
+            atendolisto
           event_change_deadline_date: Limdato por ĝisdatigo de la konkurseroj de
             konkursantoj
           allow_on_the_spot: Surlokaj registriĝoj
@@ -2489,10 +2490,10 @@ eo:
           %{update_params}'
         delete_contact_message: Mi volas forigi mian registriĝon
         no_changes: Ne estas ŝanĝoj
-        email_message: Kopiita al tondujo. Memoru uzi BCC!
+        email_message: Kopiita al tondujo. Memoru uzi kaŝkopion (bcc)!
         move_to:
-          one: 'Movi %{count} al'
-          other: 'Movi %{count} al'
+          one: Movi %{count} registriĝon al
+          other: Movi %{count} registriĝojn al
         move_to_none_selected: Movi al
         pending: Pritraktota
         waitlist: Atendolisto
@@ -2527,7 +2528,7 @@ eo:
           requirements:
             title: Postuloj
             description: Akcepti la kondiĉojn de la konkurso
-        success: 'Vi estas registrita por %{comp_name}.'
+        success: 'Vi estas registrita por %{comp_name}'
         error: 'Registriĝo malsukcesis kun eraro %{error}'
         early_registration: >-
           Registriĝperiodo ankoraŭ ne komenciĝis - vi antaŭregistriĝas kiel
@@ -3033,11 +3034,11 @@ eo:
         delegito(j) de la konkurso devas kontakti la WCAT por fari ajnan ŝanĝon
         al ligitaj kontoj.
       before_disconnect_warning: >-
-        Se vi malligas tra ĉi tiu paĝo, nia retejo forgesos la ligon al via
-        %{provider}-konto. Sed via %{provider}-panelo (vidu la ligilon sube)
-        eble ankoraŭ listos la WCA-retejon pro la rajtigo kiun vi antaŭe donis.
-        Notu ke senvalidigo de rajtigo en la %{provider}-panelo ankaŭ influos
-        iun ajn alian konkurson ligitan por akcepti pagojn per ĉi tiu konto!"
+        Se vi malligas tra ĉi tiu paĝo, nia retejo forgesos la ligon al via %{provider}-konto.
+        Sed via %{provider}-panelo (vidu la ligilon sube) eble ankoraŭ listigos la
+        WCA-retejon pro la rajtigo kiun vi antaŭe donis. Notu ke senvalidigo de rajtigo
+        en la %{provider}-panelo ankaŭ influos iun ajn alian konkurson ligitan por
+        akcepti pagojn per ĉi tiu konto!
       before_disconnect_info: >-
         Memoru ke malligi konton devas esti farita nur en esceptaj situacioj,
         ekzemple se la nuna konto nekapablas ricevi pagojn.
@@ -3324,10 +3325,9 @@ eo:
       kunlaboradoj kun tiuj kiuj interesiĝas pri tiuj puzloj.</p>
     world_championship_title: Monda Ĉampionado
     world_championship_content_html: >-
-      Ĉiu du jaroj, ni aprobas la konkurson kiu difinas la mondan ĉampionon.
-      Tiuj eventoj postulas ege zorgeman planadon per grava kvanto da
-      volontuloj, kaj ankaŭ grava financa subteno por rezervi konkursejon kaj
-      fari necesan preparadon.
+      <p>Ĉiu du jaroj, ni aprobas la konkurson kiu difinas la mondan ĉampionon. Tiuj
+      eventoj postulas ege zorgeman planadon per grava kvanto da volontuloj, kaj ankaŭ
+      grava financa subteno por rezervi konkursejon kaj fari necesan preparadon.</p>
     contributing_title: Kontribui
     contributing_content_html: >-
       Vi povas donaci per kreditkarto uzante Guidestar %{here_credit} aŭ per
@@ -3359,23 +3359,23 @@ eo:
       operations_html: 'La %{committees_and_teams} okupiĝas pri la ĉiutagaj taskoj.'
       teams_committees: Teamoj kaj Komitatoj
       delegates_html: >-
-        <p><strong>WCA-Delegito</strong> estas rolo difinita en la Rezolucioj de
-        la WCA kaj priskribataj en la Regularo de la WCA. Ĝia ĉefa devo estas
-        kontrolado de konkursoj nome de la WCA. WCA-Delegito respondecas pri
-        certigado ke ĉiuj Konkursoj de la WCA okazas sekvante la Celo, Spirito
-        kaj Regularo de la WCA. La WCA distingas <strong>Ĉefaj
-        Delegitoj</strong>, <strong>Regionaj Delegitoj</strong>, <strong>Plenaj
-        Delegitoj</strong>, <strong>Debutantaj Delegitoj</strong> kaj
-        <strong>Trejnantaj Delegitoj</strong>%{see_link}.</p> <p>Krom tiuj devoj
-        de WCA-Delegitoj, Ĉefaj Delegitoj aŭ Regionaj Delegitoj respondecas pri
-        direktado de WCA-Delegitoj en iliaj areoj kaj kontakto kun la komunumo
-        pri regionaj aferoj.</p> <p>Novaj Delegitoj estas komence listigitaj
-        kiel Debutantaj Delegitoj; poste oni postulas ke ili montru sukceson en
-        direktado kaj kontrolado de Konkursoj de la WCA antaŭ ol esti
-        promociitaj kiel WCA-Delegitoj.</p> <p>Trejnantaj Delegitoj estas
-        trejnantaj por la pozicio de WCA-Delegito kaj povas kontroli nur
-        konkursojn en kiuj WCA-Delegitoj ĉeestas.</p>
-      see_link_html: '(vidu %{link})'
+        <p><strong>WCA-Delegito</strong> estas rolo difinita en la Rezolucioj de la
+        WCA kaj priskribataj en la Regularo de la WCA. Ĝia ĉefa devo estas kontrolado
+        de konkursoj nome de la WCA. WCA-Delegito respondecas pri certigado ke ĉiuj
+        Konkursoj de la WCA okazas sekvante la Celo, Spirito kaj Regularo de la WCA.
+        La WCA distingas <strong>Ĉefaj Delegitoj</strong>, <strong>Regionaj Delegitoj</strong>,
+        <strong>Plenaj Delegitoj</strong>, <strong>Debutantaj Delegitoj</strong> kaj
+        <strong>Trejnantaj Delegitoj</strong>%{see_link}.</p> <p>Krom tiuj devoj de
+        WCA-Delegitoj, Ĉefaj Delegitoj aŭ Regionaj Delegitoj respondecas pri direktado
+        de WCA-Delegitoj en iliaj areoj kaj kontakto kun la komunumo pri regionaj
+        aferoj.</p> <p>Novaj Delegitoj estas komence listigitaj kiel Debutantaj Delegitoj;
+        poste oni postulas ke ili montru sukceson en direktado kaj kontrolado de Konkursoj
+        de la WCA antaŭ ol esti promociitaj kiel WCA-Delegitoj.</p> <p>Trejnantaj
+        Delegitoj estas trejnantaj por la pozicio de WCA-Delegito kaj povas kontroli
+        nur konkursojn en kiuj WCA-Delegitoj ĉeestas.</p> <p>Se vi interesiĝas je
+        iĝi Trejnantan Delegiton, kontaktu vian Regionan Delegiton por scii ĉu vi
+        estas elektebla.</p>
+      see_link_html: ' (vidu %{link})'
       members_html: >-
         Ĉiuj konkursantoj aŭtomate devenas <strong>membroj</strong> de la WCA
         dum ilia unua konkurso de la WCA.
@@ -3646,7 +3646,7 @@ eo:
         La <a href="/faq">sekcio de Plej Oftaj Demandoj</a> respondas al kelkaj
         oftaj demandoj pri la Regularo de la WCA.
     panel4:
-      title: Gvidlinioj por Organizantoj
+      title: Gvidlinioj por organizantoj
       content1_html: >-
         Se organizi konkurson interesas vin aŭ se vi jam planis organizi unu,
         bonvolu legi niajn <a href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">Gvidliniojn
@@ -3881,16 +3881,16 @@ eo:
         genraj opcioj estas 'ina', 'iĉa' kaj 'alia'. Bonvolu lasi komenton al la
         WRT pri ĝi.
       non_matching_name_warning: >-
-        La nomo '%{name}' provizita por %{wca_id} ne kongruas kun la aktuala
-        rikordo en la WCA-datumbazo ('%{expected_name}')
+        La nomo '%{name}' provizita por %{wca_id} ne kongruas kun la aktuala rikordo
+        en la WCA-datumbazo ('%{expected_name}'). 
       non_matching_country_warning: >-
         La lando '%{country}' provizita por %{name} (%{wca_id}) ne kongruas kun
         la aktuala rikordo en la WCA-datumbazo ('%{expected_country}'). Se ĉi
         tio estas eraro, riparu ĝin. Alie lasu komenton al la WRT pri ĝi.
       multiple_newcomers_with_same_name_warning: >-
-        Estas multaj novaj konkursantoj kun ekzakte la sama nomo: %{name}.
-        Bonvolu certigi ke ĉiuj rezultoj estas ĝustaj por ĉi tiuj konkursantoj
-        kaj ke ĉiuj rezultoj estas ĝuste apartigitaj laŭ iliaj koncernaj IDj.
+        Estas multaj novaj konkursantoj kun ekzakte la sama nomo: %{name}. Bonvolu
+        certigi ke ĉiuj rezultoj estas ĝustaj por ĉi tiuj konkursantoj kaj ke ĉiuj
+        rezultoj estas ĝuste apartigitaj laŭ iliaj koncernaj ID-j.
       wrong_parenthesis_type_error: >-
         La krampo uzata en '%{name}' estas nevalida signo, bonvolu anstataŭigi
         ĝin per ronda krampo '(' aŭ ')' kaj kun konvenaj spacoj.
@@ -4062,3 +4062,11 @@ eo:
     group: Grupo %{number}
     attempt: Provo %{number}
   tickets: {}
+  trainee_delegate_application:
+    form:
+      name: Nomo
+      wca_id: WCA-ID
+      email: Retpoŝtadreso
+      age: Aĝo
+      competition_count: Kvanto da konkursoj
+      region_and_references: Regiono kaj referencoj

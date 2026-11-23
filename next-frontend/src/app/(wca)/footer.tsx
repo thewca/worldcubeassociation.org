@@ -13,6 +13,7 @@ import type { IconName } from "@/components/icons/iconMap";
 import type { Footer, SocialLink } from "@/types/payload";
 import WCALogo from "@/components/WCALogo";
 import { getCachedGlobal } from "@/lib/payload/globals";
+import { getT } from "@/lib/i18n/get18n";
 
 type FooterNavItem = NonNullable<Footer["navigationLinks"]>[number];
 type FooterSocialItem = NonNullable<SocialLink["links"]>[number];
@@ -52,9 +53,11 @@ export default async function Footer() {
   // than inside `getCachedGlobal`: within a `"use cache"` scope `io()` resolves immediately.
   await io();
 
+  const { lng } = await getT();
+
   const [footer, socialLinksGlobal] = await Promise.all([
-    getCachedGlobal("footer"),
-    getCachedGlobal("social-links"),
+    getCachedGlobal("footer", lng),
+    getCachedGlobal("social-links", lng),
   ]);
 
   const navigationLinks = footer.navigationLinks ?? [];
