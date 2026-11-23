@@ -26,7 +26,7 @@ import {
 } from "@chakra-ui/react";
 import { ChakraMarkdown } from "@/components/Markdown";
 import AnnouncementsCard from "@/components/AnnouncementsCard";
-import { getPayload } from "payload";
+import { getPayload, type TypedLocale } from "payload";
 import config from "@payload-config";
 import { getCachedGlobal } from "@/lib/payload/globals";
 
@@ -48,8 +48,11 @@ import type {
   GrowthStrategy,
 } from "@/types/payload";
 import Link from "next/link";
+import { notFound } from "next/navigation";
+import LocaleProvider from "@/lib/i18n/LocaleProvider";
 import { route } from "nextjs-routes";
 import { getT } from "@/lib/i18n/get18n";
+import { isValidLanguageCode } from "@/lib/i18n/settings";
 import { draftMode } from "next/headers";
 import { MediaImage } from "@/components/MediaImage";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
@@ -538,9 +541,13 @@ const renderBlock = (
   }
 };
 
-const PayloadContents = async () => {
-  const { isEnabled: isDraftMode } = await draftMode();
-  const { lng } = await getT();
+const PayloadContents = async ({
+  lng,
+  isDraftMode,
+}: {
+  lng: TypedLocale;
+  isDraftMode: boolean;
+}) => {
   const homepage = isDraftMode
     ? await (
         await getPayload({ config })
@@ -579,18 +586,34 @@ const PayloadContents = async () => {
 };
 
 export default async function Homepage({
+  params,
   searchParams,
 }: {
+  params: Promise<{ locale?: string }>;
   searchParams: Promise<{ signed_out?: string }>;
 }) {
-  const { t } = await getT();
+  const { locale } = await params;
+  if (locale !== undefined) {
+    if (!isValidLanguageCode(locale)) notFound();
+
+    return (
+      <LocaleProvider lng={locale}>
+        <Suspense>
+          <PayloadContents lng={locale} isDraftMode={false} />
+        </Suspense>
+      </LocaleProvider>
+    );
+  }
+
+  const { t, lng } = await getT();
+  const { isEnabled: isDraftMode } = await draftMode();
 
   // Rails redirects here with this flag once it has ended its own session.
   //   Dismissing links back to the bare homepage, which drops the flag.
   const { signed_out: signedOut } = await searchParams;
 
   return (
-    <>
+    <LocaleProvider lng={lng}>
       {signedOut === "true" && (
         <Box px={HOMEPAGE_SPACING} pt={HOMEPAGE_SPACING}>
           <Alert.Root status="success">
@@ -604,7 +627,7 @@ export default async function Homepage({
           </Alert.Root>
         </Box>
       )}
-      <PayloadContents />
-    </>
+      <PayloadContents lng={lng} isDraftMode={isDraftMode} />
+    </LocaleProvider>
   );
 }
