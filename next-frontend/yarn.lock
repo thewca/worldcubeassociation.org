@@ -13036,7 +13036,7 @@ __metadata:
     openapi-react-query: "npm:^0.5.4"
     openapi-typescript: "npm:^7.13.0"
     payload: "npm:3.94.1"
-    prettier: "npm:^3.9.10"
+    prettier: "npm:^3.10.1"
     react: "npm:^19.3.1"
     react-country-flag: "npm:^3.1.0"
     react-dom: "npm:^19.3.1"
@@ -13831,7 +13831,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^3.2.5, prettier@npm:^3.9.10":
+"prettier@npm:^3.10.1":
+  version: 3.10.1
+  resolution: "prettier@npm:3.10.1"
+  bin:
+    prettier: bin/prettier.cjs
+  checksum: 10c0/e8c03ea575a30e15afa75a3700e94609050502980d7c906374aea4cf623eef4dce0816100126207e675cc1ed54b7dfce60f02dbee8d61ec27dc69ce5df6c3723
+  languageName: node
+  linkType: hard
+
+"prettier@npm:^3.2.5":
   version: 3.9.10
   resolution: "prettier@npm:3.9.10"
   bin:
