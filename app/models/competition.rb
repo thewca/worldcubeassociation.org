@@ -2315,7 +2315,6 @@ class Competition < ApplicationRecord
     exclude_deprecated: true,
   }.freeze
 
-  # `User#serializable_hash` checks `staff_delegate?` even with `exclude_deprecated`, which reads the role metadata.
   V1_INFO_STAFF_INCLUDES = %i[current_avatar delegate_role_metadata].freeze
 
   V1_INFO_INCLUDES = [
@@ -2327,7 +2326,7 @@ class Competition < ApplicationRecord
   ].freeze
 
   # `show_at_all` rather than `announced?`, so the status agrees with who may see the competition.
-  def lifecycle_status
+  def status
     if cancelled?
       "cancelled"
     elsif show_at_all?
@@ -2350,7 +2349,7 @@ class Competition < ApplicationRecord
       "id" => id,
       "name" => name,
       "short_name" => short_name,
-      "status" => lifecycle_status,
+      "status" => status,
       "information" => information,
       "website" => website,
       "start_date" => start_date,
@@ -2382,8 +2381,8 @@ class Competition < ApplicationRecord
         "on_the_spot_registration" => on_the_spot_registration,
         "extra_requirements" => extra_registration_requirements,
         "external_registration_page" => external_registration_page,
-        "event_change_deadline_date" => event_change_deadline_date,
-        "waiting_list_deadline_date" => waiting_list_deadline_date,
+        "event_change_deadline" => event_change_deadline_date,
+        "waiting_list_deadline" => waiting_list_deadline_date,
         "competitor_can_cancel" => competitor_can_cancel,
         "fees" => {
           "currency_code" => currency_code,
