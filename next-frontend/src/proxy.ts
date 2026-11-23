@@ -2,6 +2,8 @@ import { NextResponse, type NextRequest } from "next/server";
 import { applySetCookies, getSessionCookie } from "better-auth/cookies";
 import { auth } from "@/auth";
 import { WCA_APP_NAME } from "@/auth.config";
+import { resolveLanguage } from "@/lib/i18n/resolveLanguage";
+import { storageKey } from "@/lib/i18n/settings";
 
 /**
  * Load-bearing, not a leftover. Reading the session rotates the Rails access token, and
@@ -15,6 +17,21 @@ import { WCA_APP_NAME } from "@/auth.config";
 export async function proxy(request: NextRequest) {
   // Most traffic on a public site is signed out, and there is nothing to rotate for it.
   if (!getSessionCookie(request, { cookiePrefix: WCA_APP_NAME })) {
+    const isPublishedHomepage =
+      request.nextUrl.pathname === "/" &&
+      !request.cookies.has("__prerender_bypass") &&
+      request.nextUrl.searchParams.get("signed_out") !== "true";
+
+    if (isPublishedHomepage) {
+      const lng = resolveLanguage(
+        request.cookies.get(storageKey)?.value,
+        request.headers.get("Accept-Language"),
+      );
+      const destination = request.nextUrl.clone();
+      destination.pathname = `/homepage/${lng}`;
+      return NextResponse.rewrite(destination);
+    }
+
     return NextResponse.next();
   }
 

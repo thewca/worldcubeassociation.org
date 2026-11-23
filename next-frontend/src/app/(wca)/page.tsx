@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import React, { ComponentProps } from "react";
+import React, { ComponentProps, Suspense } from "react";
 
 export const metadata: Metadata = {
   title: { absolute: "World Cube Association" },
@@ -50,10 +50,12 @@ import type {
   GrowthStrategy,
 } from "@/types/payload";
 import Link from "next/link";
+import { notFound } from "next/navigation";
+import LocaleProvider from "@/lib/i18n/LocaleProvider";
 import { route } from "nextjs-routes";
 import { getT } from "@/lib/i18n/get18n";
 import i18next from "@/lib/i18n/i18n";
-import { defaultNamespace } from "@/lib/i18n/settings";
+import { defaultNamespace, isValidLanguageCode } from "@/lib/i18n/settings";
 import { draftMode } from "next/headers";
 import { MediaImage } from "@/components/MediaImage";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
@@ -456,7 +458,7 @@ const renderVerticalLayout = (
       }
     >
       {verticalLayout.map((entry) => {
-        return (
+        const block = (
           <Box
             key={entry.id}
             asChild
@@ -469,6 +471,13 @@ const renderVerticalLayout = (
           >
             {renderBlock(entry, lng, level, growthStrategy)}
           </Box>
+        );
+
+        // An unfinished section should not hold back the rest of the homepage.
+        return level === 0 ? (
+          <Suspense key={entry.id}>{block}</Suspense>
+        ) : (
+          block
         );
       })}
     </VStack>
@@ -613,10 +622,23 @@ const CachedPayloadContents = async ({ lng }: { lng: TypedLocale }) => {
 };
 
 export default async function Homepage({
+  params,
   searchParams,
 }: {
+  params: Promise<{ locale?: string }>;
   searchParams: Promise<{ signed_out?: string }>;
 }) {
+  const { locale } = await params;
+  if (locale !== undefined) {
+    if (!isValidLanguageCode(locale)) notFound();
+
+    return (
+      <LocaleProvider lng={locale}>
+        <CachedPayloadContents lng={locale} />
+      </LocaleProvider>
+    );
+  }
+
   const { t, lng } = await getT();
   const { isEnabled: isDraftMode } = await draftMode();
 
@@ -625,7 +647,7 @@ export default async function Homepage({
   const { signed_out: signedOut } = await searchParams;
 
   return (
-    <>
+    <LocaleProvider lng={lng}>
       {signedOut === "true" && (
         <Box px={HOMEPAGE_SPACING} pt={HOMEPAGE_SPACING}>
           <Alert.Root status="success">
@@ -644,6 +666,6 @@ export default async function Homepage({
       ) : (
         <CachedPayloadContents lng={lng} />
       )}
-    </>
+    </LocaleProvider>
   );
 }

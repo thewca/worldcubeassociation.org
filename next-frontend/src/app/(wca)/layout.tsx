@@ -78,9 +78,7 @@ export default async function RootLayout({
                   </WithLocale>
                 </Suspense>
                 <NextTopLoader height={5} showForHashAnchor={false} />
-                <Suspense fallback={<Loading />}>
-                  <WithLocale>{children}</WithLocale>
-                </Suspense>
+                <Suspense fallback={<Loading />}>{children}</Suspense>
                 <Suspense fallback={<FooterSkeleton />}>
                   <WithLocale>
                     <Footer />
