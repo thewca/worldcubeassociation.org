@@ -50,6 +50,7 @@ declare module "nextjs-routes" {
     | StaticRoute<"/export/developer">
     | StaticRoute<"/export/results">
     | StaticRoute<"/faq">
+    | DynamicRoute<"/homepage/[locale]", { "locale": string }>
     | StaticRoute<"/incidents">
     | DynamicRoute<"/incidents/[id]", { "id": string }>
     | StaticRoute<"/logo">

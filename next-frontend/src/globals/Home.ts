@@ -3,6 +3,7 @@ import { colorPaletteSelect } from "@/blocks/utils";
 import { TextCardBlock } from "@/blocks/text/textCard";
 import { BannerImageBlock } from "@/blocks/image/bannerImage";
 import { ImageCardBlock } from "@/blocks/image/imageCard";
+import { revalidateGlobal } from "@/globals/revalidateGlobal";
 import { marketingTeamAccess } from "@/payload.access";
 
 const FeaturedCompetitions: Block = {
@@ -192,6 +193,9 @@ export const Home: GlobalConfig = {
   slug: "home",
   access: {
     update: marketingTeamAccess,
+  },
+  hooks: {
+    afterChange: [revalidateGlobal],
   },
   fields: [
     {
