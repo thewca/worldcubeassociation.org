@@ -1,4 +1,4 @@
-FROM ruby:4.0.10 AS base
+FROM ruby:4.0.10-slim AS base
 WORKDIR /rails
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -44,6 +44,7 @@ RUN corepack enable
 # libvips = image processing for Rails ActiveStorage attachments
 # libssl-dev = bindings for the native extensions of Ruby SSL gem
 # libyaml-dev = bindings for the native extensions of Ruby psych gem
+# libmariadb-dev = bindings for the native extensions of Ruby mysql2 gem
 # libclang-dev and cargo = Rust compiler toolchain for Ruby gems that have external Rust bindings
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
@@ -54,6 +55,7 @@ RUN apt-get update -qq && \
       pkg-config \
       libssl-dev \
       libyaml-dev \
+      libmariadb-dev \
       libvips
 
 # Configure Rust toolchain to use what's currently stable,
@@ -134,11 +136,15 @@ FROM base AS runtime
 # RUNTIME STUFF
 # mariadb-client = talking to our database in production mode
 # libvips = image processing for Rails ActiveStorage attachments
+# unzip = unpacking the developer database dump in the `db:load:development` Rake task
+# procps = the `pgrep` command that the ECS health checks of the Sidekiq and SQS worker containers run
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
       mariadb-client \
       libvips \
       zip \
+      unzip \
+      procps \
       python-is-python3 \
       fonts-dejavu \
       fonts-unfonts-core \
@@ -169,6 +175,15 @@ RUN curl -o ./rds-cert.pem https://truststore.pki.rds.amazonaws.com/global/globa
 USER rails:rails
 
 FROM runtime AS sidekiq
+
+# build-essential = compiling the native extensions of the `mailcatcher` gem.
+#   bin/docker-entrypoint-sidekiq installs that gem when the Sidekiq container starts with WCA_LIVE_SITE=0 (staging),
+#   and without a compiler the install fails and the container stops.
+# The `runtime` stage ends as the `rails` user, so we switch to root for the install and back afterwards.
+USER root
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y build-essential
+USER rails:rails
 
 COPY --from=mongodb-tools /usr/bin/mongodump /usr/bin/mongodump
 
