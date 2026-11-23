@@ -51,7 +51,7 @@ export default function EventDropdown({
           <Select.Content>
             {collection.items.map((event) => (
               <Select.Item item={event} key={event.value}>
-                <EventIcon eventId={event.value} />
+                <EventIcon eventId={event.value} t={t} />
                 <Select.ItemText>{event.label}</Select.ItemText>
                 <Select.ItemIndicator />
               </Select.Item>
