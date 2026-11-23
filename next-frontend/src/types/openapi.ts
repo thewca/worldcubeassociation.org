@@ -1251,12 +1251,12 @@ export interface components {
     schemas: {
         UserAvatar: {
             /**
-             * Format: uri-reference
+             * Format: uri
              * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030.jpg
              */
             url: string;
             /**
-             * Format: uri-reference
+             * Format: uri
              * @example https://avatars.worldcubeassociation.org/uploads/user/avatar/2099EXAM/1535183030_thumb.jpg
              */
             thumb_url?: string;
@@ -1564,9 +1564,9 @@ export interface components {
                 /** @example https://example.com/register */
                 external_registration_page: string | null;
                 /** Format: date-time */
-                event_change_deadline_date: string | null;
+                event_change_deadline: string | null;
                 /** Format: date-time */
-                waiting_list_deadline_date: string | null;
+                waiting_list_deadline: string | null;
                 /** @enum {string} */
                 competitor_can_cancel: "not_accepted" | "always" | "unpaid";
                 fees: {

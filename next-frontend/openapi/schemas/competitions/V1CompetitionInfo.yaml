@@ -130,8 +130,8 @@ properties:
       - on_the_spot_registration
       - extra_requirements
       - external_registration_page
-      - event_change_deadline_date
-      - waiting_list_deadline_date
+      - event_change_deadline
+      - waiting_list_deadline
       - competitor_can_cancel
       - fees
       - refund_policy
@@ -161,10 +161,10 @@ properties:
       external_registration_page:
         type: [string, "null"]
         example: "https://example.com/register"
-      event_change_deadline_date:
+      event_change_deadline:
         type: [string, "null"]
         format: date-time
-      waiting_list_deadline_date:
+      waiting_list_deadline:
         type: [string, "null"]
         format: date-time
       competitor_can_cancel:
