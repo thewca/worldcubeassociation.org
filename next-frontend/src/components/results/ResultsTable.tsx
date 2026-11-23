@@ -1,3 +1,5 @@
+"use client";
+
 import { components } from "@/types/openapi";
 import events from "@/lib/wca/data/events";
 import { CssProperties, HStack, Link, Table } from "@chakra-ui/react";
