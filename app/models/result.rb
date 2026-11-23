@@ -100,23 +100,36 @@ class Result < ApplicationRecord
     end
   end
 
-  # Ids of the results whose `value_column` tied or beat every earlier result in the same event,
-  # oldest competition first. This is `ResultsHelper#historical_pb_markers` ported to SQL, so that
-  # a page of results is judged against the person's whole history without loading it.
-  def self.personal_best_ids(value_column)
-    prior_best = <<~SQL.squish
-      MIN(CASE WHEN results.#{value_column} > 0 THEN results.#{value_column} END)
-        OVER (PARTITION BY results.event_id ORDER BY competitions.start_date, results.id
-              ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING) AS prior_best
-    SQL
+  PERSONAL_BEST_COLUMNS = %i[best average].freeze
+
+  # Ids of the results whose single (`best`) or `average` tied or beat every earlier one in the same
+  # event, oldest competition first, keyed by column. This is `ResultsHelper#historical_pb_markers`
+  # ported to SQL, so that a page of results is judged against the person's whole history without loading it.
+  def self.personal_best_ids
+    # A result ties or beats every earlier one exactly when it equals the best so far including itself.
+    # Comparing against the earlier results only would need a frame ending at `1 PRECEDING`, which
+    # MySQL recomputes for every row instead of keeping a running minimum, several times slower.
+    bests_so_far = PERSONAL_BEST_COLUMNS.map do |column|
+      Arel.sql(<<~SQL.squish)
+        MIN(CASE WHEN results.#{column} > 0 THEN results.#{column} END)
+          OVER (PARTITION BY results.event_id ORDER BY competitions.start_date, results.id
+                ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS #{column}_so_far
+      SQL
+    end
+
+    personal_best_conditions = PERSONAL_BEST_COLUMNS.map { "results.#{it} = #{it}_so_far" }
 
     # Preloads don't matter for plucking ids, and an included association that is also joined
     # turns into an eager load, which would replace our `select`.
-    ranked = except(:includes).joins(:competition).select(:id, value_column, Arel.sql(prior_best))
+    ranked = except(:includes).joins(:competition).select(:id, *PERSONAL_BEST_COLUMNS, *bests_so_far)
 
-    unscoped.from(ranked, :results)
-            .where("results.#{value_column} > 0 AND (prior_best IS NULL OR results.#{value_column} <= prior_best)")
-            .ids
+    rows = unscoped.from(ranked, :results)
+                   .where(personal_best_conditions.join(" OR "))
+                   .pluck(:id, *personal_best_conditions.map { Arel.sql(it) })
+
+    PERSONAL_BEST_COLUMNS.each_with_index.to_h do |column, index|
+      [column, rows.filter_map { |id, *is_personal_best| id if is_personal_best[index] == 1 }.to_set]
+    end
   end
 
   def self.augment_attempts(result_attrs, id_key: "id")
