@@ -72,28 +72,6 @@ const EventIcon = ({
 }: EventIconProps) => {
   const IconComponent = eventIconMap[eventId as EventIconId];
   if (!IconComponent) return null;
-  // i18n-tasks-use t('events.333')
-  // i18n-tasks-use t('events.222')
-  // i18n-tasks-use t('events.444')
-  // i18n-tasks-use t('events.555')
-  // i18n-tasks-use t('events.666')
-  // i18n-tasks-use t('events.777')
-  // i18n-tasks-use t('events.333bf')
-  // i18n-tasks-use t('events.333fm')
-  // i18n-tasks-use t('events.333oh')
-  // i18n-tasks-use t('events.333ft')
-  // i18n-tasks-use t('events.clock')
-  // i18n-tasks-use t('events.minx')
-  // i18n-tasks-use t('events.pyram')
-  // i18n-tasks-use t('events.skewb')
-  // i18n-tasks-use t('events.sq1')
-  // i18n-tasks-use t('events.444bf')
-  // i18n-tasks-use t('events.555bf')
-  // i18n-tasks-use t('events.333mbf')
-  // i18n-tasks-use t('events.fto')
-  // i18n-tasks-use t('events.magic')
-  // i18n-tasks-use t('events.mmagic')
-  // i18n-tasks-use t('events.333mbo')
   const eventName = t(`events.${eventId}`);
 
   return (
