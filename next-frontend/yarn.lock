@@ -3776,33 +3776,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@newrelic/security-agent@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "@newrelic/security-agent@npm:3.0.0"
+"@newrelic/security-agent@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "@newrelic/security-agent@npm:4.0.1"
   dependencies:
     check-disk-space: "npm:^3.4.0"
     content-type: "npm:^1.0.5"
-    cron: "npm:^3.1.7"
     fast-safe-stringify: "npm:^2.1.1"
     find-package-json: "npm:^1.2.0"
     hash.js: "npm:^1.1.7"
     html-entities: "npm:^2.3.6"
     https-proxy-agent: "npm:^7.0.4"
     is-invalid-path: "npm:^1.0.2"
-    js-yaml: "npm:^4.1.1"
-    jsonschema: "npm:^1.4.1"
-    lodash: "npm:^4.17.21"
     log4js: "npm:^6.9.1"
-    pretty-bytes: "npm:^5.6.0"
+    node-cron: "npm:^4.2.1"
     request-ip: "npm:^3.3.0"
     ringbufferjs: "npm:^2.0.0"
     semver: "npm:^7.5.4"
-    undici: "npm:^7.16.0"
+    undici: "npm:^7.30.1"
     unescape: "npm:^1.0.1"
     unescape-js: "npm:^1.1.4"
-    uuid: "npm:^9.0.1"
-    ws: "npm:^8.17.1"
-  checksum: 10c0/fafadbb17faa2f794c2a29901b0845f5c024d09ec4d7cf196ed6287ef1c4df59c446cb52ccf96b6b12b265235282b55f642750ac9962c3cb5cff5d2a1d0c32a2
+    ws: "npm:^8.22.0"
+  checksum: 10c0/c1eb2ce682e17b8edebba0c89aa63304e34aa500ddf1baef9cb93956c2fe67aca1f72b27f6a6d8b566c215dea7d8bcb4fc8bf0b775f2b62938a9273bf76774eb
   languageName: node
   linkType: hard
 
@@ -5829,10 +5824,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/luxon@npm:~3.4.0":
-  version: 3.4.2
-  resolution: "@types/luxon@npm:3.4.2"
-  checksum: 10c0/d835467de3daf7e17ba78b50bb5a14efd94272439ca067990d71332a54b311544459c69623eddd243b511b28d70194c9591a9ee8cf9c038962c965f991affd7e
+"@types/luxon@npm:^3.7":
+  version: 3.7.6
+  resolution: "@types/luxon@npm:3.7.6"
+  checksum: 10c0/135c55910d8f4fb615cbfaa93b173e57e3eed9731da683005acdb84dba5ece5dbbf56cc82330015ccf5247a6e84fefbb2e2ebe255c957636f604f79efacb4214
   languageName: node
   linkType: hard
 
@@ -8335,16 +8330,6 @@ __metadata:
     path-type: "npm:^4.0.0"
     yaml: "npm:^1.10.0"
   checksum: 10c0/b923ff6af581638128e5f074a5450ba12c0300b71302398ea38dbeabd33bbcaa0245ca9adbedfcf284a07da50f99ede5658c80bb3e39e2ce770a99d28a21ef03
-  languageName: node
-  linkType: hard
-
-"cron@npm:^3.1.7":
-  version: 3.5.0
-  resolution: "cron@npm:3.5.0"
-  dependencies:
-    "@types/luxon": "npm:~3.4.0"
-    luxon: "npm:~3.5.0"
-  checksum: 10c0/ca5fbfb0d54a77ff4a293ad7bd0e67872915985d739fa4b72ecfaae72db1918f542469a1a6638af4c5a280753443ba308dd04382fe8dcc07d29bd7922856ea94
   languageName: node
   linkType: hard
 
@@ -11306,7 +11291,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-yaml@npm:^4.1.0, js-yaml@npm:^4.1.1, js-yaml@npm:^4.3.2":
+"js-yaml@npm:^4.1.0, js-yaml@npm:^4.3.2":
   version: 4.3.2
   resolution: "js-yaml@npm:4.3.2"
   dependencies:
@@ -11470,13 +11455,6 @@ __metadata:
     graceful-fs:
       optional: true
   checksum: 10c0/7dc94b628d57a66b71fb1b79510d460d662eb975b5f876d723f81549c2e9cd316d58a2ddf742b2b93a4fa6b17b2accaf1a738a0e2ea114bdfb13a32e5377e480
-  languageName: node
-  linkType: hard
-
-"jsonschema@npm:^1.4.1":
-  version: 1.5.0
-  resolution: "jsonschema@npm:1.5.0"
-  checksum: 10c0/c24ddb8d741f02efc0da3ad9b597a275f6b595062903d3edbfaa535c3f9c4c98613df68da5cb6635ed9aeab30d658986fea61d7662fc5b2b92840d5a1e21235e
   languageName: node
   linkType: hard
 
@@ -11847,13 +11825,6 @@ __metadata:
   version: 3.7.2
   resolution: "luxon@npm:3.7.2"
   checksum: 10c0/ed8f0f637826c08c343a29dd478b00628be93bba6f068417b1d8896b61cb61c6deacbe1df1e057dbd9298334044afa150f9aaabbeb3181418ac8520acfdc2ae2
-  languageName: node
-  linkType: hard
-
-"luxon@npm:~3.5.0":
-  version: 3.5.0
-  resolution: "luxon@npm:3.5.0"
-  checksum: 10c0/335789bba95077db831ef99894edadeb23023b3eb2137a1b56acd0d290082b691cf793143d69e30bc069ec95f0b49f36419f48e951c68014f19ffe12045e3494
   languageName: node
   linkType: hard
 
@@ -12922,16 +12893,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"newrelic@npm:^14.12.0":
-  version: 14.12.0
-  resolution: "newrelic@npm:14.12.0"
+"newrelic@npm:^14.13.0":
+  version: 14.13.0
+  resolution: "newrelic@npm:14.13.0"
   dependencies:
     "@apm-js-collab/tracing-hooks": "npm:^0.14.0"
     "@datadog/pprof": "npm:^5.14.2"
     "@grpc/grpc-js": "npm:^1.13.2"
     "@grpc/proto-loader": "npm:^0.8.1"
     "@newrelic/fn-inspect": "npm:^5.1.0"
-    "@newrelic/security-agent": "npm:^3.0.0"
+    "@newrelic/security-agent": "npm:^4.0.1"
     "@opentelemetry/api": "npm:^1.10.0"
     "@opentelemetry/exporter-metrics-otlp-http": "npm:^0.301.0"
     "@opentelemetry/otlp-exporter-base": "npm:^0.301.0"
@@ -12960,7 +12931,7 @@ __metadata:
   bin:
     newrelic: cli/index.mjs
     newrelic-naming-rules: bin/test-naming-rules.js
-  checksum: 10c0/16011de1ec91dc1a8cb15c05dafdc81b92fa66b5121e915023c88e28ee69fee9c7790064c2fe84289d0dcc915bb1e58942d92a0c3a8a4df7ba5de47c356d782a
+  checksum: 10c0/ba23a676f82f28fad3c0e5973968f5669f8ba60a13019cf36860fcb010058d94977deaaf5854166624d27dfc73c3ddca328778de9a0016816f9d480f16b6d4ea
   languageName: node
   linkType: hard
 
@@ -13002,6 +12973,7 @@ __metadata:
     "@types/culori": "npm:^4.0.1"
     "@types/jest": "npm:^30.0.0"
     "@types/js-cookie": "npm:^3"
+    "@types/luxon": "npm:^3.7"
     "@types/newrelic": "npm:^9.14.8"
     "@types/node": "npm:^26"
     "@types/rails__actioncable": "npm:^8"
@@ -13028,7 +13000,7 @@ __metadata:
     lodash: "npm:^4.18.1"
     luxon: "npm:^3.7.2"
     maplibre-gl: "npm:^6.18.0"
-    newrelic: "npm:^14.12.0"
+    newrelic: "npm:^14.13.0"
     next: "npm:16.4.6"
     nextjs-routes: "npm:^2.2.5"
     nextjs-toploader: "npm:^3.9.17"
@@ -13160,6 +13132,13 @@ __metadata:
   dependencies:
     semver: "npm:^7.3.5"
   checksum: 10c0/c43a2409407df3737848fd96202b0a49e15039994aecce963969e9ef7342a8fc544aba94e0bfd8155fb9de5f5fe9a4b6ccad8bf509e7c46caf096fc4491d63f2
+  languageName: node
+  linkType: hard
+
+"node-cron@npm:^4.2.1":
+  version: 4.6.0
+  resolution: "node-cron@npm:4.6.0"
+  checksum: 10c0/6523219aedd60441b43acb65670d98751a875185d88666d32ee62b044f15ffdd6a5d5422f0a060a324df918990f218fe9e400bf1db54d308a72642e396a1fbd2
   languageName: node
   linkType: hard
 
@@ -13846,13 +13825,6 @@ __metadata:
   bin:
     prettier: bin/prettier.cjs
   checksum: 10c0/0b3531593aa6fb36ac6baf629cb058bda472c59a6938774f931fe55283a07c62e6f56e621b043a82d8a3e21fc284c08c34f9e539fc70072635f79b7bae1a1067
-  languageName: node
-  linkType: hard
-
-"pretty-bytes@npm:^5.6.0":
-  version: 5.6.0
-  resolution: "pretty-bytes@npm:5.6.0"
-  checksum: 10c0/f69f494dcc1adda98dbe0e4a36d301e8be8ff99bfde7a637b2ee2820e7cb583b0fc0f3a63b0e3752c01501185a5cf38602c7be60da41bdf84ef5b70e89c370f3
   languageName: node
   linkType: hard
 
@@ -16029,10 +16001,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici@npm:7.30.1, undici@npm:^7.16.0, undici@npm:^7.24.5":
+"undici@npm:7.30.1, undici@npm:^7.24.5":
   version: 7.30.1
   resolution: "undici@npm:7.30.1"
   checksum: 10c0/c838089b010e8e28a9a5358d4bf4621e0c8d7bb70058b23e819667349c4c0b6791a7c8bc9bbe94ff0923db132faae0d9d9592b9743eda4f2b49466fa57482213
+  languageName: node
+  linkType: hard
+
+"undici@npm:^7.30.1":
+  version: 7.30.2
+  resolution: "undici@npm:7.30.2"
+  checksum: 10c0/806e17f14fb49d2b63be314cf2be68efbe105469118b366d19a3cb6fd6686089220c74c1e8e947e6b337a16ff434c10c3860f3e637db314381c4ce8c071c3daf
   languageName: node
   linkType: hard
 
@@ -16265,15 +16244,6 @@ __metadata:
   bin:
     uuid: dist-node/bin/uuid
   checksum: 10c0/32c7ee84fa7c7966cc09b3a1514a752a8e2f609f15c00033fbaedc0255d577d1877b839f11ee537f37e587bbc620bbb98c3b3a1482931b8ed47d79497cd7a7cd
-  languageName: node
-  linkType: hard
-
-"uuid@npm:^9.0.1":
-  version: 9.0.1
-  resolution: "uuid@npm:9.0.1"
-  bin:
-    uuid: dist/bin/uuid
-  checksum: 10c0/1607dd32ac7fc22f2d8f77051e6a64845c9bce5cd3dd8aa0070c074ec73e666a1f63c7b4e0f4bf2bc8b9d59dc85a15e17807446d9d2b17c8485fbc2147b27f9b
   languageName: node
   linkType: hard
 
@@ -16641,7 +16611,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ws@npm:^8.13.0, ws@npm:^8.16.0, ws@npm:^8.17.1, ws@npm:^8.21.0":
+"ws@npm:^8.13.0, ws@npm:^8.16.0, ws@npm:^8.21.0":
   version: 8.21.3
   resolution: "ws@npm:8.21.3"
   peerDependencies:
@@ -16653,6 +16623,21 @@ __metadata:
     utf-8-validate:
       optional: true
   checksum: 10c0/7b28dc2863ea0e2cece68d142a3eee90361021b73f750431e6d8076bb7dede5fdfdb75b3d29534b62f411261147b76b1bc80fb5cc63ab0aabd467280e85b22e0
+  languageName: node
+  linkType: hard
+
+"ws@npm:^8.22.0":
+  version: 8.23.0
+  resolution: "ws@npm:8.23.0"
+  peerDependencies:
+    bufferutil: ^4.0.1
+    utf-8-validate: ">=5.0.2"
+  peerDependenciesMeta:
+    bufferutil:
+      optional: true
+    utf-8-validate:
+      optional: true
+  checksum: 10c0/1de9b70701c03cdb1b22abd17a1488dc6d22b4dc36a8c32b173d955356ea3634e78aea8ec734a78201dbb34f5a402d9603df32ef267bd477228cd54ae158e2f8
   languageName: node
   linkType: hard
 

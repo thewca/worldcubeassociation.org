@@ -101,8 +101,6 @@ export const earliestTimeOfDayWithBuffer = (
   activities: WcifActivity[],
   timeZone: string | Zone,
 ) => {
-  if (activities.length === 0) return undefined;
-
   const doesAnyCrossMidnight = activities.some(({ startTime, endTime }) =>
     doesRangeCrossMidnight(startTime, endTime, timeZone),
   );
@@ -115,7 +113,11 @@ export const earliestTimeOfDayWithBuffer = (
     todayWithTime(startTime, timeZone),
   );
 
-  return roundBackToHour(DateTime.min(...startTimes)).toISOTime({
+  const earliestStart = DateTime.min(...startTimes);
+
+  if (!earliestStart) return undefined;
+
+  return roundBackToHour(earliestStart).toISOTime({
     suppressMilliseconds: true,
     includeOffset: false,
   });
@@ -125,8 +127,6 @@ export const latestTimeOfDayWithBuffer = (
   activities: WcifActivity[],
   timeZone: string | Zone,
 ) => {
-  if (activities.length === 0) return undefined;
-
   const doesAnyCrossMidnight = activities.some(({ startTime, endTime }) =>
     doesRangeCrossMidnight(startTime, endTime, timeZone),
   );
@@ -139,7 +139,11 @@ export const latestTimeOfDayWithBuffer = (
     todayWithTime(endTime, timeZone),
   );
 
-  const result = addEndBufferWithinDay(DateTime.max(...endTimes)).toISOTime({
+  const latestEnd = DateTime.max(...endTimes);
+
+  if (!latestEnd) return undefined;
+
+  const result = addEndBufferWithinDay(latestEnd).toISOTime({
     suppressMilliseconds: true,
     includeOffset: false,
   });
