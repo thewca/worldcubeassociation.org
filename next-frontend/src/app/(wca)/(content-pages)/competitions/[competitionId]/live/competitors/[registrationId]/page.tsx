@@ -25,8 +25,8 @@ export default async function PersonResults({
     <>
       <Stack direction="row" alignItems="center" gap="5">
         <Heading textStyle={{ base: "h3", md: "h2" }}>{name}</Heading>
-        <Button size="xs" asChild>
-          <Link href={`https://www.worldcubeassociation.org/persons/${wcaId}`}>
+        <Button size="xs" asChild variant="outline">
+          <Link href={`/persons/${wcaId}`} unstyled>
             Visit WCA profile
           </Link>
         </Button>
