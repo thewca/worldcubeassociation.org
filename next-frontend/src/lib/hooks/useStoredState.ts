@@ -1,44 +1,54 @@
-import { useState, type Dispatch, type SetStateAction } from "react";
+import {
+  useSyncExternalStore,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
 
 type StoredState<T> = [T, Dispatch<SetStateAction<T>>];
 
+// The native `storage` event only fires in *other* tabs, so it can't notify the tab that wrote.
+const STORED_STATE_CHANGE = "stored-state-change";
+
+const subscribe = (onChange: () => void) => {
+  window.addEventListener(STORED_STATE_CHANGE, onChange);
+  return () => window.removeEventListener(STORED_STATE_CHANGE, onChange);
+};
+
+const parseStoredState = <T>(rawState: string | null, initialState: T): T => {
+  try {
+    return JSON.parse(rawState ?? "") ?? initialState;
+  } catch {
+    return initialState;
+  }
+};
+
 /**
- * This functions like the useState hook, but it fetches the state stored in
- * local storage, via the given key, on subsequent uses.
+ * This functions like the useState hook, but it keeps the state in local
+ * storage under the given key, so that it is still there on subsequent uses.
  *
- * Do NOT call this twice with the same key - updating one of such a pair
- * will not update the other's state.
+ * The server can't read local storage, so it always renders the initial state.
  */
 export default function useStoredState<T>(
   initialState: T,
   key: string,
 ): StoredState<T> {
-  let storedState;
-  try {
-    storedState = JSON.parse(localStorage.getItem(key) ?? "");
-  } catch {
-    storedState = null;
-  }
+  const rawState = useSyncExternalStore(
+    subscribe,
+    () => localStorage.getItem(key),
+    () => null,
+  );
 
-  const [state, setState] = useState<T>(() => {
-    if (storedState === null) {
-      localStorage.setItem(key, JSON.stringify(initialState));
-      return initialState;
-    }
+  const setStoredState: Dispatch<SetStateAction<T>> = (newState) => {
+    const resolved =
+      typeof newState === "function"
+        ? (newState as (prev: T) => T)(
+            parseStoredState(localStorage.getItem(key), initialState),
+          )
+        : newState;
 
-    return storedState;
-  });
-
-  const setAndStoreState: Dispatch<SetStateAction<T>> = (newState) => {
-    setState((prev) => {
-      const resolved =
-        typeof newState === "function"
-          ? (newState as (prev: T) => T)(prev)
-          : newState;
-      localStorage.setItem(key, JSON.stringify(resolved));
-      return resolved;
-    });
+    localStorage.setItem(key, JSON.stringify(resolved));
+    window.dispatchEvent(new Event(STORED_STATE_CHANGE));
   };
 
-  return [state, setAndStoreState];
+  return [parseStoredState(rawState, initialState), setStoredState];
 }

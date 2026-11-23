@@ -63,15 +63,17 @@ export default async function RootLayout({
           <WCAQueryClientProvider>
             <EmotionRegistry>
               <UiProvider>
-                {!process.env.LIVE_RESULT_BETA && (
-                  <Suspense>
-                    <WithLocale>
+                {/* The flag is only set at runtime, so the Suspense boundary has to stay outside of
+                    the check. Otherwise the tree doesn't match the shell prerendered at build time. */}
+                <Suspense>
+                  <WithLocale>
+                    {!process.env.LIVE_RESULT_BETA && (
                       <ClientOnly>
                         <BetaDisclaimer />
                       </ClientOnly>
-                    </WithLocale>
-                  </Suspense>
-                )}
+                    )}
+                  </WithLocale>
+                </Suspense>
                 <Suspense fallback={<NavbarSkeleton />}>
                   <WithLocale>
                     <Navbar />

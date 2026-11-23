@@ -3,6 +3,7 @@ import { Card, Text } from "@chakra-ui/react";
 import { getSchedule } from "@/lib/wca/competitions/getSchedule";
 import Schedule from "@/components/competitions/Schedule";
 import { getEvents } from "@/lib/wca/competitions/wcif/getEvents";
+import { getT } from "@/lib/i18n/get18n";
 
 interface TabScheduleProps {
   competitionId: string;
@@ -22,6 +23,16 @@ export default async function TabSchedule({
 
   if (!wcifSchedule) {
     return <Text>Competition does not exist</Text>;
+  }
+
+  const hasActivities = wcifSchedule.venues
+    .flatMap((venue) => venue.rooms)
+    .some((room) => room.activities.length > 0);
+
+  if (!hasActivities) {
+    const { t } = await getT();
+
+    return <Text>{t("competitions.schedule.no_schedule")}</Text>;
   }
 
   const { data: wcifEvents, error: eventsError } =
