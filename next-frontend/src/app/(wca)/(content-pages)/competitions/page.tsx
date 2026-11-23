@@ -277,7 +277,9 @@ export default function CompetitionsPage() {
     0;
 
   return (
-    <VStack gap="8" width="full">
+    <VStack gap="8" width="full" position="relative">
+      {/* Absolutely positioned so this marker adds neither height nor a gap. */}
+      <Box ref={topSentinelRef} position="absolute" />
       <ClientOnly>
         {!session.isPending && !session.data && (
           <RemovableCard
@@ -334,9 +336,7 @@ export default function CompetitionsPage() {
           </Card.Header>
           <Card.Body asChild pb={0}>
             <Collapsible.Root asChild>
-              <VStack gap="2" borderBottom="black" pos="relative">
-                {/* Absolutely positioned so this marker adds neither height nor a gap. */}
-                <Box ref={topSentinelRef} position="absolute" />
+              <VStack gap="2" borderBottom="black">
                 <Box hideBelow="lg" width="full">
                   <FormEventSelector
                     selectedEvents={filterState.selectedEvents}
