@@ -1085,7 +1085,7 @@ function RegistrationSelect({
               <Stack
                 direction="row"
                 gap={{ base: 1.5, md: 3 }}
-                fontSize={{ base: "xs", md: "sm" }}
+                fontSize={{ base: "2xs", sm: "xs", md: "sm" }}
                 align="center"
               >
                 {icon} {t(labelKey)}
