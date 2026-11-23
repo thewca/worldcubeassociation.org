@@ -28,12 +28,12 @@ resource "aws_security_group" "redis" {
 resource "aws_elasticache_replication_group" "cache" {
   replication_group_id       = "redis-main-staging"
   description                = " "
-  engine                     = "redis"
-  engine_version             = "7.1"
+  engine                     = "valkey"
+  engine_version             = "8.2"
   node_type                  = "cache.t4g.micro"
   num_cache_clusters         = 1
   port                       = 6379
-  parameter_group_name       = var.shared.redis_cache_parameter_group.name
+  parameter_group_name       = var.shared.valkey_cache_parameter_group.name
   subnet_group_name          = var.shared.redis_subnet_group.name
   security_group_ids         = [aws_security_group.redis.id]
   automatic_failover_enabled = false
@@ -41,6 +41,7 @@ resource "aws_elasticache_replication_group" "cache" {
   snapshot_retention_limit   = 1
   snapshot_window            = "11:00-12:00"
   maintenance_window         = "sun:09:30-sun:10:30"
+  apply_immediately          = true
   at_rest_encryption_enabled = false
   transit_encryption_enabled = false
 }
@@ -48,12 +49,12 @@ resource "aws_elasticache_replication_group" "cache" {
 resource "aws_elasticache_replication_group" "sidekiq" {
   replication_group_id       = "wca-staging-sidekiq"
   description                = "redis for wca staging"
-  engine                     = "redis"
-  engine_version             = "7.1"
+  engine                     = "valkey"
+  engine_version             = "8.2"
   node_type                  = "cache.t4g.micro"
   num_cache_clusters         = 1
   port                       = 6379
-  parameter_group_name       = var.shared.redis_sidekiq_parameter_group.name
+  parameter_group_name       = var.shared.valkey_sidekiq_parameter_group.name
   subnet_group_name          = var.shared.redis_subnet_group.name
   security_group_ids         = [aws_security_group.redis.id]
   automatic_failover_enabled = false
@@ -61,6 +62,7 @@ resource "aws_elasticache_replication_group" "sidekiq" {
   snapshot_retention_limit   = 0
   snapshot_window            = "11:00-12:00"
   maintenance_window         = "sat:10:00-sat:11:00"
+  apply_immediately          = true
   at_rest_encryption_enabled = false
   transit_encryption_enabled = false
 }

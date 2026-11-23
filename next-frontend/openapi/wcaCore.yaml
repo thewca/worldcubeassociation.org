@@ -26,6 +26,8 @@ paths:
     $ref: 'paths/registrations/registrationEligibility.yaml'
   /v1/registrations/{registrationId}/payment_denomination:
     $ref: 'paths/registrations/paymentDenomination.yaml'
+  /v1/registrations/{registrationId}/payment_ticket:
+    $ref: 'paths/registrations/paymentTicket.yaml'
 
   /v1/competitions/{competitionId}:
     $ref: 'paths/competitions/v1CompetitionInfo.yaml'
@@ -71,6 +73,8 @@ paths:
   /v1/competitions/{competitionId}/live/registrations/{registrationId}:
     $ref: 'paths/competitions/live/liveResultsByPerson.yaml'
 
+  /v1/persons/{wca_id}:
+    $ref: 'paths/persons/personInfo.yaml'
   /v1/persons/{wca_id}/results:
     $ref: 'paths/persons/personResults.yaml'
   /v1/persons/{wca_id}/records:

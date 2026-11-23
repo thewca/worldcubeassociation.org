@@ -7,12 +7,12 @@ export const collectionCacheTag = (slug: CollectionSlug) =>
 
 export async function getCachedCollection<TSlug extends CollectionSlug>(
   slug: TSlug,
-  locale?: TypedLocale,
+  locale: TypedLocale,
   depth?: number,
   pagination = false,
   sort = "_order",
 ) {
-  "use cache";
+  "use cache: remote";
   cacheTag(collectionCacheTag(slug));
   cacheLife("max");
 

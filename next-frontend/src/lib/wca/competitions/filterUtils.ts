@@ -281,6 +281,7 @@ export const updateSearchParams = (
 export type CompetitionFilterAction =
   | { type: "reset" }
   | { type: "toggle_event"; eventId: string }
+  | { type: "set_events"; eventIds: string[] }
   | { type: "select_all_events" }
   | { type: "clear_events" }
   | { type: "set_region"; region: string }
@@ -310,6 +311,8 @@ export const competitionFilterReducer = (
           ? state.selectedEvents.filter((id) => id !== action.eventId)
           : [...state.selectedEvents, action.eventId],
       };
+    case "set_events":
+      return { ...state, selectedEvents: action.eventIds };
     case "select_all_events":
       return { ...state, selectedEvents: WCA_EVENT_IDS };
     case "clear_events":

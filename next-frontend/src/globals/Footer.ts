@@ -1,36 +1,7 @@
 import type { Block, GlobalConfig } from "payload";
-import type { Route } from "nextjs-routes";
 import { revalidateGlobal } from "@/globals/revalidateGlobal";
 import { marketingTeamAccess } from "@/payload.access";
-
-type StaticRoute = Exclude<Route, { query: unknown }>["pathname"];
-
-const staticLinkOptions = [
-  "/",
-  "/about",
-  "/competitions",
-  "/delegates",
-  "/disclaimer",
-  "/documents",
-  "/export/developer",
-  "/export/results",
-  "/faq",
-  "/incidents",
-  "/logo",
-  "/officers-and-board",
-  "/organizations",
-  "/privacy",
-  "/regulations/about",
-  "/regulations/history",
-  "/regulations/scrambles",
-  "/regulations/translations",
-  "/results/rankings",
-  "/results/records",
-  "/score-tools",
-  "/speedcubing-history",
-  "/teams-committees",
-  "/translators",
-] satisfies StaticRoute[];
+import { staticLinkOptions } from "@/globals/staticLinkOptions";
 
 const FooterLinkItem: Block = {
   slug: "FooterLinkItem",

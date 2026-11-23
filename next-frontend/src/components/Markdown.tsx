@@ -3,7 +3,6 @@ import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
 import {
   Box,
-  chakra,
   Link as ChakraLink,
   Image as ChakraImage,
   Em,
@@ -189,8 +188,11 @@ export const ChakraMarkdown: ChakraMarkdownComponent = ({
             </ChakraLink>
           ),
           img: (imgTag) => <ChakraImage {...imgTag} {...imageProps} />,
+          // Not `chakra.iframe`: the `chakra` factory is a client module, so in server components
+          // so it can not be used server components
           iframe: (iframeTag) => (
-            <chakra.iframe
+            <Box
+              as="iframe"
               display="block"
               width="full"
               border="none"

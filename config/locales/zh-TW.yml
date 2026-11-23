@@ -132,12 +132,14 @@ zh-TW:
         time: '%{round_format} 優於 %{time}'
         moves: '%{round_format} 優於 %{moves} 步'
         points: '%{round_format} 優於 %{points} 點'
+      all_advance: 所有晉級
     ranking: '排名前 %{ranking} 晉級下一輪'
     percent: '前 %{percent}% 晉級下一輪'
     attempt_result:
       time: '%{round_format} 優於 %{time} 晉級下一輪'
       moves: '%{round_format} 優於 %{moves} 步晉級下一輪'
       points: '%{round_format} 優於 %{points} 點晉級下一輪'
+    all_advance: 所有參賽者晉級
   cutoff:
     time:
       other: '%{count}次還原 < %{time}'
@@ -175,6 +177,15 @@ zh-TW:
     deadline:
       description: 資格取得截止日
       by_date: '在%{date}之前'
+    preview: 預覽資格
+    earliest_date:
+      description: 資格期間開始日期
+      from_date: 在 %{date}或之後
+      window_too_short: 資格期間開始日期必須至少比資格期間截止日期早%{days}天。
+      explanation:
+        '1': 資格期間開始日期是非必須。如果讓它維持空白，任何在報名截止之前的達成的成績都會計算。
+        '2': 如果有輸入資格期間開始日期，任何在該日期或之後達成的成績才會被計算在資格中。
+        '3': 資格期間開始日期必須至少比資格期間截止日期早%{days}天。
   activity:
     registration: 現場報名
     checkin: 報到
@@ -216,6 +227,8 @@ zh-TW:
     solve_time:
       unit_seconds: 秒
       unit_moves: 步
+    back_to_top: 回到最上面
+    back: 上一頁
   oauth:
     applications:
       your_apps: 您的OAuth應用程式
@@ -228,6 +241,10 @@ zh-TW:
       secret: 金鑰
       scopes: Scopes
       callback_urls: Callback Urls
+      confidential: 機密?
+      confidentiality:
+        'yes': 是
+        'no': 不是
   helpers:
     submit:
       competition_medium:
@@ -257,7 +274,7 @@ zh-TW:
         location: 地點
         region: 區域
         subRegion: 子區域
-        receive_developer_mails: 我希望接收有關WCA軟體資源變更的通知。
+        receive_developer_mails: 我希望接收有關WCA軟體資源變更的通知
         receive_delegate_reports: 我希望透過收到電子郵件收到WCA比賽報告
         delegate_reports_region: 我只想收到以下區域的比賽報告
         user_preferred_events: 喜好項目
@@ -287,7 +304,7 @@ zh-TW:
         organization: 主辦團隊
         incidents: 意外事件
         setup_images: 會場布置圖片
-        wrc_feedback_requested: 我想要WRC對於某些意外事件做意見回饋
+        wrc_feedback_requested: 我想要WRC對於某些意外事件做意見回饋。
         wrc_incidents: 需要WRC意見回饋的意外事故
         wic_feedback_requested: 我想要WIC對於某些意外事件做意見回饋。
         wic_incidents: 需要WIC意見回饋的意外事故
@@ -455,11 +472,11 @@ zh-TW:
       vote:
       competition_medium:
       regional_organization:
-        website: 必須要是正確的http(s)網址。建議是HTTPS。
-        logo: 必須是PNG格式，有好的解析度，且背景是透明的。
-        email: 應該含有所有理事和專員的郵件清單。
-        bylaws: 必須是PDF格式。
-        extra_file: 必須是PDF格式。如果您想要加入更多檔案，請合併檔案。
+        website: 必須要是正確的http(s)網址。建議是HTTPS
+        logo: 必須是PNG格式，有好的解析度，且背景是透明的
+        email: 應該含有所有理事和專員的郵件清單
+        bylaws: 必須是PDF格式
+        extra_file: 必須是PDF格式。如果您想要加入更多檔案，請合併檔案
     options:
       registration:
         status:
@@ -487,8 +504,8 @@ zh-TW:
         dob_invalid: 格式錯誤
   errors:
     next_frontend:
-      title: 頁面渲染時發生錯誤。
-      description: 如果此錯誤持續發生，請將以下列出的詳細資訊回報給 WST。
+      title: 頁面渲染時發生錯誤
+      description: 如果此錯誤持續發生，請將以下列出的詳細資訊回報給 WST
       details: 錯誤詳細資訊
     messages:
       wrong_size: '錯誤尺寸(應該為%{file_size})'
@@ -513,12 +530,12 @@ zh-TW:
             如果您無法使用您的裝置或是沒有驗證碼，您也可以按下面的按鈕，由電子郵件取得一次性密碼。複製貼上到上面的欄位登入。
           email_sent: 已經傳送一個驗證碼到電子郵件。這個驗證碼有效性只有兩分鐘。您可以在兩分鐘後再次要求一個新的驗證碼。
           errors:
-            cant_send_email: 現在無法產生驗證電子郵件。
+            cant_send_email: 現在無法產生驗證電子郵件
             invalid_otp: 無效的二步驟驗證碼。
-            not_enabled: 未啟用二步驟驗證。
+            not_enabled: 未啟用二步驟驗證
             unknown: 傳送電子郵件時發生未知錯誤。請聯絡WCA軟體組。
           otp_email:
-            subject: 您的WCA一次性密碼。
+            subject: 您的WCA一次性密碼
             2fa_attempt: 您正嘗試認證WCA網站。您有啟用兩步驟驗證且您剛要求了傳送一個一次性密碼到電子郵件。請往下尋找您的一次性密碼：
             disclaimer: 
               如果您沒有要求驗證碼，請立即回覆這封電子郵件來連絡WCA軟體組，您可能有另一個地方正在登入中，或是您的密碼可能已被他人取得。
@@ -528,14 +545,14 @@ zh-TW:
             app: 由行動裝置上的2FA應用程式產生（例如Authy、Google身份驗證器或iOS安全密鑰 ）。
             recovery: 使用二步驟驗證啟用時所產生的備用碼。
             email: 登入帳號時用電子郵件傳送給您。
-          status_html: '您的二步驟驗證：%{status}'
+          status_html: '您的二步驟驗證：%{status}。'
           enabled: 已啟用
           disabled: 未啟用
           enable: 啟用二步驟驗證
           disable: 關閉二步驟驗證
           reset: 重設二步驟驗證
           reset_if_needed: 如果您有某個裝置已無法使用，或是您想要解除裝置的連結，您可以在這邊重設您的二步驟驗證金鑰：
-          reset_warning: 您需要重設所有有二步驟驗證的裝置
+          reset_warning: 您需要重設所有有二步驟驗證的裝置。
           methods: 二步驟驗證方法
           methods_description: 登入時，您可以用很多種方法來取得一次性密碼，方法如下：
           dedicated_app: 使用專門的二步驟驗證應用程式
@@ -576,9 +593,9 @@ zh-TW:
         form_error:
           other: '有%{count}個錯誤：'
       error_pages:
-        500_error: 抱歉，出現問題了
+        500_error: 抱歉，出現問題了。
         500_contact_html: '<a href=%{contact_url}>按這裡</a>來回報。'
-        400_error: 您要尋找的頁面並不存在
+        400_error: 您要尋找的頁面並不存在。
         400_contact_html: '如果您認為這是一個錯誤，請<a href=%{contact_url}>按這裡</a>來回報。'
         comp_not_found: 未找到比賽
         comp_not_found_action: '我們找不到 ID 為 %{comp_id} 的比賽。請使用搜尋欄進行查詢。'
@@ -588,7 +605,7 @@ zh-TW:
     doorkeeper:
       applications:
         help:
-          https_info: 除非是"localhost"、否則必須是HTTPS。
+          https_info: 除非是"localhost"、否則必須是HTTPS
           scopes_html: >-
             Separate scopes with spaces. Leave blank to use the default
             scope(s). See <a
@@ -606,7 +623,7 @@ zh-TW:
       let_us_know: 如果您曾經參加過WCA比賽，請告知我們：
       welcome_back: 歡迎回來！我們需要知道您的WCA ID才能幫您建立WCA帳號。
       welcome_html: >-
-        歡迎！在您參加第一場WCA比賽之前，我們需要額外的資訊以利我們儲存資料。請注意，我們絕對不會在沒有您的許可下公開您的生日。<br/><br/>如果您是代替他人報名，請提供<strong>該參賽者</strong>的資料。
+        歡迎！在您參加第一場WCA比賽之前，我們需要額外的資訊以利我們儲存資料。<br/><br/>如果您是代替他人報名，請提供<strong>該參賽者</strong>的資料。
   layouts:
     navigation:
       information: 資訊
@@ -675,7 +692,7 @@ zh-TW:
       title: WCA幹事與董事會
       officers_description: >-
         WCA的幹事負責跟WCA非營利狀態有關的事務。這些幹事是由WCA董事會所選出的。執行董事就是WCA的執行長，董事長主持所有的董事會議，秘書負責維護組織的文件，財務長負責WCA的財務相關事務。
-      board_description: WCA董事會負責帶領全體組織，並負責一些其他團隊和委員會沒有負責的事務。
+      board_description: WCA董事會負責帶領全體組織，並負責一些其他團隊和委員會沒有負責的事務
     teams_committees_councils:
       title: WCA團隊和委員會
       description: >-
@@ -879,7 +896,7 @@ zh-TW:
         confirm: 您可以透過以下連結確認您帳號的新電子郵件：
         confirmation_link: 確認電子郵件。
       competition_submission_email:
-        header: '%{delegate_name}確認%{competition}的申請。'
+        header: '%{delegate_name}確認%{competition}的申請'
         organizers: '親愛的%{competition}主辦團隊您好，'
         confirmed: >-
           您比賽的代表%{delegate_name}已經確認%{competition}並且向WCAT提出申請。一旦WCAT公告這場比賽之後，您將收到另外一封通知。
@@ -905,11 +922,11 @@ zh-TW:
         header: '%{competition} 即將開放報名'
         intro: '%{name}您好，'
         information_html: '這是提醒您<a href=%{competition_url}>%{competition}</a> 即將在24小時以內開放報名。'
-        not_accepted_html: 您已經報名，但您的報名尚未被核准
+        not_accepted_html: 您已經報名，但您的報名尚未被核准。
         more_info_html: '請參考 <a href=%{competition_url}>competition WCA page</a> 來得知更多的訊息及報名條件。'
       results_presence_email:
         header: '%{competition} 的成績已經公告'
-        intro_html: '您在%{competition_link}的成績已經被公告'
+        intro_html: '您在%{competition_link}的成績已經被公告。'
         information_html: '按%{result_link}看您所有的比賽成績。'
         more_info_html: '您可以按%{preferences_link}管理您的電子郵件偏好設定。'
         regards_html: '謹代表<br/>WCA成績組和%{managers}致上最誠摯的問候。'
@@ -970,7 +987,7 @@ zh-TW:
           href='%{wrt_contact_path}' target='_blank'>WCA成績組</a>或是您的<a
           href='%{delegate_url}'>WCA代表</a>。
         reason:
-          no_access: 您沒有權限編輯該使用者。
+          no_access: 您沒有權限編輯該使用者
           assigned: 您已經有WCA ID了
           registered: 您已經報名比賽了
       guidelines_confirmation: 我確認我的頭像符合相關規定。
@@ -990,7 +1007,7 @@ zh-TW:
         '4': 必須有本人的頭部出現，但是不需要全臉入鏡。
         '5': 頭像包含照片邊界的部分都不應該有重疊的文字、貼紙或不自然照片濾鏡效果。
         '6': 頭像的方向必須正確。
-        '7': 頭像不得含有冒犯他人內容（例如：無禮的手勢）
+        '7': 頭像不得含有冒犯他人內容。（例如：無禮的手勢）
       staff_avatar_guidelines:
         title: 針對WCA志願者和實習代表的指導方針：
         paragraphs:
@@ -999,8 +1016,8 @@ zh-TW:
           '3': 頭像的縮圖只是頭像的一部分，它將用來表示您的完整頭像。縮圖必須被調整過，讓人可以單獨地識別您，並且縮圖必須包含您的臉。
       sensitive:
         info: 這裡可以修訂您的個人敏感信息，請先在這裡確認您是本人。
-        success: 已成功確認您的身份。
-        failure: 無法確認您的身份。
+        success: 已成功確認您的身份
+        failure: 無法確認您的身份
         confirm_proceed: 確認並繼續
         identity_error: 無法修訂您的資料，請先確認身份後再嘗試。
     errors:
@@ -1074,7 +1091,7 @@ zh-TW:
       banned_html: >-
         您被禁賽了。如果你認為有錯誤，請聯絡<a href='mailto:integrity@worldcubeassociation.org'
         target='_blank'>WCA廉正委員會</a>.
-      undelete_banned: 這位參賽者被禁賽且不能被反刪除。
+      undelete_banned: 這位參賽者被禁賽且不能被反刪除
       series_more_than_one_accepted: 您一次只能參加系列賽中的一場。
       can_only_register_for_qualified_events: 您不能報名未達資格限制的比賽項目。
       cannot_change_events_when_cancelling: 您無法在取消報名的同時變更參加項目。
@@ -1098,13 +1115,13 @@ zh-TW:
     mailer:
       regards_html: '祝您有美好的一天，來自 %{people}。'
       new:
-        mail_subject: '等待報名審核：%{comp_name}。'
+        mail_subject: '等待報名審核：%{comp_name}'
         registered_html: '您%{comp_name}的報名目前正在等待主辦團隊的核准。'
         awaits_approval: 請確認您有遵守比賽的報名條件中的要求。例如：需要繳交報名費來完成報名。
         approval_info_html: >-
           當您的報名完成時，您會收到電子郵件。請注意報名並不是自動核准的，所以當您的報名沒有馬上核准時，請耐心等待。在您報名核准之前可能還有一些步驟需要完成，請至比賽網站或聯絡主辦團隊以了解報名的規則。您可以在%{here}檢查您的報名狀態。
       accepted:
-        mail_subject: '報名已經被核准：%{comp_name}。'
+        mail_subject: '報名已經被核准：%{comp_name}'
         message_html: '您%{comp_name}的報名已經被核准了。您可以在%{here}檢查您的報名狀態。'
         see_you_soon: '我們很期待在%{comp_name}與您相會！'
       waiting_list:
@@ -1113,11 +1130,11 @@ zh-TW:
           查看您的候補名單順位。'
         email_if_error: 如果您認為這有錯誤，請回覆這封電子郵件。
       deleted:
-        mail_subject: '報名已經被取消：%{comp_name}。'
+        mail_subject: '報名已經被取消：%{comp_name}'
         message_html: '您%{comp_name}的報名已經被取消。可能的原因為：'
         email_if_error: 如果您認為這是錯誤，請回覆這封電子郵件。
         causes:
-          missing_info: 您沒有輸入所有必填的資料。
+          missing_info: 您沒有輸入所有必填的資料
           incomplete: 您沒有符合報名資格（例如：預先支付報名費或達到比賽項目的成績門檻）
           registrations_full: 比賽限制人數已經額滿且沒有其他空缺
           multiple_registrations: 您報名了兩次以上
@@ -1149,7 +1166,7 @@ zh-TW:
     refund_confirmation: 您確定要退款此金額嗎？
     update: 更新報名
     delete_confirm: 您確定要取消報名嗎？
-    delete_registration: 刪除報名。
+    delete_registration: 刪除報名
     will_open_html: '報名將在<strong>%{days}</strong>後的%{time}開始。'
     will_close_html: '報名將在<strong>%{days}</strong>後的%{time}截止。'
     closed_html: '報名在 <strong>%{days}</strong>前的%{time}已經截止。'
@@ -1163,7 +1180,7 @@ zh-TW:
       這場比賽的參賽者人數上限是%{competitor_limit}人，且可能已經額滿。如果您現在報名，您會被排在候補名單中。如果沒有名額釋出，您的報名可能不會被核准。
     entry_fees_fully_paid: '您已經支付報名費全額%{paid}。'
     entry_fees_partially_paid: '您已經付了%{total}裡的%{paid}。請跟組織團隊確認您是否要支付剩餘的款項。'
-    entry_fees_fully_refunded: 您的報名費已經全額退款。如果您需要再次付款，可以在下面進行。
+    entry_fees_fully_refunded: 您的報名費已經全額退款。如果您需要再次付款，可以在下面進行
     entry_fees_pay_again: 我想要再付款一次
     will_pay_here: 在提交報名以後您需要在這裡繳交報名費
     wont_pay_here: 請瀏覽比賽資訊以確認如何繳交報名費
@@ -1183,7 +1200,7 @@ zh-TW:
         fees_paid: 已付款
         fees_remaining: 剩餘
         donation: 捐款
-        show_donation: 我想要捐助額外只給組織團隊的款項。
+        show_donation: 我想要捐助額外只給組織團隊的款項
         payment_information: 付款訊息
         ajax_error: WCA伺服器錯誤
         payment_service_error: 付款服務出現錯誤
@@ -1242,7 +1259,7 @@ zh-TW:
       title: '新增%{comp}的報名資料'
       info: 這將會新增一個核准的報名資料。用這個表格來增加現場報名的資料。
       add: 增加報名資料
-      ots_not_enabled: 報名已結束，且未啟用現場報名—您必須先編輯比賽設定以啟用此功能。
+      ots_not_enabled: 報名已結束，且未啟用現場報名—您必須先編輯比賽設定以啟用此功能
       competition_over: 比賽結束後，無法新增現場報名。
       errors:
         already_registered: 這個人已經有報名資料了。
@@ -1254,7 +1271,7 @@ zh-TW:
       must_have_events: 請您在確認比賽之前輸入至少一項比賽項目。
       schedule_must_match_rounds: 請在申請比賽之前確保每個項目皆至少有一輪，同時您製作的賽程需包含所有您所規劃的輪次。
       advancement_condition_must_be_present_for_all_non_final_rounds: 
-        請確認所有非決賽的項目有晉級條件
+        請確認所有非決賽的項目有晉級條件。
       cutoff_is_greater_than_time_limit: '%{event}項目的第%{round_number} 輪的門檻成績比時間限制還久，請確認門檻成績沒有比時間限制還長。'
       cutoff_is_too_fast: '%{event}項目的第%{round_number} 輪的門檻小於5秒鐘，請確認是否正確。'
       cutoff_is_too_slow: '%{event}項目的第%{round_number} 輪的門檻成績大於10分鐘，請確認是否正確。'
@@ -1290,7 +1307,7 @@ zh-TW:
       confirmed_not_visible: 這場比賽已經確認但尚未公開。
       not_confirmed_visible: 這場比賽尚未確認但已經公開了。
       not_confirmed_not_visible: 這場比賽尚未確認且尚未公開。
-      championship_exists: '%{year}已經有%{championship_type}了'
+      championship_exists: '%{year}已經有%{championship_type}了。'
       orga_closed_reg_success: 已成功關閉報名。
       orga_closed_reg_failure: 無法結束報名。
       no_waiting_list_specified: 
@@ -1340,8 +1357,8 @@ zh-TW:
           omitted: '您遺漏第 %{attempt_number} 次還原。請確認這是正確的。'
           DNS: 至少有一個DNS後面接著有效成績。請確認這確實是DNS，而不是DNF。
           impossible: >-
-            你嘗試提交的成績似乎不合理：第 %{attempt_number} 次還原的時間少於每個方塊 30
-            秒。如果你要輸入「分鐘」，請記得在成績末尾加上兩個 0（代表百分之一秒）。
+            你嘗試提交的成績似乎不合理：第 %{attempt_number} 次還原的時間少於每個方塊 30 秒。如果你要輸入「分鐘」，請記得在成績末尾加上兩個
+            0（代表百分之一秒）
           inconsistent: >-
             你嘗試提交的成績似乎不一致。最佳單次（%{best_single}）與最差單次（%{worst_single}）之間差異過大。請確認成績是否正確。
           round_locked: 下一輪已經開啟，任何變更將不會影響該輪！
@@ -1422,7 +1439,7 @@ zh-TW:
         注意：您可以報名系列賽中的每一場比賽，但只有其中一個報名會被許可。<b>您只會被允許參加系列賽中的一場比賽！</b>
       competitor_limit: 參賽者人數上限
       competitor_limit_is: '比賽參賽者人數上限為%{competitor_limit}位。'
-      no_competitor_limit: 比賽沒有參賽者人數上限
+      no_competitor_limit: 比賽沒有參賽者人數上限。
       entry_fee_is: '本場比賽的基本報名費為%{base_entry_fee}。'
       no_entry_fee: 本場比賽報名費免費。
       use_stripe_link_html: '一旦報名後，報名費必須透過Stripe在%{here}支付。'
@@ -1441,7 +1458,7 @@ zh-TW:
       guests_pay: '觀眾需繳交進場費%{guests_base_fee}才得入場。'
       guests_free:
         free: 觀眾都可免費入場。
-        restricted: 只有參賽者的陪同者才能入場當觀眾
+        restricted: 只有參賽者的陪同者才能入場當觀眾。
       guest_limit:
         other: '比賽最多可以有%{count}位陪同者。'
       event_limit:
@@ -1456,7 +1473,7 @@ zh-TW:
         range_past_html: '網路報名已從%{start_date_and_time}開始到，已在%{end_date_and_time}截止。'
       highlights: 比賽摘要
       click_to_display_highlights_html: '按%{link_here}來顯示這場比賽的比賽摘要。'
-      hide_highlights: 隱藏比賽摘要
+      hide_highlights: 隱藏比賽摘要。
       result: 成績
       single: 單次
       average: 五次平均
@@ -1469,7 +1486,7 @@ zh-TW:
       h2h_first_runner_up: '%{first_runner_up}取得第二名'
       and: 以及
       second_runner_up: '第三名%{second_runner_up}：%{second_runner_up_result}。'
-      h2h_second_runner_up: '%{second_runner_up}取得第三名'
+      h2h_second_runner_up: '%{second_runner_up}取得第三名。'
       records:
         wr: 世界紀錄
         afr: 非洲紀錄
@@ -1537,12 +1554,12 @@ zh-TW:
         search: 比賽名稱或城市
         recent: '過去%{count}天'
         registration:
-          opens_in: '將在%{relativeDate}之後開放報名'
+          opens_in: '將在%{relativeDate}之後開放報名。'
           closed: '報名時間已結束。比賽將在%{relativeDate}舉行。'
           open: 已開放報名！
           full: 參賽者人數已滿，將提供候補名單給新的報名。
-      no_more_comps: 無比賽存在
-      no_comp_found: 沒有找到比賽
+      no_more_comps: 無比賽存在。
+      no_comp_found: 沒有找到比賽。
     my_competitions_table:
       edit: 編輯
       registrations: 報名資訊
@@ -1676,8 +1693,7 @@ zh-TW:
           2017）。字首要大寫且必須只能包含字母與數字、破折號(-)、和號(&)、句號(.)、冒號(:)、撇號('')和空白( )。
         short_name: '供顯示方便的簡稱。如果比賽名稱已少於%{short_name_limit}個字元，不應該編輯這個區域，而且應該要和全名一樣。'
         name_reason_html: >-
-          簡短解釋比賽名稱。名稱必須要符合<a
-          href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA比賽要求政策</a>
+          簡短解釋比賽名稱。名稱必須要符合<a href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA比賽要求政策</a>。
         venue:
           city_name: 比賽舉行的城市或州（如果適用）。不要包含國家名稱（例如使用：Taipei、Taichung或Kaohsiung）。
           name_html: >-
@@ -1741,7 +1757,7 @@ zh-TW:
             reason: 請在這裡說明為什麼您希望設定禁止報名特定的項目組合。請用英文填寫！
             per_registration_limit: >-
               可以選擇性的方式，限制每一位參賽者可以報名的最多比賽項目數量（常用在較熱門的比賽）。您應該在比賽項目新增好後再編輯這個區域。報名太多的比賽項目時會被擋下。如果沒有限制，請留白。
-          main_event_id: 這個項目的優勝參賽者將會是這場比賽的優勝參賽者
+          main_event_id: 這個項目的優勝參賽者將會是這場比賽的優勝參賽者。
         remarks: 任何您想跟WCAT說明的事。例如，有疑問的事項，或是您想向WCAT請求特別事項。請用英文填寫！
         cloning:
       choices:
@@ -1783,7 +1799,7 @@ zh-TW:
         payment_missing: 在您付款完成後您的報名才會被核准，除非您有跟主辦團隊協調或是使用別的付款方式。
         needs_approval: 請先不要預定您的旅行計畫，主辦團隊還需要手動核准您的報名。會需要一點時間。
         is_accepted: 可以整理行李並預定您的旅行計畫了! 您已取得比賽中的位子!
-        is_cancelled: 您的報名已被取消所以您沒法比賽，但您可以再次報名
+        is_cancelled: 您的報名已被取消所以您沒法比賽，但您可以再次報名。
         is_rejected: 您的報名已被主辦團隊拒絕。如果您覺得有錯誤，請聯絡主辦團隊。
         is_waitlisted: 先別做旅行計畫，但也先別放棄。比賽已額滿，但您已在候補名單中，如果有名單釋出，您會收到電子郵件。
       list:
@@ -1804,7 +1820,7 @@ zh-TW:
           information: 允許取消報名的參賽者再次報名。
         rejected:
           title: 被拒絕的報名
-          information: 不允許被拒絕的參賽者再次報名
+          information: 不允許被拒絕的參賽者再次報名。
         payment:
           refunded_status: 已退款
           initialized: '款項手續已在%{date}開始，但尚未完成。'
@@ -1824,8 +1840,8 @@ zh-TW:
         being_updated: 正在更新報名中...
         being_deleted: 正在刪除報名中...
         update_confirm: 您確定要更新您的報名嗎？
-        update_confirm_contact: 您需要聯絡比賽團隊來更新您的報名，按下"YES/好"來移動到連絡表單。
-        delete_confirm_contact: 您需要聯絡比賽團隊來取消您的報名，按下"YES/好"來移動到連絡表單。
+        update_confirm_contact: 您需要聯絡比賽團隊來更新您的報名，按下"好"來移動到連絡表單。
+        delete_confirm_contact: 您需要聯絡比賽團隊來取消您的報名，按下"好"來移動到連絡表單。
         update_contact_message: '我想要更新我的報名內容：%{update_params}'
         delete_contact_message: 我想要刪除我的報名
         no_changes: 沒有變化
@@ -1839,7 +1855,7 @@ zh-TW:
         cancelled: 已取消
         rejected: 已拒絕
         amount: 數量
-        too_many: '接受這些全部報名會造成參賽者人數超過上限，會多出%{count}人'
+        too_many: '接受這些全部報名會造成參賽者人數超過上限，會多出%{count}人。'
         no_self_update: 聯絡比賽主辦團隊來更新您的報名。
       register:
         will_open_countdown: '報名會在 %{minutes} 分 %{seconds} 秒後開始。這一個頁面會在報名開始時自動更新。'
@@ -1859,7 +1875,7 @@ zh-TW:
             description: 接受比賽的條款
         success: '您已報名了%{comp_name}'
         error: '報名發生錯誤 %{error}'
-        early_registration: 報名還未開放，您正用主辦團隊或代表的身分報名。
+        early_registration: 報名還未開放，您正用主辦團隊或代表的身分報名
         comment: 對主辦團隊的補充備註
         until: '您可以在%{date}以前更新您的報名'
         passed: 您無法再更新您的報名內容
@@ -1878,10 +1894,10 @@ zh-TW:
         event_limit: '這場比賽有比賽項目的上限：%{max_events}個。'
       errors:
         events: 讀取比賽項目失敗，請再試一次
-        '-1': 您送出的Token無效，請重新整理頁面。如果問題還是持續，請聯絡WCA軟體組。
+        '-1': 您送出的Token無效，請重新整理頁面。如果問題還是持續，請聯絡WCA軟體組
         '-2': 授權已過期，請重新整理頁面
         '-3': 無法找到授權，請登入
-        '-4': 報名系統遇到了內部錯誤。如果您持續遇到這個問題，請聯絡WCA軟體組。
+        '-4': 報名系統遇到了內部錯誤。如果您持續遇到這個問題，請聯絡WCA軟體組
         '-1000': 比賽不存在
         '-1001': 讀取比賽細節時出現錯誤，請稍後再試一次
         '-2001': 您被禁止參加WCA比賽
@@ -1903,27 +1919,27 @@ zh-TW:
         '-4010': 這個候補名單位置無效
         '-4011': 您只能受理候補名單上的第一位
         '-4012': 您沒有取得所選比賽項目的參賽資格
-        '-4013': 當只剩下初次參賽者名額時，將無法接受非初次參賽者。
+        '-4013': 當只剩下初次參賽者名額時，將無法接受非初次參賽者
         '-4014': 您已經報名了這場比賽。
         '-4015': 請輸入合理的陪同者人數，或者是如果您要額外的陪同者人數，請聯絡主辦團隊。
         '-6001': 這場比賽沒有啟用WCA付款方式
         '-6002': 您需要先完成報名才能付款
         '-6003': 未發現未付款項 — 這可能是因為您已經完成了報名費的付款。
-        '-7001': 參賽者仍有未繳清的報名費用。
+        '-7001': 參賽者仍有未繳清的報名費用
     errors:
-      must_use_wca_registration: 自動核准只能在使用WCA網站報名系統時使用。
+      must_use_wca_registration: 自動核准只能在使用WCA網站報名系統時使用
       auto_accept_limit: 自動核准的人數必須少於比賽限制人數
-      auto_accept_not_negative: 自動核准人數不能小於0
+      auto_accept_not_negative: 自動核准人數不能小於0。
       auto_accept_accept_paid_pending: 如果有待付款的報名者時，無法使用自動核准。只能手動核准或是把他們移到候補名單。
       auto_accept_accept_waitlisted: 無法開啟自動核准功能，請盡可能的核准候補名單的報名者。
-      auto_close_exceed_paid: 自動結束報名人數必須要大於目前已付款的報名者人數。
+      auto_close_exceed_paid: 自動結束報名人數必須要大於目前已付款的報名者人數
       auto_close_positive_nonzero: 自動結束報名人數必須要大於0
       must_exceed_competitor_limit: 自動結束報名人數必須要多於參賽者人數限制
       use_wca_registration: 比賽必須要用WCA報名系統
       newcomer_month_reservations_percentage: 第一次參賽者保留名額人數不能多於50%
       invalid_name_message: '必須以年份為結尾且只能包含字母與數字，破折號(-)、&符號(&)、句號(.)、冒號(:)、撇號('')和空白(
         )'
-      cannot_manage: 法管理比賽
+      cannot_manage: 無法管理比賽
       cannot_delete_public: 不得取消一場已公開的比賽。
       cannot_delete_confirmed: 不得取消一場已確認的比賽。
       must_contain_event: 這場比賽必須包含至少一個項目
@@ -2084,8 +2100,6 @@ zh-TW:
         competitors: 參賽者
         scrambles: 轉亂步驟內容
     results_table:
-      h2h_results_disclaimer: 
-        成績由Head-to-Head決賽決定。目前僅顯示名次順序與最佳單次成績，完整的Head-to-Head成績顯示功能仍在開發中。
       wca_profile: WCA個人頁面
       event: 項目
       round: 輪數
@@ -2411,8 +2425,7 @@ zh-TW:
       teams_committees: 團隊與委員會
       delegates_html: >-
         <p><strong>WCA代表</strong>是WCA動議中定義的腳色，在WCA規則中有所描述。代表的主要職責是代表WCA監督比賽。WCA代表負責確保所有WCA比賽符合WCA的宗旨、價值觀和規則。WCA將代表區別成<strong>高級代表</strong>、<strong>地區代表</strong>、<strong>一般代表</strong>、<strong>初級代表</strong>和<strong>實習代表</strong>%{see_link}。</p>
-        <p>跟一般代表職責不同的是，高級代表或是地區代表需額外負責管理該地區的代表以及當有社群成員聯絡時處理該地區社群的事務。</p>
-        <p>新上任的代表會先列為初級代表，之後他們需要證明自己管理WCA比賽的熟練程度，才能升任為一般代表。</p><p>實習代表是用來訓練成WCA代表的職位，在有其他WCA代表同時在場的時候才能監督一場比賽。</p>
+        <p>跟一般代表職責不同的是，高級代表或是地區代表需額外負責管理該地區的代表以及當有社群成員聯絡時處理該地區社群的事務。</p> <p>新上任的代表會先列為初級代表，之後他們需要證明自己管理WCA比賽的熟練程度，才能升任為一般代表。</p><p>實習代表是用來訓練成WCA代表的職位，在有其他WCA代表同時在場的時候才能監督一場比賽。</p><p>如果您想要成為實習代表，請聯絡你的地區代表來決定您是否符合資格</p>
       see_link_html: ' (參見%{link}）'
       members_html: 所有參賽者在參加第一場WCA比賽時自動成為WCA<strong>成員</strong>。
   speedcubing_history:

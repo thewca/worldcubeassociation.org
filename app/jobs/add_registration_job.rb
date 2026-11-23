@@ -22,10 +22,8 @@ class AddRegistrationJob < ApplicationJob
       return
     end
 
-    lane_model_name = lane_name.upcase_first
-
-    lane = Registrations::Lanes.class_eval(lane_model_name)
-    raise "No Lane exists for #{lane_model_name}" if lane.nil?
+    # Symbol and inherit=false keep the lookup inside Registrations::Lanes
+    lane = Registrations::Lanes.const_get(lane_name.upcase_first.to_sym, false)
 
     ActiveRecord::Base.transaction do
       lane.process!(lane_params, user_id, competition_id)

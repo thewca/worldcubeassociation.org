@@ -105,7 +105,7 @@ export default function EventPanel({
         disabled={!canAddAndRemoveEvents || requiresInternalScoretaking}
         title={
           (!canAddAndRemoveEvents && `Cannot add ${event.name} because the competition is confirmed.`)
-          || (requiresInternalScoretaking && `${event.name} requires the scoretaking software to be set to 'Internal Live Results'.`)
+          || (requiresInternalScoretaking && `${event.name} requires the scoretaking software to be set to 'Integrated Live Results'.`)
           || ''
         }
         onClick={() => dispatch(addEvent(wcifEvent.id))}

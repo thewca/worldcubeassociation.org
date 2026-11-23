@@ -27,6 +27,7 @@ export const archiveTeamAccess = teamAccess(["wat"]);
 export const regulationsCommitteeAccess = teamAccess(["wrc"]);
 export const qualityTeamAccess = teamAccess(["wqac"]);
 export const marketingTeamAccess = teamAccess(["wmt"]);
+export const assistantsTeamAccess = teamAccess(["weat"]);
 
 // Announcements embed images, so everyone allowed to post must be able to upload them.
 export const canUploadMedia = teamAccess(["wmt", ...POST_CREATOR_ROLES]);
