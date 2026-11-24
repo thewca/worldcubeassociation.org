@@ -52,19 +52,20 @@ export default async function RegulationsHistory() {
             <Link href={item.url}>{item.version}</Link>{" "}
             {item.changesUrl && (
               <Text>
-                (
-                <Link href={item.changesUrl}>
-                  {t("regulations_history.changes")}
-                </Link>
-                {item.summarizedChangesUrl && (
-                  <>
-                    {", "}
-                    <Link href={item.summarizedChangesUrl}>
-                      {t("regulations_history.summarized_changes")}
-                    </Link>
-                  </>
+                {item.summarizedChangesUrl ? (
+                  <TransWithLinks
+                    i18nKey="regulations_history.changes_with_summary_html"
+                    values={{
+                      changes_url: item.changesUrl,
+                      summary_url: item.summarizedChangesUrl,
+                    }}
+                  />
+                ) : (
+                  <TransWithLinks
+                    i18nKey="regulations_history.changes_html"
+                    values={{ changes_url: item.changesUrl }}
+                  />
                 )}
-                )
               </Text>
             )}
           </List.Item>

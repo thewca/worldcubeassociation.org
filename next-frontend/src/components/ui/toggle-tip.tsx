@@ -64,7 +64,7 @@ export const InfoTip = React.forwardRef<
     <ToggleTip content={children} {...rest} ref={ref}>
       <IconButton
         variant="ghost"
-        aria-label={t("competitions.nav.menu.info")}
+        aria-label={t("common.more_information")}
         size="2xs"
         colorPalette="gray"
       >

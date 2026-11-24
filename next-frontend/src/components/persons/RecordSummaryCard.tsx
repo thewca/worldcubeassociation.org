@@ -36,7 +36,7 @@ const RecordSummaryCard: React.FC<RecordSummaryCardProps> = async ({
               <Stat.ValueText alignItems="baseline">
                 <Heading size="3xl">{world}</Heading>
                 <Stat.ValueUnit color="green.contrast">
-                  {t("common.world")}
+                  {t("persons.show.record_levels.world")}
                 </Stat.ValueUnit>
               </Stat.ValueText>
             </Stat.Root>

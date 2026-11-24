@@ -30,8 +30,10 @@ interface ConfirmOptions {
   requireInput?: string | null;
 }
 
-const DEFAULT_OPTIONS: Required<ConfirmOptions> = {
-  content: null,
+type ResolvedConfirmOptions = Required<Omit<ConfirmOptions, "content">> &
+  Pick<ConfirmOptions, "content">;
+
+const DEFAULT_OPTIONS: ResolvedConfirmOptions = {
   confirmButton: "Yes",
   cancelButton: "No",
   requireInput: null,
@@ -109,7 +111,7 @@ export default function ConfirmProvider({ children }: { children: ReactNode }) {
   const { t } = useT();
 
   const [options, setOptions] =
-    useState<Required<ConfirmOptions>>(DEFAULT_OPTIONS);
+    useState<ResolvedConfirmOptions>(DEFAULT_OPTIONS);
   const [resolveReject, setResolveReject] = useState<
     [voidFunction, voidFunction] | []
   >([]);

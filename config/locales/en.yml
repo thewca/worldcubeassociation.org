@@ -266,6 +266,8 @@ en:
       world: "WR"
       continental: "CR"
       national: "NR"
+    #context: label of an icon button that shows an explanation, read out by screen readers
+    more_information: "More information"
     #context: dialog that asks the user to confirm an action
     confirm_dialog:
       title: "Confirm action"
@@ -2683,6 +2685,7 @@ en:
       not_found: "Person does not exist"
       #context: levels of records a person has broken, shown next to the number of records
       record_levels:
+        world: "World"
         continental: "Continental"
         national: "National"
       achievements:
@@ -3150,9 +3153,10 @@ en:
     older_versions: "Older versions of the Regulations"
     maintainers_html: 'Until 2011, the Regulations were maintained by Ron van Bruchem and the WCA Board. Since then, the <a href="mailto:wrc@worldcubeassociation.org">WCA Regulations Committee</a> is in charge of them.'
     guidelines_merge: "Previously, from the January 1st, 2013 release until the January 1st, 2025 release, the WCA Regulations were split into the WCA Regulations and the WCA Guidelines. The former contents of both documents were combined into the WCA Regulations for the July 17th, 2025 release."
-    #context: link to the list of changes of one version of the regulations
-    changes: "Changes"
-    summarized_changes: "Summarized changes"
+    #context: shown after the version, links to the list of changes of that version
+    changes_html: '(<a href="%{changes_url}">Changes</a>)'
+    #context: same as above, for versions that also have a summary of the changes
+    changes_with_summary_html: '(<a href="%{changes_url}">Changes</a>, <a href="%{summary_url}">Summarized changes</a>)'
     current_updates_html: 'Current updates to the Regulations are available <a href="https://github.com/thewca/wca-regulations/">on GitHub</a>'
   #context: Page about the official scramble program
   regulations_scrambles:
