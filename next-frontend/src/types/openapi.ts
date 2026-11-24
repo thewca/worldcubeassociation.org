@@ -2010,6 +2010,11 @@ export interface components {
             /** @example US */
             country_iso2: string;
             /**
+             * @description Null for a person who has no WCA account.
+             * @example 1
+             */
+            user_id: number | null;
+            /**
              * @description Null for a person who is not a delegate, or who has no WCA account at all.
              * @example delegate
              */
@@ -2732,6 +2737,9 @@ export interface components {
             };
             can_request_to_edit_others_profile: {
                 scope: string[] | "*";
+            };
+            can_edit_users: {
+                scope: components["schemas"]["CompetitionPermissions"];
             };
         };
         RegulationsContent: {

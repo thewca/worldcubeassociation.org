@@ -122,6 +122,7 @@ export default async function PersonOverview({
             profilePicture={personDetails.avatar.url}
             roles={roles}
             wcaId={wcaId}
+            userId={personDetails.user_id}
             gender={personDetails.gender}
             regionIso2={personDetails.country_iso2}
             competitions={personDetails.competition_count}

@@ -5,6 +5,7 @@ required:
   - name
   - gender
   - country_iso2
+  - user_id
   - delegate_status
   - url
   - teams
@@ -30,6 +31,10 @@ properties:
   country_iso2:
     type: string
     example: "US"
+  user_id:
+    type: [integer, "null"]
+    description: Null for a person who has no WCA account.
+    example: 1
   delegate_status:
     type: [string, "null"]
     description: Null for a person who is not a delegate, or who has no WCA account at all.
