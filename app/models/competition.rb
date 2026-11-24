@@ -2335,7 +2335,7 @@ class Competition < ApplicationRecord
     if cancelled?
       "cancelled"
     elsif announced?
-      if results_posted_at?
+      if results_posted?
         "results_posted"
       elsif probably_over?
         "results_pending"
