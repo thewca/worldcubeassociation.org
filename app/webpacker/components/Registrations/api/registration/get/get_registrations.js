@@ -18,8 +18,11 @@ export async function getPsychSheetForEvent(
   competitionId,
   eventId,
   sortBy,
+  rankingPeriod,
 ) {
-  const { data } = await fetchJsonOrError(getPsychSheetForEventUrl(competitionId, eventId, sortBy));
+  const { data } = await fetchJsonOrError(
+    getPsychSheetForEventUrl(competitionId, eventId, sortBy, rankingPeriod),
+  );
   return data;
 }
 

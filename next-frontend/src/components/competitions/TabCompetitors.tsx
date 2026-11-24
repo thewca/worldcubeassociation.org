@@ -4,7 +4,9 @@ import { Card, Text, Table } from "@chakra-ui/react";
 import useAPI from "@/lib/wca/useAPI";
 import { useT } from "@/lib/i18n/useI18n";
 import CompetitorTable from "@/components/competitions/CompetitorTable";
-import PsychSheet from "@/components/competitions/PsychSheet";
+import PsychSheet, {
+  type PsychSheetRankingPeriod,
+} from "@/components/competitions/PsychSheet";
 import { FormEventSelector } from "@/components/EventSelector";
 import Loading from "@/components/ui/loading";
 
@@ -22,6 +24,8 @@ const TabCompetitors: React.FC<CompetitorData> = ({
   addOnTheSpotSlot,
 }) => {
   const [psychSheetEvent, setPsychSheetEvent] = useState<string | null>(null);
+  const [rankingPeriod, setRankingPeriod] =
+    useState<PsychSheetRankingPeriod>("all_time");
 
   const api = useAPI();
   const { t } = useT();
@@ -67,6 +71,8 @@ const TabCompetitors: React.FC<CompetitorData> = ({
               key={psychSheetEvent}
               competitionId={id}
               eventId={psychSheetEvent}
+              rankingPeriod={rankingPeriod}
+              setRankingPeriod={setRankingPeriod}
               t={t}
             />
           ) : (

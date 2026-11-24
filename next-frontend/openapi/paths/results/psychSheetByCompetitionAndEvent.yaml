@@ -22,7 +22,32 @@ get:
         enum:
           - average
           - single
+    - name: ranking_period
+      in: query
+      required: false
+      description: >-
+        Use lifetime personal bests (all_time, the default), or best successful
+        results from competitions ending between today minus 12 calendar months
+        and today, inclusive (last_12_months). World ranks are null for the latter;
+        competitors without a successful result remain on the sheet, unranked.
+      schema:
+        type: string
+        default: all_time
+        enum:
+          - all_time
+          - last_12_months
   responses:
+    '400':
+      description: Invalid ranking_period
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - error
+            properties:
+              error:
+                type: string
     '200':
       description: Successful response
       content:

@@ -1577,7 +1577,7 @@ class Competition < ApplicationRecord
   )
   # rubocop:enable Lint/StructNewOverride
 
-  def psych_sheet_event(event, sort_by)
+  def psych_sheet_event(event, sort_by, ranking_period: 'all_time')
     ActiveRecord::Base.connected_to(role: :read_replica) do
       competition_event = competition_events.find_by!(event: event)
       recommended_format = competition_event.recommended_format || event.recommended_format
@@ -1619,58 +1619,82 @@ class Competition < ApplicationRecord
             .find(registered_user_ids)
       end
 
-      rank_symbol = :"ranks_#{sort_by}"
-      second_rank_symbol = :"ranks_#{sort_by_second}"
-
-      sorted_users = users_with_rankings.sort_by do |user|
-        # using '.find_by(event: ...)' fires another SQL query *despite* the ranks being pre-loaded :facepalm:
-        rank = user.send(rank_symbol).find { |r| r.event == event }
-        second_rank = user.send(second_rank_symbol).find { |r| r.event == event }
-
-        [
-          # Competitors with ranks should appear first in the sorting,
-          # competitors without ranks should appear last. That's why they get a higher number if rank is not present.
-          rank.present? ? 0 : 1,
-          rank&.world_rank || 0,
-          second_rank.present? ? 0 : 1,
-          second_rank&.world_rank || 0,
-          user.name,
-        ]
+      recent_results_only = ranking_period == 'last_12_months'
+      if recent_results_only
+        today = Date.current
+        recent_results_cache_key = [*results_cache_key, event.id, ranking_period, today]
+        single_bests, average_bests = Rails.cache.fetch(recent_results_cache_key, expires_in: 1.day) do
+          # The concise results tables aggregate by year, so they cannot apply a
+          # rolling date cutoff. Query actual results for these competitors instead.
+          # Merge both competition filters together: Result's date scopes alias
+          # this join as "competition", conflicting with the publication scope.
+          results = Result.where(person_id: users_with_rankings.filter_map(&:wca_id), event_id: event.id)
+                          .joins(:competition)
+                          .merge(Competition.results_posted.where(end_date: (today - 12.months)..today))
+                          .group(:person_id)
+          [results.succeeded.minimum(:best), results.average_succeeded.minimum(:average)]
+        end
       end
 
-      prev_sorted_ranking = nil
-
-      sorted_rankings = sorted_users.map.with_index do |user, i|
-        # see comment about .find vs .find_by above.
+      rankings = users_with_rankings.map do |user|
+        # using '.find_by(event: ...)' fires another SQL query *despite* the ranks being pre-loaded :facepalm:
         single_ranking = user.ranks_single.find { |r| r.event == event }
         average_ranking = user.ranks_average.find { |r| r.event == event }
 
-        sort_by_ranking = sort_by == 'single' ? single_ranking : average_ranking
-
-        if sort_by_ranking.present?
-          # Change position to previous if both single and average are tied with previous registration.
-          average_tied_previous = average_ranking&.world_rank == prev_sorted_ranking&.average_rank
-          single_tied_previous = single_ranking&.world_rank == prev_sorted_ranking&.single_rank
-
-          tied_previous = single_tied_previous && average_tied_previous
-
-          pos = tied_previous ? prev_sorted_ranking.pos : i + 1
-        else
-          # Hasn't competed in this event yet.
-          tied_previous = nil
-          pos = nil
-        end
-
-        sorted_ranking = SortedRanking.new(
+        SortedRanking.new(
           name: user.name,
           user_id: user.id,
           wca_id: user.wca_id,
           country_id: user.country&.id,
           country_iso2: user.country_iso2,
-          average_rank: average_ranking&.world_rank,
-          average_best: average_ranking&.best || 0,
-          single_rank: single_ranking&.world_rank,
-          single_best: single_ranking&.best || 0,
+          average_rank: recent_results_only ? nil : average_ranking&.world_rank,
+          average_best: (recent_results_only ? average_bests[user.wca_id] : average_ranking&.best) || 0,
+          single_rank: recent_results_only ? nil : single_ranking&.world_rank,
+          single_best: (recent_results_only ? single_bests[user.wca_id] : single_ranking&.best) || 0,
+        )
+      end
+
+      # Keep the existing all-time ordering and tie handling based on world ranks.
+      ranking_attribute = recent_results_only ? 'best' : 'rank'
+      primary_key = :"#{sort_by}_#{ranking_attribute}"
+      secondary_key = :"#{sort_by_second}_#{ranking_attribute}"
+      single_key = :"single_#{ranking_attribute}"
+      average_key = :"average_#{ranking_attribute}"
+
+      sorted_rankings = rankings.sort_by do |ranking|
+        primary = recent_results_only ? ranking[primary_key].nonzero? : ranking[primary_key]
+        secondary = recent_results_only ? ranking[secondary_key].nonzero? : ranking[secondary_key]
+
+        [
+          # Missing results sort after successful results in either period.
+          primary.present? ? 0 : 1,
+          primary || 0,
+          secondary.present? ? 0 : 1,
+          secondary || 0,
+          ranking.name,
+        ]
+      end
+
+      prev_sorted_ranking = nil
+
+      positioned_rankings = sorted_rankings.map.with_index do |ranking, i|
+        has_result = recent_results_only ? ranking[primary_key].positive? : ranking[primary_key].present?
+        if has_result
+          # Change position to previous if both single and average are tied with previous registration.
+          average_tied_previous = ranking[average_key] == prev_sorted_ranking&.[](average_key)
+          single_tied_previous = ranking[single_key] == prev_sorted_ranking&.[](single_key)
+
+          tied_previous = single_tied_previous && average_tied_previous
+
+          pos = tied_previous ? prev_sorted_ranking.pos : i + 1
+        else
+          # No successful result for this event and period.
+          tied_previous = nil
+          pos = nil
+        end
+
+        sorted_ranking = SortedRanking.new(
+          **ranking.to_h,
           tied_previous: tied_previous,
           pos: pos,
         )
@@ -1679,7 +1703,7 @@ class Competition < ApplicationRecord
       end
 
       PsychSheet.new(
-        sorted_rankings: sorted_rankings,
+        sorted_rankings: positioned_rankings,
         sort_by: sort_by,
         sort_by_second: sort_by_second,
       )

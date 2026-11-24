@@ -2120,6 +2120,10 @@ en:
         psychsheets:
           show_me: "Show me"
           rank: "Rank: %{userPosition}"
+          position: "Pos"
+          position_last_12_months: "Pos (12 months)"
+          recent_rankings_unavailable: "The 12-month positions could not be loaded. All-time positions and results are still available."
+          ranking_comparison_hint: "Pos (12 months) ranks best results from competitions ending in the last 12 months, up to today. Click either position heading to sort. All result and world-rank columns remain all-time. A dash means no successful result in the last 12 months."
         timestamp: "Timestamp"
         comment_and_note: "Comment & Note"
         edit_waiting_list: "Enable Waiting List Edit Mode"
