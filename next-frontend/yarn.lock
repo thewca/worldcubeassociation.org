@@ -13073,7 +13073,7 @@ __metadata:
     react: "npm:^19.3.1"
     react-country-flag: "npm:^3.1.0"
     react-dom: "npm:^19.3.1"
-    react-hotkeys-hook: "npm:^5.3.3"
+    react-hotkeys-hook: "npm:^5.4.0"
     react-i18next: "npm:^17.1.8"
     react-icons: "npm:^5.7.0"
     react-intersection-observer: "npm:^11.0.1"
@@ -14147,13 +14147,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hotkeys-hook@npm:^5.3.3":
-  version: 5.3.3
-  resolution: "react-hotkeys-hook@npm:5.3.3"
+"react-hotkeys-hook@npm:^5.4.0":
+  version: 5.4.0
+  resolution: "react-hotkeys-hook@npm:5.4.0"
   peerDependencies:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
-  checksum: 10c0/311f3b749cdd5ba20832fb2ea97cd94248f25ebe8417f0da2a76be7a2ca0fa94dfd2fe9eb1d399f41305f65937690825d167708f5d5c27652cb90a97ce0dbf06
+  checksum: 10c0/32cb7f8c5107d78e10a6568bb3f0613a725466ebdcbfa6cc3c4dbb9131ffcd1039aa78b76d600d7bdbf65185a0143868ec335117a6307be908ee12c53816737e
   languageName: node
   linkType: hard
 
