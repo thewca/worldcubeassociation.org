@@ -2334,14 +2334,12 @@ class Competition < ApplicationRecord
   def status
     if cancelled?
       "cancelled"
+    elsif results_posted?
+      "results_posted"
+    elsif announced? && probably_over?
+      "results_pending"
     elsif announced?
-      if results_posted?
-        "results_posted"
-      elsif probably_over?
-        "results_pending"
-      else
-        "announced"
-      end
+      "announced"
     elsif confirmed?
       "confirmed"
     else

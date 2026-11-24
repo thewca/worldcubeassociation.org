@@ -2155,6 +2155,12 @@ RSpec.describe Competition do
       expect(confirmed_competition.status).to eq "confirmed"
     end
 
+    it "stays confirmed when it is over without ever being announced" do
+      unannounced_past_competition = create(:competition, :confirmed, :not_visible, :past)
+
+      expect(unannounced_past_competition.status).to eq "confirmed"
+    end
+
     it "is announced once visible" do
       announced_competition = create(:competition, :confirmed, :visible, :announced, :future)
 
