@@ -2362,7 +2362,7 @@ class Competition < ApplicationRecord
       "end_date" => end_date,
       "scoretaking_software" => scoretaking_software,
       "number_of_bookmarks" => number_of_bookmarks,
-      "competition_series_ids" => competition_series&.public_competitions&.ids || [],
+      "competition_series_ids" => part_of_competition_series? ? series_competitions.visible.ids : [],
       "championship_types" => championships.map(&:championship_type),
       "tabs" => tabs.as_json(only: %w[id name]),
       "events" => {
