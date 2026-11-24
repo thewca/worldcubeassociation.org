@@ -176,10 +176,7 @@ USER rails:rails
 
 FROM runtime AS sidekiq
 
-# build-essential = compiling the native extensions of the `mailcatcher` gem.
-#   bin/docker-entrypoint-sidekiq installs that gem when the Sidekiq container starts with WCA_LIVE_SITE=0 (staging),
-#   and without a compiler the install fails and the container stops.
-# The `runtime` stage ends as the `rails` user, so we switch to root for `apt-get install` and back to `rails` afterwards.
+# build-essential = compiling the `mailcatcher` gem, which bin/docker-entrypoint-sidekiq installs at container start when WCA_LIVE_SITE=0 (staging)
 USER root
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential
