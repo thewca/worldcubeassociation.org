@@ -8,8 +8,8 @@ properties:
     type: string
     example: "Tim Reynolds"
   url:
-    type: string
-    description: Empty for users without a WCA ID.
+    type: [string, "null"]
+    description: Null for users without a WCA ID.
     example: "https://www.worldcubeassociation.org/persons/2005REYN01"
   avatar:
     $ref: '../users/UserAvatar.yaml'

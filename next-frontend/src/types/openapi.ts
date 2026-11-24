@@ -1471,10 +1471,10 @@ export interface components {
             /** @example Tim Reynolds */
             name: string;
             /**
-             * @description Empty for users without a WCA ID.
+             * @description Null for users without a WCA ID.
              * @example https://www.worldcubeassociation.org/persons/2005REYN01
              */
-            url: string;
+            url: string | null;
             avatar: components["schemas"]["UserAvatar"];
             /** @description Always false for organizers until lead organizers are stored. */
             is_lead: boolean;

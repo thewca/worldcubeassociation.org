@@ -265,6 +265,14 @@ RSpec.describe "API v1 Competitions" do
       expect(response.parsed_body.dig("staff", "delegates").first.keys).to contain_exactly("id", "name", "url", "avatar", "is_lead")
     end
 
+    it "has no URL for staff without a WCA ID" do
+      organizer_competition = create(:competition, :visible, organizers: [create(:user)])
+
+      get api_v1_competition_path(organizer_competition)
+
+      expect(response.parsed_body.dig("staff", "organizers", 0, "url")).to be_nil
+    end
+
     it "marks only the lead delegate as lead" do
       get api_v1_competition_path(competition)
 

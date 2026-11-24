@@ -2403,9 +2403,9 @@ class Competition < ApplicationRecord
       },
       "staff" => {
         "contact" => contact,
-        "delegates" => delegates.as_json(V1_INFO_STAFF_SERIALIZE_OPTIONS).map { it.except("class").merge("is_lead" => it["id"] == lead_delegate_id) },
+        "delegates" => delegates.as_json(V1_INFO_STAFF_SERIALIZE_OPTIONS).map { it.except("class").merge("url" => it["url"].presence, "is_lead" => it["id"] == lead_delegate_id) },
         # TODO: mark the lead organizer once lead organizers are stored
-        "organizers" => organizers.as_json(V1_INFO_STAFF_SERIALIZE_OPTIONS).map { it.except("class").merge("is_lead" => false) },
+        "organizers" => organizers.as_json(V1_INFO_STAFF_SERIALIZE_OPTIONS).map { it.except("class").merge("url" => it["url"].presence, "is_lead" => false) },
       },
     }
   end
