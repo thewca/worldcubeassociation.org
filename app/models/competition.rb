@@ -2308,7 +2308,7 @@ class Competition < ApplicationRecord
     include: {},
   }.freeze
 
-  V1_INFO_STAFF_SERIALIZE_OPTIONS = {
+  V1_INFO_TEAM_MEMBER_SERIALIZE_OPTIONS = {
     only: %w[id name],
     methods: %w[url],
     include: %w[avatar],
@@ -2320,7 +2320,7 @@ class Competition < ApplicationRecord
     methods: %w[latitude_degrees longitude_degrees],
   }.freeze
 
-  V1_INFO_STAFF_INCLUDES = %i[current_avatar delegate_role_metadata].freeze
+  V1_INFO_TEAM_MEMBER_INCLUDES = %i[current_avatar delegate_role_metadata].freeze
 
   V1_INFO_INCLUDES = [
     :events,
@@ -2328,7 +2328,7 @@ class Competition < ApplicationRecord
     :tabs,
     :championships,
     :competition_venues,
-    { delegates: V1_INFO_STAFF_INCLUDES, organizers: V1_INFO_STAFF_INCLUDES },
+    { delegates: V1_INFO_TEAM_MEMBER_INCLUDES, organizers: V1_INFO_TEAM_MEMBER_INCLUDES },
   ].freeze
 
   def status
@@ -2357,6 +2357,7 @@ class Competition < ApplicationRecord
       "status" => status,
       "information" => information,
       "website" => website,
+      "contact" => contact,
       "start_date" => start_date,
       "end_date" => end_date,
       "scoretaking_software" => scoretaking_software,
@@ -2401,13 +2402,27 @@ class Competition < ApplicationRecord
           "limit_date" => refund_policy_limit_date,
         },
       },
-      "staff" => {
-        "contact" => contact,
-        "delegates" => delegates.as_json(V1_INFO_STAFF_SERIALIZE_OPTIONS).map { it.except("class").merge("url" => it["url"].presence, "is_lead" => it["id"] == lead_delegate_id) },
-        # TODO: mark the lead organizer once lead organizers are stored
-        "organizers" => organizers.as_json(V1_INFO_STAFF_SERIALIZE_OPTIONS).map { it.except("class").merge("url" => it["url"].presence, "is_lead" => false) },
-      },
+      "organization_team" => to_v1_organization_team_json,
     }
+  end
+
+  def to_v1_organization_team_json
+    (delegates | organizers).sort_by(&:name).map do |member|
+      member.as_json(V1_INFO_TEAM_MEMBER_SERIALIZE_OPTIONS)
+            .except("class")
+            .merge("url" => member.url.presence, "roles" => v1_team_roles(member))
+    end
+  end
+
+  # TODO: add `lead_organizer` once lead organizers are stored
+  private def v1_team_roles(member)
+    delegate_role = member.trainee_delegate? ? "trainee_delegate" : "delegate"
+
+    [
+      ("organizer" if organizers.include?(member)),
+      (delegate_role if delegates.include?(member)),
+      ("lead_delegate" if member.id == lead_delegate_id),
+    ].compact
   end
 
   def serializable_hash(options = nil)

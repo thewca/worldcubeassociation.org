@@ -259,26 +259,49 @@ RSpec.describe "API v1 Competitions" do
       end
     end
 
-    it "serializes delegates without their deprecated team data" do
+    it "serializes its organization team without their deprecated team data" do
       get api_v1_competition_path(competition)
 
-      expect(response.parsed_body.dig("staff", "delegates").first.keys).to contain_exactly("id", "name", "url", "avatar", "is_lead")
+      expect(response.parsed_body["organization_team"].first.keys).to contain_exactly("id", "name", "url", "avatar", "roles")
     end
 
-    it "has no URL for staff without a WCA ID" do
-      organizer_competition = create(:competition, :visible, organizers: [create(:user)])
+    it "has no URL for team members without a WCA ID" do
+      organizer = create(:user)
+      organizer_competition = create(:competition, :visible, organizers: [organizer])
 
       get api_v1_competition_path(organizer_competition)
 
-      expect(response.parsed_body.dig("staff", "organizers", 0, "url")).to be_nil
+      organizer_json = response.parsed_body["organization_team"].find { it["id"] == organizer.id }
+      expect(organizer_json["url"]).to be_nil
     end
 
-    it "marks only the lead delegate as lead" do
+    it "lists the roles of each team member" do
       get api_v1_competition_path(competition)
 
-      staff_json = response.parsed_body["staff"]
-      expect(staff_json["delegates"].to_h { [it["id"], it["is_lead"]] }).to eq({ competition.lead_delegate_id => true })
-      expect(staff_json["organizers"].pluck("is_lead")).to all(be false)
+      roles_by_id = response.parsed_body["organization_team"].to_h { [it["id"], it["roles"]] }
+      expect(roles_by_id).to eq({
+                                  competition.lead_delegate_id => %w[delegate lead_delegate],
+                                  competition.organizers.first.id => %w[organizer],
+                                })
+    end
+
+    it "lists a delegate who also organizes only once" do
+      delegate = create(:delegate)
+      self_organized_competition = create(:competition, :visible, delegates: [delegate], organizers: [delegate])
+
+      get api_v1_competition_path(self_organized_competition)
+
+      expect(response.parsed_body["organization_team"].pluck("id", "roles")).to eq [[delegate.id, %w[organizer delegate lead_delegate]]]
+    end
+
+    it "marks trainee delegates" do
+      trainee_delegate = create(:trainee_delegate)
+      trainee_competition = create(:competition, :visible, delegates: [create(:delegate), trainee_delegate])
+
+      get api_v1_competition_path(trainee_competition)
+
+      trainee_json = response.parsed_body["organization_team"].find { it["id"] == trainee_delegate.id }
+      expect(trainee_json["roles"]).to eq %w[trainee_delegate]
     end
 
     it "lists its schedule venues" do

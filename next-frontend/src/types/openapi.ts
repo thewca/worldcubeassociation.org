@@ -1465,7 +1465,7 @@ export interface components {
             /** @example -122.332554 */
             longitude_degrees: number;
         };
-        V1CompetitionStaff: {
+        V1OrganizationTeamMember: {
             /** @example 267 */
             id: number;
             /** @example Tim Reynolds */
@@ -1476,8 +1476,15 @@ export interface components {
              */
             url: string | null;
             avatar: components["schemas"]["UserAvatar"];
-            /** @description Always false for organizers until lead organizers are stored. */
-            is_lead: boolean;
+            /**
+             * @description Every role this person holds at the competition. A lead delegate also has the `delegate` role. `lead_organizer` is not assigned yet.
+             * @example [
+             *       "organizer",
+             *       "delegate",
+             *       "lead_delegate"
+             *     ]
+             */
+            roles: ("organizer" | "lead_organizer" | "delegate" | "lead_delegate" | "trainee_delegate")[];
         };
         /** @description The general information about a competition, as shown on its page. Most fields can be null while an unannounced competition is still being set up. */
         V1CompetitionInfo: {
@@ -1502,6 +1509,8 @@ export interface components {
             information: string | null;
             /** @example https://cubingusa.org/worlds */
             website: string | null;
+            /** @example [Organization team](mailto:worlds@example.com) */
+            contact: string | null;
             /**
              * Format: date
              * @example 2025-07-03
@@ -1609,12 +1618,8 @@ export interface components {
                     limit_date: string | null;
                 };
             };
-            staff: {
-                /** @example [Organization team](mailto:worlds@example.com) */
-                contact: string | null;
-                delegates: components["schemas"]["V1CompetitionStaff"][];
-                organizers: components["schemas"]["V1CompetitionStaff"][];
-            };
+            /** @description The delegates and organizers of the competition, each listed once, ordered by name. */
+            organization_team: components["schemas"]["V1OrganizationTeamMember"][];
         };
         General404: {
             error: string;

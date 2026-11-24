@@ -9,6 +9,7 @@ required:
   - status
   - information
   - website
+  - contact
   - start_date
   - end_date
   - scoretaking_software
@@ -20,7 +21,7 @@ required:
   - venues
   - location
   - registration_info
-  - staff
+  - organization_team
 properties:
   id:
     type: string
@@ -48,6 +49,9 @@ properties:
   website:
     type: [string, "null"]
     example: "https://cubingusa.org/worlds"
+  contact:
+    type: [string, "null"]
+    example: "[Organization team](mailto:worlds@example.com)"
   start_date:
     type: [string, "null"]
     format: date
@@ -207,18 +211,8 @@ properties:
           limit_date:
             type: [string, "null"]
             format: date-time
-  staff:
-    type: object
-    required: [contact, delegates, organizers]
-    properties:
-      contact:
-        type: [string, "null"]
-        example: "[Organization team](mailto:worlds@example.com)"
-      delegates:
-        type: array
-        items:
-          $ref: 'V1CompetitionStaff.yaml'
-      organizers:
-        type: array
-        items:
-          $ref: 'V1CompetitionStaff.yaml'
+  organization_team:
+    type: array
+    description: The delegates and organizers of the competition, each listed once, ordered by name.
+    items:
+      $ref: 'V1OrganizationTeamMember.yaml'

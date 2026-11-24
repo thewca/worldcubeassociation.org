@@ -1,0 +1,24 @@
+type: object
+required: [id, name, url, avatar, roles]
+properties:
+  id:
+    type: integer
+    example: 267
+  name:
+    type: string
+    example: "Tim Reynolds"
+  url:
+    type: [string, "null"]
+    description: Null for users without a WCA ID.
+    example: "https://www.worldcubeassociation.org/persons/2005REYN01"
+  avatar:
+    $ref: '../users/UserAvatar.yaml'
+  roles:
+    type: array
+    description: >-
+      Every role this person holds at the competition. A lead delegate also has the `delegate`
+      role. `lead_organizer` is not assigned yet.
+    items:
+      type: string
+      enum: [organizer, lead_organizer, delegate, lead_delegate, trainee_delegate]
+    example: ["organizer", "delegate", "lead_delegate"]
