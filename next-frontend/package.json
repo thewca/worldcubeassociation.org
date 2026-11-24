@@ -39,7 +39,7 @@
     "@stripe/stripe-js": "^10.1.0",
     "@tanstack/react-form": "^1.33.5",
     "@tanstack/react-query": "^5.108.3",
-    "@trieb.work/nextjs-turbo-redis-cache": "1.18.1",
+    "@trieb.work/nextjs-turbo-redis-cache": "1.18.2",
     "@wrksz/themes": "^2.1.1",
     "accept-language-parser": "^1.5.0",
     "aws4": "^1.13.2",
