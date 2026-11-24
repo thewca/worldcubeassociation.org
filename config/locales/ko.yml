@@ -175,8 +175,17 @@ ko:
       ranking: '평균 기준 상위 %{ranking}위'
       any_result: 모든 평균 기록
     deadline:
-      description: 참가 자격 충족 기한 마감 일시
+      description: 참가 자격 충족 마감일
       by_date: '%{date}까지'
+    preview: 참가 자격 미리보기
+    earliest_date:
+      description: 참가 자격 기간 시작일
+      from_date: '%{date} 당일 또는 그 이후'
+      window_too_short: 참가 자격 기간 시작일은 기간 마감일보다 최소 %{days}일 이전이어야 합니다.
+      explanation:
+        '1': 참가 자격 기간 시작일은 선택 사항입니다. 비워두면 마감일 이전에 달성한 모든 결과가 인정됩니다.
+        '2': 참가 자격 기간 시작일을 입력하면 해당 날짜 당일 또는 그 이후에 달성한 결과만 참가 자격에 반영됩니다.
+        '3': 참가 자격 기간 시작일은 기간 마감일보다 최소 %{days}일 이전이어야 합니다.
   activity:
     registration: 현장 참가 신청
     checkin: 체크인
@@ -218,6 +227,8 @@ ko:
     solve_time:
       unit_seconds: 초
       unit_moves: 회전
+    back_to_top: 맨 위로
+    back: 뒤로
   oauth:
     applications:
       your_apps: 나의 OAuth 앱
@@ -230,6 +241,10 @@ ko:
       secret: 비밀
       scopes: 범위
       callback_urls: 콜백 Url
+      confidential: 기밀 유지가 필요한가요?
+      confidentiality:
+        'yes': 예
+        'no': 아니요
   helpers:
     submit:
       competition_medium:
@@ -519,6 +534,8 @@ ko:
     passwords:
       edit:
         new_password_confirmation: 새 비밀번호 재입력
+      send_paranoid_instructions: WCA에 등록된 계정이 있는 경우 해당 이메일 주소로 비밀번호 재설정 링크가 
+        전송됩니다.
     sessions:
       new:
         sign_in: 로그인
@@ -592,8 +609,12 @@ ko:
             활성화하는 경우 기기를 재설정해야 한다는 점에 유의하십시오.
           disabled_success: 2단계 인증을 성공적으로 비활성화했습니다.
           disabled_failed: 2FA를 비활성화할 수 없습니다. 아래 오류를 참조하십시오.
+        redesign_notice: 새 로그인 페이지를 보고 계십니다. 이 페이지는 올해 말까지 기존 페이지를 대체할 예정입니다.
+        use_classic: 기존 로그인 페이지로 전환
       destroy_other:
         success: 다른 기기에서 성공적으로 로그아웃되었습니다.
+      destroy:
+        success: 로그아웃되었습니다.
     shared:
       links:
         sign_in: 로그인
@@ -607,7 +628,9 @@ ko:
     mailer:
       confirmation_instructions:
         subject: 새로운 이메일 주소를 확인해 주십시오.
-    registrations: {}
+    registrations:
+      new:
+        redesign_notice: 새 회원가입 페이지를 보고 계십니다. 이 페이지는 올해 말까지 기존 페이지를 대체할 예정입니다.
   wca:
     errors:
       messages:
@@ -634,11 +657,15 @@ ko:
             공백으로 범위를 구분합니다. 기본 범위를 사용하려면 비워둡니다. 지원되는 범위 목록은 <a
             href="https://github.com/thewca/worldcubeassociation.org/blob/main/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">여기</a>에서 확인하십시오.
+          confidential: 클라이언트 비밀 정보를 기밀로 유지할 수 있는 환경에서 사용할 애플리케이션입니다. 네이티브 모바일 
+            앱과 단일 페이지 앱(SPA)은 기밀 정보를 유지할 수 없는 것으로 간주됩니다.
       scopes:
         public: '귀하의 공개 데이터(이름, WCA ID, 성별, 국적, 프로필 사진)에 접근할 수 있습니다.'
         dob: 귀하의 생년월일에 접근할 수 있습니다.
         email: 귀하의 이메일 주소에 접근할 수 있습니다.
         manage_competitions: 귀하가 주최하는 예정된 대회를 관리할 수 있습니다.
+        manage_registrations: 대회 참가 신청을 관리하고, 참가 신청을 변경하거나 취소할 수 있습니다.
+        translations: WCA 번역가로 참여하는 언어 목록에 접근할 수 있습니다.
     devise:
       no_account: 계정이 없으십니까?
       have_competed: WCA 대회에 참가한 적이 있습니다.
@@ -646,8 +673,9 @@ ko:
       let_us_know: WCA 대회에 참가한 적이 있다면 알려주십시오.
       welcome_back: '환영합니다! WCA 홈페이지 계정을 생성하기 위해, 어느 WCA ID로 WCA 대회에 참가하였는지 알려주십시오.'
       welcome_html: >-
-        환영합니다! 첫 WCA 대회에 참가하기 전에, 기록 보관을 위한 추가 정보가 필요합니다. 생년월일은 귀하의 허락 없이 공개되지
-        않습니다.<br/><br/>대리 가입하는 경우, <strong>선수</strong>의 세부 정보를 제공해 주십시오.
+        환영합니다! 첫 WCA 대회에 참가하기 전에 기록 보관을 위한 추가 정보가 필요합니다.<br/><br/>다른 사람을 대신해 가입하는
+        경우, <strong>선수</strong>의 세부 정보를 제공해 주십시오.
+      dob_privacy: 이 정보는 귀하의 허락 없이 절대 공개되지 않습니다.
   layouts:
     navigation:
       information: 정보
@@ -709,6 +737,22 @@ ko:
       privacy: 개인 정보
       disclaimer: 면책 조항
       find_us: 소셜 미디어
+      panels:
+        admin: 관리자 패널
+        volunteer: 자원봉사자 패널
+        delegate: 파견위원 패널
+        wapc: WAC 패널
+        wfc: WFC 패널
+        wrt: WRT 패널
+        wst: WST 패널
+        board: 이사회 패널
+        leader: 대표 패널
+        senior_delegate: 수석 파견위원 패널
+        wic: WIC 패널
+        weat: WEAT 패널
+        wqac: WQAC 패널
+      switch_to_dark_mode: 다크 모드로 전환
+      switch_to_light_mode: 라이트 모드로 전환
   page:
     translators:
       title: 번역가
@@ -779,6 +823,7 @@ ko:
         wapc: >-
           WCA 항소 위원회(WAC)는 다른 WCA 자원봉사자가 내린 결정에 대한 항소를 검토하고 의결합니다. WAC는 독립적이고
           공정한 검토 절차를 통해 결정이 공정하고 합리적이며 WCA 정책 및 규정에 부합하는지 확인합니다.
+      empty: 팀이나 위원회를 찾을 수 없습니다. 나중에 다시 확인해 주십시오.
     contacts:
       title: WCA 문의 양식
       faq_note_html: >-
@@ -884,6 +929,13 @@ ko:
       success_message: 요청이 제출되었습니다. 곧 답변드리겠습니다.
       success_message_with_ticket_link_html: '요청이 접수되었습니다. 곧 연락드리겠습니다. 요청 상태를 확인하려면
         <a href="%{link}">이 링크</a>를 방문하세요.'
+    executives:
+      title: 임원진
+      joined_wca: WCA 가입
+      joined_executives: 임원진 합류
+      more_information: 추가 정보
+      close: 닫기
+      person_not_found: WCA ID가 %{wca_id}인 사람을 찾을 수 없습니다
   homepage:
     learn_more: 더 알아보기
     title: 세계 큐브 협회에 오신 것을 환영합니다
@@ -1143,6 +1195,7 @@ ko:
         WCA ID %{link_id}에 생년월일이 지정되어 있지 않습니다. 이 <a href="%{dob_form_path}">전용
         양식</a>을 사용하여 WCA 결과 팀에게 문의하십시오.
       unknown_wca_id_html: 'WCA ID %{link_id}이(가) 존재하지 않습니다.'
+      search_for_delegate: 파견위원 검색
   user_roles:
     email:
       role_metadata:
@@ -1151,6 +1204,9 @@ ko:
         locale: 로케일
         group_name: 팀/위원회 이름
         delegated_competitions_count: 파견위원 역할을 수행한 대회 수
+        wca_id: WCA ID
+        location: 위치
+        email: 이메일
   user_groups:
     group_types:
       board: WCA 이사회
@@ -1179,6 +1235,7 @@ ko:
       cannot_register_without_comment: >-
         코멘트를 작성해야 합니다. 위의 참가 신청 요건을 읽고 무엇이 포함되어야 하는지 확인하십시오(예: FMC 동시 대회의 경우,
         참가하는 장소).
+      banned_until: 귀하의 출전 금지는 %{date}에 종료됩니다.
     registration_info_people:
       newcomer:
         other: 첫 참가자
@@ -1244,6 +1301,9 @@ ko:
       payment_requested_on: '결제 요청일: %{date}'
       series_registrations: 시리즈 참가 신청
       total: 총합
+      export_to_csv:
+        other: 참가 신청 %{count}건을 CSV로 내보내기
+      export_all_to_csv: 모든 참가 신청을 CSV로 내보내기
     new_registration:
       title: '%{comp} 참가 신청'
     sign_in: 로그인
@@ -1334,8 +1394,8 @@ ko:
       title: '%{comp}에 대한 참가자 명단 가져오기'
       info: 참가자 명단을 여러 번 가져올 수 있습니다. 변경 사항이 결정되면 그에 따라 데이터베이스가 업데이트됩니다.
       registrations_file_label: 참가자 명단 파일
-      registrations_file_hint: '상태, 이름, 지역, WCA ID, 생년월일, 성별, 이메일 및 각 종목에 대한 열이 있는
-        CSV 파일입니다.'
+      registrations_file_hint: '상태, 이름, 지역, WCA ID, 생년월일, 성별, 이메일 및 각 종목 열이 포함된 CSV
+        파일 또는 WCIF 데이터가 포함된 JSON 파일입니다.'
       preview: 참가 신청 데이터 미리 보기
       import: 가져오기
       cancel: 취소
@@ -1360,6 +1420,9 @@ ko:
           생년월일은 YYYY-mm-dd 형식(년-월-일, 예: 1944-07-13)을 따라야 합니다. 다음 생년월일은 구문을 분석할 수
           없습니다: %{raw_dobs}.
         empty_file: 파일이 비어 있습니다.
+        invalid_country: '잘못된 국가: %{country}.'
+        invalid_wcif: JSON 파일에 유효한 WCIF 데이터가 없습니다.
+        unsupported_file_format: 지원하지 않는 파일 형식입니다. JSON 또는 CSV 파일을 업로드하십시오.
     add:
       title: '%{comp}에 대한 참가 신청을 추가합니다'
       info: 이로써 승인된 참가 신청이 생성됩니다. 이 양식을 사용하여 대회 기간 동안 현장 참가 신청 내역을 추가할 수 있습니다.
@@ -1417,8 +1480,7 @@ ko:
       reg_opens_too_early: 참가 신청이 48시간 이내에 시작되도록 설정되어 있습니다.
       registration_already_closed: 참가 신청 마감일이 이미 지났습니다. 마감일을 미래로 설정해 주십시오.
       tooltip_registered: 귀하는 참가 신청되었습니다.
-      tooltip_pending: '귀하의 참가 신청은 수동 승인을 기다리고 있습니다. 대회 페이지에 나열된 모든 지침(예: 지불)을 따랐는지
-        확인하십시오.'
+      tooltip_pending: '참가 신청이 수동 승인을 기다리고 있습니다. 대회 페이지에 나열된 모든 지침(예: 결제)을 따랐는지 확인하십시오.'
       tooltip_waiting_list: 귀하는 현재 대기 명단에 있습니다.
       tooltip_deleted: 안타깝게도 귀하의 참가 신청이 삭제되었습니다. 자세한 내용은 이메일을 확인하거나 주최자에게 
         문의하십시오.
@@ -1436,6 +1498,7 @@ ko:
       spots_left:
         other: '%{count}자리 남음'
       no_spots_left: 정원 마감
+      provisional_live_results: '그동안 예비 결과를 여기에서 확인할 수 있습니다:'
     live:
       title: 실시간 결과
       manage_rounds: 라운드 관리
@@ -1501,12 +1564,15 @@ ko:
             menu: 일괄 내보내기
             id: ID
             name: 성명
+            select_all: 모두 선택
           quit_menu: 나가기
           no_next: 다음 라운드로 진출할 선수가 없습니다.
           cancel: 취소
           failed_to_fetch: 다음으로 진출할 선수를 가져오는 데 실패했습니다.
           still_processing: 일부 결과가 처리 중인 동안에는 '선수 내보내기' 작업을 실행할 수 없습니다
           in_batch: 제출되지 않은 일괄 처리에 속한 선수를 내보낼 수 없습니다
+          scoresheet_warning: 선수의 빈 기록지를 실제로 보유하고 있음이 확인될 때만 해당 선수를 퇴장 처리하십시오. 
+            종료된 라운드에는 선수를 다시 추가할 수 없습니다.
         add_competitor:
           single_round: 라운드에 선수 추가하기
           multiple_rounds:
@@ -1514,11 +1580,20 @@ ko:
           event_edit_warning: >-
             이 선수는 해당 대회에 참가 신청되어 있지 않으며, 이 대회는 참가 종목 변경을 더 이상 허용하지 않습니다. 선수를
             추가하는 것은 가능하지만, 의도된 변경인지 반드시 확인하십시오.
+          round_closed: 이미 종료된 라운드에는 선수를 추가할 수 없습니다
+        first_timer: 첫 참가자
       results:
         competitor: 선수
         mean: 평균
       errors:
         round_closed: 라운드가 아직 개시되지 않았습니다
+      combined_title: 통합 듀얼 라운드
+      overview:
+        upcoming: 예정
+        in_progress: 현재 진행 중
+        past_month: 지난 한 달
+        no_upcoming: 예정된 대회 중 실시간 결과가 제공되는 대회가 없습니다.
+        search: 대회 검색
     my_competitions:
       title: 나의 대회
       disclaimer: >-
@@ -1534,6 +1609,8 @@ ko:
         abbr_description: '%{short_name}: %{long_name}'
         cutoff: '컷오프: %{short_cutoff}'
         download_html: '대회의 모든 세부 정보를 PDF로 다운로드하려면 %{here}를 클릭하십시오.'
+        download_pdf: 대회 일정 PDF를 여기에서 다운로드하세요
+        download: 다운로드
       date: 날짜
       add_to_calendar: 캘린더에 추가하기
       name: 대회명
@@ -1653,6 +1730,9 @@ ko:
       bookmark: 이 대회를 북마크하기
       is_bookmarked: 이 대회를 북마크했습니다.
       number_of_bookmarks: 북마크한 횟수
+      view_more_members: 팀원 %{count}명 더 보기
+      see_more: + %{count}명 더 보기
+      waiting_list_size: 대기자 명단 규모
     index:
       title: 대회
       all_events: 모두 선택
@@ -1690,13 +1770,14 @@ ko:
       use_admin_view: 관리자 보기 사용
       titles:
         in_progress: 진행 중인 대회
-        past: '%{year}년 대회'
-        past_all: 지난 모든 대회
+        past: '%{year}년에 개최된 대회 (%{count})'
+        past_all: 지난 모든 대회 (%{count})
         recent: '최근 대회 (최근 %{count}일)'
-        upcoming: 예정된 대회
+        upcoming: 예정된 대회 (%{count})
         ongoing_and_upcoming: 진행 중이거나 예정된 대회
         custom: 선택된 기간의 대회
         by_announcement: '발표일 순으로 정렬된 대회, 최근에 발표된 대회가 맨 위에 위치합니다'
+        in_progress_count: 진행 중인 대회 (%{count})
       tooltips:
         hourglass:
           ended: '%{days}전에 종료됨'
@@ -1713,6 +1794,43 @@ ko:
           full: '참가자 정원에 도달했으므로, 새로 참가 신청한 사람은 대기 명단에 올라갑니다.'
       no_more_comps: 더 이상의 대회가 없음.
       no_comp_found: 대회가 없습니다.
+      all_competitions: 모든 대회
+      event: 종목
+      name: 이름
+      location: 위치
+      location_placeholder: 주소 입력
+      use_my_location: 내 위치 사용
+      location_sign_in_required: 주소를 검색하려면 로그인하십시오
+      location_not_found: 이 주소에서 위치를 찾을 수 없습니다
+      location_search_failed: 주소 검색에 실패했습니다. 잠시 후 다시 시도하십시오
+      distance: 거리
+      distance_units:
+        km: km
+        mi: mi
+      advanced_filters: 고급 필터
+      championship_only: 선수권 대회만 표시
+      sort:
+        order: 정렬 순서
+        start_date_asc: '시작 날짜: 오름차순'
+        start_date_desc: '시작 날짜: 내림차순'
+        end_date_asc: '종료 날짜: 오름차순'
+        end_date_desc: '종료 날짜: 내림차순'
+        announced_at_asc: '공지 날짜: 오름차순'
+        announced_at_desc: '공지 날짜: 내림차순'
+        name_asc: '이름: A-Z'
+        name_desc: '이름: Z-A'
+      date_and_city: '%{date} – %{city}'
+      registration_key: '참가 신청 키:'
+      registration_status:
+        open: 접수 중
+        not_open: 접수 예정
+        closed: 접수 마감
+        all: 전체
+      register_now: 지금 참가 신청하기
+      view_competition: 대회 보기
+      why_compete_description_html: |-
+        <p>대회는 누가 가장 빠른지 알아보는 자리만은 아닙니다. 사람들과 어울리는 자리이기도 합니다! 큐브를 맞출 수 있는 사람이라면 누구나 대회에 참가해 개인 최고 기록을 세울 수 있습니다. 모두가 대회가 원활히 진행되도록 함께 힘을 보태기 때문에 친구를 사귀기도 쉽습니다.</p>
+        <p>아래 도구를 사용해 가까운 대회를 찾고 큐빙을 시작해 보세요!</p>
     my_competitions_table:
       edit: 수정
       registrations: 참가 신청
@@ -1906,7 +2024,7 @@ ko:
           external_website: 대회 웹사이트. 유효한 http(s) url이어야 합니다.
           external_registration_page: 선수들이 참가 신청을 진행해야 하는 페이지입니다. 유효한 http(s) 
             url이어야 합니다.
-          scoretaking_software: '듀얼 라운드를 사용하려면 ''%{choice_ilr}''을 선택하세요'
+          scoretaking_software: '듀얼 라운드를 사용하려면 ''%{choice_ilr}'' 또는 외부 도구를 선택하십시오'
         entry_fees:
           currency_code: 참가비에 대한 통화 코드입니다.
           base_entry_fee: >-
@@ -2011,6 +2129,8 @@ ko:
         is_waitlisted: >-
           여행 일정을 예약하지 마십시오. 하지만 희망도 포기하지 마십시오. 참가자 정원에 도달하였지만, 귀하께서는 대기 명단에 올랐고,
           참가할 수 있는 자리가 생기면 이메일을 받게 될 것입니다.
+        additional: 결제 또는 기타 참가 신청 요건과 관련하여 위에 안내된 추가 지침을 모두 따랐는지 확인해 주십시오.
+        email: 참가 신청 상태가 업데이트되면 이메일을 받게 됩니다.
       list:
         empty: 없음
         spots_remaining_plural:
@@ -2019,8 +2139,8 @@ ko:
         pending:
           title: 승인 보류자 명단
           information: >-
-            '승인 보류자 명단'은 참가 신청이 완료되지 않은 경우에만(예: 미납) 사용해야 합니다. 신청자가 너무 많아서 새로운
-            참가자를 받을 수 없는 경우 대기자 명단을 사용하십시오.
+            '보류 중' 상태는 미완료(예: 미결제) 참가 신청에만 사용해야 합니다. 대회 정원이 차서 신규 선수를 받을 수 없는 경우에는
+            대기자 명단을 사용하십시오.
           waitlist_skipped_warning: >-
             %{count}개의 참가 신청을 이미 건너뛰었습니다. 보류 중인 참가 신청이 있습니다. 선택한 참가 신청을 대기자 명단으로
             이동하시겠습니까?
@@ -2036,6 +2156,7 @@ ko:
           title: 승인자 명단
           pending_waitlist_combined_skipped_warning: '이전에 보류/대기 명단에 있는 참가 신청 중 %{count}개를
             건너뛰었습니다. 선택한 참가 신청을 수락하시겠습니까?'
+          information: 승인된 선수는 신청한 종목에 참가할 수 있는 것으로 확인되었습니다.
         cancelled:
           title: 취소자 명단
           information: 참가 신청이 취소된 선수는 다시 참가 신청할 수 있습니다.
@@ -2061,6 +2182,7 @@ ko:
         acknowledgement: '저는 ''참가 신청'' 탭에 있는 모든 정보(참가비, 환불 정책 및 위에 나열된 추가 요구 사항 포함)를
           읽고 확인했습니다.'
         next_step: 다음 단계로 계속
+        accept: 수락
       update:
         being_updated: 참가 신청을 업데이트하고 있습니다...
         being_deleted: 참가 신청을 삭제하고 있습니다...
@@ -2075,7 +2197,7 @@ ko:
         no_changes: 변경 사항이 없습니다
         email_message: 클립보드에 복사되었습니다. 숨은 참조(bcc)를 사용하는 것을 잊지 마십시오!
         move_to:
-          other: '%{count}을(를) 다음으로 이동'
+          other: 참가 신청 %{count}건을 다음으로 이동
         move_to_none_selected: 다음으로 이동
         pending: 보류
         waitlist: 대기 명단
@@ -2085,6 +2207,12 @@ ko:
         amount: 금액
         too_many: '이 모든 참가 신청을 수락하면 참가자 정원을 %{count}만큼 초과하게 됩니다'
         no_self_update: 참가 신청을 업데이트하려면 주최 팀에 문의하십시오.
+        send_email:
+          other: 이메일 주소 %{count}개로 이메일 보내기
+        copy_emails:
+          other: 이메일 주소 %{count}개 복사
+        scroll_to: 다음 위치로 스크롤
+        non_competing: 미출전
       register:
         will_open_countdown: >-
           참가 신청은 %{minutes}분 %{seconds}초 후에 시작됩니다. 신청이 시작되면 이 페이지가 자동으로 새로
@@ -2102,6 +2230,7 @@ ko:
           competing:
             title: 참가 신청
             description: 종목 선택
+            summary_title: 참가 신청
           requirements:
             title: 요구 사항
             description: 대회 약관 동의
@@ -2125,6 +2254,9 @@ ko:
           있습니다.
         processing_queue: '많은 참가 신청이 처리 중이며, 대기열에 %{queueCount}건이 있습니다.'
         event_limit: '이 대회에서는 최대 %{max_events}개의 종목에 참가 신청할 수 있습니다.'
+        comment_overview: 비고
+        waiting_list_count:
+          other: 대기 명단에 선수 %{count}명이 있습니다.
       errors:
         events: 종목 불러오기에 실패했습니다. 다시 시도해 주십시오
         '-1': 잘못된 토큰을 전송하였습니다. 페이지를 새로 고침 하십시오. 문제가 계속되면 WST에 문의하십시오
@@ -2166,7 +2298,7 @@ ko:
     errors:
       must_use_wca_registration: 자동 승인 기능은 WCA 웹사이트를 통해 참가 신청을 하는 경우에만 사용할 수 
         있습니다
-      must_use_payment_integration: '자동 승인 사용하려면 통합 결제(예: Stripe)를 활성화해야 합니다'
+      must_use_payment_integration: '자동 승인을 사용하려면 결제 연동(예: Stripe)을 활성화해야 합니다'
       auto_accept_limit: 자동 승인된 참가 신청의 한도는 참가자 정원보다 적어야 합니다
       auto_accept_not_negative: 자동 승인된 참가 신청 수는 0보다 작을 수 없습니다.
       auto_accept_accept_paid_pending: >-
@@ -2226,6 +2358,7 @@ ko:
         원래 값보다 앞서 설정되었습니다.'
       edited_deadline_not_in_future: '미래의 마감일만 입력할 수 있지만, %{new_timestamp}는 미래의 값이
         아닙니다.'
+      fto_requires_internal_scoretaking: FTO를 개최할 때는 통합 실시간 결과(ILR)로 설정해야 합니다.
     new:
       create_competition: 대회 생성하기
       note_clone: 기존 대회를 복제하려면 해당 대회의 정보 페이지로 가서 메뉴에서 "복제" 링크를 클릭하십시오.
@@ -2379,6 +2512,12 @@ ko:
         register: 참가 신청
         competitors: 참가자 명단
         scrambles: 스크램블
+        competitor_results: 선수 결과
+      general: 일반
+      more: 더 보기
+      admin: 관리자
+      results: 결과
+      events: 종목
     results_table:
       wca_profile: WCA 프로필
       event: 종목
@@ -2388,12 +2527,29 @@ ko:
         national: 국가 순위
         continent: 대륙 순위
         world: 세계 순위
+      h2h_results_disclaimer_html: 결과는 일대일 결승으로 결정되었습니다. 여기에는 순위와 최고 솔브만 표시됩니다. 
+        전체 일대일 대진표는 <a href="%{results_url}">새 결과 페이지</a>에서 확인할 수 있습니다.
+      show_all_linked_results: 두 라운드의 결과 모두 표시
+      linked_results_disclaimer_html: 이 라운드는 듀얼 라운드의 일부입니다. 아래 결과는 라운드별로 표시됩니다. 
+        두 라운드의 통합 결과는 <a href="%{results_url}">새 결과 페이지</a>에서 확인할 수 있습니다.
     scrambles_table:
       group: 그룹
       scramble: 스크램블
     competition_series_fields:
       add_series: 시리즈에 추가
       remove_series: 시리즈에서 제거
+    results:
+      query_search: 이름 또는 WCA ID로 검색
+      country_search: 국가별 필터
+      no_results: 검색 결과가 없습니다.
+      all_countries: 모든 국가
+    h2h:
+      set_number: '%{number}세트'
+      stage_of: '%{number}강'
+      quarterfinal_stage: 8강
+      semifinal_stage: 4강
+      final_stage: 결승
+      third_place: 3위 결정전
   competition_tabs:
     headers:
       tabs: 탭
@@ -2421,6 +2577,7 @@ ko:
       unknown_show: '알 수 없는 표시 매개변수입니다. "N명", "N개 결과" 또는 "지역별" 중 하나여야 합니다'
     records:
       title: 기록
+      load_error: 기록을 불러오는 중 오류가 발생했습니다
     last_updated_html: '마지막 업데이트: %{timestamp}'
     filters_fixes_underway: >-
       일부 필터(예: 과년도)는 일시적으로 비활성화되어 있습니다. 소프트웨어 팀은 이러한 필터를 복구하기 위해 노력하고 있습니다. 불편을
@@ -2458,6 +2615,7 @@ ko:
       date_circa: 대략적인 날짜
   notifications:
     connect_wca_id: WCA 계정과 WCA ID를 연결하십시오!
+    copied_to_clipboard: 클립보드에 복사했습니다
   payments:
     header: 결제 이력
     messages:
@@ -2529,8 +2687,8 @@ ko:
           primary_email: 이메일
         manual:
           payment_instructions: 결제 지침(대회 페이지에 표시됨)
-          payment_reference_label: '사용자는 결제를 식별하기 위해 어떤 정보를 제공해야 합니까? (예: 결제 참조 번호/계정
-            ID 등)'
+          payment_reference_label: '결제를 식별할 수 있도록 사용자가 어떤 정보를 제공해야 합니까? (예: 결제 참조
+            번호/계정 ID 등)'
         fallback_not_applicable: N/A
   persons:
     index:
@@ -2572,6 +2730,9 @@ ko:
     announcement_info_html: '%{date_time}에 %{author_name}에 의해 공지됨'
     errors:
       unstick_at_future: 반드시 미래의 날짜여야 합니다.
+    search: 공지 검색
+    no_announcements: 아직 공지사항이 없습니다.
+    no_search_results: 검색 결과에 해당하는 공지사항이 없습니다.
   contacts:
     dob:
       title: 생년월일 변경 신청 양식
@@ -2773,15 +2934,15 @@ ko:
       operations_html: '일상 업무는 WCA의 %{committees_and_teams}에서 수행합니다.'
       teams_committees: 팀과 위원회
       delegates_html: >-
-        <p><strong>WCA 파견위원</strong>은 WCA 발의에서 정의되고 WCA 규정에 설명된 역할입니다. 파견위원의 주요
-        임무는 WCA를 대신하여 대회를 감독하는 것입니다. WCA 파견위원은 모든 WCA 대표가 WCA의 목적, 핵심 가치 및 규정에
-        따라 운영되도록 할 책임이 있습니다. WCA는 <strong>수석 파견위원</strong>, <strong>지역
-        파견위원</strong>, <strong>파견위원</strong>, <strong>준 파견위원</strong> 및
-        <strong>수습 파견위원</strong>%{see_link}을 구분합니다.</p> <p>WCA 파견위원의 임무 외에도 수석
-        파견위원 또는 지역 파견위원은 해당 지역의 WCA 파견위원을 관리할 책임이 있으며, 지역 문제에 대해 커뮤니티에서 연락을 받을
-        수도 있습니다.</p> <p>새로운 파견위원은 처음에 준 파견위원으로 임명됩니다. 이후 WCA 파견위원으로 승격되기 전에 WCA
-        대회를 관리하는 능력을 증명해야 합니다.</p> <p>수습 파견위원은 WCA 파견위원에 대한 교육을 받으며, WCA 파견위원이
-        있는 대회에서만 파견위원 역할을 수행할 수 있습니다.</p>
+        <p><strong>WCA 파견위원</strong>은 WCA 발의에서 정의되고 WCA 규정에 설명된 역할입니다. 파견위원의 주요 임무는
+        WCA를 대신하여 대회를 감독하는 것입니다. WCA 파견위원은 모든 WCA 대회가 WCA의 목적, 가치 및 규정에 따라 운영되도록 할
+        책임이 있습니다. WCA는 <strong>수석 파견위원</strong>, <strong>지역 파견위원</strong>, <strong>파견위원</strong>,
+        <strong>준 파견위원</strong> 및 <strong>수습 파견위원</strong>%{see_link}을 구분합니다.</p>
+        <p>WCA 파견위원의 임무 외에도 수석 파견위원 또는 지역 파견위원은 해당 지역의 WCA 파견위원을 관리할 책임이 있으며, 지역 문제에
+        대해 커뮤니티에서 연락을 받을 수도 있습니다.</p> <p>새 파견위원은 처음에 준 파견위원으로 지정됩니다. 이후 WCA 파견위원으로
+        승격되기 전에 WCA 대회를 관리하는 능력을 입증하도록 요청받습니다.</p> <p>수습 파견위원은 WCA 파견위원 직책을 위해 교육을
+        받으며, WCA 파견위원이 함께 있는 대회만 감독할 수 있습니다.</p> <p>수습 파견위원이 되는 데 관심이 있다면, 자격 요건을
+        확인하기 위해 지역 파견위원에게 문의하십시오.</p>
       see_link_html: ' (%{link} 참고)'
       members_html: 모든 선수는 본인의 첫 WCA 대회에서 자동으로 WCA <strong>회원</strong>이 됩니다.
   speedcubing_history:
@@ -2797,6 +2958,8 @@ ko:
     codeofconduct: 행동강령
     finances: 재정
     strategic_plan: 전략 계획
+    motion_not_found: 동의안을 찾을 수 없음
+    motion_not_found_action: 번호가 "%{motion_id}"인 동의안을 찾을 수 없습니다. 폐기되었을 수 있습니다.
   education:
     title: WCA 교육 자료
     description: WQAC는 커뮤니티를 위해 여러 문서를 게시했습니다. 아래에서 다운로드할 수 있습니다.
@@ -2804,6 +2967,7 @@ ko:
     judge_tutorial: 첫 참가자를 위한 심판 업무 안내
     competition_templates: 대회 템플릿
     certificates: WCT의 상장 템플릿
+    orga_handbook: 주최자 지침서
   delegates_page:
     title: WCA 파견위원
     acknowledges: 'WCA는 다음과 같은 WCA 파견위원을 인정합니다:'
@@ -2818,6 +2982,7 @@ ko:
       total_delegated: 총 파견 횟수
       lead_delegated: 대표 파견위원을 수행한 대회
       history: 이력
+    copy_email: 이메일 복사
   regional_organizations:
     title: 지역 단체
     content: 'WCA는 다음과 같은 지역 단체를 인정합니다:'
@@ -2966,9 +3131,48 @@ ko:
         posts: 검색된 게시물이 없습니다
         incidents: 검색된 사건이 없습니다
         regulations_and_guidelines: 검색된 규정이 없습니다
+      empty_query: 검색어를 입력해 보세요!
   incidents_log:
     i18n_disclaimer: '사건 섹션은 영어로만 제공되며, 아래 내용은 번역되지 않습니다.'
     incident: '사건:'
+    title: 사건 로그
+    page_title: '사건: %{title}'
+    not_found: 사건을 찾을 수 없음
+    back_to_log: 사건 로그로 돌아가기
+    search_placeholder: 검색
+    status: 상태
+    resolved: 해결됨
+    pending: 미해결
+    sent_in_digest: 요약 발송 여부
+    sent: 발송됨
+    showing_entries: 전체 %{total}개 항목 중 %{first}~%{last}개 표시 (<select></select>개씩
+      페이지에 표시)
+    not_public_warning: '참고: 이 사건은 아직 해결되지 않아 공개적으로 표시되지 않습니다.'
+    public_summary: 사건 설명 및 해결 내용
+    private_description: 설명 (파견위원에게만 공개)
+    private_wrc_decision: WRC 결정 (파견위원에게만 공개)
+    tags:
+      regulation: 규정
+      guideline: 지침
+      search_with_tag: 이 태그가 있는 사건 검색
+      filter_by_tag: 이 태그로 필터링
+      competition_page: 대회 페이지
+      delegate_report: 파견위원 보고서
+    admin:
+      publish: 게시
+      unpublish: 게시 취소
+      edit: 편집
+      destroy: 삭제
+      cancel: 취소
+      confirm: 확인
+      change_status: 상태 변경
+      destroy_title: 사고 기록 삭제
+      confirm_publish: 이 사고 기록을 공개하려고 합니다. 계속하시겠습니까?
+      confirm_unpublish: 이 사고 기록의 공개를 취소하려고 합니다. 계속하시겠습니까?
+      confirm_destroy: 이 사고를 삭제하시겠습니까?
+      publish_error: 이 사고를 공개할 수 없습니다.
+      unpublish_error: 이 사고의 공개를 취소할 수 없습니다.
+      destroy_error: 이 사고를 삭제할 수 없습니다.
   about_regulations:
     title: 규정에 대하여
     panel1:
@@ -2993,7 +3197,7 @@ ko:
         <a href="/faq">자주 묻는 질문들</a> 섹션에서는 WCA 규정에 대한 반복적인 문의 사항에 대한 답변을
         모아놓았습니다.
     panel4:
-      title: 주최자 지침
+      title: 주최자 지침서
       content1_html: >-
         대회를 주최하는 데 관심이 있거나 이미 대회를 주최할 계획이 있다면 <a
         href="https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf">주최자
@@ -3258,6 +3462,10 @@ ko:
       wrong_position_in_results_error: >-
         [%{round_id}] %{person_name}은 잘못된 위치에 있습니다. %{expected_pos}를 기대했지만
         %{pos}를 받았습니다.
+      automatically_global_position_fixed_info: '[%{round_id}] %{person_name}의 전체
+        순위를 %{pos}에서 %{expected_pos}(으)로 자동 수정했습니다.'
+      wrong_global_position_in_results_error: '[%{round_id}] %{person_name}의 전체 순위가
+        잘못되었습니다. %{expected_pos}여야 하지만 %{pos}입니다.'
     rounds:
       too_many_qualified_warning: >-
         라운드 %{round_id}: 계획된 진출 조건보다 더 많은 선수가 진출했습니다(%{expected} 대신 %{actual},
@@ -3334,4 +3542,68 @@ ko:
     stakeholder_role:
       actioner: Actioner
       requester: 요청자
-  trainee_delegate_application: {}
+  trainee_delegate_application:
+    title: 수습 파견위원 신청
+    introduction: 이 양식은 수습 파견위원이 되기 위해 신청하는 WCA 등록 스피드큐버를 위한 것입니다. 신청서는 선택하신 지역을
+      담당하는 파견위원들에게 전송됩니다.
+    success_title: 신청서 제출 완료
+    success: 신청서가 성공적으로 전송되었습니다. WCA 계정 이메일 주소로 사본을 보내드렸습니다.
+    eligibility:
+      title: 아직 이 신청서를 제출할 수 없습니다
+      missing_wca_id: WCA 계정이 WCA ID와 연결되어 있어야 합니다.
+      missing_date_of_birth: WCA 계정에 생년월일이 인증되어 있어야 합니다.
+      underage: 신청자는 만 %{minimum_age}세 이상이어야 합니다.
+      claim_wca_id: WCA ID를 등록하세요.
+      edit_profile: 프로필 업데이트를 요청하세요.
+    errors:
+      invalid_region: 유효하고 활성 상태인 파견위원 지역을 선택하세요.
+      missing_reviewer: 선택한 지역에는 현재 신청서를 받을 수 있는 지역 파견위원 또는 수석 파견위원이 없습니다.
+      recommender_required: 추천 파견위원을 한 명 이상 선택하세요.
+      invalid_recommender: 선택한 추천 파견위원 중 한 명 이상이 더 이상 선택한 지역의 파견위원이 아닙니다.
+      spoken_delegate_required: 대화를 나누어 본 파견위원을 한 명 이상 선택하세요.
+      invalid_spoken_delegate: 대화를 나눠 본 파견위원 중 한 명 이상이 더 이상 선택한 지역의 활성 파견위원이 
+        아닙니다.
+      declarations_required: 모든 선언 사항을 확인하고 동의해야 합니다.
+      business_involvement_required: 큐빙 관련 사업에 관여하고 있는지 선택하세요.
+      business_involvement_explanation_required: 큐빙 관련 사업에 어떻게 관여하고 있는지 설명하세요.
+    form:
+      declaration_and_basic_information: 선언 및 기본 정보
+      name: 이름
+      wca_id: WCA ID
+      email: 이메일
+      age: 나이
+      competition_count: 대회 참가 횟수
+      region_and_references: 지역 및 추천인
+      region: 현재 어느 파견위원 지역에 거주하고 있습니까?
+      region_placeholder: 지역 선택
+      subregion: 현재 어느 파견위원 하위 지역에 거주하고 있습니까?
+      subregion_placeholder: 하위 지역을 선택하십시오
+      reviewing_delegate: 심사를 담당하는 WCA 파견위원
+      spoken_delegates: 수습 파견위원이 되는 것에 대해 어떤 파견위원과 이야기했습니까?
+      recommenders: 귀하의 지역에서 수습 파견위원 후보로 추천하는 데 동의한 파견위원은 누구입니까?
+      delegates_placeholder: 파견위원을 한 명 이상 선택하십시오
+      experience_and_motivation: 경험 및 동기
+      introduction: 두 문장부터 네 문장으로 간단히 자기소개를 해 주십시오.
+      competition_contributions: 모든 선수에게 기대되는 범위를 넘어 지역 대회를 위해 어떤 도움을 주었는지 요약해 
+        주십시오.
+      volunteer_history: WCA 자원봉사 직책을 맡은 적이 있다면, 여기에 기간을 기재해 주십시오(선택 사항).
+      role_history_warning: 이 웹사이트의 직책 이력이 신청서에 자동으로 포함됩니다. 이전 직책은 모두 완전히 소급 
+        입력되지 않았으므로, 누락된 직책이나 수정 사항을 아래에 추가해 주십시오.
+      present: 현재
+      board_member: 이사회 구성원
+      motivation: 수습 파견위원에 지원하는 동기를 두 문장부터 네 문장으로 간단히 설명해 주십시오.
+      relevant_skills: 수습 파견위원으로서 성공하는 데 도움이 될 가장 중요한 기술과 경험을 나열해 주십시오.
+      declaration_understands_application: 이 양식은 수습 파견위원에 지원하는 등록 스피드큐버를 위한 것임을 
+        이해합니다.
+      declaration_has_delegate_support: 제 후보 자격을 지지하는, 제 지역의 자격을 갖춘 파견위원과 이야기를 
+        나누었음을 확인합니다.
+      declaration_proficient_in_english: 영어를 읽고 쓸 수 있음을 인정합니다.
+      declaration_read_regulations_html: <a href="%{regulations_url}" 
+        target="_blank" rel="noreferrer">WCA 규정</a>을 읽었음을 확인합니다.
+      regulations_note: '참고: 파견위원이 모든 규정을 알 것으로 기대되지는 않습니다. 그러나 기본 사항을 알고 있어야 하며 확실하지
+        않은 경우에는 규정을 찾아보아야 합니다.'
+      cubing_business_involvement: 큐빙 관련 사업에 관여하고 있습니까?
+      cubing_business_involvement_details: 큐빙 관련 사업에 관여하는 내용을 설명해 주십시오.
+      "yes": 예
+      "no": 아니요
+      submit: 신청서 제출
