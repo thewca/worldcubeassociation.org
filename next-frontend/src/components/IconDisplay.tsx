@@ -16,7 +16,14 @@ const IconDisplay = ({
   const IconComponent = iconMap[name];
 
   if (!IconComponent) {
-    return fallback === true ? <Text>No_Icon</Text> : fallback;
+    return fallback === true ? (
+      <Text>
+        {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
+        No_Icon
+      </Text>
+    ) : (
+      fallback
+    );
   }
 
   return <IconComponent boxSize={size} />;

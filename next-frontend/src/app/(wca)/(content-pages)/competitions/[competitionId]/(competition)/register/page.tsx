@@ -59,7 +59,7 @@ export default async function RegisterPage({
     return (
       <Alert.Root>
         <Alert.Indicator />
-        <Alert.Content>You need to log in first</Alert.Content>
+        <Alert.Content>{t("api.login_message")}</Alert.Content>
       </Alert.Root>
     );
   }
@@ -71,7 +71,7 @@ export default async function RegisterPage({
       <Alert.Root status="warning">
         <Alert.Indicator />
         <Alert.Content>
-          Your session is out of date. Please sign out and sign in again.
+          {t("errors.next_frontend.session_outdated")}
         </Alert.Content>
       </Alert.Root>
     );
@@ -140,14 +140,14 @@ export default async function RegisterPage({
       <Alert.Root status="warning">
         <Alert.Indicator />
         <Alert.Content flexDirection="row">
-          This is a preview. We recommend registering via the regular panel{" "}
+          {t("competitions.registration_v2.preview.notice")}{" "}
           <Link
             href={`https://www.worldcubeassociation.org/competitions/${competitionInfo.id}/register`}
             variant="underline"
             target="_blank"
             rel="noopener noreferrer"
           >
-            on the current registration page
+            {t("competitions.registration_v2.preview.link")}
             <Icon>
               <LuExternalLink />
             </Icon>

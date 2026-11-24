@@ -15,13 +15,18 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function FAQ() {
-  const { lng } = await getT();
+  const { t, lng } = await getT();
 
   const faqPage = await getCachedGlobal("faq-page", lng, 2);
   const faqQuestionsRaw = faqPage.questions;
 
   if (faqQuestionsRaw.length === 0) {
-    return <Heading>No FAQ Categories, add some!</Heading>;
+    return (
+      <Heading>
+        {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
+        No FAQ Categories, add some!
+      </Heading>
+    );
   }
 
   const faqQuestions = faqQuestionsRaw.map(
@@ -38,7 +43,7 @@ export default async function FAQ() {
     <VStack gap="8" width="full" alignItems="left">
       <Card.Root maxW="40em">
         <Card.Body>
-          <Card.Title textStyle="h1">Frequently Asked Questions</Card.Title>
+          <Card.Title textStyle="h1">{t("faq.title")}</Card.Title>
           {faqPage.introTextMarkdown ? (
             <ChakraMarkdown
               headingAs={Card.Title}
@@ -49,7 +54,10 @@ export default async function FAQ() {
               {faqPage.introTextMarkdown}
             </ChakraMarkdown>
           ) : (
-            <Card.Description>No Intro text, add it!</Card.Description>
+            <Card.Description>
+              {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
+              No Intro text, add it!
+            </Card.Description>
           )}
         </Card.Body>
       </Card.Root>

@@ -28,7 +28,12 @@ export default async function Documents() {
   const { documents } = documentsResult;
 
   if (documents.length === 0) {
-    return <Heading>No documents found. Add some</Heading>;
+    return (
+      <Heading>
+        {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
+        No documents found. Add some
+      </Heading>
+    );
   }
 
   const [categorizedRaw, uncategorized] = _.partition(documents, "category");
@@ -36,7 +41,7 @@ export default async function Documents() {
 
   return (
     <VStack gap="8" alignItems="left">
-      <Heading size="5xl">Documents</Heading>
+      <Heading size="5xl">{t("documents.title")}</Heading>
       <Accordion.Root variant="enclosed" multiple>
         {uncategorized.map((doc) => (
           <Accordion.Item key={doc.id} value={doc.title}>

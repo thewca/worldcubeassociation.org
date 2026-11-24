@@ -54,7 +54,9 @@ export function LiveTableHeader({
           )}
           <Table.ColumnHeader textAlign="end">#</Table.ColumnHeader>
           {isAdmin && (
-            <Table.ColumnHeader textAlign="center">ID</Table.ColumnHeader>
+            <Table.ColumnHeader textAlign="center">
+              {t("competitions.live.admin.quit.bulk.id")}
+            </Table.ColumnHeader>
           )}
           {!byPerson && (
             <Table.ColumnHeader overflow="hidden" textOverflow="ellipsis">

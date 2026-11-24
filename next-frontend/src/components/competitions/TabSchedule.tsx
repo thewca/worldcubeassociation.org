@@ -3,6 +3,7 @@ import { Card, Text } from "@chakra-ui/react";
 import { getSchedule } from "@/lib/wca/competitions/getSchedule";
 import Schedule from "@/components/competitions/Schedule";
 import { getEvents } from "@/lib/wca/competitions/wcif/getEvents";
+import { getT } from "@/lib/i18n/get18n";
 
 interface TabScheduleProps {
   competitionId: string;
@@ -13,26 +14,28 @@ export default async function TabSchedule({
   competitionId,
   competitionName,
 }: TabScheduleProps) {
+  const { t } = await getT();
+
   const { data: wcifSchedule, error: scheduleError } =
     await getSchedule(competitionId);
 
   if (scheduleError) {
-    return <Text>Error fetching competition schedule</Text>;
+    return <Text>{t("errors.next_frontend.load_error.schedule")}</Text>;
   }
 
   if (!wcifSchedule) {
-    return <Text>Competition does not exist</Text>;
+    return <Text>{t("competitions.registration_v2.errors.-1000")}</Text>;
   }
 
   const { data: wcifEvents, error: eventsError } =
     await getEvents(competitionId);
 
   if (eventsError) {
-    return <Text>Error fetching competition schedule</Text>;
+    return <Text>{t("errors.next_frontend.load_error.schedule")}</Text>;
   }
 
   if (!wcifEvents) {
-    return <Text>Competition does not exist</Text>;
+    return <Text>{t("competitions.registration_v2.errors.-1000")}</Text>;
   }
 
   return (

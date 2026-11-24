@@ -24,7 +24,7 @@ export default async function TabEvents({ competitionId }: TabEventsProps) {
   if (error) return <OpenapiError response={response} t={t} />;
 
   if (!events) {
-    return <Text>Competition does not exist</Text>;
+    return <Text>{t("competitions.registration_v2.errors.-1000")}</Text>;
   }
 
   const allRounds = events.flatMap((event) => event.rounds);
@@ -44,14 +44,30 @@ export default async function TabEvents({ competitionId }: TabEventsProps) {
           <Table.Root striped interactive>
             <Table.Header>
               <Table.Row>
-                <Table.ColumnHeader>Event</Table.ColumnHeader>
-                <Table.ColumnHeader>Round</Table.ColumnHeader>
-                <Table.ColumnHeader>Format</Table.ColumnHeader>
-                <Table.ColumnHeader>Time Limit</Table.ColumnHeader>
-                {showCutoff && <Table.ColumnHeader>Cutoff</Table.ColumnHeader>}
-                <Table.ColumnHeader>Proceed</Table.ColumnHeader>
+                <Table.ColumnHeader>
+                  {t("results.table_elements.event")}
+                </Table.ColumnHeader>
+                <Table.ColumnHeader>
+                  {t("competitions.results_table.round")}
+                </Table.ColumnHeader>
+                <Table.ColumnHeader>
+                  {t("competitions.events.format")}
+                </Table.ColumnHeader>
+                <Table.ColumnHeader>
+                  {t("competitions.events.time_limit")}
+                </Table.ColumnHeader>
+                {showCutoff && (
+                  <Table.ColumnHeader>
+                    {t("competitions.events.cutoff")}
+                  </Table.ColumnHeader>
+                )}
+                <Table.ColumnHeader>
+                  {t("competitions.events.proceed")}
+                </Table.ColumnHeader>
                 {showQualifications && (
-                  <Table.ColumnHeader>Qualification</Table.ColumnHeader>
+                  <Table.ColumnHeader>
+                    {t("competitions.events.qualification")}
+                  </Table.ColumnHeader>
                 )}
               </Table.Row>
             </Table.Header>

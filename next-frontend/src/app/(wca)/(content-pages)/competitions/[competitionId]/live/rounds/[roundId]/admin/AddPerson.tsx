@@ -46,7 +46,7 @@ export default function AddPersonModal({
       >
         <Dialog.Trigger asChild>
           <Button variant="outline" disabled={roundClosed}>
-            Add Competitor
+            {t("competitions.live.admin.add_competitor.title")}
           </Button>
         </Dialog.Trigger>
       </Tooltip>
@@ -55,7 +55,9 @@ export default function AddPersonModal({
         <Dialog.Positioner>
           <Dialog.Content>
             <Dialog.Header>
-              <Dialog.Title>Add Competitor</Dialog.Title>
+              <Dialog.Title>
+                {t("competitions.live.admin.add_competitor.title")}
+              </Dialog.Title>
             </Dialog.Header>
             <Dialog.Body>
               <AddPerson
@@ -75,10 +77,12 @@ export default function AddPersonModal({
                   )
                 }
               >
-                Add Competitor to Round
+                {t("competitions.live.admin.add_competitor.single_round")}
               </Button>
               <Dialog.ActionTrigger asChild>
-                <Button variant="outline">Cancel</Button>
+                <Button variant="outline">
+                  {t("competitions.live.admin.quit.cancel")}
+                </Button>
               </Dialog.ActionTrigger>
             </Dialog.Footer>
             <Dialog.CloseTrigger asChild>
@@ -199,7 +203,9 @@ function AddPersonCombobox({
         }}
       >
         <Combobox.Control>
-          <Combobox.Input placeholder="Type to search" />
+          <Combobox.Input
+            placeholder={t("competitions.live.admin.type_to_search")}
+          />
           <Combobox.IndicatorGroup>
             <Combobox.ClearTrigger />
             <Combobox.Trigger />
@@ -210,7 +216,7 @@ function AddPersonCombobox({
         <Combobox.Positioner>
           <Combobox.Content>
             <Combobox.Empty>
-              All Competitors are already Part of the Round
+              {t("competitions.live.admin.add_competitor.all_added")}
             </Combobox.Empty>
             {collection.items.map((item) => (
               <Combobox.Item item={item} key={item.id}>

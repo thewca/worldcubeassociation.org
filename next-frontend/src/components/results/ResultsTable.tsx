@@ -78,20 +78,29 @@ export function ResultsTable({
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeader>#</Table.ColumnHeader>
-            {isAdmin && <Table.ColumnHeader>Edit</Table.ColumnHeader>}
+            {isAdmin && (
+              <Table.ColumnHeader>
+                {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
+                Edit
+              </Table.ColumnHeader>
+            )}
             <Table.ColumnHeader {...STICKY_COLUMN}>
-              Competitor
+              {t("competitions.live.results.competitor")}
             </Table.ColumnHeader>
-            <Table.ColumnHeader>Best</Table.ColumnHeader>
-            {anyAverages && <Table.ColumnHeader>Average</Table.ColumnHeader>}
-            <Table.ColumnHeader>Representing</Table.ColumnHeader>
+            <Table.ColumnHeader>{t("common.best")}</Table.ColumnHeader>
+            {anyAverages && (
+              <Table.ColumnHeader>{t("common.average")}</Table.ColumnHeader>
+            )}
+            <Table.ColumnHeader>
+              {t("common.user.representing")}
+            </Table.ColumnHeader>
             {showLinkedRoundsView && (
               <Table.ColumnHeader>
                 {t("competitions.results_table.round")}
               </Table.ColumnHeader>
             )}
             <Table.ColumnHeader colSpan={solveCount} textAlign={solveTextAlign}>
-              Solves
+              {t("common.solves")}
             </Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
@@ -107,7 +116,12 @@ export function ResultsTable({
 
               return (
                 <Table.Row key={competitorResult.id}>
-                  {isAdmin && <Table.Cell>EDIT</Table.Cell>}
+                  {isAdmin && (
+                    <Table.Cell>
+                      {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
+                      EDIT
+                    </Table.Cell>
+                  )}
                   {showText && (
                     <PositionCell
                       result={competitorResult}
@@ -209,20 +223,31 @@ export function ByPersonTable({
       <Table.Root>
         <Table.Header>
           <Table.Row>
-            {isAdmin && <Table.ColumnHeader>Edit</Table.ColumnHeader>}
-            <Table.ColumnHeader>Event</Table.ColumnHeader>
-            <Table.ColumnHeader>Round</Table.ColumnHeader>
+            {isAdmin && (
+              <Table.ColumnHeader>
+                {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
+                Edit
+              </Table.ColumnHeader>
+            )}
+            <Table.ColumnHeader>
+              {t("results.table_elements.event")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("competitions.results_table.round")}
+            </Table.ColumnHeader>
             <Table.ColumnHeader>#</Table.ColumnHeader>
-            <Table.ColumnHeader>Best</Table.ColumnHeader>
-            <Table.ColumnHeader>Average</Table.ColumnHeader>
+            <Table.ColumnHeader>{t("common.best")}</Table.ColumnHeader>
+            <Table.ColumnHeader>{t("common.average")}</Table.ColumnHeader>
             {showNationalityColumn && (
-              <Table.ColumnHeader>Representing</Table.ColumnHeader>
+              <Table.ColumnHeader>
+                {t("common.user.representing")}
+              </Table.ColumnHeader>
             )}
             <Table.ColumnHeader
               colSpan={attemptCount}
               textAlign={solveTextAlign}
             >
-              Solves
+              {t("common.solves")}
             </Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
@@ -236,7 +261,12 @@ export function ByPersonTable({
               resultAttempts(competitorResult);
             return (
               <Table.Row key={competitorResult.id}>
-                {isAdmin && <Table.Cell>EDIT</Table.Cell>}
+                {isAdmin && (
+                  <Table.Cell>
+                    {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
+                    EDIT
+                  </Table.Cell>
+                )}
                 <Table.Cell>
                   {isFirstRoundOfEvent && events.byId[eventId].name}
                 </Table.Cell>
@@ -291,6 +321,17 @@ export function ByPersonTable({
 const competitionStartMillis = (result: components["schemas"]["V1Result"]) =>
   DateTime.fromISO(result.competition_start_date).toMillis();
 
+// A regional record outranks a personal best, so the record's own tag wins and "PR"
+// is only shown for a result that was a personal best without being a record.
+function recordOrPersonalBestTag<RecordTag extends string | null | undefined>(
+  record: RecordTag,
+  isPersonalBest: boolean | undefined,
+) {
+  if (record) return record;
+  if (isPersonalBest) return "PR";
+  return record;
+}
+
 export function ByCompetitionTable({
   results,
   t,
@@ -330,12 +371,14 @@ export function ByCompetitionTable({
             <Table.ColumnHeader>
               {t("persons.show.competition")}
             </Table.ColumnHeader>
-            <Table.ColumnHeader>Round</Table.ColumnHeader>
+            <Table.ColumnHeader>{t("persons.show.round")}</Table.ColumnHeader>
             <Table.ColumnHeader>{t("persons.show.place")}</Table.ColumnHeader>
-            <Table.ColumnHeader>Single</Table.ColumnHeader>
-            {anyAverages && <Table.ColumnHeader>Average</Table.ColumnHeader>}
+            <Table.ColumnHeader>{t("common.single")}</Table.ColumnHeader>
+            {anyAverages && (
+              <Table.ColumnHeader>{t("common.average")}</Table.ColumnHeader>
+            )}
             <Table.ColumnHeader colSpan={attemptCount} textAlign="start">
-              Solves
+              {t("common.solves")}
             </Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
@@ -344,8 +387,17 @@ export function ByCompetitionTable({
             return competitionResults.map((competitorResult, index) => {
               const eventId = competitorResult.event_id;
 
-              const isSingleRecord = competitorResult.is_personal_best_single;
-              const isAvgRecord = competitorResult.is_personal_best_average;
+              const singleRecord = competitorResult.regional_single_record;
+              const avgRecord = competitorResult.regional_average_record;
+
+              const isSinglePB = competitorResult.is_personal_best_single;
+              const isAvgPB = competitorResult.is_personal_best_average;
+
+              const singleTag = recordOrPersonalBestTag(
+                singleRecord,
+                isSinglePB,
+              );
+              const avgTag = recordOrPersonalBestTag(avgRecord, isAvgPB);
 
               const { definedAttempts, bestResultIndex, worstResultIndex } =
                 resultAttempts(competitorResult);
@@ -379,42 +431,20 @@ export function ByCompetitionTable({
                   />
                   <Table.Cell
                     color={
-                      isSingleRecord
-                        ? personalBestColor(
-                            competitorResult.regional_single_record,
-                          )
-                        : undefined
+                      singleTag ? personalBestColor(singleRecord) : undefined
                     }
                     fontWeight="extrabold"
                   >
-                    <WithRecordTag
-                      recordTag={
-                        isSingleRecord
-                          ? "PR"
-                          : competitorResult.regional_single_record
-                      }
-                    >
+                    <WithRecordTag recordTag={singleTag}>
                       {formatAttemptResult(competitorResult.best, eventId)}
                     </WithRecordTag>
                   </Table.Cell>
                   {anyAverages && (
                     <Table.Cell
-                      color={
-                        isAvgRecord
-                          ? personalBestColor(
-                              competitorResult.regional_average_record,
-                            )
-                          : undefined
-                      }
+                      color={avgTag ? personalBestColor(avgRecord) : undefined}
                       fontWeight="extrabold"
                     >
-                      <WithRecordTag
-                        recordTag={
-                          isAvgRecord
-                            ? "PR"
-                            : competitorResult.regional_average_record
-                        }
-                      >
+                      <WithRecordTag recordTag={avgTag}>
                         {formatAttemptResult(competitorResult.average, eventId)}
                       </WithRecordTag>
                     </Table.Cell>
@@ -424,7 +454,7 @@ export function ByCompetitionTable({
                     bestResultIndex={bestResultIndex}
                     worstResultIndex={worstResultIndex}
                     eventId={eventId}
-                    recordTag={competitorResult.regional_single_record}
+                    recordTag={singleTag}
                     attemptCount={attemptCount}
                   />
                 </Table.Row>

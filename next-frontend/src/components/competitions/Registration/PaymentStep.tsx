@@ -153,11 +153,13 @@ export function PaymentStatus({
     return <Text>{t("registrations.payment_form.labels.fees_remaining")}</Text>;
   }
 
+  const currency = currencies.byIsoCode[payment.currency_code];
+
   const formatAmount = (lowestDenomination: number) =>
     new Intl.NumberFormat(i18n.language, {
       style: "currency",
       currency: payment.currency_code,
-    }).format(lowestDenomination / payment.currency_subunit_to_unit);
+    }).format(lowestDenomination / currency.subunit_to_unit);
 
   const paid = formatAmount(payment.paid_amount_iso);
 

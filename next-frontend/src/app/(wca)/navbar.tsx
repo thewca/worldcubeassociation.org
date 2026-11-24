@@ -130,7 +130,7 @@ async function SessionAvatarMenu() {
 }
 
 export default async function Navbar() {
-  const { lng } = await getT();
+  const { t, lng } = await getT();
 
   const [navbar, socialLinksGlobal] = await Promise.all([
     getCachedGlobal("nav", lng),
@@ -310,7 +310,10 @@ export default async function Navbar() {
           </Box>
           <HStack>
             {showEmptyMessage && (
-              <Text hideBelow="md">Oh no, there are no navbar items!</Text>
+              <Text hideBelow="md">
+                {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
+                Oh no, there are no navbar items!
+              </Text>
             )}
             <Box hideBelow="md">
               <ColorModeButton />
@@ -325,7 +328,10 @@ export default async function Navbar() {
             </Box>
             <Box hideFrom="xl">
               <Collapsible.Trigger asChild>
-                <IconButton variant="ghost" aria-label="Toggle navigation">
+                <IconButton
+                  variant="ghost"
+                  aria-label={t("layouts.navigation.toggle_navigation")}
+                >
                   <Icon size="lg" asChild>
                     <LuMenu />
                   </Icon>
@@ -339,7 +345,10 @@ export default async function Navbar() {
           <Collapsible.Content>
             <VStack align="stretch" px={3.5} pt={1} pb={1.5} gap={1}>
               {showEmptyMessage && (
-                <Text>Oh no, there are no navbar items!</Text>
+                <Text>
+                  {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
+                  Oh no, there are no navbar items!
+                </Text>
               )}
               {navbarEntries.map((navbarEntry) => (
                 <React.Fragment key={navbarEntry.id}>

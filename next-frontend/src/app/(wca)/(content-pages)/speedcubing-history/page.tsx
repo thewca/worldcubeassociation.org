@@ -22,7 +22,12 @@ export default async function SpeedcubingHistory() {
   const historyItems = historyPage.blocks;
 
   if (historyItems.length === 0) {
-    return <Heading>No History Items, add some!</Heading>;
+    return (
+      <Heading>
+        {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
+        No History Items, add some!
+      </Heading>
+    );
   }
 
   return (

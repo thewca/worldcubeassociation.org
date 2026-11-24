@@ -286,7 +286,7 @@ export default function CompetitionsPage() {
         {!session.isPending && !session.data && (
           <RemovableCard
             imageUrl="newcomer.png"
-            heading="Why Compete?"
+            heading={t("competitions.index.why_compete_title")}
             descriptionAs="div"
             description={
               <Trans
@@ -294,7 +294,7 @@ export default function CompetitionsPage() {
                 i18nKey="competitions.index.why_compete_description_html"
               />
             }
-            buttonText="Learn More"
+            buttonText={t("homepage.learn_more")}
             buttonUrl="/faq"
           />
         )}

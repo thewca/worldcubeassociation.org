@@ -4,6 +4,7 @@ import { roundResultRows } from "@/lib/wca/results/competitionResults";
 import ByPersonResults from "./ByPersonResults";
 import { Text } from "@chakra-ui/react";
 import { getSession } from "@/auth";
+import { getT } from "@/lib/i18n/get18n";
 
 export default async function PodiumsPage({
   params,
@@ -18,7 +19,8 @@ export default async function PodiumsPage({
     await getCompetitionResults(competitionId);
 
   if (resultsError) {
-    return <Text>Error fetching Results</Text>;
+    const { t } = await getT();
+    return <Text>{t("errors.next_frontend.load_error.results")}</Text>;
   }
 
   const resultsByPerson = _.groupBy(

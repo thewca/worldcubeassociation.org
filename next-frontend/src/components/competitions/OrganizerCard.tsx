@@ -225,7 +225,7 @@ export default function OrganizationTeamCard({
         </Stat.Root>
 
         <Stat.Root variant="competition">
-          <Stat.Label>Contact</Stat.Label>
+          <Stat.Label>{t("competitions.competition_info.contact")}</Stat.Label>
           {competitionInfo.contact ? (
             <ChakraMarkdown paragraphAs={Stat.ValueText}>
               {competitionInfo.contact}

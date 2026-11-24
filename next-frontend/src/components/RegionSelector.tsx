@@ -174,7 +174,9 @@ export default function RegionSelector({
         <Portal>
           <Combobox.Positioner>
             <Combobox.Content>
-              <Combobox.Empty>No items found</Combobox.Empty>
+              <Combobox.Empty>
+                {t("search_results.index.not_found.generic")}
+              </Combobox.Empty>
               {collection.items.map((item) => (
                 <Combobox.Item
                   item={item}

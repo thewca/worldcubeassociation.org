@@ -5,6 +5,7 @@ import { Button, Card, Table, Text } from "@chakra-ui/react";
 import useAPI from "@/lib/wca/useAPI";
 import Loading from "@/components/ui/loading";
 import { toaster } from "@/components/ui/toaster";
+import { useT } from "@/lib/i18n/useI18n";
 
 export default function ScoretakerManager({
   competitionId,
@@ -12,6 +13,7 @@ export default function ScoretakerManager({
   competitionId: string;
 }) {
   const api = useAPI();
+  const { t } = useT();
 
   const { data: registrations, isFetching } = api.useQuery(
     "get",
@@ -50,7 +52,9 @@ export default function ScoretakerManager({
   }
 
   if (!registrations) {
-    return <Text>No registrations found.</Text>;
+    return (
+      <Text>{t("competitions.live.admin.scoretakers.no_registrations")}</Text>
+    );
   }
 
   const pending = isAdding || isRemoving;
@@ -58,11 +62,15 @@ export default function ScoretakerManager({
   return (
     <Card.Root>
       <Card.Body>
-        <Card.Title>Scoretakers</Card.Title>
+        <Card.Title>
+          {t("competitions.live.admin.scoretakers.title")}
+        </Card.Title>
         <Table.Root>
           <Table.Header>
             <Table.Row>
-              <Table.ColumnHeader>Name</Table.ColumnHeader>
+              <Table.ColumnHeader>
+                {t("results.table_elements.name")}
+              </Table.ColumnHeader>
               <Table.ColumnHeader />
             </Table.Row>
           </Table.Header>
@@ -91,7 +99,7 @@ export default function ScoretakerManager({
                             })
                           }
                         >
-                          Remove
+                          {t("competitions.live.admin.scoretakers.remove")}
                         </Button>
                       ) : (
                         <Button
@@ -104,7 +112,7 @@ export default function ScoretakerManager({
                             })
                           }
                         >
-                          Add as scoretaker
+                          {t("competitions.live.admin.scoretakers.add")}
                         </Button>
                       )}
                     </Table.Cell>
