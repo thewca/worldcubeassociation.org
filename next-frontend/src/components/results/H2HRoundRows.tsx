@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { ComponentProps, useState } from "react";
 import {
   Badge,
   Box,
   Button,
   chakra,
+  HStack,
   Link,
   Stack,
   Table,
@@ -15,241 +16,148 @@ import { TFunction } from "i18next";
 import _ from "lodash";
 import { components } from "@/types/openapi";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
-import { PositionCell, WithRecordTag } from "@/components/results/TableCells";
+import {
+  PositionCell,
+  WithRecordTag,
+  personalBestColor,
+} from "@/components/results/TableCells";
+import {
+  AnalysedMatch,
+  Outcome,
+  analyseMatches,
+  solveOutcome,
+} from "@/lib/wca/competitions/h2hMatches";
 
-type V1Result = components["schemas"]["V1Result"];
+type V1PersonResult = components["schemas"]["V1PersonResult"];
 
-// ---------------------------------------------------------------------------
-// Temporary local types, mirroring the dummy payload (h2h-result.dummy.json).
-// Replace them with the generated OpenAPI types once the API officially
-// exposes `matches` on a result.
-// ---------------------------------------------------------------------------
-type H2HCompetitor = {
-  user_id: number;
-  name: string;
-  wca_id: string | null;
-  country_iso2: string;
-  final_pos: number;
-};
-
-type H2HSetAttempt = {
-  set_attempt_number: number;
-  user_id: number;
-  value: number;
-};
-
-type H2HSet = {
-  set_number: number;
-  attempts: H2HSetAttempt[];
-};
-
-type H2HMatch = {
-  match_number: number;
-  competitors: H2HCompetitor[];
-  sets: H2HSet[];
-};
-
-export type H2HResult = V1Result & { matches?: H2HMatch[] };
-
-// ---------------------------------------------------------------------------
-// Pure logic: turns the raw payload into what the rows need.
-// ---------------------------------------------------------------------------
-type Outcome = "win" | "loss" | "tie";
-
-// WCA attempt values: > 0 is a time in centiseconds, -1 is DNF, -2 is DNS.
-const isSolved = (value: number) => value > 0;
-
-// A solve is a point for whoever is faster; a DNF only loses to a time.
-function solveOutcome(own: number, opponent: number): Outcome {
-  if (!isSolved(own) && !isSolved(opponent)) return "tie";
-  if (!isSolved(own)) return "loss";
-  if (!isSolved(opponent)) return "win";
-  if (own === opponent) return "tie";
-  return own < opponent ? "win" : "loss";
-}
-
-const outcomeFromCounts = (own: number, opponent: number): Outcome =>
-  own > opponent ? "win" : own < opponent ? "loss" : "tie";
-
-type AttemptPair = { own?: number; opponent?: number };
-
-type AnalysedSet = {
-  setNumber: number;
-  pairs: AttemptPair[];
-  ownPoints: number;
-  opponentPoints: number;
-  outcome: Outcome;
-  best?: number;
-};
-
-type AnalysedMatch = {
-  matchNumber: number;
-  opponent: H2HCompetitor;
-  sets: AnalysedSet[];
-  ownSets: number;
-  opponentSets: number;
-  outcome: Outcome;
-};
-
-function analyseSet(
-  set: H2HSet,
-  ownId: number,
-  opponentId: number,
-): AnalysedSet {
-  const valuesOf = (userId: number) =>
-    Object.fromEntries(
-      set.attempts
-        .filter((a) => a.user_id === userId)
-        .map((a) => [a.set_attempt_number, a.value]),
-    ) as Record<number, number | undefined>;
-
-  const ownValues = valuesOf(ownId);
-  const opponentValues = valuesOf(opponentId);
-  const length = _.max(set.attempts.map((a) => a.set_attempt_number)) ?? 0;
-
-  const pairs: AttemptPair[] = _.range(1, length + 1).map((n) => ({
-    own: ownValues[n],
-    opponent: opponentValues[n],
-  }));
-
-  let ownPoints = 0;
-  let opponentPoints = 0;
-  pairs.forEach(({ own, opponent }) => {
-    if (own === undefined || opponent === undefined) return;
-    const outcome = solveOutcome(own, opponent);
-    if (outcome === "win") ownPoints += 1;
-    if (outcome === "loss") opponentPoints += 1;
-  });
-
-  const ownSolved = pairs
-    .map((p) => p.own)
-    .filter((v): v is number => v !== undefined && isSolved(v));
-
-  return {
-    setNumber: set.set_number,
-    pairs,
-    ownPoints,
-    opponentPoints,
-    outcome: outcomeFromCounts(ownPoints, opponentPoints),
-    best: _.min(ownSolved),
-  };
-}
-
-// `result` is the row of the person whose page this is. They are one of the two
-// competitors of every match, matched by WCA ID (names are the fallback for
-// competitors that have no WCA ID yet).
-function analyseMatch(result: V1Result, match: H2HMatch): AnalysedMatch | null {
-  const own =
-    match.competitors.find((c) => c.wca_id && c.wca_id === result.wca_id) ??
-    match.competitors.find((c) => c.name === result.name);
-  const opponent = match.competitors.find((c) => c !== own);
-  if (!own || !opponent) return null;
-
-  const sets = _.sortBy(match.sets, "set_number").map((set) =>
-    analyseSet(set, own.user_id, opponent.user_id),
-  );
-  const ownSets = sets.filter((s) => s.outcome === "win").length;
-  const opponentSets = sets.filter((s) => s.outcome === "loss").length;
-
-  return {
-    matchNumber: match.match_number,
-    opponent,
-    sets,
-    ownSets,
-    opponentSets,
-    outcome: outcomeFromCounts(ownSets, opponentSets),
-  };
-}
-
-// ---------------------------------------------------------------------------
-// Presentation
-// ---------------------------------------------------------------------------
-// Copy of the stage helper used elsewhere; import the shared one instead if it is
-// exported from somewhere.
-function stageLabel(
-  stageIndex: number,
-  stageCount: number,
-  places: number,
-  t: TFunction,
-) {
-  const stagesFromFinal = stageCount - 1 - stageIndex;
-
-  if (stagesFromFinal === 0) return t("competitions.h2h.final_stage");
-  if (stagesFromFinal === 1) return t("competitions.h2h.semifinal_stage");
-  if (stagesFromFinal === 2) return t("competitions.h2h.quarterfinal_stage");
-  return t("competitions.h2h.stage_of", { number: places });
-}
-
-// Locates a match in a single-elimination bracket whose matches are numbered
-// consecutively from 1, stage by stage. With 16 competitors: matches 1-8 are the
-// stage of 16, 9-12 the quarterfinals, 13-14 the semifinals and 15 the final.
-function stageOfMatch(matchNumber: number, bracketSize: number) {
-  const stageCount = Math.log2(bracketSize);
-  if (!Number.isInteger(stageCount) || matchNumber < 1) return null;
-
-  let firstMatchOfStage = 1;
-  for (let stageIndex = 0; stageIndex < stageCount; stageIndex++) {
-    const matchesInStage = bracketSize / 2 ** (stageIndex + 1);
-    if (matchNumber < firstMatchOfStage + matchesInStage) {
-      return { stageIndex, stageCount, places: bracketSize / 2 ** stageIndex };
-    }
-    firstMatchOfStage += matchesInStage;
-  }
-  return null;
-}
-
-// Every solve column gets the same minimum width, so columns no longer shrink or
-// grow with whatever happens to be in them.
-const SOLVE_CELL_MIN_WIDTH = "4.5rem";
-
-const OUTCOME_STYLE = {
-  win: { bg: "bg.success", color: "fg.success" },
-  loss: { bg: "bg.error", color: "fg.error" },
-  tie: { bg: "bg.emphasized", color: "fg.muted" },
+const OUTCOME_UI = {
+  win: {
+    palette: "green",
+    letter: "W",
+    cell: { bg: "bg.success", color: "fg.success" },
+  },
+  loss: {
+    palette: "red",
+    letter: "L",
+    cell: { bg: "bg.error", color: "fg.error" },
+  },
+  tie: {
+    palette: "gray",
+    letter: "=",
+    cell: { bg: "bg.emphasized", color: "fg.muted" },
+  },
 } as const;
 
-const OUTCOME_PALETTE = { win: "green", loss: "red", tie: "gray" } as const;
-const OUTCOME_LETTER = { win: "W", loss: "L", tie: "=" } as const;
+// The result's best single, which is what a record or personal-best tag refers to.
+type BestSingle = {
+  value: number;
+  tag: string | null;
+  color: string | undefined;
+};
+
+const REVEAL = "0.2s ease";
+
+type CellProps = ComponentProps<typeof Table.Cell>;
+
+// A cell that opens from, and closes to, nothing, so a whole row can animate.
+//
+// The content stays mounted while closed. That is deliberate: the table sizes its
+// columns from every row it contains, so the widths are already settled when a
+// row opens and nothing shifts. `visibility: hidden` keeps the closed content out
+// of the tab order and away from screen readers, and is held back until the
+// closing animation has finished.
+function RevealCell({
+  open,
+  children,
+  ...cellProps
+}: CellProps & { open: boolean }) {
+  return (
+    <Table.Cell
+      {...cellProps}
+      py={open ? undefined : "0"}
+      borderBottomWidth={open ? undefined : "0"}
+      transition={`padding ${REVEAL}, border-width ${REVEAL}`}
+      _motionReduce={{ transition: "none" }}
+      width="fit-content"
+    >
+      <Box
+        display="grid"
+        gridTemplateRows={open ? "1fr" : "0fr"}
+        transition={`grid-template-rows ${REVEAL}`}
+        _motionReduce={{ transition: "none" }}
+      >
+        <Box
+          minH="0"
+          visibility={open ? "visible" : "hidden"}
+          transition={`visibility 0s linear ${open ? "0s" : "0.2s"}`}
+        >
+          {children}
+        </Box>
+      </Box>
+    </Table.Cell>
+  );
+}
+
+function stageLabel({ stagePlaces, matchNumber }: AnalysedMatch, t: TFunction) {
+  switch (stagePlaces) {
+    case null:
+      return `Match ${matchNumber}`;
+    case 2:
+      return t("competitions.h2h.final_stage");
+    case 4:
+      return t("competitions.h2h.semifinal_stage");
+    case 8:
+      return t("competitions.h2h.quarterfinal_stage");
+    default:
+      return t("competitions.h2h.stage_of", { number: stagePlaces });
+  }
+}
 
 function SolveCell({
   own,
   opponent,
   eventId,
+  recordTag,
+  open,
 }: {
   own?: number;
   opponent?: number;
   eventId: string;
+  recordTag: string | null;
+  open: boolean;
 }) {
-  if (own === undefined) return <Table.Cell minW={SOLVE_CELL_MIN_WIDTH} />;
+  if (own === undefined) return <RevealCell open={open} />;
+
+  const ownTime = (
+    <WithRecordTag recordTag={recordTag}>
+      {formatAttemptResult(own, eventId)}
+    </WithRecordTag>
+  );
 
   if (opponent === undefined) {
-    return (
-      <Table.Cell minW={SOLVE_CELL_MIN_WIDTH}>
-        {formatAttemptResult(own, eventId)}
-      </Table.Cell>
-    );
+    return <RevealCell open={open}>{ownTime}</RevealCell>;
   }
 
   const outcome = solveOutcome(own, opponent);
 
   return (
-    <Table.Cell px="1" minW={SOLVE_CELL_MIN_WIDTH}>
+    <RevealCell open={open} px="1">
       <Box
         rounded="md"
         px="2"
         py="0.5"
         textAlign="center"
         lineHeight="short"
-        {...OUTCOME_STYLE[outcome]}
+        {...OUTCOME_UI[outcome].cell}
       >
         <Text fontWeight={outcome === "loss" ? "normal" : "bold"}>
-          {formatAttemptResult(own, eventId)}
+          {ownTime}
         </Text>
         <Text fontSize="xs" opacity={0.8}>
           {formatAttemptResult(opponent, eventId)}
         </Text>
       </Box>
-    </Table.Cell>
+    </RevealCell>
   );
 }
 
@@ -262,14 +170,16 @@ function ScoreBadge({
   own: number;
   opponent: number;
 }) {
+  const { palette, letter } = OUTCOME_UI[outcome];
+
   return (
-    <Badge colorPalette={OUTCOME_PALETTE[outcome]}>
-      {OUTCOME_LETTER[outcome]} {own}–{opponent}
+    <Badge colorPalette={palette}>
+      {letter} {own}–{opponent}
     </Badge>
   );
 }
 
-function OpponentName({ opponent }: { opponent: H2HCompetitor }) {
+function OpponentLink({ opponent }: { opponent: AnalysedMatch["opponent"] }) {
   if (!opponent.wca_id) return <>{opponent.name}</>;
 
   return (
@@ -286,54 +196,135 @@ function OpponentName({ opponent }: { opponent: H2HCompetitor }) {
   );
 }
 
-// One head-to-head result of ByCompetitionTable: a summary row (named after the
-// round, acting as the toggle) and, when open, one row per set of every match.
-// It uses the same columns as the table so the solves stay aligned with the
-// classic rows.
-//
-// Match row layout:
-//   Competition column -> match number, opponent, match score (spans the sets)
+// One row per set. The first one carries the match (stage, opponent, score) in a
+// cell that spans all the sets of the match.
+//   Competition column -> stage, opponent, match score
 //   Round column       -> set number
 //   Place column       -> set score (points won in the set)
-//   Single column      -> your best solve of the set
-//   Solves             -> your time large, the opponent's small, coloured per solve
+//   Single column      -> person's best solve of the set
+//   Solves             -> person's time large, the opponent's small, coloured per solve
+function MatchRows({
+  match,
+  stage,
+  eventId,
+  attemptCount,
+  anyAverages,
+  bestSingle,
+  open,
+}: {
+  match: AnalysedMatch;
+  stage: string;
+  eventId: string;
+  attemptCount: number;
+  anyAverages: boolean;
+  bestSingle: BestSingle;
+  open: boolean;
+}) {
+  return match.sets.map((set, setIndex) => {
+    const setHoldsBestSingle = set.best === bestSingle.value;
+
+    return (
+      <Table.Row
+        key={set.setNumber}
+        bg="bg.muted"
+        borderBottomWidth={open ? undefined : "0"}
+      >
+        {setIndex === 0 && (
+          <RevealCell
+            open={open}
+            rowSpan={match.sets.length}
+            verticalAlign="top"
+          >
+            <Stack gap="1" align="start">
+              <Text fontSize="xs" color="fg.muted">
+                {stage}
+              </Text>
+              <OpponentLink opponent={match.opponent} />
+              <ScoreBadge
+                outcome={match.outcome}
+                own={match.ownSets}
+                opponent={match.opponentSets}
+              />
+            </Stack>
+          </RevealCell>
+        )}
+        <RevealCell open={open} color="fg.muted">
+          Set {set.setNumber}
+        </RevealCell>
+        <RevealCell open={open}>
+          <ScoreBadge
+            outcome={set.outcome}
+            own={set.ownPoints}
+            opponent={set.opponentPoints}
+          />
+        </RevealCell>
+        <RevealCell
+          open={open}
+          color={setHoldsBestSingle ? bestSingle.color : undefined}
+        >
+          {set.best !== undefined && (
+            <WithRecordTag
+              recordTag={setHoldsBestSingle ? bestSingle.tag : null}
+            >
+              {formatAttemptResult(set.best, eventId)}
+            </WithRecordTag>
+          )}
+        </RevealCell>
+        {anyAverages && <RevealCell open={open} />}
+        {_.range(attemptCount).map((i) => {
+          const own = set.pairs[i]?.own;
+
+          return (
+            <SolveCell
+              key={i}
+              own={own}
+              opponent={set.pairs[i]?.opponent}
+              eventId={eventId}
+              recordTag={own === bestSingle.value ? bestSingle.tag : null}
+              open={open}
+            />
+          );
+        })}
+      </Table.Row>
+    );
+  });
+}
+
+// One head-to-head result of ByCompetitionTable: a summary row, named after the
+// round and acting as the toggle, and the rows of every match, which open and
+// close under it. It uses the same columns as the table, so the solves stay
+// aligned with the classic rows.
 export function HeadToHeadRoundRows({
   result,
   showCompetition,
   attemptCount,
   anyAverages,
   t,
-  bracketSize = 16,
+  isSinglePersonalBest = false,
   defaultOpen = false,
 }: {
-  result: H2HResult;
+  result: V1PersonResult;
   showCompetition: boolean;
   attemptCount: number;
   anyAverages: boolean;
   t: TFunction;
-  // Number of competitors that start the bracket (a power of two). Needed to turn
-  // a match number into a stage name; defaults to the usual 16.
-  bracketSize?: number;
+  isSinglePersonalBest?: boolean;
   defaultOpen?: boolean;
 }) {
   const [open, setOpen] = useState(defaultOpen);
 
-  const matchLabel = (matchNumber: number) => {
-    const stage = stageOfMatch(matchNumber, bracketSize);
-    return stage
-      ? stageLabel(stage.stageIndex, stage.stageCount, stage.places, t)
-      : `Match ${matchNumber}`;
-  };
-
   const eventId = result.event_id;
-
-  // Latest match first, like the rest of the page.
-  const matches = _.orderBy(result.matches ?? [], "match_number", "desc")
-    .map((match) => analyseMatch(result, match))
-    .filter((match): match is AnalysedMatch => match !== null);
-
-  const matchesWon = matches.filter((m) => m.outcome === "win").length;
+  const matches = analyseMatches(result);
+  const matchesWon = matches.filter((match) => match.outcome === "win").length;
   const roundName = t(`rounds.${result.round_type_id}.name`);
+
+  const bestSingle: BestSingle = {
+    value: result.best,
+    tag: isSinglePersonalBest ? "PR" : result.regional_single_record,
+    color: isSinglePersonalBest
+      ? personalBestColor(result.regional_single_record)
+      : undefined,
+  };
 
   return (
     <>
@@ -353,34 +344,39 @@ export function HeadToHeadRoundRows({
           )}
         </Table.Cell>
         <Table.Cell>
-          {matches.length > 0 ? (
-            <Button
-              variant="plain"
-              size="sm"
-              px="0"
-              h="auto"
-              minW="0"
-              fontWeight="inherit"
-              aria-expanded={open}
-              onClick={() => setOpen((isOpen) => !isOpen)}
-            >
-              <chakra.span
-                aria-hidden
-                display="inline-block"
-                transition="transform 0.15s"
-                transform={open ? "rotate(90deg)" : undefined}
+          <HStack gap="2">
+            {matches.length > 0 ? (
+              <Button
+                variant="plain"
+                size="sm"
+                px="0"
+                h="auto"
+                minW="0"
+                fontWeight="inherit"
+                aria-expanded={open}
+                onClick={() => setOpen((isOpen) => !isOpen)}
               >
-                ▸
-              </chakra.span>
-              {roundName}
-            </Button>
-          ) : (
-            roundName
-          )}
+                <chakra.span
+                  aria-hidden
+                  display="inline-block"
+                  transition="transform 0.15s"
+                  transform={open ? "rotate(90deg)" : undefined}
+                >
+                  ▸
+                </chakra.span>
+                {roundName}
+              </Button>
+            ) : (
+              roundName
+            )}
+            <Badge size="xs" variant="outline">
+              H2H
+            </Badge>
+          </HStack>
         </Table.Cell>
         <PositionCell result={result} rankingMode={result.ranking_mode} />
-        <Table.Cell fontWeight="extrabold">
-          <WithRecordTag recordTag={result.regional_single_record}>
+        <Table.Cell color={bestSingle.color} fontWeight="extrabold">
+          <WithRecordTag recordTag={bestSingle.tag}>
             {formatAttemptResult(result.best, eventId)}
           </WithRecordTag>
         </Table.Cell>
@@ -391,52 +387,18 @@ export function HeadToHeadRoundRows({
         </Table.Cell>
       </Table.Row>
 
-      {open &&
-        matches.flatMap((match) =>
-          match.sets.map((set, setIndex) => (
-            <Table.Row
-              key={`${match.matchNumber}-${set.setNumber}`}
-              bg="bg.muted"
-            >
-              {setIndex === 0 && (
-                <Table.Cell rowSpan={match.sets.length} verticalAlign="top">
-                  <Stack gap="1" align="start">
-                    <Text fontSize="xs" color="fg.muted">
-                      {matchLabel(match.matchNumber)}
-                    </Text>
-                    <OpponentName opponent={match.opponent} />
-                    <ScoreBadge
-                      outcome={match.outcome}
-                      own={match.ownSets}
-                      opponent={match.opponentSets}
-                    />
-                  </Stack>
-                </Table.Cell>
-              )}
-              <Table.Cell color="fg.muted">Set {set.setNumber}</Table.Cell>
-              <Table.Cell>
-                <ScoreBadge
-                  outcome={set.outcome}
-                  own={set.ownPoints}
-                  opponent={set.opponentPoints}
-                />
-              </Table.Cell>
-              <Table.Cell>
-                {set.best !== undefined &&
-                  formatAttemptResult(set.best, eventId)}
-              </Table.Cell>
-              {anyAverages && <Table.Cell />}
-              {_.range(attemptCount).map((i) => (
-                <SolveCell
-                  key={i}
-                  own={set.pairs[i]?.own}
-                  opponent={set.pairs[i]?.opponent}
-                  eventId={eventId}
-                />
-              ))}
-            </Table.Row>
-          )),
-        )}
+      {matches.map((match) => (
+        <MatchRows
+          key={match.matchNumber}
+          match={match}
+          stage={stageLabel(match, t)}
+          eventId={eventId}
+          attemptCount={attemptCount}
+          anyAverages={anyAverages}
+          bestSingle={bestSingle}
+          open={open}
+        />
+      ))}
     </>
   );
 }

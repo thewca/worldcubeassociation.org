@@ -22,11 +22,8 @@ import _ from "lodash";
 import roundTypes from "@/lib/wca/data/roundTypes";
 import formats from "@/lib/wca/data/formats";
 import { DateTime } from "luxon";
-import { H2HResult, HeadToHeadRoundRows } from "./H2HRoundRows";
-import dummyResults from "./h2h-result.dummy.json" with { type: "json" };
-import dummyResults2 from "./h2h-result-2.dummy.json" with { type: "json" };
-
-const DUMMY_RESULTS = [dummyResults, dummyResults2] as H2HResult[];
+import { HeadToHeadRoundRows } from "./H2HRoundRows";
+import { attemptColumnCount } from "@/lib/wca/competitions/h2hMatches";
 
 // The solve columns push the row past the width of a phone, so the column that says
 // whose row it is stays pinned to the left edge while the rest scrolls under it.
@@ -249,12 +246,12 @@ export function ByPersonTable({
                 </Table.Cell>
                 <RoundNameCell
                   roundTypeId={competitorResult.round_type_id}
-                  rankingMode={competitorResult.rankingMode}
+                  rankingMode={competitorResult.ranking_mode}
                   t={t}
                 />
                 <PositionCell
                   result={competitorResult}
-                  rankingMode={competitorResult.rankingMode}
+                  rankingMode={competitorResult.ranking_mode}
                 />
                 <Table.Cell fontWeight="bold">
                   <WithRecordTag
@@ -337,7 +334,7 @@ export function ByCompetitionTable({
   t,
   highlightPersonalBests = false,
 }: {
-  results: components["schemas"]["V1Result"][];
+  results: components["schemas"]["V1PersonResult"][];
   t: TFunction;
   highlightPersonalBests?: boolean;
 }) {
@@ -345,7 +342,7 @@ export function ByCompetitionTable({
     ? historicalPbMarkers(results)
     : null;
 
-  const attemptCount = maxAttemptCount(results);
+  const attemptCount = attemptColumnCount(results);
 
   const anyAverages = results.some((res) => res.average !== 0);
 
@@ -362,8 +359,6 @@ export function ByCompetitionTable({
     ),
     "competition_id",
   );
-
-  console.log(resultsByCompetition);
 
   return (
     <Table.ScrollArea rounded="md" width="full">
@@ -398,15 +393,12 @@ export function ByCompetitionTable({
               if (isH2H) {
                 return (
                   <HeadToHeadRoundRows
-                    key={`h2h-${competitorResult.id}`}
-                    result={
-                      DUMMY_RESULTS[
-                        Math.floor(Math.random() * DUMMY_RESULTS.length)
-                      ]
-                    }
+                    key={competitorResult.id}
+                    result={competitorResult}
                     showCompetition={index === 0}
                     attemptCount={attemptCount}
                     anyAverages={anyAverages}
+                    isSinglePersonalBest={isSingleRecord}
                     t={t}
                   />
                 );
