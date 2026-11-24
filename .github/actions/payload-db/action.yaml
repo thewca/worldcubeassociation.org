@@ -14,6 +14,9 @@ runs:
         mongodb-db: payload
     - name: Import the public dump
       shell: bash
+      # The nightly dump is fresh enough: the build only needs it for the prerendered shells, which short-lived
+      #   build caching replaces with live data at runtime (see `payloadCacheLife`). Triggering an export per build
+      #   would add load on production and AWS access to this action for no visible benefit.
       run: |
         # The image's init phase runs a temporary mongod bound to 127.0.0.1 only, which also satisfies the
         #   action's own readiness check. Pinging the container IP waits for the real server instead of
