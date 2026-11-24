@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 export default async function About() {
-  const { lng } = await getT();
+  const { t, lng } = await getT();
 
   const aboutPage = await getCachedGlobal("about-us-page", lng);
 
@@ -24,7 +24,7 @@ export default async function About() {
   if (aboutItems.length === 0) {
     return (
       <Heading>
-        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
         No About Items, add some!
       </Heading>
     );
@@ -32,10 +32,7 @@ export default async function About() {
 
   return (
     <VStack gap="8" width="full" alignItems="left">
-      <Heading size="5xl">
-        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-        About Us
-      </Heading>
+      <Heading size="5xl">{t("homepage.about_us.title")}</Heading>
       {aboutItems.map((item) => {
         switch (item.blockType) {
           case "callToAction":

@@ -46,23 +46,23 @@ export default async function RegulationsTranslations() {
   );
 }
 
-function TranslationList({
+async function TranslationList({
   translations,
 }: {
   translations: components["schemas"]["Translation"][];
 }) {
+  const { t } = await getT();
+
   return (
     <Table.ScrollArea>
       <Table.Root size="sm" striped>
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeader>
-              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-              Version
+              {t("regulations_translations.table_elements.version")}
             </Table.ColumnHeader>
             <Table.ColumnHeader>
-              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-              Language
+              {t("regulations_translations.table_elements.language")}
             </Table.ColumnHeader>
           </Table.Row>
         </Table.Header>

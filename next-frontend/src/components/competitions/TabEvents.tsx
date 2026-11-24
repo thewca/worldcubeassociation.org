@@ -28,12 +28,7 @@ export default async function TabEvents({
   if (error) return <OpenapiError response={response} t={t} />;
 
   if (!events) {
-    return (
-      <Text>
-        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-        Competition does not exist
-      </Text>
-    );
+    return <Text>{t("competitions.registration_v2.errors.-1000")}</Text>;
   }
 
   const allRounds = events.flatMap((event) => event.rounds);
@@ -53,35 +48,28 @@ export default async function TabEvents({
             <Table.Header>
               <Table.Row>
                 <Table.ColumnHeader>
-                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                  Event
+                  {t("results.table_elements.event")}
                 </Table.ColumnHeader>
                 <Table.ColumnHeader>
-                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                  Round
+                  {t("competitions.results_table.round")}
                 </Table.ColumnHeader>
                 <Table.ColumnHeader>
-                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                  Format
+                  {t("competitions.events.format")}
                 </Table.ColumnHeader>
                 <Table.ColumnHeader>
-                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                  Time Limit
+                  {t("competitions.events.time_limit")}
                 </Table.ColumnHeader>
                 {showCutoff && (
                   <Table.ColumnHeader>
-                    {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                    Cutoff
+                    {t("competitions.events.cutoff")}
                   </Table.ColumnHeader>
                 )}
                 <Table.ColumnHeader>
-                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                  Proceed
+                  {t("competitions.events.proceed")}
                 </Table.ColumnHeader>
                 {showQualifications && (
                   <Table.ColumnHeader>
-                    {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                    Qualification
+                    {t("competitions.events.qualification")}
                   </Table.ColumnHeader>
                 )}
               </Table.Row>

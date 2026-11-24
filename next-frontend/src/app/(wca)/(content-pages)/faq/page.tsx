@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function FAQ() {
-  const { lng } = await getT();
+  const { t, lng } = await getT();
 
   const faqPage = await getCachedGlobal("faq-page", lng, 2);
   const faqQuestionsRaw = faqPage.questions;
@@ -23,7 +23,7 @@ export default async function FAQ() {
   if (faqQuestionsRaw.length === 0) {
     return (
       <Heading>
-        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
         No FAQ Categories, add some!
       </Heading>
     );
@@ -43,10 +43,7 @@ export default async function FAQ() {
     <VStack gap="8" width="full" alignItems="left">
       <Card.Root maxW="40em">
         <Card.Body>
-          <Card.Title textStyle="h1">
-            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-            Frequently Asked Questions
-          </Card.Title>
+          <Card.Title textStyle="h1">{t("faq.title")}</Card.Title>
           {faqPage.introTextMarkdown ? (
             <ChakraMarkdown
               headingAs={Card.Title}
@@ -58,7 +55,7 @@ export default async function FAQ() {
             </ChakraMarkdown>
           ) : (
             <Card.Description>
-              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+              {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
               No Intro text, add it!
             </Card.Description>
           )}

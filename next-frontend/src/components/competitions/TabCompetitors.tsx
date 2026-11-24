@@ -48,8 +48,7 @@ const TabCompetitors: React.FC<CompetitorData> = ({
         {addOnTheSpotSlot}
         <Card.Title>
           <FormEventSelector
-            // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
-            title="Events"
+            title={t("competitions.competition_info.events")}
             selectedEvents={psychSheetEvent ? [psychSheetEvent] : []}
             eventList={eventIds}
             onEventClick={setPsychSheetEvent}

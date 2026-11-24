@@ -7,12 +7,15 @@ import { components } from "@/types/openapi";
 import events from "@/lib/wca/data/events";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import EventIcon from "@/components/EventIcon";
+import { getT } from "@/lib/i18n/get18n";
 
 interface RecordsProps {
   records: components["schemas"]["V1PersonInfo"]["ranks_by_event"];
 }
 
-const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
+const PersonalRecordsTable: React.FC<RecordsProps> = async ({ records }) => {
+  const { t } = await getT();
+
   const getColor = (pr?: number) => {
     if (!pr) return undefined;
     if (pr === 1) return "recordMarkers.personal";
@@ -25,8 +28,7 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
       <Card.Header>
         <HStack justify="space-between">
           <Card.Title textStyle="s4">
-            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-            Current Personal Records
+            {t("persons.show.personal_records")}
           </Card.Title>
           <IconButton variant="ghost">
             <LuShare2 /> {/* TODO SLATE - implement share functionality */}
@@ -42,15 +44,13 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
                   <HStack>
                     <SpeedcubingHistoryIcon fontSize="md" />
                     <Text fontWeight="medium">
-                      {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                      Event
+                      {t("results.table_elements.event")}
                     </Text>
                   </HStack>
                 </Table.ColumnHeader>
                 <Tooltip content="National Ranking" showArrow openDelay={100}>
                   <Table.ColumnHeader textAlign="end">
-                    {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                    NR
+                    {t("common.ranking_abbreviations.national")}
                   </Table.ColumnHeader>
                 </Tooltip>
                 <Tooltip
@@ -59,28 +59,23 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
                   openDelay={100}
                 >
                   <Table.ColumnHeader textAlign="end">
-                    {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                    CR
+                    {t("common.ranking_abbreviations.continental")}
                   </Table.ColumnHeader>
                 </Tooltip>
                 <Tooltip content="World Ranking" showArrow openDelay={100}>
                   <Table.ColumnHeader textAlign="end">
-                    {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                    WR
+                    {t("common.ranking_abbreviations.world")}
                   </Table.ColumnHeader>
                 </Tooltip>
                 <Table.ColumnHeader textAlign="end">
-                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                  Single
+                  {t("common.single")}
                 </Table.ColumnHeader>
                 <Table.ColumnHeader paddingStart={3}>
-                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                  Average
+                  {t("common.average")}
                 </Table.ColumnHeader>
                 <Tooltip content="World Ranking" showArrow openDelay={100}>
                   <Table.ColumnHeader>
-                    {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                    WR
+                    {t("common.ranking_abbreviations.world")}
                   </Table.ColumnHeader>
                 </Tooltip>
                 <Tooltip
@@ -89,14 +84,12 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
                   openDelay={100}
                 >
                   <Table.ColumnHeader>
-                    {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                    CR
+                    {t("common.ranking_abbreviations.continental")}
                   </Table.ColumnHeader>
                 </Tooltip>
                 <Tooltip content="National Ranking" showArrow openDelay={100}>
                   <Table.ColumnHeader>
-                    {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                    NR
+                    {t("common.ranking_abbreviations.national")}
                   </Table.ColumnHeader>
                 </Tooltip>
               </Table.Row>

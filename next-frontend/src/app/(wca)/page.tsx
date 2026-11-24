@@ -340,37 +340,42 @@ const FeaturedCompetitions = async ({
   block,
 }: {
   block: FeaturedCompetitionsBlock;
-}) => (
-  <Card.Root width="full">
-    <Card.Body>
-      <Card.Title asChild>
-        <HStack justify="space-between" wrap="wrap">
-          <Text textStyle={{ base: "h2", md: "h1" }}>
-            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-            Upcoming Competitions
-          </Text>
-          <Button asChild variant="pastelSolid">
-            <ChakraLink asChild textStyle={undefined}>
-              <Link href="/competitions">
-                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                View all Competitions
-              </Link>
-            </ChakraLink>
-          </Button>
-        </HStack>
-      </Card.Title>
-      <SimpleGrid columns={{ base: 1, md: block.competitions?.length }} gap={4}>
-        {block.competitions?.map((featuredComp) => (
-          <FeaturedCompetition
-            key={featuredComp.id}
-            competitionId={featuredComp.competitionId}
-            colorPalette={featuredComp.colorPalette}
-          />
-        ))}
-      </SimpleGrid>
-    </Card.Body>
-  </Card.Root>
-);
+}) => {
+  const { t } = await getT();
+
+  return (
+    <Card.Root width="full">
+      <Card.Body>
+        <Card.Title asChild>
+          <HStack justify="space-between" wrap="wrap">
+            <Text textStyle={{ base: "h2", md: "h1" }}>
+              {t("competitions.index.titles.upcoming")}
+            </Text>
+            <Button asChild variant="pastelSolid">
+              <ChakraLink asChild textStyle={undefined}>
+                <Link href="/competitions">
+                  {t("competitions.index.all_competitions")}
+                </Link>
+              </ChakraLink>
+            </Button>
+          </HStack>
+        </Card.Title>
+        <SimpleGrid
+          columns={{ base: 1, md: block.competitions?.length }}
+          gap={4}
+        >
+          {block.competitions?.map((featuredComp) => (
+            <FeaturedCompetition
+              key={featuredComp.id}
+              competitionId={featuredComp.competitionId}
+              colorPalette={featuredComp.colorPalette}
+            />
+          ))}
+        </SimpleGrid>
+      </Card.Body>
+    </Card.Root>
+  );
+};
 
 const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
   const slides = block.slides;
@@ -560,13 +565,13 @@ const PayloadContents = async () => {
     return (
       <Center p={HOMEPAGE_SPACING} asChild>
         <Text>
-          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+          {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
           No homepage content yet, go ahead and{" "}
           <ChakraLink asChild>
             <Link
               href={route({ pathname: "/payload/[[...segments]]", query: {} })}
             >
-              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+              {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
               add some!
             </Link>
           </ChakraLink>

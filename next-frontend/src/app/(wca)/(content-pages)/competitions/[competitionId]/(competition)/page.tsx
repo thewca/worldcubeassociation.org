@@ -37,12 +37,7 @@ async function GeneralPage({ competitionId }: { competitionId: string }) {
   if (error) return <OpenapiError t={t} response={response} />;
 
   if (!competitionInfo) {
-    return (
-      <Text>
-        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-        Competition does not exist
-      </Text>
-    );
+    return <Text>{t("competitions.registration_v2.errors.-1000")}</Text>;
   }
 
   const session = await getSession();

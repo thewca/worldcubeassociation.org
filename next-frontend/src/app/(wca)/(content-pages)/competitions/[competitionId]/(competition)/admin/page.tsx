@@ -22,12 +22,7 @@ export default async function CompetitionOverview({
   if (error) return <OpenapiError t={t} response={response} />;
 
   if (!competitionInfo) {
-    return (
-      <p>
-        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-        Competition does not exist
-      </p>
-    );
+    return <p>{t("competitions.registration_v2.errors.-1000")}</p>;
   }
 
   return (
@@ -36,13 +31,8 @@ export default async function CompetitionOverview({
         requiredPermission="canAdministerCompetition"
         item={competitionId}
       >
+        <Text>{t("competitions.messages.administering")}</Text>
         <Text>
-          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-          You are administering this competition
-        </Text>
-        <Text>
-          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-          Go back to the public page{" "}
           <ChakraLink asChild variant="underline" colorPalette="teal">
             <Link
               href={route({
@@ -50,8 +40,7 @@ export default async function CompetitionOverview({
                 query: { competitionId: competitionId },
               })}
             >
-              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-              here
+              {t("competitions.messages.back_to_public_page")}
             </Link>
           </ChakraLink>
         </Text>

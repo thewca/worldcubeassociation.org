@@ -96,8 +96,7 @@ export default function TimeZoneSelector({
         </Combobox.Label>
         <Combobox.Control>
           <Combobox.Input
-            // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
-            placeholder="Nothing selected"
+            placeholder={t("competitions.schedule.no_timezone_selected")}
           />
           <Combobox.IndicatorGroup>
             <Combobox.Trigger />
@@ -106,8 +105,7 @@ export default function TimeZoneSelector({
         <Combobox.Positioner>
           <Combobox.Content>
             <Combobox.Empty>
-              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-              No items found
+              {t("search_results.index.not_found.generic")}
             </Combobox.Empty>
             {collection.items.map((item) => (
               <Combobox.Item item={item} key={item}>

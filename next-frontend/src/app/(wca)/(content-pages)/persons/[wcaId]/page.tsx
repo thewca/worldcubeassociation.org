@@ -43,21 +43,11 @@ export default async function PersonOverview({
   const { t } = await getT();
 
   if (error) {
-    return (
-      <Text>
-        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-        Error fetching person
-      </Text>
-    );
+    return <Text>{t("errors.next_frontend.load_error.person")}</Text>;
   }
 
   if (!personDetails) {
-    return (
-      <Text>
-        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-        Person does not exist
-      </Text>
-    );
+    return <Text>{t("persons.show.not_found")}</Text>;
   }
 
   const roles: {

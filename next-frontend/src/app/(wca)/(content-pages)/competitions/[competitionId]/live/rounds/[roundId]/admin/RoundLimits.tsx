@@ -26,8 +26,7 @@ export default function RoundLimits() {
         {t("competitions.events.cutoff")}:{" "}
         {round.cutoff
           ? cutoffToString(t, round.cutoff, eventId)
-          : // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
-            "None"}
+          : t("competitions.live.admin.no_cutoff")}
       </Text>
     </Stack>
   );

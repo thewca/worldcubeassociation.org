@@ -130,7 +130,7 @@ async function SessionAvatarMenu() {
 }
 
 export default async function Navbar() {
-  const { lng } = await getT();
+  const { t, lng } = await getT();
 
   const [navbar, socialLinksGlobal] = await Promise.all([
     getCachedGlobal("nav", lng),
@@ -311,7 +311,7 @@ export default async function Navbar() {
           <HStack>
             {showEmptyMessage && (
               <Text hideBelow="md">
-                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
                 Oh no, there are no navbar items!
               </Text>
             )}
@@ -330,8 +330,7 @@ export default async function Navbar() {
               <Collapsible.Trigger asChild>
                 <IconButton
                   variant="ghost"
-                  // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
-                  aria-label="Toggle navigation"
+                  aria-label={t("layouts.navigation.toggle_navigation")}
                 >
                   <Icon size="lg" asChild>
                     <LuMenu />
@@ -347,7 +346,7 @@ export default async function Navbar() {
             <VStack align="stretch" px={3.5} pt={1} pb={1.5} gap={1}>
               {showEmptyMessage && (
                 <Text>
-                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                  {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
                   Oh no, there are no navbar items!
                 </Text>
               )}

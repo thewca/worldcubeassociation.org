@@ -2,15 +2,13 @@ import Link from "next/link";
 import { IconButton } from "@chakra-ui/react";
 import React from "react";
 import WcaLogoIcon from "@/components/icons/WcaLogoIcon";
+import { getT } from "@/lib/i18n/get18n";
 
-export default function WCALogo() {
+export default async function WCALogo() {
+  const { t } = await getT();
+
   return (
-    <IconButton
-      asChild
-      variant="ghost"
-      // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
-      aria-label="WCA Logo"
-    >
+    <IconButton asChild variant="ghost" aria-label={t("logo.title")}>
       <Link href="/">
         <WcaLogoIcon boxSize={10} color="fg" />
       </Link>

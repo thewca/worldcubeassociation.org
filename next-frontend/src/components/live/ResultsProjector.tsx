@@ -134,9 +134,7 @@ function ResultsProjector({
                   <IconButton
                     variant="ghost"
                     onClick={() => setStatus("hiding")}
-
-                    // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
-                    aria-label="Play"
+                    aria-label={t("competitions.live.projector.play")}
                     size="lg"
                     me={2}
                   >
@@ -146,9 +144,7 @@ function ResultsProjector({
                   <IconButton
                     variant="ghost"
                     onClick={() => setStatus("paused")}
-
-                    // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
-                    aria-label="Pause"
+                    aria-label={t("competitions.live.projector.pause")}
                     size="lg"
                     me={2}
                   >
@@ -157,9 +153,7 @@ function ResultsProjector({
                 )}
                 <IconButton
                   variant="ghost"
-
-                  // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
-                  aria-label="Close"
+                  aria-label={t("page.executives.close")}
                   size="lg"
                   onClick={disableProjectorView}
                 >

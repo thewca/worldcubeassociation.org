@@ -20,6 +20,8 @@ import {
   Portal,
   Text,
 } from "@chakra-ui/react";
+import { Trans } from "react-i18next";
+import { useT } from "@/lib/i18n/useI18n";
 
 interface ConfirmOptions {
   content?: ReactNode;
@@ -29,12 +31,7 @@ interface ConfirmOptions {
 }
 
 const DEFAULT_OPTIONS: Required<ConfirmOptions> = {
-  content: (
-    <Text>
-      {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-      Are you sure? This action cannot be undone.
-    </Text>
-  ),
+  content: null,
   confirmButton: "Yes",
   cancelButton: "No",
   requireInput: null,
@@ -109,6 +106,8 @@ export function ConfirmDialog({
 }
 
 export default function ConfirmProvider({ children }: { children: ReactNode }) {
+  const { t } = useT();
+
   const [options, setOptions] =
     useState<Required<ConfirmOptions>>(DEFAULT_OPTIONS);
   const [resolveReject, setResolveReject] = useState<
@@ -171,9 +170,7 @@ export default function ConfirmProvider({ children }: { children: ReactNode }) {
       </ConfirmationContext.Provider>
       <ConfirmDialog
         open={isOpen}
-
-        // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
-        title="Confirm Action"
+        title={t("common.confirm_dialog.title")}
         lazyMount
         onCancel={handleCancel}
         onConfirm={handleConfirm}
@@ -181,16 +178,16 @@ export default function ConfirmProvider({ children }: { children: ReactNode }) {
         confirmButton={options.confirmButton}
         confirmDisabled={!!options.requireInput && !inputValue}
       >
-        {options.content}
+        {options.content ?? <Text>{t("common.confirm_dialog.message")}</Text>}
         {options.requireInput && (
           <Field.Root invalid={inputError} mt={3}>
             <Text mb={1}>
-              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-              Type <code>{options.requireInput}</code>
-              {
-                // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
-                " to confirm"
-              }
+              <Trans
+                t={t}
+                i18nKey="common.confirm_dialog.type_to_confirm_html"
+                values={{ input: options.requireInput }}
+                components={{ code: <code /> }}
+              />
             </Text>
             <Input
               placeholder={options.requireInput}
@@ -201,8 +198,7 @@ export default function ConfirmProvider({ children }: { children: ReactNode }) {
               autoFocus
             />
             <Field.ErrorText>
-              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-              Input does not match. Please try again.
+              {t("common.confirm_dialog.input_mismatch")}
             </Field.ErrorText>
           </Field.Root>
         )}

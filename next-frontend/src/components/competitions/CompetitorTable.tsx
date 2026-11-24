@@ -27,12 +27,10 @@ export default function CompetitorTable({
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeader>
-              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-              Name
+              {t("results.table_elements.name")}
             </Table.ColumnHeader>
             <Table.ColumnHeader>
-              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-              Representing
+              {t("common.user.representing")}
             </Table.ColumnHeader>
             {eventIds.map((eventId) => (
               <Table.ColumnHeader
@@ -45,8 +43,7 @@ export default function CompetitorTable({
               </Table.ColumnHeader>
             ))}
             <Table.ColumnHeader>
-              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-              Total
+              {t("registrations.list.total")}
             </Table.ColumnHeader>
           </Table.Row>
         </Table.Header>

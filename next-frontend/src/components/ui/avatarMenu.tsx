@@ -115,12 +115,10 @@ function AvatarMenu({
           px={2}
           justifyContent="flex-start"
         >
-          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-          Sign in
+          {t("devise.sessions.new.sign_in")}
         </Button>
         <MobileNavButton hideFrom="md" onClick={() => signIn()}>
-          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-          Sign in
+          {t("devise.sessions.new.sign_in")}
         </MobileNavButton>
       </>
     );
@@ -197,8 +195,7 @@ function AvatarMenu({
               })}
               <Menu.Separator />
               <Menu.Item value="logout" onSelect={handleSignOut}>
-                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                Log Out
+                {t("layouts.navigation.sign_out")}
               </Menu.Item>
             </Menu.Content>
           </Menu.Positioner>
@@ -246,8 +243,7 @@ function AvatarMenu({
               })}
               <Separator />
               <MobileNavButton onClick={handleSignOut}>
-                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                Log Out
+                {t("layouts.navigation.sign_out")}
               </MobileNavButton>
             </VStack>
           </Collapsible.Content>

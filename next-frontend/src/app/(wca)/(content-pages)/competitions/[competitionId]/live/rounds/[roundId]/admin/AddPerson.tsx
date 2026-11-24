@@ -46,8 +46,7 @@ export default function AddPersonModal({
       >
         <Dialog.Trigger asChild>
           <Button variant="outline" disabled={roundClosed}>
-            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-            Add Competitor
+            {t("competitions.live.admin.add_competitor.title")}
           </Button>
         </Dialog.Trigger>
       </Tooltip>
@@ -57,8 +56,7 @@ export default function AddPersonModal({
           <Dialog.Content>
             <Dialog.Header>
               <Dialog.Title>
-                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                Add Competitor
+                {t("competitions.live.admin.add_competitor.title")}
               </Dialog.Title>
             </Dialog.Header>
             <Dialog.Body>
@@ -79,13 +77,11 @@ export default function AddPersonModal({
                   )
                 }
               >
-                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                Add Competitor to Round
+                {t("competitions.live.admin.add_competitor.single_round")}
               </Button>
               <Dialog.ActionTrigger asChild>
                 <Button variant="outline">
-                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                  Cancel
+                  {t("competitions.live.admin.quit.cancel")}
                 </Button>
               </Dialog.ActionTrigger>
             </Dialog.Footer>
@@ -208,8 +204,7 @@ function AddPersonCombobox({
       >
         <Combobox.Control>
           <Combobox.Input
-            // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
-            placeholder="Type to search"
+            placeholder={t("competitions.live.admin.type_to_search")}
           />
           <Combobox.IndicatorGroup>
             <Combobox.ClearTrigger />
@@ -221,8 +216,7 @@ function AddPersonCombobox({
         <Combobox.Positioner>
           <Combobox.Content>
             <Combobox.Empty>
-              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-              All Competitors are already Part of the Round
+              {t("competitions.live.admin.add_competitor.all_added")}
             </Combobox.Empty>
             {collection.items.map((item) => (
               <Combobox.Item item={item} key={item.id}>

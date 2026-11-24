@@ -50,20 +50,20 @@ function LayerStyleRow({ layerStyle }: { layerStyle: LayerStyleName }) {
           >
             <Text textStyle="s1">{palette}</Text>
             <Text textStyle="body">
-              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+              {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
               Card body copy on this surface.
             </Text>
             <HStack gap="2" mt="3">
               <Button size="xs" variant="solid">
-                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
                 Solid
               </Button>
               <Button size="xs" variant="outline">
-                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
                 Outline
               </Button>
               <Button size="xs" variant="onSolid">
-                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
                 onSolid
               </Button>
             </HStack>
@@ -116,7 +116,7 @@ export default function LayerStyleDoc() {
 
       <Stack gap="4">
         <Text textStyle="h3">
-          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+          {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
           Applied directly to buttons
         </Text>
         {NAMES.map((name) => (

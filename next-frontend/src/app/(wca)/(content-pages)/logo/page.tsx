@@ -25,7 +25,7 @@ export default async function LogoPage() {
   if (logoItems.length === 0) {
     return (
       <Heading>
-        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
         No Logo Items, add some!
       </Heading>
     );

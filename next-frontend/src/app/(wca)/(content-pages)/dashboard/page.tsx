@@ -31,7 +31,7 @@ export default async function Dashboard() {
       {session && (
         <>
           <Text>
-            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+            {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
             Welcome, {session.user?.name}
           </Text>
           {permissions && (
@@ -40,7 +40,7 @@ export default async function Dashboard() {
         </>
       )}
       <Text>
-        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
         Test Links:
       </Text>
       <HStack>
@@ -52,7 +52,7 @@ export default async function Dashboard() {
             })}
           >
             <Button variant="outline">
-              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+              {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
               OC2024
             </Button>
           </Link>
@@ -65,7 +65,7 @@ export default async function Dashboard() {
             })}
           >
             <Button variant="outline" colorPalette="red">
-              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+              {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
               WC2025
             </Button>
           </Link>
@@ -78,7 +78,7 @@ export default async function Dashboard() {
             })}
           >
             <Button variant="outline" colorPalette="red">
-              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+              {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
               2022ANDE01
             </Button>
           </Link>
@@ -89,7 +89,7 @@ export default async function Dashboard() {
         <Card.Body>
           <Box mb="4">
             <Text fontSize="xl" fontWeight="bold">
-              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+              {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
               WCA Icon Gallery
             </Text>
           </Box>
@@ -108,7 +108,7 @@ export default async function Dashboard() {
       <Card.Root width="full">
         <Card.Body>
           <Card.Title>
-            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+            {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
             Layer Styles
           </Card.Title>
           <LayerStyleDoc />
@@ -117,7 +117,7 @@ export default async function Dashboard() {
       <Card.Root width="full">
         <Card.Body>
           <Card.Title>
-            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+            {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
             Theme Explorer
           </Card.Title>
           <Box>

@@ -3,6 +3,7 @@ import AnnouncementContent from "@/components/AnnouncementContent";
 import { Announcement, ColorPaletteSelect } from "@/types/payload";
 import { LuChevronsRight } from "react-icons/lu";
 import AnnouncementByline from "@/components/announcements/AnnouncementByline";
+import { getT } from "@/lib/i18n/get18n";
 
 function AnnouncementItem({
   announcement,
@@ -41,7 +42,7 @@ function AnnouncementItem({
   );
 }
 
-export default function AnnouncementsCard({
+export default async function AnnouncementsCard({
   hero,
   others = [],
   colorPalette,
@@ -52,6 +53,8 @@ export default function AnnouncementsCard({
   colorPalette: ColorPaletteSelect;
   showSeeAll?: boolean;
 }) {
+  const { t } = await getT();
+
   return (
     <Accordion.Root
       variant="card"
@@ -82,8 +85,7 @@ export default function AnnouncementsCard({
               <Accordion.ItemIndicator transition={undefined}>
                 <LuChevronsRight />
               </Accordion.ItemIndicator>
-              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-              See all announcements
+              {t("homepage.see_all_announcements")}
             </ChakraLink>
           </Accordion.ItemTrigger>
         </Accordion.Item>

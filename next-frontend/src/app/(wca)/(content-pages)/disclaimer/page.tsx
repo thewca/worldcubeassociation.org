@@ -12,7 +12,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 export default async function Disclaimer() {
-  const { lng } = await getT();
+  const { t, lng } = await getT();
 
   const disclaimerPage = await getCachedGlobal("disclaimer-page", lng);
 
@@ -21,7 +21,7 @@ export default async function Disclaimer() {
   if (disclaimerItems.length === 0) {
     return (
       <Heading>
-        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
         No Disclaimer Items, add some!
       </Heading>
     );
@@ -29,10 +29,7 @@ export default async function Disclaimer() {
 
   return (
     <VStack gap="8" width="full" alignItems="left">
-      <Heading size="5xl">
-        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-        Disclaimer
-      </Heading>
+      <Heading size="5xl">{t("layouts.navigation.disclaimer")}</Heading>
       {disclaimerItems.map((item) => (
         <Box key={item.id}>
           {item.title && <Heading size="xl">{item.title}</Heading>}

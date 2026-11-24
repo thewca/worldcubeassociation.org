@@ -5,6 +5,7 @@ import { Text } from "@chakra-ui/react";
 import useAPI from "@/lib/wca/useAPI";
 import { useT } from "@/lib/i18n/useI18n";
 import RecordsTable from "@/components/persons/RecordsTable";
+import Loading from "@/components/ui/loading";
 
 interface RecordsTabProps {
   wcaId: string;
@@ -23,21 +24,11 @@ const RecordsTab: React.FC<RecordsTabProps> = ({ wcaId }) => {
   );
 
   if (isLoading) {
-    return (
-      <Text>
-        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-        Loading...
-      </Text>
-    );
+    return <Loading />;
   }
 
   if (!recordsQuery) {
-    return (
-      <Text>
-        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-        Failed fetching records
-      </Text>
-    );
+    return <Text>{t("results.records.load_error")}</Text>;
   }
 
   return <RecordsTable recordResults={recordsQuery} t={t} />;

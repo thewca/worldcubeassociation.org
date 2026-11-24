@@ -13,7 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Privacy() {
-  const { lng } = await getT();
+  const { t, lng } = await getT();
 
   const privacyPage = await getCachedGlobal("privacy-page", lng);
 
@@ -22,7 +22,7 @@ export default async function Privacy() {
   if (privacyItems.length === 0) {
     return (
       <Heading>
-        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
         No Privacy Items, add some!
       </Heading>
     );
@@ -30,10 +30,7 @@ export default async function Privacy() {
 
   return (
     <VStack gap="8" width="full" alignItems="left">
-      <Heading size="5xl">
-        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-        WCA Privacy Statement
-      </Heading>
+      <Heading size="5xl">{t("privacy.title")}</Heading>
       <ChakraMarkdown>{privacyPage.preambleMarkdown}</ChakraMarkdown>
       {privacyItems.map((item) => (
         <Box key={item.id}>

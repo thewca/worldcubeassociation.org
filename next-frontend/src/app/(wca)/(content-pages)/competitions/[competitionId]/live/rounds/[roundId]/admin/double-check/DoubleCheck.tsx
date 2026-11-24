@@ -17,9 +17,11 @@ import AttemptsForm from "@/components/live/AttemptsForm";
 import { useResultsAdmin } from "@/providers/LiveResultAdminProvider";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 import { useRoundName } from "@/lib/wca/live/getRoundName";
+import { useT } from "@/lib/i18n/useI18n";
 
 export default function DoubleCheck({ results }: { results: LiveResult[] }) {
   const roundName = useRoundName();
+  const { t } = useT();
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -97,16 +99,10 @@ export default function DoubleCheck({ results }: { results: LiveResult[] }) {
                   {roundName}
                 </Card.Header>
                 <Card.Title>
-                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                  Double-check
+                  {t("competitions.live.admin.double_check")}
                 </Card.Title>
                 <Card.Description>
-                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                  Here you can iterate over results ordered by entry time
-                  (newest first). When doing double-check you can place a
-                  scorecard next to the form to quickly compare attempt results.
-                  For optimal experience make sure to always put entered/updated
-                  scorecard at the top of the pile.
+                  {t("competitions.live.admin.double_check_description")}
                 </Card.Description>
               </Card.Body>
             </Card.Root>

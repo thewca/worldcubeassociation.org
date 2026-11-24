@@ -18,7 +18,7 @@ const IconDisplay = ({
   if (!IconComponent) {
     return fallback === true ? (
       <Text>
-        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
         No_Icon
       </Text>
     ) : (

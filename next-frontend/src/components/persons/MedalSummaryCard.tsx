@@ -1,6 +1,7 @@
 import React from "react";
 import { Stat, Card, Heading, Float, StatGroup } from "@chakra-ui/react";
 import MyResultsIcon from "@/components/icons/MyResultsIcon";
+import { getT } from "@/lib/i18n/get18n";
 
 interface MedalSummaryCardProps {
   gold: number;
@@ -8,11 +9,13 @@ interface MedalSummaryCardProps {
   bronze: number;
 }
 
-const MedalSummaryCard: React.FC<MedalSummaryCardProps> = ({
+const MedalSummaryCard: React.FC<MedalSummaryCardProps> = async ({
   gold,
   silver,
   bronze,
 }) => {
+  const { t } = await getT();
+
   return (
     <Card.Root colorVariant="solid" colorPalette="yellow" overflow="hidden">
       <Float placement="middle-end" offsetX="20">
@@ -24,8 +27,7 @@ const MedalSummaryCard: React.FC<MedalSummaryCardProps> = ({
       </Float>
       <Card.Body>
         <Card.Title textStyle="s4">
-          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-          Medals
+          {t("persons.show.medal_collection")}
         </Card.Title>
         <StatGroup justifyContent="flex-start" gap="5">
           {gold > 0 && (
@@ -33,8 +35,7 @@ const MedalSummaryCard: React.FC<MedalSummaryCardProps> = ({
               <Stat.ValueText alignItems="baseline">
                 <Heading size="3xl">{gold}</Heading>
                 <Stat.ValueUnit color="yellow.contrast">
-                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                  Gold
+                  {t("persons.show.medals.gold")}
                 </Stat.ValueUnit>
               </Stat.ValueText>
             </Stat.Root>
@@ -44,8 +45,7 @@ const MedalSummaryCard: React.FC<MedalSummaryCardProps> = ({
               <Stat.ValueText alignItems="baseline">
                 <Heading size="3xl">{silver}</Heading>
                 <Stat.ValueUnit color="yellow.contrast">
-                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                  Silver
+                  {t("persons.show.medals.silver")}
                 </Stat.ValueUnit>
               </Stat.ValueText>
             </Stat.Root>
@@ -55,8 +55,7 @@ const MedalSummaryCard: React.FC<MedalSummaryCardProps> = ({
               <Stat.ValueText alignItems="baseline">
                 <Heading size="3xl">{bronze}</Heading>
                 <Stat.ValueUnit color="yellow.contrast">
-                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                  Bronze
+                  {t("persons.show.medals.bronze")}
                 </Stat.ValueUnit>
               </Stat.ValueText>
             </Stat.Root>

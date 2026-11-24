@@ -78,18 +78,16 @@ export default function FilteredScrambles({
                         <Table.Row>
                           {isAdmin && (
                             <Table.ColumnHeader>
-                              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                              {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
                               Edit
                             </Table.ColumnHeader>
                           )}
                           <Table.ColumnHeader>
-                            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                            Group
+                            {t("competitions.scrambles_table.group")}
                           </Table.ColumnHeader>
                           <Table.ColumnHeader>#</Table.ColumnHeader>
                           <Table.ColumnHeader>
-                            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                            Scramble
+                            {t("competitions.scrambles_table.scramble")}
                           </Table.ColumnHeader>
                         </Table.Row>
                       </Table.Header>
@@ -101,7 +99,7 @@ export default function FilteredScrambles({
                               <Table.Row key={scramble.id}>
                                 {isAdmin && (
                                   <Table.Cell>
-                                    {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+                                    {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
                                     EDIT
                                   </Table.Cell>
                                 )}
@@ -117,8 +115,9 @@ export default function FilteredScrambles({
                                 )}
                                 <Table.Cell>
                                   {scramble.is_extra
-                                    ? // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
-                                      `Extra ${scramble.scramble_num}`
+                                    ? t("competitions.scrambles_table.extra", {
+                                        number: scramble.scramble_num,
+                                      })
                                     : scramble.scramble_num}
                                 </Table.Cell>
                                 <Table.Cell>{scramble.scramble}</Table.Cell>

@@ -2,6 +2,7 @@ import { Heading, Link, List, Text, VStack } from "@chakra-ui/react";
 import { findCached } from "@/lib/payload/collections";
 import { getT } from "@/lib/i18n/get18n";
 import { Metadata } from "next";
+import TransWithLinks from "@/components/TransWithLinks";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getT();
@@ -11,7 +12,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 export default async function RegulationsHistory() {
-  const { i18n, lng } = await getT();
+  const { t, i18n, lng } = await getT();
 
   const regulationsHistory = await findCached("regulationsHistoryItem", {
     locale: lng,
@@ -31,7 +32,7 @@ export default async function RegulationsHistory() {
   if (regulationsHistoryItems.length === 0) {
     return (
       <Heading>
-        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
         No Regulation History Items, add some!
       </Heading>
     );
@@ -39,32 +40,12 @@ export default async function RegulationsHistory() {
 
   return (
     <VStack gap="8" alignItems="left">
-      <Heading size="5xl">
-        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-        WCA Regulations
-      </Heading>
-      <Heading size="2xl">
-        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-        Older Versions of the Regulations
-      </Heading>
+      <Heading size="5xl">{t("regulations_history.title")}</Heading>
+      <Heading size="2xl">{t("regulations_history.older_versions")}</Heading>
       <Text>
-        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-        Until 2011, the Regulations were maintained by Ron van Bruchem and the
-        WCA Board. Since then, the{" "}
-        <Link href="mailto:wrc@worldcubeassociation.org">
-          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-          WCA Regulations Committee
-        </Link>{" "}
-        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-        is in charge of them.
+        <TransWithLinks i18nKey="regulations_history.maintainers_html" />
       </Text>
-      <Text>
-        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-        Previously, from the January 1st, 2013 release until the January 1st,
-        2025 release, the WCA Regulations were split into the WCA Regulations
-        and the WCA Guidelines. The former contents of both documents were
-        combined into the WCA Regulations for the July 17th, 2025 release.
-      </Text>
+      <Text>{t("regulations_history.guidelines_merge")}</Text>
       <List.Root indented>
         {regulationsHistoryItems.map((item) => (
           <List.Item key={item.id}>
@@ -73,14 +54,15 @@ export default async function RegulationsHistory() {
               <Text>
                 (
                 <Link href={item.changesUrl}>
-                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                  Changes
+                  {t("regulations_history.changes")}
                 </Link>
                 {item.summarizedChangesUrl && (
-                  <Link href={item.summarizedChangesUrl}>
-                    {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                    , Summarized Changes
-                  </Link>
+                  <>
+                    {", "}
+                    <Link href={item.summarizedChangesUrl}>
+                      {t("regulations_history.summarized_changes")}
+                    </Link>
+                  </>
                 )}
                 )
               </Text>
@@ -89,12 +71,7 @@ export default async function RegulationsHistory() {
         ))}
       </List.Root>
       <Text>
-        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-        Current updates to the Regulations are available{" "}
-        <Link href="https://github.com/thewca/wca-regulations/">
-          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-          on GitHub
-        </Link>
+        <TransWithLinks i18nKey="regulations_history.current_updates_html" />
       </Text>
     </VStack>
   );

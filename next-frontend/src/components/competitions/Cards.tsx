@@ -64,17 +64,18 @@ function formatDateRange(start: Date, end: Date): string {
   return `${fullFormatter.format(start)} - ${fullFormatter.format(end)}`;
 }
 
-export function VenueDetailsCard({
+export async function VenueDetailsCard({
   competitionInfo,
 }: {
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
+  const { t } = await getT();
+
   return (
     <Card.Root width="inherit">
       <Card.Body>
         <Card.Title textStyle="s4">
-          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-          Venue Details
+          {t("competitions.competition_form.labels.venue.details")}
         </Card.Title>
         {/* Sized against the card rather than the viewport: the card is narrow on a phone,
             but also in a narrow desktop column, and both want one column. A flex basis
@@ -83,8 +84,7 @@ export function VenueDetailsCard({
           <Stat.Root variant="competition" flexBasis="3xs" flexGrow="1">
             <Stat.Label>
               <VenueIcon />
-              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-              Venue
+              {t("competitions.competition_info.venue")}
             </Stat.Label>
             <ChakraMarkdown paragraphAs={Stat.ValueText}>
               {competitionInfo.venue}
@@ -94,8 +94,7 @@ export function VenueDetailsCard({
           <Stat.Root variant="competition" flexBasis="3xs" flexGrow="1">
             <Stat.Label>
               <MapIcon />
-              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-              Address
+              {t("competitions.competition_info.address")}
             </Stat.Label>
             <Stat.ValueText>{competitionInfo.venue_address}</Stat.ValueText>
           </Stat.Root>
@@ -104,8 +103,7 @@ export function VenueDetailsCard({
             <Stat.Root variant="competition" flexBasis="3xs" flexGrow="1">
               <Stat.Label>
                 <DetailsIcon />
-                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                Details
+                {t("competitions.competition_info.details")}
               </Stat.Label>
               <ChakraMarkdown paragraphAs={Stat.ValueText}>
                 {competitionInfo.venue_details}
@@ -118,17 +116,18 @@ export function VenueDetailsCard({
   );
 }
 
-export function AdditionalInformationCard({
+export async function AdditionalInformationCard({
   competitionInfo,
 }: {
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
+  const { t } = await getT();
+
   return (
     <Card.Root>
       <Card.Body>
         <Card.Title textStyle="s4">
-          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-          Information
+          {t("competitions.competition_info.information")}
         </Card.Title>
         <ChakraMarkdown
           paragraphAs={Card.Description}
@@ -144,17 +143,18 @@ export function AdditionalInformationCard({
   );
 }
 
-export function RefundPolicyCard({
+export async function RefundPolicyCard({
   competitionInfo,
 }: {
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
+  const { t } = await getT();
+
   return (
     <Card.Root>
       <Card.Body>
         <Card.Title textStyle="s4">
-          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-          Refund Policy
+          {t("competitions.competition_info.refund_policy")}
         </Card.Title>
         <Card.Description>
           <RefundPolicyText
@@ -321,17 +321,18 @@ export async function RegistrationCard({
   );
 }
 
-export function EventCard({
+export async function EventCard({
   competitionInfo,
 }: {
   competitionInfo: components["schemas"]["CompetitionInfo"];
 }) {
+  const { t } = await getT();
+
   return (
     <Card.Root>
       <Card.Body>
         <Card.Title textStyle="s4">
-          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-          Events List
+          {t("competitions.competition_info.events")}
         </Card.Title>
         <Wrap gap="4">
           {competitionInfo.event_ids.map((event_id) => (
@@ -380,8 +381,7 @@ export function InfoCard({
           <Stat.Root variant="competition">
             <Stat.Label>
               <CompRegoOpenDateIcon />
-              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-              Date
+              {t("competitions.competition_info.date")}
             </Stat.Label>
             <Stat.ValueText>
               {formatDateRange(
@@ -411,8 +411,7 @@ export function InfoCard({
           <Stat.Root variant="competition">
             <Stat.Label>
               <CompetitorsIcon />
-              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-              Competitor Limit
+              {t("competitions.competition_info.competitor_limit")}
             </Stat.Label>
             <Stat.ValueText>
               <FormatNumber value={competitionInfo.competitor_limit} />
@@ -422,15 +421,10 @@ export function InfoCard({
           <Stat.Root variant="competition">
             <Stat.Label>
               <BookmarkIcon />
-              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-              Bookmarked
+              {t("competitions.competition_info.number_of_bookmarks")}
             </Stat.Label>
             <Stat.ValueText>
               <FormatNumber value={competitionInfo.number_of_bookmarks} />
-              {
-                // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
-                " Times"
-              }
             </Stat.ValueText>
           </Stat.Root>
         </SimpleGrid>

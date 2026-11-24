@@ -112,8 +112,7 @@ export default function LiveUpdatingResultsTable({
               <Switch.Thumb />
             </Switch.Control>
             <Switch.Label>
-              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-              Show combined Results
+              {t("competitions.live.results.show_combined")}
             </Switch.Label>
           </Switch.Root>
         )}
@@ -132,14 +131,12 @@ export default function LiveUpdatingResultsTable({
                 <Switch.Label>
                   <Box
                     hideFrom="md"
-                    // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
-                    aria-label="Forecast view"
+                    aria-label={t("competitions.live.results.forecast_view")}
                   >
                     <LuChartLine />
                   </Box>
                   <Box hideBelow="md">
-                    {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                    Forecast view
+                    {t("competitions.live.results.forecast_view")}
                   </Box>
                 </Switch.Label>
               </Switch.Root>

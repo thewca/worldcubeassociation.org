@@ -32,28 +32,23 @@ export default function PsychsheetTable({
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeader>
-              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-              Pos
+              {t("common.ranking_abbreviations.position")}
             </Table.ColumnHeader>
             <Table.ColumnHeader>
-              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-              Name
+              {t("results.table_elements.name")}
             </Table.ColumnHeader>
             <Table.ColumnHeader>
-              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-              Representing
+              {t("common.user.representing")}
             </Table.ColumnHeader>
             <Table.ColumnHeader>
-              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-              WR
+              {t("common.ranking_abbreviations.world")}
             </Table.ColumnHeader>
             <Table.ColumnHeader
               cursor="pointer"
               aria-sort={sortBy === "single" ? "ascending" : "none"}
               onClick={() => setSortBy("single")}
             >
-              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-              Single
+              {t("common.single")}
             </Table.ColumnHeader>
             {showAverage && (
               <>
@@ -62,12 +57,10 @@ export default function PsychsheetTable({
                   aria-sort={sortBy === "average" ? "ascending" : "none"}
                   onClick={() => setSortBy("average")}
                 >
-                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                  Average
+                  {t("common.average")}
                 </Table.ColumnHeader>
                 <Table.ColumnHeader>
-                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                  WR
+                  {t("common.ranking_abbreviations.world")}
                 </Table.ColumnHeader>
               </>
             )}

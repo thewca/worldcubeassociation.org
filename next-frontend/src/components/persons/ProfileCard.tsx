@@ -60,6 +60,7 @@ const ProfileCard: React.FC<ProfileData> = async ({
 }) => {
   const startYear = Number.parseInt(wcaId.slice(0, 4));
   const currentYear = new Date().getFullYear();
+  const careerYears = currentYear - startYear;
 
   const { t } = await getT();
   const permissions = await getPermissions();
@@ -75,9 +76,7 @@ const ProfileCard: React.FC<ProfileData> = async ({
           <Image
             src={profilePicture}
             rounded="md"
-
-            // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
-            alt="Profile Photo"
+            alt={t("common.user.profile_picture")}
             minW={0}
             maxW={{ base: "3xs", md: "sm" }}
           />
@@ -116,17 +115,13 @@ const ProfileCard: React.FC<ProfileData> = async ({
         <SimpleGrid columns={2}>
           <DataList.Root variant="bold">
             <DataList.Item>
-              <DataList.ItemLabel>
-                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                WCA ID
-              </DataList.ItemLabel>
+              <DataList.ItemLabel>{t("common.user.wca_id")}</DataList.ItemLabel>
               <DataList.ItemValue>{wcaId}</DataList.ItemValue>
             </DataList.Item>
             {gender !== "o" && (
               <DataList.Item>
                 <DataList.ItemLabel>
-                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                  Gender
+                  {t("activerecord.attributes.user.gender")}
                 </DataList.ItemLabel>
                 <DataList.ItemValue>
                   {t(`enums.user.gender.${gender}`)}
@@ -135,26 +130,21 @@ const ProfileCard: React.FC<ProfileData> = async ({
             )}
             <DataList.Item>
               <DataList.ItemLabel>
-                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                Completed Solves
+                {t("persons.show.completed_solves")}
               </DataList.ItemLabel>
               <DataList.ItemValue>{completedSolves}</DataList.ItemValue>
             </DataList.Item>
           </DataList.Root>
           <DataList.Root variant="bold">
             <DataList.Item>
-              <DataList.ItemLabel>
-                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                Region
-              </DataList.ItemLabel>
+              <DataList.ItemLabel>{t("common.country")}</DataList.ItemLabel>
               <DataList.ItemValue>
                 <CountryMap code={regionIso2} t={t} />
               </DataList.ItemValue>
             </DataList.Item>
             <DataList.Item>
               <DataList.ItemLabel>
-                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                Competitions
+                {t("layouts.navigation.competitions")}
               </DataList.ItemLabel>
               <DataList.ItemValue>{competitions}</DataList.ItemValue>
             </DataList.Item>
@@ -164,10 +154,7 @@ const ProfileCard: React.FC<ProfileData> = async ({
       <Card.Body>
         <Card.Title>
           <HStack justify="space-between">
-            <Text textStyle="s4">
-              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-              Achievements
-            </Text>
+            <Text textStyle="s4">{t("persons.show.achievements.title")}</Text>
             <Dialog.Root placement="center" motionPreset="slide-in-bottom">
               <Dialog.Trigger asChild>
                 <IconButton variant="ghost">
@@ -180,38 +167,22 @@ const ProfileCard: React.FC<ProfileData> = async ({
                   <Dialog.Content>
                     <Dialog.Header>
                       <Dialog.Title>
-                        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                        Profile Achievements explained
+                        {t("persons.show.achievements.explanation_title")}
                       </Dialog.Title>
                     </Dialog.Header>
                     <Dialog.Body>
-                      <Text>
-                        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                        Competitors can unlock &apos;Achievements&apos; that get
-                        displayed on their profile. These cover mainly results
-                        based achievements, but not exclusively.
-                      </Text>
-                      <Text>
-                        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                        The badges that can be earned or displayed (right now)
-                        are:
-                      </Text>
+                      <Text>{t("persons.show.achievements.explanation")}</Text>
+                      <Text>{t("persons.show.achievements.badges_intro")}</Text>
                       <List.Root>
                         <List.Item>
-                          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                          Championship Podiums
+                          {t("persons.show.championship_podiums")}
+                        </List.Item>
+                        <List.Item>{t("persons.show.records")}</List.Item>
+                        <List.Item>
+                          {t("persons.show.achievements.career_length")}
                         </List.Item>
                         <List.Item>
-                          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                          Records
-                        </List.Item>
-                        <List.Item>
-                          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                          Career Length
-                        </List.Item>
-                        <List.Item>
-                          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                          Medals won
+                          {t("persons.show.achievements.medals_won")}
                         </List.Item>
                       </List.Root>
                     </Dialog.Body>
@@ -230,8 +201,7 @@ const ProfileCard: React.FC<ProfileData> = async ({
               <NationalChampionshipIcon />
               <Stat.Root>
                 <Stat.Label>
-                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                  Championship Podiums
+                  {t("persons.show.championship_podiums")}
                 </Stat.Label>
                 <Stat.ValueText>{championshipPodiumCount}</Stat.ValueText>
               </Stat.Root>
@@ -243,10 +213,7 @@ const ProfileCard: React.FC<ProfileData> = async ({
                 <LuStar />
               </Icon>
               <Stat.Root>
-                <Stat.Label>
-                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                  Records
-                </Stat.Label>
+                <Stat.Label>{t("persons.show.records")}</Stat.Label>
                 <Stat.ValueText>{recordCount}</Stat.ValueText>
               </Stat.Root>
             </Badge>
@@ -255,15 +222,13 @@ const ProfileCard: React.FC<ProfileData> = async ({
             <Badge variant="achievement">
               <RegulationsHistoryIcon />
               <Stat.Root>
-                <Stat.Label>
-                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                  Career
-                </Stat.Label>
+                <Stat.Label>{t("persons.show.achievements.career")}</Stat.Label>
                 <Stat.ValueText>
-                  {currentYear - startYear}
+                  {careerYears}
                   <Stat.ValueUnit>
-                    {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                    Years
+                    {t("persons.show.achievements.years", {
+                      count: careerYears,
+                    })}
                   </Stat.ValueUnit>
                 </Stat.ValueText>
               </Stat.Root>
@@ -273,10 +238,7 @@ const ProfileCard: React.FC<ProfileData> = async ({
             <Badge variant="achievement">
               <MyResultsIcon />
               <Stat.Root>
-                <Stat.Label>
-                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                  Medals
-                </Stat.Label>
+                <Stat.Label>{t("persons.show.achievements.medals")}</Stat.Label>
                 <Stat.ValueText>{medalCount}</Stat.ValueText>
               </Stat.Root>
             </Badge>

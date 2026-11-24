@@ -35,8 +35,7 @@ function ShortlistItem<T extends DataCompetition>({
       return (
         <DataList.Item>
           <DataList.ItemLabel>
-            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-            Events
+            {t("competitions.competition_info.events")}
           </DataList.ItemLabel>
           <DataList.ItemValue asChild>
             <Wrap gap="4">

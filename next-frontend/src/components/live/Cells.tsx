@@ -55,8 +55,7 @@ export function LiveTableHeader({
           <Table.ColumnHeader textAlign="end">#</Table.ColumnHeader>
           {isAdmin && (
             <Table.ColumnHeader textAlign="center">
-              {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-              ID
+              {t("competitions.live.admin.quit.bulk.id")}
             </Table.ColumnHeader>
           )}
           {!byPerson && (

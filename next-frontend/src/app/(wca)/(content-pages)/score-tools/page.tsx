@@ -44,7 +44,7 @@ export default async function ScoreTools() {
   if (tools.length === 0) {
     return (
       <Heading>
-        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
         No Tools found. Add some
       </Heading>
     );
@@ -77,7 +77,9 @@ export default async function ScoreTools() {
   );
 }
 
-function ToolCard({ tool }: { tool: Tool }) {
+async function ToolCard({ tool }: { tool: Tool }) {
+  const { t } = await getT();
+
   return (
     <Card.Root>
       <Card.Body>
@@ -86,11 +88,7 @@ function ToolCard({ tool }: { tool: Tool }) {
           {tool.isOfficial && (
             <HoverCard.Root openDelay={0} closeDelay={500}>
               <HoverCard.Trigger asChild>
-                <IconButton
-                  variant="ghost"
-                  // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
-                  aria-label="WCA Logo"
-                >
+                <IconButton variant="ghost" aria-label={t("logo.title")}>
                   <WcaLogoIcon boxSize={10} color="fg" />
                 </IconButton>
               </HoverCard.Trigger>
@@ -98,10 +96,7 @@ function ToolCard({ tool }: { tool: Tool }) {
                 <HoverCard.Positioner>
                   <HoverCard.Content>
                     <HoverCard.Arrow />
-                    <Text my="4">
-                      {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                      Developed and maintained by the WST
-                    </Text>
+                    <Text my="4">{t("score_tools.wca_icon_text")}</Text>
                   </HoverCard.Content>
                 </HoverCard.Positioner>
               </Portal>
@@ -111,31 +106,18 @@ function ToolCard({ tool }: { tool: Tool }) {
         <VStack align="left">
           <Text>{tool.description}</Text>
           <Link href={tool.homepageLink}>
-            <CgWebsite />
-            {
-              // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
-              " Website "
-            }
+            <CgWebsite /> {t("competitions.competition_info.website")}{" "}
             <ExternalLinkIcon />
           </Link>
           {tool.guideLink && (
             <Link href={tool.guideLink}>
-              <AiFillQuestionCircle />
-              {
-                // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
-                " Guide "
-              }
+              <AiFillQuestionCircle /> {t("score_tools.guide")}{" "}
               <ExternalLinkIcon />
             </Link>
           )}
           {tool.sourceCodeLink && (
             <Link href={tool.sourceCodeLink}>
-              <GithubIcon />
-              {
-                // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
-                " Sources "
-              }
-              <ExternalLinkIcon />
+              <GithubIcon /> {t("score_tools.sources")} <ExternalLinkIcon />
             </Link>
           )}
         </VStack>

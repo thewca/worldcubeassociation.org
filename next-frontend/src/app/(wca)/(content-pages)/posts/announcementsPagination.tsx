@@ -5,6 +5,7 @@ import Link from "next/link";
 import { route } from "nextjs-routes";
 import type { ComponentProps } from "react";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
+import { useT } from "@/lib/i18n/useI18n";
 
 const pageRoute = (page: number, searchQuery?: string) =>
   route({
@@ -56,6 +57,7 @@ export default function AnnouncementsPagination({
   searchQuery?: string;
 }) {
   const totalPages = Math.ceil(totalAnnouncements / pageSize);
+  const { t } = useT();
 
   if (totalPages <= 1) {
     return null;
@@ -74,9 +76,7 @@ export default function AnnouncementsPagination({
             targetPage={page - 1}
             searchQuery={searchQuery}
             disabled={page === 1}
-
-            // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
-            label="Previous page"
+            label={t("posts.previous_page")}
           >
             <LuChevronLeft />
           </StepLink>
@@ -100,9 +100,7 @@ export default function AnnouncementsPagination({
             targetPage={page + 1}
             searchQuery={searchQuery}
             disabled={page === totalPages}
-
-            // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
-            label="Next page"
+            label={t("posts.next_page")}
           >
             <LuChevronRight />
           </StepLink>

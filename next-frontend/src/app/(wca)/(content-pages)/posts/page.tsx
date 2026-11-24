@@ -20,17 +20,16 @@ type AnnouncementsPageProps = {
   searchParams: Promise<{ [key: string]: string | undefined }>;
 };
 
-export default function AnnouncementsPage({
+export default async function AnnouncementsPage({
   searchParams,
 }: AnnouncementsPageProps) {
+  const { t } = await getT();
+
   return (
     <Box py={8}>
       <Card.Root size="md">
         <Card.Header>
-          <Heading textStyle="h1">
-            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-            Announcements
-          </Heading>
+          <Heading textStyle="h1">{t("homepage.announcements")}</Heading>
         </Card.Header>
         <Card.Body>
           <Suspense fallback={<Loading />}>

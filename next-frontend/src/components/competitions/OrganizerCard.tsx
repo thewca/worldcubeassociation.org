@@ -226,10 +226,7 @@ export default function OrganizationTeamCard({
         </Stat.Root>
 
         <Stat.Root variant="competition">
-          <Stat.Label>
-            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-            Contact
-          </Stat.Label>
+          <Stat.Label>{t("competitions.competition_info.contact")}</Stat.Label>
           {competitionInfo.contact ? (
             <ChakraMarkdown paragraphAs={Stat.ValueText}>
               {competitionInfo.contact}

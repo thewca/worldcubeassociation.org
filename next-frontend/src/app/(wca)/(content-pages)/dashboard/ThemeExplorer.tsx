@@ -73,7 +73,7 @@ export const ColorSemanticTokenDoc = () => {
   return (
     <Stack gap="8" my="8">
       <TokenDoc
-        // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
+        // eslint-disable-next-line no-restricted-syntax -- Backoffice-only text
         title="background"
       >
         <ColorGrid
@@ -84,7 +84,7 @@ export const ColorSemanticTokenDoc = () => {
       </TokenDoc>
 
       <TokenDoc
-        // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
+        // eslint-disable-next-line no-restricted-syntax -- Backoffice-only text
         title="border"
       >
         <ColorGrid
@@ -96,7 +96,7 @@ export const ColorSemanticTokenDoc = () => {
       </TokenDoc>
 
       <TokenDoc
-        // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
+        // eslint-disable-next-line no-restricted-syntax -- Backoffice-only text
         title="text"
       >
         <ColorGrid
@@ -151,7 +151,7 @@ const ColorGridItem = (props: ColorGridItemProps) => {
       >
         {variant === "text" && (
           <Text fontSize="lg">
-            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+            {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
             Ag
           </Text>
         )}

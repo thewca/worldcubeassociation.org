@@ -30,7 +30,7 @@ export default async function Documents() {
   if (documents.length === 0) {
     return (
       <Heading>
-        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
         No documents found. Add some
       </Heading>
     );
@@ -41,10 +41,7 @@ export default async function Documents() {
 
   return (
     <VStack gap="8" alignItems="left">
-      <Heading size="5xl">
-        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-        Documents
-      </Heading>
+      <Heading size="5xl">{t("documents.title")}</Heading>
       <Accordion.Root variant="enclosed" multiple>
         {uncategorized.map((doc) => (
           <Accordion.Item key={doc.id} value={doc.title}>

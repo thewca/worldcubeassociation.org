@@ -24,7 +24,7 @@ export default async function SpeedcubingHistory() {
   if (historyItems.length === 0) {
     return (
       <Heading>
-        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
         No History Items, add some!
       </Heading>
     );

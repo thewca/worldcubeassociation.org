@@ -5,6 +5,7 @@ import { Button, Card, Table, Text } from "@chakra-ui/react";
 import useAPI from "@/lib/wca/useAPI";
 import Loading from "@/components/ui/loading";
 import { toaster } from "@/components/ui/toaster";
+import { useT } from "@/lib/i18n/useI18n";
 
 export default function ScoretakerManager({
   competitionId,
@@ -12,6 +13,7 @@ export default function ScoretakerManager({
   competitionId: string;
 }) {
   const api = useAPI();
+  const { t } = useT();
 
   const { data: registrations, isFetching } = api.useQuery(
     "get",
@@ -51,10 +53,7 @@ export default function ScoretakerManager({
 
   if (!registrations) {
     return (
-      <Text>
-        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-        No registrations found.
-      </Text>
+      <Text>{t("competitions.live.admin.scoretakers.no_registrations")}</Text>
     );
   }
 
@@ -64,15 +63,13 @@ export default function ScoretakerManager({
     <Card.Root>
       <Card.Body>
         <Card.Title>
-          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-          Scoretakers
+          {t("competitions.live.admin.scoretakers.title")}
         </Card.Title>
         <Table.Root>
           <Table.Header>
             <Table.Row>
               <Table.ColumnHeader>
-                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                Name
+                {t("results.table_elements.name")}
               </Table.ColumnHeader>
               <Table.ColumnHeader />
             </Table.Row>
@@ -102,8 +99,7 @@ export default function ScoretakerManager({
                             })
                           }
                         >
-                          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                          Remove
+                          {t("competitions.live.admin.scoretakers.remove")}
                         </Button>
                       ) : (
                         <Button
@@ -116,8 +112,7 @@ export default function ScoretakerManager({
                             })
                           }
                         >
-                          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                          Add as scoretaker
+                          {t("competitions.live.admin.scoretakers.add")}
                         </Button>
                       )}
                     </Table.Cell>

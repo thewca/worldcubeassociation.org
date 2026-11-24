@@ -157,7 +157,7 @@ async function TeamTab({
       {canReadGroupPast && (
         <>
           <Heading size="xl">
-            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+            {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
             Past Roles
           </Heading>
           <MemberTable id={id} isActive={false} />

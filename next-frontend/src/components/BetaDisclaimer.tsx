@@ -3,12 +3,16 @@
 import { useState } from "react";
 import { Button, Dialog, Link, Portal, Text } from "@chakra-ui/react";
 import Cookies from "js-cookie";
+import { Trans } from "react-i18next";
+import { useT } from "@/lib/i18n/useI18n";
 
 const BETA_DISCLAIMER_COOKIE = "beta_disclaimer_accepted";
 
 const ONE_YEAR_IN_DAYS = 365;
 
 export default function BetaDisclaimer() {
+  const { t } = useT();
+
   // Rendered inside <ClientOnly>, so the cookie is readable on first render.
   const [open, setOpen] = useState(() => !Cookies.get(BETA_DISCLAIMER_COOKIE));
 
@@ -38,28 +42,23 @@ export default function BetaDisclaimer() {
           <Dialog.Content>
             <Dialog.Header>
               <Dialog.Title textStyle="h3">
-                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                WCA Website Redesign Beta Disclaimer
+                {t("beta_disclaimer.title")}
               </Dialog.Title>
             </Dialog.Header>
             <Dialog.Body display="flex" alignItems="center">
               <Text textStyle="s2">
-                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                You are viewing the English-only beta version of the redesigned
-                WCA Website. This is intended to give the community a sneak peek
-                at the website, for feedback and discussion. <br />
-                {
-                  // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
-                  " You should expect to find glitches and issues when browsing the website - when you do, please report them via"
-                }{" "}
-                <Link
-                  href="https://docs.google.com/forms/d/e/1FAIpQLSfBIy3E8cpqa6QTg9SG5r6ELyV1FhNMF89fwxPrr1aafgw2Ig/viewform"
-                  textStyle="s2"
-                >
-                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                  the feedback form
-                </Link>
-                .
+                <Trans
+                  t={t}
+                  i18nKey="beta_disclaimer.description_html"
+                  components={{
+                    a: (
+                      <Link
+                        href="https://docs.google.com/forms/d/e/1FAIpQLSfBIy3E8cpqa6QTg9SG5r6ELyV1FhNMF89fwxPrr1aafgw2Ig/viewform"
+                        textStyle="s2"
+                      />
+                    ),
+                  }}
+                />
               </Text>
             </Dialog.Body>
             <Dialog.Footer>
@@ -69,8 +68,7 @@ export default function BetaDisclaimer() {
                 w={{ base: "full", md: "auto" }}
                 onClick={acceptDisclaimer}
               >
-                {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                I understand, let me in!
+                {t("beta_disclaimer.accept")}
               </Button>
             </Dialog.Footer>
           </Dialog.Content>

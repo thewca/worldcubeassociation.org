@@ -32,7 +32,7 @@ export default function AdminModeToggle({
       </Switch.Control>
       {/* No i18n because this is only visible to admins */}
       <Switch.Label>
-        {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
+        {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
         Enable admin mode
       </Switch.Label>
     </Switch.Root>

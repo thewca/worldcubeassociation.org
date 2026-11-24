@@ -246,7 +246,7 @@ async function DelegateGrid({
                 variant="ghost"
                 size="sm"
                 aria-label={
-                  // eslint-disable-next-line no-restricted-syntax -- Existing text added before we started enforcing translations
+                  // eslint-disable-next-line no-restricted-syntax -- Backoffice-only text
                   `Edit ${role.user.name}`
                 }
               >

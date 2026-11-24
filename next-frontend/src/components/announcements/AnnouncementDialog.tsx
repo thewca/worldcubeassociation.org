@@ -14,12 +14,15 @@ import AnnouncementMarkdown from "@/components/announcements/AnnouncementMarkdow
 import { announcementRoute } from "@/components/announcements/announcement";
 import AnnouncementByline from "@/components/announcements/AnnouncementByline";
 import { Announcement, ColorPaletteSelect } from "@/types/payload";
+import { useT } from "@/lib/i18n/useI18n";
 
 /// The announcement's own page is no longer linked from anywhere, so this is
 /// how a reader hands the announcement to someone else. It only renders inside
 /// the dialog body, which `lazyMount` keeps off the server, so reading
 /// `window` here is safe.
 function ShareButton({ announcement }: { announcement: Announcement }) {
+  const { t } = useT();
+
   const shareUrl = new URL(
     announcementRoute(announcement),
     window.location.origin,
@@ -32,9 +35,8 @@ function ShareButton({ announcement }: { announcement: Announcement }) {
           <Clipboard.Indicator copied={<LuCheck />}>
             <LuShare2 />
           </Clipboard.Indicator>
-          <Clipboard.Indicator copied="Link copied">
-            {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-            Share
+          <Clipboard.Indicator copied={t("notifications.copied_to_clipboard")}>
+            {t("posts.share")}
           </Clipboard.Indicator>
         </Button>
       </Clipboard.Trigger>
@@ -56,12 +58,13 @@ export default function AnnouncementDialog({
   announcement: Announcement;
   colorPalette: ColorPaletteSelect;
 }) {
+  const { t } = useT();
+
   return (
     <Dialog.Root size="xl" scrollBehavior="inside" lazyMount>
       <Dialog.Trigger asChild>
         <Button variant="onSolid" size="sm" alignSelf="flex-start">
-          {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-          Read More
+          {t("posts.read_more")}
         </Button>
       </Dialog.Trigger>
       <Portal>
@@ -88,10 +91,7 @@ export default function AnnouncementDialog({
             <Dialog.Footer>
               <ShareButton announcement={announcement} />
               <Dialog.ActionTrigger asChild>
-                <Button variant="onSolid">
-                  {/* eslint-disable-line no-restricted-syntax -- Existing text added before we started enforcing translations */}
-                  Close
-                </Button>
+                <Button variant="onSolid">{t("page.executives.close")}</Button>
               </Dialog.ActionTrigger>
             </Dialog.Footer>
             <Dialog.CloseTrigger asChild>
