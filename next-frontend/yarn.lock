@@ -5591,13 +5591,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@trieb.work/nextjs-turbo-redis-cache@npm:1.18.1":
-  version: 1.18.1
-  resolution: "@trieb.work/nextjs-turbo-redis-cache@npm:1.18.1"
+"@trieb.work/nextjs-turbo-redis-cache@npm:1.18.2":
+  version: 1.18.2
+  resolution: "@trieb.work/nextjs-turbo-redis-cache@npm:1.18.2"
   peerDependencies:
     next: ">=15.0.3 <17.0.0"
     redis: 4.7.0
-  checksum: 10c0/2eacb4870b7404d0e35fe5d53122039935f77502f39980eb78f91df53d823a3556d868e972338857842a04ec5763a39d3f8483cbf4c0464c5a9ac4ee9faebc87
+  checksum: 10c0/17b4a18633be1f79ed258a2301c1999969d65fb60e1da93b0f306d4e7ae869e3b134b0d37f2234d8a72ac53b7d5e55d2156d4e02199ccf4c3c4cea15a6e663cd
   languageName: node
   linkType: hard
 
@@ -12967,7 +12967,7 @@ __metadata:
     "@testing-library/dom": "npm:^10.4.2"
     "@testing-library/jest-dom": "npm:^8.0.0"
     "@testing-library/react": "npm:^16.3.3"
-    "@trieb.work/nextjs-turbo-redis-cache": "npm:1.18.1"
+    "@trieb.work/nextjs-turbo-redis-cache": "npm:1.18.2"
     "@types/accept-language-parser": "npm:^1"
     "@types/aws4": "npm:^1"
     "@types/culori": "npm:^4.0.1"
