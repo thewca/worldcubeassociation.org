@@ -52,6 +52,9 @@ properties:
     example: "https://cubingusa.org/worlds"
   contact:
     type: [string, "null"]
+    description: >-
+      Markdown with how to reach the organizers. If not set,
+      the competition page links to the WCA contact form for this competition instead.
     example: "[Organization team](mailto:worlds@example.com)"
   start_date:
     type: [string, "null"]

@@ -25,6 +25,7 @@ import {
 import { useT } from "@/lib/i18n/useI18n";
 import WcaFlag from "../WcaFlag";
 import { toAvatarName } from "@/lib/utils";
+import RailsLink from "@/components/RailsLink";
 
 type OrganizerPerson =
   components["schemas"]["Person"] | components["schemas"]["Organizer"];
@@ -224,14 +225,25 @@ export default function OrganizationTeamCard({
           </Stat.ValueText>
         </Stat.Root>
 
-        {competitionInfo.contact && (
-          <Stat.Root variant="competition">
-            <Stat.Label>Contact</Stat.Label>
+        <Stat.Root variant="competition">
+          <Stat.Label>Contact</Stat.Label>
+          {competitionInfo.contact ? (
             <ChakraMarkdown paragraphAs={Stat.ValueText}>
               {competitionInfo.contact}
             </ChakraMarkdown>
-          </Stat.Root>
-        )}
+          ) : (
+            <Stat.ValueText>
+              <RailsLink
+                href={`/contact?${new URLSearchParams({
+                  contactRecipient: "competition",
+                  competitionId: competitionInfo.id,
+                })}`}
+              >
+                {t("competitions.competition_info.organization_team")}
+              </RailsLink>
+            </Stat.ValueText>
+          )}
+        </Stat.Root>
       </Card.Body>
     </Card.Root>
   );

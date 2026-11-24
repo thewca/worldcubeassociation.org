@@ -233,6 +233,14 @@ RSpec.describe "API v1 Competitions" do
       expect(response.parsed_body["competition_series_ids"]).to eq [earlier_competition.id, later_competition.id]
     end
 
+    it "returns no contact when the organizers left it blank" do
+      blank_contact_competition = create(:competition, :visible, contact: "")
+
+      get api_v1_competition_path(blank_contact_competition)
+
+      expect(response.parsed_body["contact"]).to be_nil
+    end
+
     it "lists the championships it holds" do
       championship = create(:competition, :visible, championship_types: %w[world PL])
 

@@ -1510,7 +1510,10 @@ export interface components {
             information: string | null;
             /** @example https://cubingusa.org/worlds */
             website: string | null;
-            /** @example [Organization team](mailto:worlds@example.com) */
+            /**
+             * @description Markdown with how to reach the organizers. Null if the organizers did not set one, in which case the competition page links to the WCA contact form for this competition instead.
+             * @example [Organization team](mailto:worlds@example.com)
+             */
             contact: string | null;
             /**
              * Format: date

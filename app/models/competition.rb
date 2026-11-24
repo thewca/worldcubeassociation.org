@@ -2357,7 +2357,7 @@ class Competition < ApplicationRecord
       "status" => status,
       "information" => information,
       "website" => website,
-      "contact" => contact,
+      "contact" => contact.presence,
       "start_date" => start_date,
       "end_date" => end_date,
       "scoretaking_software" => scoretaking_software,
