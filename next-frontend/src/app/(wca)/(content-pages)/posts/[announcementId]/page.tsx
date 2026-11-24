@@ -14,11 +14,15 @@ const findAnnouncement = async (
 
   // `findByID` throws on unknown IDs, and MongoDB additionally throws on IDs
   // that aren't valid ObjectIDs, so query instead of catching two error types.
-  const { docs } = await findCached("announcements", {
-    locale: lng,
-    where: { id: { equals: announcementId } },
-    limit: 1,
-  });
+  const { docs } = await findCached(
+    "announcements",
+    {
+      locale: lng,
+      where: { id: { equals: announcementId } },
+      limit: 1,
+    },
+    "minutes",
+  );
 
   return docs[0] ?? null;
 };

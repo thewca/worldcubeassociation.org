@@ -44,15 +44,19 @@ async function AnnouncementsList({ searchParams }: AnnouncementsPageProps) {
   const currentPage = Math.max(parseInt(page, 10) || 1, 1);
 
   const { t, lng } = await getT();
-  const announcements = await findCached("announcements", {
-    locale: lng,
-    where: q
-      ? { or: [{ title: { like: q } }, { summary: { like: q } }] }
-      : undefined,
-    sort: "-publishedAt",
-    page: currentPage,
-    limit: ANNOUNCEMENTS_PER_PAGE,
-  });
+  const announcements = await findCached(
+    "announcements",
+    {
+      locale: lng,
+      where: q
+        ? { or: [{ title: { like: q } }, { summary: { like: q } }] }
+        : undefined,
+      sort: "-publishedAt",
+      page: currentPage,
+      limit: ANNOUNCEMENTS_PER_PAGE,
+    },
+    "minutes",
+  );
 
   const firstIndexOnPage = (currentPage - 1) * ANNOUNCEMENTS_PER_PAGE;
 
