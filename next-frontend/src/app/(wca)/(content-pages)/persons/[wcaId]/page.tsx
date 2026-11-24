@@ -43,11 +43,11 @@ export default async function PersonOverview({
   const { t } = await getT();
 
   if (error) {
-    return <Text>Error fetching person</Text>;
+    return <Text>{t("errors.next_frontend.load_error.person")}</Text>;
   }
 
   if (!personDetails) {
-    return <Text>Person does not exist</Text>;
+    return <Text>{t("persons.show.not_found")}</Text>;
   }
 
   const roles: {

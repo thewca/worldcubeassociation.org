@@ -15,19 +15,24 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 export default async function About() {
-  const { lng } = await getT();
+  const { t, lng } = await getT();
 
   const aboutPage = await getCachedGlobal("about-us-page", lng);
 
   const aboutItems = aboutPage.blocks;
 
   if (aboutItems.length === 0) {
-    return <Heading>No About Items, add some!</Heading>;
+    return (
+      <Heading>
+        {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
+        No About Items, add some!
+      </Heading>
+    );
   }
 
   return (
     <VStack gap="8" width="full" alignItems="left">
-      <Heading size="5xl">About Us</Heading>
+      <Heading size="5xl">{t("homepage.about_us.title")}</Heading>
       {aboutItems.map((item) => {
         switch (item.blockType) {
           case "callToAction":

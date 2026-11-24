@@ -78,20 +78,29 @@ export function ResultsTable({
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeader>#</Table.ColumnHeader>
-            {isAdmin && <Table.ColumnHeader>Edit</Table.ColumnHeader>}
+            {isAdmin && (
+              <Table.ColumnHeader>
+                {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
+                Edit
+              </Table.ColumnHeader>
+            )}
             <Table.ColumnHeader {...STICKY_COLUMN}>
-              Competitor
+              {t("competitions.live.results.competitor")}
             </Table.ColumnHeader>
-            <Table.ColumnHeader>Best</Table.ColumnHeader>
-            {anyAverages && <Table.ColumnHeader>Average</Table.ColumnHeader>}
-            <Table.ColumnHeader>Representing</Table.ColumnHeader>
+            <Table.ColumnHeader>{t("common.best")}</Table.ColumnHeader>
+            {anyAverages && (
+              <Table.ColumnHeader>{t("common.average")}</Table.ColumnHeader>
+            )}
+            <Table.ColumnHeader>
+              {t("common.user.representing")}
+            </Table.ColumnHeader>
             {showLinkedRoundsView && (
               <Table.ColumnHeader>
                 {t("competitions.results_table.round")}
               </Table.ColumnHeader>
             )}
             <Table.ColumnHeader colSpan={solveCount} textAlign={solveTextAlign}>
-              Solves
+              {t("common.solves")}
             </Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
@@ -107,7 +116,12 @@ export function ResultsTable({
 
               return (
                 <Table.Row key={competitorResult.id}>
-                  {isAdmin && <Table.Cell>EDIT</Table.Cell>}
+                  {isAdmin && (
+                    <Table.Cell>
+                      {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
+                      EDIT
+                    </Table.Cell>
+                  )}
                   {showText && (
                     <PositionCell
                       result={competitorResult}
@@ -209,20 +223,31 @@ export function ByPersonTable({
       <Table.Root>
         <Table.Header>
           <Table.Row>
-            {isAdmin && <Table.ColumnHeader>Edit</Table.ColumnHeader>}
-            <Table.ColumnHeader>Event</Table.ColumnHeader>
-            <Table.ColumnHeader>Round</Table.ColumnHeader>
+            {isAdmin && (
+              <Table.ColumnHeader>
+                {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
+                Edit
+              </Table.ColumnHeader>
+            )}
+            <Table.ColumnHeader>
+              {t("results.table_elements.event")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("competitions.results_table.round")}
+            </Table.ColumnHeader>
             <Table.ColumnHeader>#</Table.ColumnHeader>
-            <Table.ColumnHeader>Best</Table.ColumnHeader>
-            <Table.ColumnHeader>Average</Table.ColumnHeader>
+            <Table.ColumnHeader>{t("common.best")}</Table.ColumnHeader>
+            <Table.ColumnHeader>{t("common.average")}</Table.ColumnHeader>
             {showNationalityColumn && (
-              <Table.ColumnHeader>Representing</Table.ColumnHeader>
+              <Table.ColumnHeader>
+                {t("common.user.representing")}
+              </Table.ColumnHeader>
             )}
             <Table.ColumnHeader
               colSpan={attemptCount}
               textAlign={solveTextAlign}
             >
-              Solves
+              {t("common.solves")}
             </Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
@@ -236,7 +261,12 @@ export function ByPersonTable({
               resultAttempts(competitorResult);
             return (
               <Table.Row key={competitorResult.id}>
-                {isAdmin && <Table.Cell>EDIT</Table.Cell>}
+                {isAdmin && (
+                  <Table.Cell>
+                    {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
+                    EDIT
+                  </Table.Cell>
+                )}
                 <Table.Cell>
                   {isFirstRoundOfEvent && events.byId[eventId].name}
                 </Table.Cell>

@@ -60,6 +60,7 @@ const ProfileCard: React.FC<ProfileData> = async ({
 }) => {
   const startYear = Number.parseInt(wcaId.slice(0, 4));
   const currentYear = new Date().getFullYear();
+  const careerYears = currentYear - startYear;
 
   const { t } = await getT();
   const permissions = await getPermissions();
@@ -75,7 +76,7 @@ const ProfileCard: React.FC<ProfileData> = async ({
           <Image
             src={profilePicture}
             rounded="md"
-            alt="Profile Photo"
+            alt={t("common.user.profile_picture")}
             minW={0}
             maxW={{ base: "3xs", md: "sm" }}
           />
@@ -114,31 +115,37 @@ const ProfileCard: React.FC<ProfileData> = async ({
         <SimpleGrid columns={2}>
           <DataList.Root variant="bold">
             <DataList.Item>
-              <DataList.ItemLabel>WCA ID</DataList.ItemLabel>
+              <DataList.ItemLabel>{t("common.user.wca_id")}</DataList.ItemLabel>
               <DataList.ItemValue>{wcaId}</DataList.ItemValue>
             </DataList.Item>
             {gender !== "o" && (
               <DataList.Item>
-                <DataList.ItemLabel>Gender</DataList.ItemLabel>
+                <DataList.ItemLabel>
+                  {t("activerecord.attributes.user.gender")}
+                </DataList.ItemLabel>
                 <DataList.ItemValue>
                   {t(`enums.user.gender.${gender}`)}
                 </DataList.ItemValue>
               </DataList.Item>
             )}
             <DataList.Item>
-              <DataList.ItemLabel>Completed Solves</DataList.ItemLabel>
+              <DataList.ItemLabel>
+                {t("persons.show.completed_solves")}
+              </DataList.ItemLabel>
               <DataList.ItemValue>{completedSolves}</DataList.ItemValue>
             </DataList.Item>
           </DataList.Root>
           <DataList.Root variant="bold">
             <DataList.Item>
-              <DataList.ItemLabel>Region</DataList.ItemLabel>
+              <DataList.ItemLabel>{t("common.country")}</DataList.ItemLabel>
               <DataList.ItemValue>
                 <CountryMap code={regionIso2} t={t} />
               </DataList.ItemValue>
             </DataList.Item>
             <DataList.Item>
-              <DataList.ItemLabel>Competitions</DataList.ItemLabel>
+              <DataList.ItemLabel>
+                {t("layouts.navigation.competitions")}
+              </DataList.ItemLabel>
               <DataList.ItemValue>{competitions}</DataList.ItemValue>
             </DataList.Item>
           </DataList.Root>
@@ -147,7 +154,7 @@ const ProfileCard: React.FC<ProfileData> = async ({
       <Card.Body>
         <Card.Title>
           <HStack justify="space-between">
-            <Text textStyle="s4">Achievements</Text>
+            <Text textStyle="s4">{t("persons.show.achievements.title")}</Text>
             <Dialog.Root placement="center" motionPreset="slide-in-bottom">
               <Dialog.Trigger asChild>
                 <IconButton variant="ghost">
@@ -160,24 +167,23 @@ const ProfileCard: React.FC<ProfileData> = async ({
                   <Dialog.Content>
                     <Dialog.Header>
                       <Dialog.Title>
-                        Profile Achievements explained
+                        {t("persons.show.achievements.explanation_title")}
                       </Dialog.Title>
                     </Dialog.Header>
                     <Dialog.Body>
-                      <Text>
-                        Competitors can unlock &apos;Achievements&apos; that get
-                        displayed on their profile. These cover mainly results
-                        based achievements, but not exclusively.
-                      </Text>
-                      <Text>
-                        The badges that can be earned or displayed (right now)
-                        are:
-                      </Text>
+                      <Text>{t("persons.show.achievements.explanation")}</Text>
+                      <Text>{t("persons.show.achievements.badges_intro")}</Text>
                       <List.Root>
-                        <List.Item>Championship Podiums</List.Item>
-                        <List.Item>Records</List.Item>
-                        <List.Item>Career Length</List.Item>
-                        <List.Item>Medals won</List.Item>
+                        <List.Item>
+                          {t("persons.show.championship_podiums")}
+                        </List.Item>
+                        <List.Item>{t("persons.show.records")}</List.Item>
+                        <List.Item>
+                          {t("persons.show.achievements.career_length")}
+                        </List.Item>
+                        <List.Item>
+                          {t("persons.show.achievements.medals_won")}
+                        </List.Item>
                       </List.Root>
                     </Dialog.Body>
                     <Dialog.CloseTrigger asChild>
@@ -194,7 +200,9 @@ const ProfileCard: React.FC<ProfileData> = async ({
             <Badge variant="achievement">
               <NationalChampionshipIcon />
               <Stat.Root>
-                <Stat.Label>Championship Podiums</Stat.Label>
+                <Stat.Label>
+                  {t("persons.show.championship_podiums")}
+                </Stat.Label>
                 <Stat.ValueText>{championshipPodiumCount}</Stat.ValueText>
               </Stat.Root>
             </Badge>
@@ -205,7 +213,7 @@ const ProfileCard: React.FC<ProfileData> = async ({
                 <LuStar />
               </Icon>
               <Stat.Root>
-                <Stat.Label>Records</Stat.Label>
+                <Stat.Label>{t("persons.show.records")}</Stat.Label>
                 <Stat.ValueText>{recordCount}</Stat.ValueText>
               </Stat.Root>
             </Badge>
@@ -214,10 +222,14 @@ const ProfileCard: React.FC<ProfileData> = async ({
             <Badge variant="achievement">
               <RegulationsHistoryIcon />
               <Stat.Root>
-                <Stat.Label>Career</Stat.Label>
+                <Stat.Label>{t("persons.show.achievements.career")}</Stat.Label>
                 <Stat.ValueText>
-                  {currentYear - startYear}
-                  <Stat.ValueUnit>Years</Stat.ValueUnit>
+                  {careerYears}
+                  <Stat.ValueUnit>
+                    {t("persons.show.achievements.years", {
+                      count: careerYears,
+                    })}
+                  </Stat.ValueUnit>
                 </Stat.ValueText>
               </Stat.Root>
             </Badge>
@@ -226,7 +238,7 @@ const ProfileCard: React.FC<ProfileData> = async ({
             <Badge variant="achievement">
               <MyResultsIcon />
               <Stat.Root>
-                <Stat.Label>Medals</Stat.Label>
+                <Stat.Label>{t("persons.show.achievements.medals")}</Stat.Label>
                 <Stat.ValueText>{medalCount}</Stat.ValueText>
               </Stat.Root>
             </Badge>

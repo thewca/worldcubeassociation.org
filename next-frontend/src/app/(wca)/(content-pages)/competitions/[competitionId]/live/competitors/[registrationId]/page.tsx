@@ -18,7 +18,7 @@ export default async function PersonResults({
   );
 
   if (!personResultRequest.data) {
-    return <p>Something went wrong while trying to fetch results</p>;
+    return <p>{t("errors.next_frontend.load_error.results")}</p>;
   }
 
   const { results, name, wcaId } = personResultRequest.data;

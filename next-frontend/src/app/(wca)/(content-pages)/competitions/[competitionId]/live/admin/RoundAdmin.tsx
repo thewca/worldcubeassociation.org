@@ -16,6 +16,7 @@ import _ from "lodash";
 import events from "@/lib/wca/data/events";
 import RoundActions from "@/app/(wca)/(content-pages)/competitions/[competitionId]/live/admin/RoundActions";
 import { useAllRoundsInfo } from "@/providers/RoundInfoProvider";
+import { useT } from "@/lib/i18n/useI18n";
 
 export default function RoundAdmin({
   competitionId,
@@ -23,6 +24,7 @@ export default function RoundAdmin({
   competitionId: string;
 }) {
   const { rounds } = useAllRoundsInfo();
+  const { t } = useT();
 
   const roundsById = _.groupBy(rounds, (d) => parseActivityCode(d.id).eventId);
 
@@ -35,7 +37,7 @@ export default function RoundAdmin({
             query: { competitionId },
           })}
         >
-          Manage scoretakers
+          {t("competitions.live.admin.scoretakers.manage")}
         </Link>
       </Button>
       <SimpleGrid columns={3} gap={2}>

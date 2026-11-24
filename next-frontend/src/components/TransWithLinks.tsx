@@ -1,6 +1,6 @@
 "use client";
 
-import { Link } from "@chakra-ui/react";
+import { Code, Link } from "@chakra-ui/react";
 import { Trans } from "react-i18next";
 import { useT } from "@/lib/i18n/useI18n";
 
@@ -23,7 +23,7 @@ export default function TransWithLinks({
       t={t}
       i18nKey={i18nKey}
       values={values}
-      components={{ a: <Link display="inline" /> }}
+      components={{ a: <Link display="inline" />, code: <Code /> }}
     />
   );
 }

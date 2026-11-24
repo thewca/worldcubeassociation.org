@@ -42,7 +42,12 @@ export default async function ScoreTools() {
   const tools = toolResults.docs;
 
   if (tools.length === 0) {
-    return <Heading>No Tools found. Add some</Heading>;
+    return (
+      <Heading>
+        {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
+        No Tools found. Add some
+      </Heading>
+    );
   }
 
   const toolsByCategory = _.groupBy(tools, "category");
@@ -72,7 +77,9 @@ export default async function ScoreTools() {
   );
 }
 
-function ToolCard({ tool }: { tool: Tool }) {
+async function ToolCard({ tool }: { tool: Tool }) {
+  const { t } = await getT();
+
   return (
     <Card.Root>
       <Card.Body>
@@ -81,7 +88,7 @@ function ToolCard({ tool }: { tool: Tool }) {
           {tool.isOfficial && (
             <HoverCard.Root openDelay={0} closeDelay={500}>
               <HoverCard.Trigger asChild>
-                <IconButton variant="ghost" aria-label="WCA Logo">
+                <IconButton variant="ghost" aria-label={t("logo.title")}>
                   <WcaLogoIcon boxSize={10} color="fg" />
                 </IconButton>
               </HoverCard.Trigger>
@@ -89,7 +96,7 @@ function ToolCard({ tool }: { tool: Tool }) {
                 <HoverCard.Positioner>
                   <HoverCard.Content>
                     <HoverCard.Arrow />
-                    <Text my="4">Developed and maintained by the WST</Text>
+                    <Text my="4">{t("score_tools.wca_icon_text")}</Text>
                   </HoverCard.Content>
                 </HoverCard.Positioner>
               </Portal>
@@ -99,16 +106,18 @@ function ToolCard({ tool }: { tool: Tool }) {
         <VStack align="left">
           <Text>{tool.description}</Text>
           <Link href={tool.homepageLink}>
-            <CgWebsite /> Website <ExternalLinkIcon />
+            <CgWebsite /> {t("competitions.competition_info.website")}{" "}
+            <ExternalLinkIcon />
           </Link>
           {tool.guideLink && (
             <Link href={tool.guideLink}>
-              <AiFillQuestionCircle /> Guide <ExternalLinkIcon />
+              <AiFillQuestionCircle /> {t("score_tools.guide")}{" "}
+              <ExternalLinkIcon />
             </Link>
           )}
           {tool.sourceCodeLink && (
             <Link href={tool.sourceCodeLink}>
-              <GithubIcon /> Sources <ExternalLinkIcon />
+              <GithubIcon /> {t("score_tools.sources")} <ExternalLinkIcon />
             </Link>
           )}
         </VStack>

@@ -23,7 +23,12 @@ export default async function LogoPage() {
   const logoItems = logoPage.blocks;
 
   if (logoItems.length === 0) {
-    return <Heading>No Logo Items, add some!</Heading>;
+    return (
+      <Heading>
+        {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
+        No Logo Items, add some!
+      </Heading>
+    );
   }
 
   return (
