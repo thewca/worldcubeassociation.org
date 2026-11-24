@@ -1,10 +1,8 @@
 import { Suspense } from "react";
 import { Box, Card, Heading, Text, VStack } from "@chakra-ui/react";
 import type { Metadata } from "next";
-import { getPayload } from "payload";
-import config from "@payload-config";
+import { findCached } from "@/lib/payload/collections";
 import { getT } from "@/lib/i18n/get18n";
-import { connection } from "next/server";
 import { AnnouncementCard } from "@/components/announcements/AnnouncementCard";
 import { announcementColorPalette } from "@/components/announcements/announcement";
 import { Announcement } from "@/types/payload";
@@ -45,20 +43,20 @@ async function AnnouncementsList({ searchParams }: AnnouncementsPageProps) {
   const { page = "1", q } = await searchParams;
   const currentPage = Math.max(parseInt(page, 10) || 1, 1);
 
-  await connection();
-
   const { t, lng } = await getT();
-  const payload = await getPayload({ config });
-  const announcements = await payload.find({
-    collection: "announcements",
-    locale: lng,
-    where: q
-      ? { or: [{ title: { like: q } }, { summary: { like: q } }] }
-      : undefined,
-    sort: "-publishedAt",
-    page: currentPage,
-    limit: ANNOUNCEMENTS_PER_PAGE,
-  });
+  const announcements = await findCached(
+    "announcements",
+    {
+      locale: lng,
+      where: q
+        ? { or: [{ title: { like: q } }, { summary: { like: q } }] }
+        : undefined,
+      sort: "-publishedAt",
+      page: currentPage,
+      limit: ANNOUNCEMENTS_PER_PAGE,
+    },
+    "minutes",
+  );
 
   const firstIndexOnPage = (currentPage - 1) * ANNOUNCEMENTS_PER_PAGE;
 
