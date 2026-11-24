@@ -517,6 +517,44 @@ RSpec.describe Result do
       end
     end
   end
+
+  describe ".personal_best_ids_by_column" do
+    let(:person) { create(:person) }
+    let!(:result) { create(:result, person: person, best: 1000, average: 2000) }
+
+    def create_later_result(weeks_later, **)
+      competition = create(:competition, starts: result.competition.start_date + weeks_later.weeks)
+      create(:result, person: person, competition: competition, **)
+    end
+
+    it "counts a tie as a personal best" do
+      tied_result = create_later_result(1, best: 1000, average: 2000)
+
+      personal_best_ids = person.results.personal_best_ids_by_column
+
+      expect(personal_best_ids[:best]).to contain_exactly(result.id, tied_result.id)
+      expect(personal_best_ids[:average]).to contain_exactly(result.id, tied_result.id)
+    end
+
+    it "never counts a DNF and keeps judging later results against the last valid one" do
+      create_later_result(1, best: SolveTime::DNF_VALUE, average: SolveTime::DNF_VALUE)
+      create_later_result(2, best: 1100, average: 2100)
+
+      personal_best_ids = person.results.personal_best_ids_by_column
+
+      expect(personal_best_ids[:best]).to contain_exactly(result.id)
+      expect(personal_best_ids[:average]).to contain_exactly(result.id)
+    end
+
+    it "judges each event separately" do
+      other_event_result = create_later_result(1, event_id: "222", format_id: "a", best: 5000, average: 6000)
+
+      personal_best_ids = person.results.personal_best_ids_by_column
+
+      expect(personal_best_ids[:best]).to contain_exactly(result.id, other_event_result.id)
+      expect(personal_best_ids[:average]).to contain_exactly(result.id, other_event_result.id)
+    end
+  end
 end
 
 def build_result(attrs)
