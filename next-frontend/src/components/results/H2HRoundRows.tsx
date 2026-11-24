@@ -152,7 +152,7 @@ function SolveCell({
         lineHeight="short"
         {...OUTCOME_UI[outcome].cell}
       >
-        <Text fontWeight={outcome === "loss" ? "normal" : "bold"}>
+        <Text as="div" fontWeight={outcome === "loss" ? "normal" : "bold"}>
           {ownTime}
         </Text>
         <Text fontSize="xs" opacity={0.8}>
