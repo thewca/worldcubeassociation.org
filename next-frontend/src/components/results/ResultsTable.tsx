@@ -331,11 +331,7 @@ export function ByCompetitionTable({
     >)[];
   t: TFunction;
 }) {
-  const pbMarkers = highlightPersonalBests
-    ? historicalPbMarkers(results)
-    : null;
-
-  const attemptCount = maxAttemptCount(results);
+  const attemptCount = attemptColumnCount(results);
 
   const anyAverages = results.some((res) => res.average !== 0);
 
