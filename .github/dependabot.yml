@@ -106,24 +106,16 @@ updates:
     - "/next-frontend"
   schedule:
     interval: weekly
+    day: monday
+    time: "06:00"
   ignore:
-    # Without this rule, Dependabot opens a PR for each new major version of an image.
-    #   Moving to a new major version is a migration that we plan ourselves.
+    # A new major version of an image is a migration that we plan ourselves.
     - dependency-name: "*"
-      update-types: ["version-update:semver-major"]
-  open-pull-requests-limit: 10
-- package-ecosystem: docker-compose
-  directories:
-    - "/"
-    - "/weblate"
-  schedule:
-    interval: weekly
-  ignore:
-    # Major versions are ignored for the same reason as in the `docker` entry above.
-    - dependency-name: "*"
-      update-types: ["version-update:semver-major"]
-    # The Playwright image in `docker-compose.yml` only holds the browsers for the `@playwright/test` version
-    #   with the same number, and the tests cannot start a browser when the two differ.
-    #   Change the image tag by hand in the PR that bumps `@playwright/test`.
-    - dependency-name: playwright
+      update-types:
+        - "version-update:semver-major"
+    # A new minor version of Ruby is a migration too: the lambda runtime in `infra/` has to follow it.
+    #   For a patch version, add a commit to the Dependabot PR that bumps `.ruby-version` and `infra/wca_on_rails/lambda/Gemfile`.
+    - dependency-name: ruby
+      update-types:
+        - "version-update:semver-minor"
   open-pull-requests-limit: 10
