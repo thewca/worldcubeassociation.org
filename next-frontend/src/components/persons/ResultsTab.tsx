@@ -45,7 +45,7 @@ const Results: React.FC<{ wcaId: string; eventId: string }> = ({
   const {
     data: resultsQuery,
     isLoading,
-    isFetching,
+    isFetchingNextPage,
     hasNextPage,
     fetchNextPage,
   } = api.useInfiniteQuery(
@@ -75,7 +75,7 @@ const Results: React.FC<{ wcaId: string; eventId: string }> = ({
   );
 
   const bottomRef = useOnInView((inView) => {
-    if (inView && hasNextPage && !isFetching) {
+    if (inView) {
       fetchNextPage();
     }
   });
@@ -93,7 +93,7 @@ const Results: React.FC<{ wcaId: string; eventId: string }> = ({
   return (
     <>
       <ByCompetitionTable results={loadedResults} t={t} />
-      {isFetching ? (
+      {isFetchingNextPage ? (
         <Box width="full">
           <Loading />
         </Box>
