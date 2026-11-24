@@ -1414,6 +1414,7 @@ export interface components {
             parameters: {
                 stripePublishableKey: string;
                 connectedAccountId: string;
+                enable_donations: boolean;
             };
         } & {
             /**

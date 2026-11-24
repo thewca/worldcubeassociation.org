@@ -12,8 +12,11 @@ allOf:
             type: string
           connectedAccountId:
             type: string
+          enable_donations:
+            type: boolean
         required:
           - stripePublishableKey
           - connectedAccountId
+          - enable_donations
     required:
       - parameters

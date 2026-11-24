@@ -11,7 +11,7 @@ import RegistrationOpeningMessage from "@/components/competitions/Registration/R
 import RegistrationClosingMessage from "@/components/competitions/Registration/RegistrationClosingMessage";
 import useRegistration from "@/lib/wca/registrations/useRegistration";
 
-type CompetitionInfo = components["schemas"]["CompetitionInfo"];
+type CompetitionInfo = components["schemas"]["V1CompetitionInfo"];
 type StepConfig = components["schemas"]["RegistrationConfig"];
 type Registration = components["schemas"]["RegistrationDataV2"];
 type RegistrationEligibility = components["schemas"]["RegistrationEligibility"];
@@ -29,16 +29,15 @@ function RegistrationFullMessage({
 }) {
   const { t } = useT();
 
-  const message = competitionInfo["registration_full_and_accepted?"]
-    ? "registrations.registration_full"
-    : "registrations.registration_full_include_waiting_list";
-
   return (
     <Alert.Root status="warning" width="full">
       <Alert.Indicator />
       <Alert.Content>
         <Alert.Title>
-          {t(message, { competitor_limit: competitionInfo.competitor_limit })}
+          {t("registrations.registration_full_include_waiting_list", {
+            competitor_limit:
+              competitionInfo.registration_info.competitor_limit,
+          })}
         </Alert.Title>
         <Alert.Description>
           {t("competitions.registration_v2.register.waiting_list_count", {
@@ -65,6 +64,8 @@ export default function RegistrationPanel({
 }) {
   const { t } = useT();
 
+  const registrationInfo = competitionInfo.registration_info;
+
   // The competitor can withdraw from inside the panel, and once registration has closed that is
   //   what decides whether the panel is still theirs to see - so the live registration, not the
   //   one the page was rendered with.
@@ -77,10 +78,10 @@ export default function RegistrationPanel({
   // Ticking rather than computed once, so that the countdown below turns into the panel the
   //   moment registration opens, without the competitor having to reload.
   const registrationHasOpened = usePerpetualState(() =>
-    hasPassed(competitionInfo.registration_open),
+    hasPassed(registrationInfo.opens_at),
   );
   const registrationHasNotClosed = usePerpetualState(() =>
-    hasNotPassed(competitionInfo.registration_close),
+    hasNotPassed(registrationInfo.closes_at),
   );
 
   if (eligibility.banned || eligibility.missing_profile_fields.length > 0) {
@@ -106,17 +107,20 @@ export default function RegistrationPanel({
     hasViewableRegistration;
 
   const isRegistrationFull =
-    competitionInfo["registration_full?"] ||
-    competitionInfo["registration_full_and_accepted?"];
+    registrationInfo.spots_left !== null && registrationInfo.spots_left <= 0;
 
   return (
     <VStack width="full" gap="4" align="stretch">
-      <RegistrationOpeningMessage
-        registrationStart={competitionInfo.registration_open}
-      />
-      <RegistrationClosingMessage
-        registrationEnd={competitionInfo.registration_close}
-      />
+      {registrationInfo.opens_at && (
+        <RegistrationOpeningMessage
+          registrationStart={registrationInfo.opens_at}
+        />
+      )}
+      {registrationInfo.closes_at && (
+        <RegistrationClosingMessage
+          registrationEnd={registrationInfo.closes_at}
+        />
+      )}
       {isPreRegistering && (
         <Alert.Root status="info" width="full">
           <Alert.Indicator />

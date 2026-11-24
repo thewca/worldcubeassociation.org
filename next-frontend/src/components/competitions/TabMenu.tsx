@@ -40,7 +40,7 @@ export default function TabMenu({
   backHref,
   customTabs = [],
 }: {
-  competitionInfo: components["schemas"]["CompetitionInfo"];
+  competitionInfo: components["schemas"]["V1CompetitionInfo"];
   tabs: CompetitionNavTab[];
   backHref?: RouteLiteral;
   customTabs?: string[];
