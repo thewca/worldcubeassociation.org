@@ -3521,6 +3521,7 @@ pt:
       continental_records: Histórico de Recordes Continentais
       national_records: Histórico de Recordes Nacionais
       dual: Dupla
+      round: Ronda
   posts:
     confirm_delete_post: Tem a certeza que quer apagar este post? Esta ação é 
       irreversível.
