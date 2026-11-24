@@ -2328,7 +2328,7 @@ class Competition < ApplicationRecord
     :tabs,
     :championships,
     :competition_venues,
-    { delegates: V1_INFO_TEAM_MEMBER_INCLUDES, organizers: V1_INFO_TEAM_MEMBER_INCLUDES },
+    { delegates: [*V1_INFO_TEAM_MEMBER_INCLUDES, { roles: %i[metadata group] }], organizers: V1_INFO_TEAM_MEMBER_INCLUDES },
   ].freeze
 
   def status
@@ -2414,13 +2414,22 @@ class Competition < ApplicationRecord
     end
   end
 
+  # Senior and Regional Delegate are administrative ranks; at a competition they act as full Delegates.
+  V1_DISTINCT_DELEGATE_STATUSES = RolesMetadataDelegateRegions.statuses.values_at(:trainee_delegate, :junior_delegate).freeze
+
+  # Delegates who retired before role history was recorded have no role at all; like `staff_delegates`, count them as full Delegates.
+  private def v1_delegate_role(member)
+    return unless delegates.include?(member)
+
+    status = member.delegate_status_on(start_date || Date.today)
+    V1_DISTINCT_DELEGATE_STATUSES.include?(status) ? status : RolesMetadataDelegateRegions.statuses[:delegate]
+  end
+
   # TODO: add `lead_organizer` once lead organizers are stored
   private def v1_team_roles(member)
-    delegate_role = member.trainee_delegate? ? "trainee_delegate" : "delegate"
-
     [
       ("organizer" if organizers.include?(member)),
-      (delegate_role if delegates.include?(member)),
+      v1_delegate_role(member),
       ("lead_delegate" if member.id == lead_delegate_id),
     ].compact
   end

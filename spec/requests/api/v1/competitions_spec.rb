@@ -302,14 +302,48 @@ RSpec.describe "API v1 Competitions" do
       expect(response.parsed_body["organization_team"].pluck("id", "roles")).to eq [[delegate.id, %w[organizer delegate lead_delegate]]]
     end
 
-    it "marks trainee delegates" do
+    it "marks trainee and junior delegates" do
       trainee_delegate = create(:trainee_delegate)
-      trainee_competition = create(:competition, :visible, delegates: [create(:delegate), trainee_delegate])
+      junior_delegate = create(:junior_delegate)
+      upcoming_competition = create(:competition, :visible, :future, delegates: [create(:delegate), trainee_delegate, junior_delegate])
 
-      get api_v1_competition_path(trainee_competition)
+      get api_v1_competition_path(upcoming_competition)
 
-      trainee_json = response.parsed_body["organization_team"].find { it["id"] == trainee_delegate.id }
-      expect(trainee_json["roles"]).to eq %w[trainee_delegate]
+      roles_by_id = response.parsed_body["organization_team"].to_h { [it["id"], it["roles"]] }
+      expect(roles_by_id[trainee_delegate.id]).to eq %w[trainee_delegate]
+      expect(roles_by_id[junior_delegate.id]).to eq %w[junior_delegate]
+    end
+
+    it "reports a delegate's status at the time of the competition" do
+      promoted_delegate = create(:user_with_wca_id)
+      create(:trainee_delegate_role, user: promoted_delegate, start_date: 1.year.ago, end_date: 1.month.ago)
+      create(:delegate_role, user: promoted_delegate, start_date: 1.month.ago)
+      past_competition = create(:competition, :visible, starts: 3.months.ago, delegates: [create(:delegate), promoted_delegate])
+
+      get api_v1_competition_path(past_competition)
+
+      promoted_json = response.parsed_body["organization_team"].find { it["id"] == promoted_delegate.id }
+      expect(promoted_json["roles"]).to eq %w[trainee_delegate]
+    end
+
+    it "counts delegates without any recorded role as full delegates" do
+      retired_delegate = create(:user_with_wca_id)
+      past_competition = create(:competition, :visible, :past, delegates: [create(:delegate), retired_delegate])
+
+      get api_v1_competition_path(past_competition)
+
+      retired_json = response.parsed_body["organization_team"].find { it["id"] == retired_delegate.id }
+      expect(retired_json["roles"]).to eq %w[delegate]
+    end
+
+    it "gives organizers no delegate role" do
+      organizer = create(:user_with_wca_id)
+      organizer_competition = create(:competition, :visible, organizers: [organizer])
+
+      get api_v1_competition_path(organizer_competition)
+
+      organizer_json = response.parsed_body["organization_team"].find { it["id"] == organizer.id }
+      expect(organizer_json["roles"]).to eq %w[organizer]
     end
 
     it "lists its schedule venues" do

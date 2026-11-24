@@ -1477,14 +1477,14 @@ export interface components {
             url: string | null;
             avatar: components["schemas"]["UserAvatar"];
             /**
-             * @description Every role this person holds at the competition. A lead delegate also has the `delegate` role. `lead_organizer` is not assigned yet.
+             * @description Every role this person holds at the competition. A lead delegate also has their delegate role. `lead_organizer` is not assigned yet. Whether a delegate is a `trainee_delegate`, `junior_delegate` or `delegate` is taken from their role on the competition's start date. This data is only accurate from April 2024 onwards.
              * @example [
              *       "organizer",
              *       "delegate",
              *       "lead_delegate"
              *     ]
              */
-            roles: ("organizer" | "lead_organizer" | "delegate" | "lead_delegate" | "trainee_delegate")[];
+            roles: ("organizer" | "lead_organizer" | "delegate" | "lead_delegate" | "junior_delegate" | "trainee_delegate")[];
         };
         /** @description The general information about a competition, as shown on its page. Most fields can be null while an unannounced competition is still being set up. */
         V1CompetitionInfo: {
@@ -1511,7 +1511,7 @@ export interface components {
             /** @example https://cubingusa.org/worlds */
             website: string | null;
             /**
-             * @description Markdown with how to reach the organizers. Null if the organizers did not set one, in which case the competition page links to the WCA contact form for this competition instead.
+             * @description Markdown with how to reach the organizers. If not set, the competition page links to the WCA contact form for this competition instead.
              * @example [Organization team](mailto:worlds@example.com)
              */
             contact: string | null;
