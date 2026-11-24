@@ -113,7 +113,7 @@ function AddPerson({
   );
 
   const { data: competitionInfo, isFetching: isFetchingCompetitionInfo } =
-    api.useQuery("get", "/v0/competitions/{competitionId}/", {
+    api.useQuery("get", "/v1/competitions/{competitionId}", {
       params: { path: { competitionId } },
     });
 
@@ -129,7 +129,7 @@ function AddPerson({
       registrations={registrations.filter((r) => !competitors.has(r.id))}
       setSelectedCompetitor={setSelectedCompetitor}
       eventEditsAllowed={hasNotPassedOrNull(
-        competitionInfo.event_change_deadline_date,
+        competitionInfo.registration_info.event_change_deadline,
       )}
       eventId={roundId.split("-r")[0]}
     />
