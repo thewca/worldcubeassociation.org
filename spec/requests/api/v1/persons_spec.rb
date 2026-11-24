@@ -151,6 +151,36 @@ RSpec.describe "API v1 Persons" do
       expect(json.pluck("id")).to contain_exactly(other_event_result.id)
     end
 
+    it "paginates by competition, newest first, keeping all of a competition's results on one page" do
+      newer_competition = create(:competition, starts: result.competition.start_date + 1.week)
+      newer_results = [
+        create(:result, person: person, competition: newer_competition),
+        create(:result, person: person, competition: newer_competition, event_id: "222", format_id: "a"),
+      ]
+
+      get api_v1_person_results_path(person.wca_id), params: { per_page: 1, page: 1 }
+
+      expect(response.parsed_body.pluck("id")).to match_array(newer_results.map(&:id))
+      expect(response.headers["Total"]).to eq "2"
+
+      get api_v1_person_results_path(person.wca_id), params: { per_page: 1, page: 2 }
+
+      expect(response.parsed_body.pluck("id")).to contain_exactly(result.id)
+    end
+
+    it "judges the newest page against results on older pages" do
+      older_competition = create(:competition, starts: result.competition.start_date - 1.week)
+      create(:result, person: person, competition: older_competition, best: result.best - 100, average: result.average + 100)
+
+      get api_v1_person_results_path(person.wca_id), params: { per_page: 1, page: 1 }
+
+      expect(response.parsed_body.first).to include(
+        "id" => result.id,
+        "is_personal_best_single" => false,
+        "is_personal_best_average" => true,
+      )
+    end
+
     it "404s for an unknown WCA ID" do
       get api_v1_person_results_path("1000AAAA01")
 
