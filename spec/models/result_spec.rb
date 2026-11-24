@@ -554,6 +554,40 @@ RSpec.describe Result do
       expect(personal_best_ids[:best]).to contain_exactly(result.id, other_event_result.id)
       expect(personal_best_ids[:average]).to contain_exactly(result.id, other_event_result.id)
     end
+
+    context "with several rounds" do
+      let(:competition) { create(:competition, starts: result.competition.start_date + 1.week) }
+      let(:first_round) { create(:round, competition: competition, event_id: "333oh", number: 1, total_number_of_rounds: 2) }
+      let(:final) { create(:round, competition: competition, event_id: "333oh", number: 2, total_number_of_rounds: 2) }
+
+      def create_round_result(round, **)
+        create(:result, person: person, competition: round.competition, round: round, round_type_id: round.round_type_id, **)
+      end
+
+      it "judges a first round before the final, even if the final's result was created first" do
+        final_result = create_round_result(final, best: 800, average: 1800)
+        first_round_result = create_round_result(first_round, best: 900, average: 1900)
+
+        personal_best_ids = person.results.personal_best_ids_by_type
+
+        expect(personal_best_ids[:best]).to contain_exactly(result.id, first_round_result.id, final_result.id)
+        expect(personal_best_ids[:average]).to contain_exactly(result.id, first_round_result.id, final_result.id)
+      end
+
+      it "does not interleave the rounds of competitions starting on the same day" do
+        later_id_competition = create(:competition, id: "#{competition.id}Z", starts: competition.start_date)
+        later_id_first_round = create(:round, competition: later_id_competition, event_id: "333oh", number: 1, total_number_of_rounds: 2)
+
+        first_round_result = create_round_result(first_round, best: 900, average: 1900)
+        create_round_result(later_id_first_round, best: 800, average: 1800)
+        final_result = create_round_result(final, best: 700, average: 1700)
+
+        personal_best_ids = person.results.personal_best_ids_by_type
+
+        expect(personal_best_ids[:best]).to contain_exactly(result.id, first_round_result.id, final_result.id)
+        expect(personal_best_ids[:average]).to contain_exactly(result.id, first_round_result.id, final_result.id)
+      end
+    end
   end
 end
 

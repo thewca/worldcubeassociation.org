@@ -103,7 +103,7 @@ class Result < ApplicationRecord
   PERSONAL_BEST_COLUMNS = %i[best average].freeze
 
   # Ids of the results whose single (`best`) or `average` tied or beat every earlier one in the same
-  # event, oldest competition first, keyed by type. This is `ResultsHelper#historical_pb_markers`
+  # event, oldest round first, keyed by type. This is `ResultsHelper#historical_pb_markers`
   # ported to SQL, so that a page of results is judged against the person's whole history without loading it.
   def self.personal_best_ids_by_type
     # A result ties or beats every earlier one exactly when it equals the best so far including itself.
@@ -112,7 +112,7 @@ class Result < ApplicationRecord
     bests_so_far = PERSONAL_BEST_COLUMNS.map do |column|
       Arel.sql(<<~SQL.squish)
         MIN(CASE WHEN results.#{column} > 0 THEN results.#{column} END)
-          OVER (PARTITION BY results.event_id ORDER BY competitions.start_date, results.id
+          OVER (PARTITION BY results.event_id ORDER BY competitions.start_date, competitions.id, round_types.rank
                 ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS #{column}_so_far
       SQL
     end
@@ -121,7 +121,7 @@ class Result < ApplicationRecord
 
     # Preloads don't matter for plucking ids, and an included association that is also joined
     # turns into an eager load, which would replace our `select`.
-    ranked = except(:includes).joins(:competition).select(:id, *PERSONAL_BEST_COLUMNS, *bests_so_far)
+    ranked = except(:includes).joins(:competition, :round_type).select(:id, *PERSONAL_BEST_COLUMNS, *bests_so_far)
 
     personal_best_rows = unscoped.from(ranked, :results)
                                  .where(personal_best_conditions.join(" OR "))
