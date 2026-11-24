@@ -22,7 +22,7 @@ class Api::V1::PersonsController < Api::V1::ApiController
     page_results = results.where(competition_id: competitions.ids)
                           .includes(person: { user: { h2h_matches: h2h_match_includes } })
 
-    personal_best_ids_by_column = results.personal_best_ids_by_column
+    personal_best_ids_by_type = results.personal_best_ids_by_type
 
     serialized_results = page_results.as_json(
       only: Result::V1_STANDALONE_SERIALIZE_OPTIONS[:only],
@@ -31,8 +31,8 @@ class Api::V1::PersonsController < Api::V1::ApiController
 
     render json: serialized_results.map { |result_json|
       result_json.merge(
-        "is_personal_best_single" => personal_best_ids_by_column[:best].include?(result_json["id"]),
-        "is_personal_best_average" => personal_best_ids_by_column[:average].include?(result_json["id"]),
+        "is_personal_best_single" => personal_best_ids_by_type[:best].include?(result_json["id"]),
+        "is_personal_best_average" => personal_best_ids_by_type[:average].include?(result_json["id"]),
       )
     }
   end

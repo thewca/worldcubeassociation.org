@@ -103,9 +103,9 @@ class Result < ApplicationRecord
   PERSONAL_BEST_COLUMNS = %i[best average].freeze
 
   # Ids of the results whose single (`best`) or `average` tied or beat every earlier one in the same
-  # event, oldest competition first, keyed by column. This is `ResultsHelper#historical_pb_markers`
+  # event, oldest competition first, keyed by type. This is `ResultsHelper#historical_pb_markers`
   # ported to SQL, so that a page of results is judged against the person's whole history without loading it.
-  def self.personal_best_ids_by_column
+  def self.personal_best_ids_by_type
     # A result ties or beats every earlier one exactly when it equals the best so far including itself.
     # Comparing against the earlier results only would need a frame ending at `1 PRECEDING`, which
     # MySQL recomputes for every row instead of keeping a running minimum, several times slower.
