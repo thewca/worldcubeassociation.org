@@ -325,6 +325,17 @@ function historicalPbMarkers(results: components["schemas"]["V1Result"][]) {
   };
 }
 
+// A regional record outranks a personal best, so the record's own tag wins and "PR"
+// is only shown for a result that was a personal best without being a record.
+function recordOrPersonalBestTag<RecordTag extends string | null | undefined>(
+  record: RecordTag,
+  isPersonalBest: boolean | undefined,
+) {
+  if (record) return record;
+  if (isPersonalBest) return "PR";
+  return record;
+}
+
 export function ByCompetitionTable({
   results,
   t,
@@ -386,6 +397,12 @@ export function ByCompetitionTable({
               const isSinglePB = pbMarkers?.single.has(competitorResult.id);
               const isAvgPB = pbMarkers?.average.has(competitorResult.id);
 
+              const singleTag = recordOrPersonalBestTag(
+                singleRecord,
+                isSinglePB,
+              );
+              const avgTag = recordOrPersonalBestTag(avgRecord, isAvgPB);
+
               const { definedAttempts, bestResultIndex, worstResultIndex } =
                 resultAttempts(competitorResult);
 
@@ -418,42 +435,20 @@ export function ByCompetitionTable({
                   />
                   <Table.Cell
                     color={
-                      isSinglePB || singleRecord
-                        ? personalBestColor(
-                            competitorResult.regional_single_record,
-                          )
-                        : undefined
+                      singleTag ? personalBestColor(singleRecord) : undefined
                     }
                     fontWeight="extrabold"
                   >
-                    <WithRecordTag
-                      recordTag={
-                        singleRecord
-                          ? singleRecord
-                          : isSinglePB
-                            ? "PR"
-                            : undefined
-                      }
-                    >
+                    <WithRecordTag recordTag={singleTag}>
                       {formatAttemptResult(competitorResult.best, eventId)}
                     </WithRecordTag>
                   </Table.Cell>
                   {anyAverages && (
                     <Table.Cell
-                      color={
-                        isAvgPB || avgRecord
-                          ? personalBestColor(
-                              competitorResult.regional_average_record,
-                            )
-                          : undefined
-                      }
+                      color={avgTag ? personalBestColor(avgRecord) : undefined}
                       fontWeight="extrabold"
                     >
-                      <WithRecordTag
-                        recordTag={
-                          avgRecord ? avgRecord : isAvgPB ? "PR" : undefined
-                        }
-                      >
+                      <WithRecordTag recordTag={avgTag}>
                         {formatAttemptResult(competitorResult.average, eventId)}
                       </WithRecordTag>
                     </Table.Cell>
@@ -463,9 +458,7 @@ export function ByCompetitionTable({
                     bestResultIndex={bestResultIndex}
                     worstResultIndex={worstResultIndex}
                     eventId={eventId}
-                    recordTag={
-                      singleRecord ? singleRecord : isSinglePB ? "PR" : null
-                    }
+                    recordTag={singleTag}
                     attemptCount={attemptCount}
                   />
                 </Table.Row>
