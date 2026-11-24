@@ -4,6 +4,7 @@ import countriesFictive from "@/lib/staticData/countries.fictive.json";
 
 import type { ComponentPropsWithoutRef } from "react";
 import { Icon } from "@chakra-ui/react";
+import _ from "lodash";
 import ReactCountryFlag from "react-country-flag";
 
 type IconProps = ComponentPropsWithoutRef<typeof Icon>;
@@ -21,7 +22,7 @@ const WcaFlag = ({ code, size = "md", ...restProps }: WcaFlagProps) => {
 
   const countryCode = code.toUpperCase();
 
-  if (countriesFictive.some(({ iso2 }) => iso2 === countryCode)) {
+  if (_.some(countriesFictive, { iso2: countryCode })) {
     return (
       <OverlappingLocationPins size={size} color="gray.fg" {...restProps} />
     );
