@@ -83,20 +83,28 @@ export function ResultsTable({
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeader>#</Table.ColumnHeader>
-            {isAdmin && <Table.ColumnHeader>Edit</Table.ColumnHeader>}
+            {isAdmin && (
+              <Table.ColumnHeader>
+                {t("competitions.live.admin.edit")}
+              </Table.ColumnHeader>
+            )}
             <Table.ColumnHeader {...STICKY_COLUMN}>
               Competitor
             </Table.ColumnHeader>
-            <Table.ColumnHeader>Best</Table.ColumnHeader>
-            {anyAverages && <Table.ColumnHeader>Average</Table.ColumnHeader>}
-            <Table.ColumnHeader>Representing</Table.ColumnHeader>
+            <Table.ColumnHeader>{t("common.best")}</Table.ColumnHeader>
+            {anyAverages && (
+              <Table.ColumnHeader>{t("common.average")}</Table.ColumnHeader>
+            )}
+            <Table.ColumnHeader>
+              {t("common.user.representing")}
+            </Table.ColumnHeader>
             {showLinkedRoundsView && (
               <Table.ColumnHeader>
                 {t("competitions.results_table.round")}
               </Table.ColumnHeader>
             )}
             <Table.ColumnHeader colSpan={solveCount} textAlign={solveTextAlign}>
-              Solves
+              {t("common.solves")}
             </Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
@@ -112,7 +120,9 @@ export function ResultsTable({
 
               return (
                 <Table.Row key={competitorResult.id}>
-                  {isAdmin && <Table.Cell>EDIT</Table.Cell>}
+                  {isAdmin && (
+                    <Table.Cell>{t("competitions.live.admin.edit")}</Table.Cell>
+                  )}
                   {showText && (
                     <PositionCell
                       result={competitorResult}
@@ -214,20 +224,30 @@ export function ByPersonTable({
       <Table.Root>
         <Table.Header>
           <Table.Row>
-            {isAdmin && <Table.ColumnHeader>Edit</Table.ColumnHeader>}
-            <Table.ColumnHeader>Event</Table.ColumnHeader>
-            <Table.ColumnHeader>Round</Table.ColumnHeader>
+            {isAdmin && (
+              <Table.ColumnHeader>
+                {t("competitions.live.admin.edit")}
+              </Table.ColumnHeader>
+            )}
+            <Table.ColumnHeader>
+              {t("competitions.results_table.event")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("competitions.results_table.round")}
+            </Table.ColumnHeader>
             <Table.ColumnHeader>#</Table.ColumnHeader>
-            <Table.ColumnHeader>Best</Table.ColumnHeader>
-            <Table.ColumnHeader>Average</Table.ColumnHeader>
+            <Table.ColumnHeader>{t("common.best")}</Table.ColumnHeader>
+            <Table.ColumnHeader>{t("common.average")}</Table.ColumnHeader>
             {showNationalityColumn && (
-              <Table.ColumnHeader>Representing</Table.ColumnHeader>
+              <Table.ColumnHeader>
+                {t("common.user.representing")}
+              </Table.ColumnHeader>
             )}
             <Table.ColumnHeader
               colSpan={attemptCount}
               textAlign={solveTextAlign}
             >
-              Solves
+              {t("common.solves")}
             </Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
@@ -241,7 +261,9 @@ export function ByPersonTable({
               resultAttempts(competitorResult);
             return (
               <Table.Row key={competitorResult.id}>
-                {isAdmin && <Table.Cell>EDIT</Table.Cell>}
+                {isAdmin && (
+                  <Table.Cell>{t("competitions.live.admin.edit")}</Table.Cell>
+                )}
                 <Table.Cell>
                   {isFirstRoundOfEvent && events.byId[eventId].name}
                 </Table.Cell>
@@ -369,12 +391,16 @@ export function ByCompetitionTable({
             <Table.ColumnHeader>
               {t("persons.show.competition")}
             </Table.ColumnHeader>
-            <Table.ColumnHeader>Round</Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("competitions.results_table.round")}
+            </Table.ColumnHeader>
             <Table.ColumnHeader>{t("persons.show.place")}</Table.ColumnHeader>
-            <Table.ColumnHeader>Single</Table.ColumnHeader>
-            {anyAverages && <Table.ColumnHeader>Average</Table.ColumnHeader>}
+            <Table.ColumnHeader>{t("common.single")}</Table.ColumnHeader>
+            {anyAverages && (
+              <Table.ColumnHeader>{t("common.average")}</Table.ColumnHeader>
+            )}
             <Table.ColumnHeader colSpan={attemptCount} textAlign="start">
-              Solves
+              {t("common.solves")}
             </Table.ColumnHeader>
           </Table.Row>
         </Table.Header>

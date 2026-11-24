@@ -385,7 +385,7 @@ export function HeadToHeadRoundRows({
         {anyAverages && <Table.Cell />}
         <Table.Cell colSpan={attemptCount} color="fg.muted">
           {matches.length > 0 &&
-            `${matches.length} ${matches.length === 1 ? "match" : "matches"} · ${matchesWon}W ${matches.length - matchesWon}L`}
+            `${matches.length} ${t(matches.length === 1 ? "persons.show.results_table.match" : "persons.show.results_table.matches")} · ${matchesWon}W ${matches.length - matchesWon}L`}
         </Table.Cell>
       </Table.Row>
 

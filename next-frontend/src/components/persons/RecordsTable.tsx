@@ -14,7 +14,6 @@ export default function RecordsTable({
   recordResults: components["schemas"]["V1Results"];
   t: TFunction;
 }) {
-  console.log(recordResults);
   const recordsByType = _.groupBy(
     recordResults,
     (r) => r.regional_single_record || r.regional_average_record,
