@@ -1479,7 +1479,7 @@ export interface components {
             /** @description Always false for organizers until lead organizers are stored. */
             is_lead: boolean;
         };
-        /** @description Unannounced competitions are still being set up, so most of their fields can be null. */
+        /** @description The general information about a competition, as shown on its page. Most fields can be null while an unannounced competition is still being set up. */
         V1CompetitionInfo: {
             /** @example WC2003 */
             id: string;
@@ -1488,7 +1488,13 @@ export interface components {
             /** @example Worlds 2003 */
             short_name: string;
             /**
-             * @description Where the competition is in its lifecycle. A cancelled competition stays `cancelled` even though it was announced before. `results_pending` means it has ended but its results are not posted yet.
+             * @description Where the competition is in its lifecycle:
+             *     - `unconfirmed`: still being set up by its organizers
+             *     - `confirmed`: submitted to the WCAT, waiting to be announced
+             *     - `announced`: public, and not over yet
+             *     - `results_pending`: over, but its results are not posted yet
+             *     - `results_posted`: its results are posted
+             *     - `cancelled`: cancelled
              * @enum {string}
              */
             status: "unconfirmed" | "confirmed" | "announced" | "results_pending" | "results_posted" | "cancelled";
@@ -1519,7 +1525,7 @@ export interface components {
              */
             competition_series_ids: string[];
             /**
-             * @description One entry per championship this competition holds: `world`, a continent ID, a country ISO2 code, or a multi-country group such as `greater_china`. Empty if it is not a championship.
+             * @description The different championship_types this competition holds. A competition can hold several (e.g. a continental and a national championship). Values can be: `world`, a continent ID, a country ISO2 code, or a multi-country group such as `greater_china`. Empty if not a championship.
              * @example [
              *       "world"
              *     ]
