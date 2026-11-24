@@ -49,13 +49,13 @@ import { withWeblateSync } from "@/lib/translate/hooks";
 import { weblateSyncEndpoint } from "@/lib/translate/endpoint";
 import { WCA_CMS_PROVIDER_ID, WCA_ROLES_FIELD } from "@/auth.config";
 import { PHASE_PRODUCTION_BUILD } from "next/constants";
+import { isLiveSite } from "@/lib/wca/isLiveSite";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
 function plugins() {
   const isProduction = process.env.NODE_ENV === "production";
-  const isLiveSite = !!process.env.WCA_LIVE_SITE;
 
   return [
     betterAuthCollections({
@@ -91,7 +91,7 @@ function plugins() {
       enabled: isProduction,
       collections: {
         media: {
-          prefix: isLiveSite ? "media" : "media-staging",
+          prefix: isLiveSite() ? "media" : "media-staging",
           generateFileURL: ({ prefix, filename }) => {
             return `${process.env.MEDIA_BUCKET_CDN!}/${prefix}/${filename}`;
           },
