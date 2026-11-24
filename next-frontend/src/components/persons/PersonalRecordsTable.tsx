@@ -9,12 +9,12 @@ import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import EventIcon from "@/components/EventIcon";
 
 interface RecordsProps {
-  records: components["schemas"]["PersonInfo"]["personal_records"];
+  records: components["schemas"]["V1PersonInfo"]["ranks_by_event"];
 }
 
 const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
-  const getColor = (pr: number) => {
-    if (pr === 0) return undefined;
+  const getColor = (pr?: number) => {
+    if (!pr) return undefined;
     if (pr === 1) return "recordMarkers.personal";
     if (pr < 11) return "recordMarkers.national";
     return undefined;

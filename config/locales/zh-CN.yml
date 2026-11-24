@@ -1594,8 +1594,6 @@ zh-CN:
         open: 报名开启中
         not_open: 报名未开启
         closed: 报名已结束
-      currently_displaying:
-        other: '当前显示：%{count} 场比赛'
       register_now: 立即报名
       view_competition: 查看比赛
       no_more_comps: 无比赛存在。

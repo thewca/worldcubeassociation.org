@@ -1,0 +1,21 @@
+type: object
+required: [wcif_id, name, country_iso2, timezone_id, latitude_degrees, longitude_degrees]
+properties:
+  wcif_id:
+    type: integer
+    example: 1
+  name:
+    type: string
+    example: "Seattle Convention Center"
+  country_iso2:
+    type: string
+    example: "US"
+  timezone_id:
+    type: string
+    example: "America/Los_Angeles"
+  latitude_degrees:
+    type: number
+    example: 47.611387
+  longitude_degrees:
+    type: number
+    example: -122.332554

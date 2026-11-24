@@ -72,16 +72,14 @@ class Result < ApplicationRecord
                 worst_index regional_single_record regional_average_record],
   }.freeze
 
-  # `best_index` / `worst_index` are omitted deliberately: they are derivable from `attempts`.
-  # A result rendered inside a round, which already carries the competition, event and format
-  # context, so this shape holds only what is specific to the competitor.
+  # Use when serializing results that belong to a Round object
   V1_ROUND_SERIALIZE_OPTIONS = {
     only: %w[id pos global_pos best average],
     methods: %w[wca_id name country_iso2 attempts regional_single_record regional_average_record],
   }.freeze
 
-  # The same result rendered on its own, which has to repeat the context a round would carry.
-  V1_SERIALIZE_OPTIONS = {
+  # Shows a result in isolation, and so the competition-specific data is included
+  V1_STANDALONE_SERIALIZE_OPTIONS = {
     only: V1_ROUND_SERIALIZE_OPTIONS[:only],
     methods: V1_ROUND_SERIALIZE_OPTIONS[:methods] |
              %w[competition_id competition_short_name competition_start_date
@@ -102,6 +100,39 @@ class Result < ApplicationRecord
     end
   end
 
+  PERSONAL_BEST_COLUMNS = %i[best average].freeze
+
+  # Ids of the results whose single (`best`) or `average` tied or beat every earlier one in the same
+  # event, oldest round first, keyed by type. This is `ResultsHelper#historical_pb_markers`
+  # ported to SQL, so that a page of results is judged against the person's whole history without loading it.
+  def self.personal_best_ids_by_type
+    # A result ties or beats every earlier one exactly when it equals the best so far including itself.
+    # Comparing against the earlier results only would need a frame ending at `1 PRECEDING`, which
+    # MySQL recomputes for every row instead of keeping a running minimum, several times slower.
+    bests_so_far = PERSONAL_BEST_COLUMNS.map do |column|
+      Arel.sql(<<~SQL.squish)
+        MIN(CASE WHEN results.#{column} > 0 THEN results.#{column} END)
+          OVER (PARTITION BY results.event_id ORDER BY competitions.start_date, competitions.id, round_types.rank
+                ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS #{column}_so_far
+      SQL
+    end
+
+    personal_best_conditions = PERSONAL_BEST_COLUMNS.map { "results.#{it} = #{it}_so_far" }
+
+    # Preloads don't matter for plucking ids, and an included association that is also joined
+    # turns into an eager load, which would replace our `select`.
+    ranked = except(:includes).joins(:competition, :round_type).select(:id, *PERSONAL_BEST_COLUMNS, *bests_so_far)
+
+    personal_best_rows = unscoped.from(ranked, :results)
+                                 .where(personal_best_conditions.join(" OR "))
+                                 .pluck(:id, :best, :best_so_far, :average, :average_so_far)
+
+    {
+      best: personal_best_rows.filter_map { |id, best, best_so_far, _, _| id if best == best_so_far }.to_set,
+      average: personal_best_rows.filter_map { |id, _, _, average, average_so_far| id if average == average_so_far }.to_set,
+    }
+  end
+
   def self.augment_attempts(result_attrs, id_key: "id")
     result_ids = result_attrs.pluck(id_key).uniq
 
@@ -110,5 +141,12 @@ class Result < ApplicationRecord
                                              .transform_values { it.sort_by(&:attempt_number).map(&:value) }
 
     result_attrs.map { it.merge(attempts: result_attempts_by_result[it[id_key]]) }
+  end
+
+  # Make sure to preload the relevant data when calling this method
+  private def participated_matches
+    return [] if person.user.nil?
+
+    person.user.h2h_matches.filter { it.round_id == round_id }
   end
 end

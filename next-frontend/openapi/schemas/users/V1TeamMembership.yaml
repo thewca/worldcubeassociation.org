@@ -1,0 +1,14 @@
+type: object
+description: A team, committee or council that the person is currently a part of (including the WCA Board).
+required:
+  - friendly_id
+  - status
+properties:
+  friendly_id:
+    type: string
+    example: "wst"
+  status:
+    type: [string, "null"]
+    enum: [leader, senior_member, member, null]
+    description: Null for the board, which has no ranks among its members.
+    example: "senior_member"

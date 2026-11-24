@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  Badge,
   Box,
   Button,
   Card,
@@ -25,11 +24,11 @@ import {
   SegmentGroup,
   SimpleGrid,
   Stack,
+  Switch,
   Table,
   Tabs,
   Text,
   VStack,
-  Wrap,
   Select,
   createListCollection,
 } from "@chakra-ui/react";
@@ -47,7 +46,13 @@ import CompRegoCloseDateIcon from "@/components/icons/CompRegoCloseDateIcon";
 
 import { Trans } from "react-i18next";
 import { useSession } from "@/auth.client";
-import { Dispatch, ReactNode, useReducer, useState } from "react";
+import {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useReducer,
+  useState,
+} from "react";
 import {
   competitionFilterReducer,
   createFilterState,
@@ -59,16 +64,20 @@ import {
   sortOrderValues,
 } from "@/lib/wca/competitions/queryUtils";
 import useAPI from "@/lib/wca/useAPI";
+import { usePermissionsQuery } from "@/lib/hooks/usePermissionsQuery";
 import useDebounce from "@/lib/hooks/useDebounce";
 import Loading from "@/components/ui/loading";
 import { useSearchParams } from "next/navigation";
 import { useOnInView } from "react-intersection-observer";
 import { TFunction } from "i18next";
 import { useT } from "@/lib/i18n/useI18n";
+import { useLocale } from "@/lib/i18n/LocaleProvider";
 import RegionSelector from "@/components/RegionSelector";
 import { getDistanceInKm } from "@/lib/math/geolocation";
 import type { GeoCoordinates } from "@/lib/types/geolocation";
 import { FormEventSelector } from "@/components/EventSelector";
+import EventDropdown from "@/components/EventDropdown";
+import { formatDateRange } from "@/lib/dates/format";
 import TabMap from "@/components/competitions/TabMap";
 import { LuMapPin, LuSearch, LuSettings2 } from "react-icons/lu";
 import { Tooltip } from "@/components/ui/tooltip";
@@ -106,6 +115,12 @@ const COORDINATE_PRECISION = 4;
 
 const REGISTRATION_STATUS_KEY = [
   {
+    status: "all",
+    icon: <></>,
+    // i18n-tasks-use t("competitions.index.registration_status.all")
+    labelKey: "competitions.index.registration_status.all",
+  },
+  {
     status: "open",
     icon: <CompRegoNotFullOpenGreenIcon />,
     // i18n-tasks-use t("competitions.index.registration_status.open")
@@ -134,7 +149,7 @@ export default function CompetitionsPage() {
   const [location, setLocation] = useState<GeoCoordinates>();
   // Purely client side: the registration key doubles as a filter over what is already loaded.
   const [registrationStatus, setRegistrationStatus] =
-    useState<RegistrationStatus | null>(null);
+    useState<RegistrationStatus>("all");
   const [distanceUnit, setDistanceUnit] = useState(DEFAULT_DISTANCE_UNIT);
   // Held as a string because that is what NumberInput controls, and it lets the field go
   // empty while the competitor is typing.
@@ -157,6 +172,7 @@ export default function CompetitionsPage() {
   });
 
   const { t } = useT();
+  const lng = useLocale();
 
   const canViewAdminDetails = false;
 
@@ -237,7 +253,7 @@ export default function CompetitionsPage() {
       : loadedCompetitions;
 
   const competitionsFiltered =
-    registrationStatus === null
+    registrationStatus === "all"
       ? competitionsDistanceFiltered
       : competitionsDistanceFiltered.filter(
           (competition) =>
@@ -251,12 +267,21 @@ export default function CompetitionsPage() {
     (competition) => showInProgressSection && isInProgress(competition),
   );
 
+  // Emphasize the first occurrence of each date label so distinct dates are easier to scan.
+  const firstCompetitionIds = new Set(
+    _.uniqBy([...inProgressComps, ...upcomingComps], (competition) =>
+      formatDateRange(competition.start_date, competition.end_date, lng),
+    ).map((competition) => competition.id),
+  );
+
   const loadedCompetitionCount =
     rawCompetitionData?.pages.reduce((total, page) => total + page.length, 0) ??
     0;
 
   return (
-    <VStack gap="8" width="full">
+    <VStack gap="8" width="full" position="relative">
+      {/* Absolutely positioned so this marker adds neither height nor a gap. */}
+      <Box ref={topSentinelRef} position="absolute" />
       <ClientOnly>
         {!session.isPending && !session.data && (
           <RemovableCard
@@ -311,21 +336,38 @@ export default function CompetitionsPage() {
               </Tabs.List>
             </Stack>
           </Card.Header>
-          <Card.Body asChild>
+          <Card.Body asChild pb={0}>
             <Collapsible.Root asChild>
-              <VStack gap="3" borderBottom="black">
-                <FormEventSelector
-                  selectedEvents={filterState.selectedEvents}
-                  title={t("competitions.index.event")}
-                  onEventClick={(eventId) =>
-                    dispatchFilter({ type: "toggle_event", eventId })
-                  }
-                  onClearClick={() => dispatchFilter({ type: "clear_events" })}
-                  onAllClick={() =>
-                    dispatchFilter({ type: "select_all_events" })
-                  }
-                />
-                <SimpleGrid gap="2" width="full" columns={{ base: 1, md: 2 }}>
+              <VStack gap="2" borderBottom="black">
+                <Box hideBelow="lg" width="full">
+                  <FormEventSelector
+                    selectedEvents={filterState.selectedEvents}
+                    title={t("competitions.index.event")}
+                    onEventClick={(eventId) =>
+                      dispatchFilter({ type: "toggle_event", eventId })
+                    }
+                    onClearClick={() =>
+                      dispatchFilter({ type: "clear_events" })
+                    }
+                    onAllClick={() =>
+                      dispatchFilter({ type: "select_all_events" })
+                    }
+                  />
+                </Box>
+                <SimpleGrid
+                  gap="2"
+                  width="full"
+                  columns={{ base: 1, lg: 2 }}
+                  rowGap="0"
+                >
+                  <Box hideFrom="lg" minW="0">
+                    <EventDropdown
+                      selectedEvents={filterState.selectedEvents}
+                      onEventsChange={(eventIds) =>
+                        dispatchFilter({ type: "set_events", eventIds })
+                      }
+                    />
+                  </Box>
                   <RegionSelector
                     t={t}
                     label={t("activerecord.attributes.user.region")}
@@ -365,17 +407,33 @@ export default function CompetitionsPage() {
                     </InputGroup>
                   </Field.Root>
                 </SimpleGrid>
-                <Collapsible.Trigger asChild alignSelf="flex-end">
-                  <Button
-                    variant="outline"
-                    width={{ base: "full", lg: "auto" }}
-                  >
-                    <Icon>
-                      <LuSettings2 />
-                    </Icon>{" "}
-                    {t("competitions.index.advanced_filters")}
-                  </Button>
-                </Collapsible.Trigger>
+                <Stack
+                  direction={{ base: "column", md: "row" }}
+                  align={{ base: undefined, md: "end" }}
+                  justify={{ base: undefined, md: "space-between" }}
+                  width="full"
+                  gap={{ base: 3, md: undefined }}
+                >
+                  <RegistrationSelect
+                    registrationStatus={registrationStatus}
+                    setRegistrationStatus={setRegistrationStatus}
+                    t={t}
+                  />
+
+                  <Collapsible.Trigger asChild>
+                    <Button
+                      variant="outline"
+                      width={{ base: "full", md: "auto" }}
+                      size={{ base: "sm", md: undefined }}
+                    >
+                      <Icon>
+                        <LuSettings2 />
+                      </Icon>{" "}
+                      {t("competitions.index.advanced_filters")}
+                    </Button>
+                  </Collapsible.Trigger>
+                </Stack>
+
                 <Collapsible.Content width="full">
                   <VStack gap="4" width="full" align="stretch">
                     <Stack
@@ -437,42 +495,8 @@ export default function CompetitionsPage() {
               </VStack>
             </Collapsible.Root>
           </Card.Body>
-          <Card.Body pos="relative">
-            {/* Absolutely positioned so this marker adds neither height nor a gap. */}
-            <Box ref={topSentinelRef} position="absolute" />
-
+          <Card.Body pt={0}>
             <Tabs.Content value="list">
-              <Stack
-                direction={{ base: "column", lg: "row" }}
-                justify="space-between"
-                align={{ base: "start", lg: "center" }}
-                mb={3}
-              >
-                <Wrap gapX="3" gapY="1" align="center">
-                  <Text>{t("competitions.index.registration_key")}</Text>
-                  {/* Currently disabled until we have accepted registrations as part of the API https://github.com/thewca/worldcubeassociation.org/pull/15651 */}
-                  {/* full: <CompRegoFullButOpenOrangeIcon /> */}
-                  {REGISTRATION_STATUS_KEY.map(({ status, icon, labelKey }) => (
-                    <Badge
-                      key={status}
-                      as="button"
-                      size="md"
-                      variant={
-                        registrationStatus === status ? "solid" : "surface"
-                      }
-                      cursor="pointer"
-                      onClick={() =>
-                        setRegistrationStatus(
-                          registrationStatus === status ? null : status,
-                        )
-                      }
-                    >
-                      {icon}
-                      {t(labelKey)}
-                    </Badge>
-                  ))}
-                </Wrap>
-              </Stack>
               <Table.ScrollArea>
                 <Table.Root
                   size="xs"
@@ -480,36 +504,21 @@ export default function CompetitionsPage() {
                   borderWidth="2px"
                   stickyHeader
                 >
-                  <Table.Header bg="bg.muted">
-                    <Table.Row>
-                      <Table.ColumnHeader
-                        colSpan={6}
-                        fontWeight="normal"
-                        textAlign="end"
-                        p={2}
-                      >
-                        {t("competitions.index.currently_displaying", {
-                          count: competitionsFiltered.length,
-                        })}
-                      </Table.ColumnHeader>
-                    </Table.Row>
+                  <Table.Header bg="bg.muted" hideBelow="md">
                     <Table.Row>
                       <Table.ColumnHeader></Table.ColumnHeader>
-                      <Table.ColumnHeader>
+                      <Table.ColumnHeader width="1" textAlign="start">
                         {t("competitions.competition_info.date")}
                       </Table.ColumnHeader>
+                      <Table.ColumnHeader></Table.ColumnHeader>
                       <Table.ColumnHeader>
                         {t("competitions.competition_info.name")}
                       </Table.ColumnHeader>
                       <Table.ColumnHeader></Table.ColumnHeader>
-                      <Table.ColumnHeader
-                        display={{ base: "none", md: "table-cell" }}
-                      >
+                      <Table.ColumnHeader hideBelow="lg">
                         {t("competitions.competition_info.location")}
                       </Table.ColumnHeader>
-                      <Table.ColumnHeader
-                        display={{ base: "none", md: "table-cell" }}
-                      >
+                      <Table.ColumnHeader hideBelow="xl">
                         {t("competitions.competition_info.venue")}
                       </Table.ColumnHeader>
                     </Table.Row>
@@ -518,18 +527,42 @@ export default function CompetitionsPage() {
                     {inProgressComps.length > 0 && (
                       <>
                         <TableHeaderRow>
-                          {t("competitions.index.titles.in_progress")}
+                          {t("competitions.index.titles.in_progress_count", {
+                            count: inProgressComps.length,
+                          })}
                         </TableHeaderRow>
                         {inProgressComps.map((comp) => (
-                          <CompetitionTableRow comp={comp} key={comp.id} />
+                          <CompetitionTableRow
+                            comp={comp}
+                            key={comp.id}
+                            isRepeatedDate={!firstCompetitionIds.has(comp.id)}
+                          />
                         ))}
                         <TableHeaderRow>
-                          {t("competitions.index.titles.upcoming")}
+                          {t("competitions.index.titles.upcoming", {
+                            count: upcomingComps.length,
+                          })}
                         </TableHeaderRow>
                       </>
                     )}
+                    {filterState.timeOrder === "past" && (
+                      <TableHeaderRow>
+                        {filterState.selectedYear !== "all_years"
+                          ? t("competitions.index.titles.past", {
+                              year: filterState.selectedYear,
+                              count: upcomingComps.length,
+                            })
+                          : t("competitions.index.titles.past_all", {
+                              count: upcomingComps.length,
+                            })}
+                      </TableHeaderRow>
+                    )}
                     {upcomingComps.map((comp) => (
-                      <CompetitionTableRow comp={comp} key={comp.id} />
+                      <CompetitionTableRow
+                        comp={comp}
+                        key={comp.id}
+                        isRepeatedDate={!firstCompetitionIds.has(comp.id)}
+                      />
                     ))}
                   </Table.Body>
                 </Table.Root>
@@ -783,6 +816,8 @@ function AdvancedFilters({
   dispatchFilter: Dispatch<CompetitionFilterAction>;
   t: TFunction;
 }) {
+  const { data: permissions } = usePermissionsQuery();
+
   const timeOrderItems = [
     { value: "present", label: t("competitions.index.present") },
     {
@@ -902,13 +937,32 @@ function AdvancedFilters({
           </HStack>
         </Checkbox.Label>
       </Checkbox.Root>
+      {permissions?.canSeeAdminCompetitions() && (
+        <Switch.Root
+          minHeight="10"
+          onCheckedChange={() =>
+            window.location.assign(
+              new URL(
+                "/competitions?show_admin_details=yes",
+                process.env.NEXT_PUBLIC_WCA_FRONTEND_API_URL,
+              ),
+            )
+          }
+        >
+          <Switch.HiddenInput />
+          <Switch.Control>
+            <Switch.Thumb />
+          </Switch.Control>
+          <Switch.Label>{t("competitions.index.use_admin_view")}</Switch.Label>
+        </Switch.Root>
+      )}
     </Stack>
   );
 }
 
 function TableHeaderRow({
   children,
-  colSpan = 6,
+  colSpan = 7,
 }: {
   children: ReactNode;
   colSpan?: number;
@@ -920,7 +974,7 @@ function TableHeaderRow({
         // overrides the default highlighting behavior
         _hover={{ bg: "bg", _odd: { bg: "bg.subtle" } }}
       >
-        <Heading textStyle="s4" textAlign="center">
+        <Heading textStyle="tableSection" textAlign="center">
           {children}
         </Heading>
       </Table.Cell>
@@ -1018,5 +1072,52 @@ function SortOrderSelect({
         </Select.Content>
       </Select.Positioner>
     </Select.Root>
+  );
+}
+
+function RegistrationSelect({
+  registrationStatus,
+  setRegistrationStatus,
+  t,
+}: {
+  registrationStatus: RegistrationStatus;
+  setRegistrationStatus: Dispatch<SetStateAction<RegistrationStatus>>;
+  t: TFunction;
+}) {
+  return (
+    <Stack>
+      <Text fontWeight="bold">{t("competitions.index.registration_key")}</Text>
+      {/* Currently disabled until we have accepted registrations as part of the API https://github.com/thewca/worldcubeassociation.org/pull/15651 */}
+      {/* full: <CompRegoFullButOpenOrangeIcon /> */}
+      <SegmentGroup.Root
+        value={registrationStatus}
+        onValueChange={(e) =>
+          setRegistrationStatus(e.value as RegistrationStatus)
+        }
+      >
+        <SegmentGroup.Indicator />
+        {REGISTRATION_STATUS_KEY.map(({ status, icon, labelKey }) => (
+          <SegmentGroup.Item
+            key={status}
+            value={status}
+            flex="1 1 0"
+            minWidth="max-content"
+            justifyContent="center"
+          >
+            <SegmentGroup.ItemText>
+              <Stack
+                direction="row"
+                gap={{ base: 1.5, md: 3 }}
+                fontSize={{ base: "2xs", sm: "xs", md: "sm" }}
+                align="center"
+              >
+                {icon} {t(labelKey)}
+              </Stack>
+            </SegmentGroup.ItemText>
+            <SegmentGroup.ItemHiddenInput />
+          </SegmentGroup.Item>
+        ))}
+      </SegmentGroup.Root>
+    </Stack>
   );
 }

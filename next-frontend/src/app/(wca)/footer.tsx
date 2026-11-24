@@ -7,12 +7,12 @@ import {
   Stack,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { io } from "next/cache";
 import IconDisplay from "@/components/IconDisplay";
 import type { IconName } from "@/components/icons/iconMap";
 import type { Footer, SocialLink } from "@/types/payload";
 import WCALogo from "@/components/WCALogo";
 import { getCachedGlobal } from "@/lib/payload/globals";
+import { getT } from "@/lib/i18n/get18n";
 
 type FooterNavItem = NonNullable<Footer["navigationLinks"]>[number];
 type FooterSocialItem = NonNullable<SocialLink["links"]>[number];
@@ -47,14 +47,11 @@ function FooterLink({ item }: { item: FooterNavItem | FooterSocialItem }) {
 }
 
 export default async function Footer() {
-  // `io()` marks the boundary the build-time prerender stops at, so the Payload reads below
-  // never run while building, where MongoDB is unreachable. It has to stay out here rather
-  // than inside `getCachedGlobal`: within a `"use cache"` scope `io()` resolves immediately.
-  await io();
+  const { lng } = await getT();
 
   const [footer, socialLinksGlobal] = await Promise.all([
-    getCachedGlobal("footer"),
-    getCachedGlobal("social-links"),
+    getCachedGlobal("footer", lng),
+    getCachedGlobal("social-links", lng),
   ]);
 
   const navigationLinks = footer.navigationLinks ?? [];

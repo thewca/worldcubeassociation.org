@@ -14,6 +14,11 @@ class H2hMatch < ApplicationRecord
     methods: %w[competitors sets],
   }.freeze
 
+  SERIALIZATION_INCLUDES = [
+    { h2h_match_competitors: :user },
+    { h2h_sets: { h2h_attempts: %i[h2h_match_competitor live_attempt result_attempt] } },
+  ].freeze
+
   def serializable_hash(options = nil)
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end

@@ -288,27 +288,6 @@ export function ByPersonTable({
   );
 }
 
-// Ids of the results that tied or beat every earlier one, scanning oldest-first.
-// Ports the old Rails `historical_pb_markers`, which coloured a result that was
-// a personal best at the time it was set.
-function personalBestIds(
-  chronologicalResults: components["schemas"]["V1Result"][],
-  value: (result: components["schemas"]["V1Result"]) => number,
-) {
-  const { ids } = chronologicalResults.reduce<{
-    best: number;
-    ids: number[];
-  }>(
-    ({ best, ids }, result) =>
-      value(result) > 0 && value(result) <= best
-        ? { best: value(result), ids: [...ids, result.id] }
-        : { best, ids },
-    { best: Infinity, ids: [] },
-  );
-
-  return new Set(ids);
-}
-
 const competitionStartMillis = (result: components["schemas"]["V1Result"]) =>
   DateTime.fromISO(result.competition_start_date).toMillis();
 
@@ -339,16 +318,16 @@ function recordOrPersonalBestTag<RecordTag extends string | null | undefined>(
 export function ByCompetitionTable({
   results,
   t,
-  highlightPersonalBests = false,
 }: {
-  results: components["schemas"]["V1Result"][];
+  results: (components["schemas"]["V1Result"] &
+    Partial<
+      Pick<
+        components["schemas"]["V1PersonResult"],
+        "is_personal_best_single" | "is_personal_best_average"
+      >
+    >)[];
   t: TFunction;
-  highlightPersonalBests?: boolean;
 }) {
-  const pbMarkers = highlightPersonalBests
-    ? historicalPbMarkers(results)
-    : null;
-
   const attemptCount = maxAttemptCount(results);
 
   const anyAverages = results.some((res) => res.average !== 0);
@@ -394,8 +373,8 @@ export function ByCompetitionTable({
               const singleRecord = competitorResult.regional_single_record;
               const avgRecord = competitorResult.regional_average_record;
 
-              const isSinglePB = pbMarkers?.single.has(competitorResult.id);
-              const isAvgPB = pbMarkers?.average.has(competitorResult.id);
+              const isSinglePB = competitorResult.is_personal_best_single;
+              const isAvgPB = competitorResult.is_personal_best_average;
 
               const singleTag = recordOrPersonalBestTag(
                 singleRecord,
