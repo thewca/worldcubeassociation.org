@@ -42,7 +42,7 @@ class Api::V1::CompetitionsController < Api::V1::ApiController
                         .includes(:competition_event, :linked_round, results: :result_attempts)
                         .sort_by { [it.event.rank, it.number] }
 
-    return unless stale?(competition.results, public: true)
+    return unless stale?(competition.results, public: competition.show_at_all?)
 
     render json: rounds.map(&:to_v1_results_json)
   end
@@ -50,7 +50,7 @@ class Api::V1::CompetitionsController < Api::V1::ApiController
   def podiums
     competition = competition_from_params
 
-    return unless stale?(competition.results, public: true)
+    return unless stale?(competition.results, public: competition.show_at_all?)
 
     render json: competition.to_v1_podiums_json
   end
@@ -72,12 +72,12 @@ class Api::V1::CompetitionsController < Api::V1::ApiController
     render json: rounds.as_json(Round::H2H_SERIALIZE_OPTIONS)
   end
 
-  # Unannounced competitions answer exactly like missing ones, so their IDs can't be probed.
   private def competition_from_params(associations: {})
     competition_id = params[:competition_id] || params[:id]
     competition = Competition.includes(associations).find_by(id: competition_id)
 
     managing_user = authenticated_user if token_has_scope?(MANAGE_COMPETITIONS_SCOPE)
+    # Unannounced competitions answer exactly like missing ones, so their IDs can't be probed.
     raise ActiveRecord::RecordNotFound.new("Competition with id #{competition_id} not found", Competition.name, :id, competition_id) unless competition&.user_can_view?(managing_user)
 
     competition
