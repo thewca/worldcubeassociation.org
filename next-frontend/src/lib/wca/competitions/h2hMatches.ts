@@ -79,6 +79,14 @@ function analyseRaces(
   });
 }
 
+const COMPETITORS_PER_MATCH = 2;
+const FINAL_PLACES = COMPETITORS_PER_MATCH;
+const SEMIFINAL_PLACES = FINAL_PLACES * COMPETITORS_PER_MATCH;
+const QUARTERFINAL_PLACES = SEMIFINAL_PLACES * COMPETITORS_PER_MATCH;
+
+const THIRD_PLACE = 3;
+const FOURTH_PLACE = 4;
+
 // A match's loser finishes below everyone still in the bracket, so the worse of the two final
 // positions gives the stage without needing the rest of the bracket, which this payload lacks.
 // Unknown as soon as either position is, for example after an opponent was anonymized.
@@ -91,13 +99,17 @@ function matchStage(match: H2hMatch): MatchStage | undefined {
   const winnerPos = Math.min(...positions);
   const loserPos = Math.max(...positions);
 
-  if (loserPos <= 2) return { type: "final" };
+  if (loserPos <= FINAL_PLACES) return { type: "final" };
   // Semifinal winners always reach the top two, so 3rd against 4th is its own match.
-  if (winnerPos === 3 && loserPos === 4) return { type: "third_place" };
-  if (loserPos <= 4) return { type: "semifinal" };
-  if (loserPos <= 8) return { type: "quarterfinal" };
+  const isThirdPlaceMatch =
+    winnerPos === THIRD_PLACE && loserPos === FOURTH_PLACE;
+  if (isThirdPlaceMatch) return { type: "third_place" };
+  if (loserPos <= SEMIFINAL_PLACES) return { type: "semifinal" };
+  if (loserPos <= QUARTERFINAL_PLACES) return { type: "quarterfinal" };
 
-  return { type: "stage_of", places: 2 ** Math.ceil(Math.log2(loserPos)) };
+  const stagesToWin = Math.ceil(Math.log2(loserPos));
+
+  return { type: "stage_of", places: COMPETITORS_PER_MATCH ** stagesToWin };
 }
 
 function analyseMatch(wcaId: string, match: H2hMatch): AnalysedMatch[] {

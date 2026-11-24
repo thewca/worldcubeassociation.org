@@ -382,7 +382,7 @@ export function ByCompetitionTable({
                   <HeadToHeadRoundRows
                     key={competitorResult.id}
                     result={competitorResult}
-                    showCompetition={index === 0}
+                    isFirstOfCompetition={index === 0}
                     attemptCount={attemptCount}
                     anyAverages={anyAverages}
                     isSinglePersonalBest={isSingleRecord}
@@ -425,7 +425,7 @@ export function ByCompetitionTable({
                           )
                         : undefined
                     }
-                    fontWeight="extrabold"
+                    textStyle="bestResult"
                   >
                     <WithRecordTag
                       recordTag={
@@ -446,7 +446,7 @@ export function ByCompetitionTable({
                             )
                           : undefined
                       }
-                      fontWeight="extrabold"
+                      textStyle="bestResult"
                     >
                       <WithRecordTag
                         recordTag={

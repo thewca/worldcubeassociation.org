@@ -11,6 +11,7 @@ import {
   Stack,
   Table,
   Text,
+  useRecipe,
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { route } from "nextjs-routes";
@@ -31,22 +32,10 @@ import {
   analyseMatches,
 } from "@/lib/wca/competitions/h2hMatches";
 
-const OUTCOME_UI = {
-  win: {
-    palette: "green",
-    letter: "W",
-    cell: { bg: "bg.success", color: "fg.success" },
-  },
-  loss: {
-    palette: "red",
-    letter: "L",
-    cell: { bg: "bg.error", color: "fg.error" },
-  },
-  tie: {
-    palette: "gray",
-    letter: "=",
-    cell: { bg: "bg.emphasized", color: "fg.muted" },
-  },
+const OUTCOME_PALETTE = {
+  win: "green",
+  loss: "red",
+  tie: "gray",
 } as const;
 
 // The result's best single, which is what a record or personal-best tag refers to.
@@ -55,8 +44,6 @@ type BestSingle = {
   tag: string | null;
   color: string | undefined;
 };
-
-const REVEAL = "0.2s ease";
 
 type CellProps = ComponentProps<typeof Table.Cell>;
 
@@ -77,20 +64,23 @@ function RevealCell({
       {...cellProps}
       py={open ? undefined : "0"}
       borderBottomWidth={open ? undefined : "0"}
-      transition={`padding ${REVEAL}, border-width ${REVEAL}`}
+      transitionProperty="padding, border-width"
+      transitionDuration="moderate"
       _motionReduce={{ transition: "none" }}
       width="fit-content"
     >
       <Box
         display="grid"
         gridTemplateRows={open ? "1fr" : "0fr"}
-        transition={`grid-template-rows ${REVEAL}`}
+        transitionProperty="grid-template-rows"
+        transitionDuration="moderate"
         _motionReduce={{ transition: "none" }}
       >
         <Box
           minH="0"
           visibility={open ? "visible" : "hidden"}
-          transition={`visibility 0s linear ${open ? "0s" : "0.2s"}`}
+          transitionProperty="visibility"
+          transitionDuration="moderate"
         >
           {children}
         </Box>
@@ -119,39 +109,33 @@ function stageLabel({ stage, matchNumber }: AnalysedMatch, t: TFunction) {
 function SolveCell({
   race,
   eventId,
-  recordTag,
+  bestSingle,
   open,
 }: {
   race?: AnalysedRace;
   eventId: string;
-  recordTag: string | null;
+  bestSingle: BestSingle;
   open: boolean;
 }) {
+  const recipe = useRecipe({ key: "h2hSolve" });
+
   if (race?.own === undefined) return <RevealCell open={open} />;
 
   const { own, opponent, outcome } = race;
+  const isBestSingle = own === bestSingle.value;
 
   const ownTime = (
-    <WithRecordTag recordTag={recordTag}>
+    <WithRecordTag recordTag={isBestSingle ? bestSingle.tag : null}>
       {formatAttemptResult(own, eventId)}
     </WithRecordTag>
   );
 
   return (
     <RevealCell open={open} px="1">
-      <Box
-        rounded="md"
-        px="2"
-        py="0.5"
-        textAlign="center"
-        lineHeight="short"
-        {...OUTCOME_UI[outcome].cell}
-      >
-        <Text as="div" fontWeight={outcome === "loss" ? "normal" : "bold"}>
-          {ownTime}
-        </Text>
+      <Box css={recipe({ outcome })}>
+        <Box>{ownTime}</Box>
         {opponent !== undefined && (
-          <Text fontSize="xs" opacity={0.8}>
+          <Text textStyle="annotation">
             {formatAttemptResult(opponent, eventId)}
           </Text>
         )}
@@ -169,11 +153,14 @@ function ScoreBadge({
   own: number;
   opponent: number;
 }) {
-  const { palette, letter } = OUTCOME_UI[outcome];
+  const { t } = useT();
 
   return (
-    <Badge colorPalette={palette}>
-      {letter} {own}–{opponent}
+    <Badge colorPalette={OUTCOME_PALETTE[outcome]}>
+      {/* i18n-tasks-use t("competitions.h2h.score.win") */}
+      {/* i18n-tasks-use t("competitions.h2h.score.loss") */}
+      {/* i18n-tasks-use t("competitions.h2h.score.tie") */}
+      {t(`competitions.h2h.score.${outcome}`, { own, opponent })}
     </Badge>
   );
 }
@@ -221,7 +208,10 @@ function MatchRows({
 }) {
   const { t } = useT();
 
+  const attemptNumbers = _.range(1, attemptCount + 1);
+
   return match.sets.map((set, setIndex) => {
+    const raceByAttemptNumber = _.keyBy(set.races, "attemptNumber");
     const setHoldsBestSingle = set.best === bestSingle.value;
 
     return (
@@ -237,7 +227,7 @@ function MatchRows({
             verticalAlign="top"
           >
             <Stack gap="1" align="start">
-              <Text fontSize="xs" color="fg.muted">
+              <Text textStyle="annotation" color="fg.muted">
                 {stage}
               </Text>
               <OpponentLink opponent={match.opponent} />
@@ -272,21 +262,15 @@ function MatchRows({
           )}
         </RevealCell>
         {anyAverages && <RevealCell open={open} />}
-        {_.range(attemptCount).map((i) => {
-          const race = set.races.find(
-            ({ attemptNumber }) => attemptNumber === i + 1,
-          );
-
-          return (
-            <SolveCell
-              key={i}
-              race={race}
-              eventId={eventId}
-              recordTag={race?.own === bestSingle.value ? bestSingle.tag : null}
-              open={open}
-            />
-          );
-        })}
+        {attemptNumbers.map((attemptNumber) => (
+          <SolveCell
+            key={attemptNumber}
+            race={raceByAttemptNumber[attemptNumber]}
+            eventId={eventId}
+            bestSingle={bestSingle}
+            open={open}
+          />
+        ))}
       </Table.Row>
     );
   });
@@ -298,14 +282,14 @@ function MatchRows({
 // aligned with the classic rows.
 export function HeadToHeadRoundRows({
   result,
-  showCompetition,
+  isFirstOfCompetition,
   attemptCount,
   anyAverages,
   isSinglePersonalBest = false,
   defaultOpen = false,
 }: {
   result: ByCompetitionResultsRow;
-  showCompetition: boolean;
+  isFirstOfCompetition: boolean;
   attemptCount: number;
   anyAverages: boolean;
   isSinglePersonalBest?: boolean;
@@ -320,10 +304,6 @@ export function HeadToHeadRoundRows({
   const matchesLost = matches.filter(
     (match) => match.outcome === "loss",
   ).length;
-  const matchCountLabel =
-    matches.length === 1
-      ? t("persons.show.results_table.match")
-      : t("persons.show.results_table.matches");
   const roundName = t(`rounds.${result.round_type_id}.name`);
 
   const bestSingle: BestSingle = {
@@ -338,7 +318,7 @@ export function HeadToHeadRoundRows({
     <>
       <Table.Row>
         <Table.Cell>
-          {showCompetition && (
+          {isFirstOfCompetition && (
             <Link asChild>
               <NextLink
                 href={route({
@@ -367,7 +347,8 @@ export function HeadToHeadRoundRows({
                 <chakra.span
                   aria-hidden
                   display="inline-block"
-                  transition="transform 0.15s"
+                  transitionProperty="transform"
+                  transitionDuration="fast"
                   transform={open ? "rotate(90deg)" : undefined}
                 >
                   ▸
@@ -378,12 +359,12 @@ export function HeadToHeadRoundRows({
               roundName
             )}
             <Badge size="xs" variant="outline">
-              H2H
+              {t("formats.short.h")}
             </Badge>
           </HStack>
         </Table.Cell>
         <PositionCell result={result} rankingMode={result.ranking_mode} />
-        <Table.Cell color={bestSingle.color} fontWeight="extrabold">
+        <Table.Cell color={bestSingle.color} textStyle="bestResult">
           <WithRecordTag recordTag={bestSingle.tag}>
             {formatAttemptResult(result.best, eventId)}
           </WithRecordTag>
@@ -391,7 +372,11 @@ export function HeadToHeadRoundRows({
         {anyAverages && <Table.Cell />}
         <Table.Cell colSpan={attemptCount} color="fg.muted">
           {matches.length > 0 &&
-            `${matches.length} ${matchCountLabel} · ${matchesWon}W ${matchesLost}L`}
+            t("persons.show.h2h_summary", {
+              count: matches.length,
+              wins: matchesWon,
+              losses: matchesLost,
+            })}
         </Table.Cell>
       </Table.Row>
 
