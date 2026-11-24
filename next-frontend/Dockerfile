@@ -5,8 +5,7 @@ FROM node:26-alpine AS base
 RUN npm install -g corepack
 RUN corepack enable
 
-# We only use this stage for its `vault` binary, which the `runner` stage copies.
-#   The Vault version sits in a `FROM` line because Dependabot reads no other line of a Dockerfile.
+# Vault is its own stage so that its version sits in a `FROM` line, the only line of a Dockerfile that Dependabot reads.
 FROM hashicorp/vault:1.19.5 AS vault
 
 FROM base AS deps
