@@ -2308,6 +2308,132 @@ class Competition < ApplicationRecord
     include: {},
   }.freeze
 
+  V1_INFO_TEAM_MEMBER_SERIALIZE_OPTIONS = {
+    only: %w[id name],
+    methods: %w[url],
+    include: %w[avatar],
+    exclude_deprecated: true,
+  }.freeze
+
+  V1_INFO_VENUE_SERIALIZE_OPTIONS = {
+    only: %w[wcif_id name country_iso2 timezone_id],
+    methods: %w[latitude_degrees longitude_degrees],
+  }.freeze
+
+  V1_INFO_TEAM_MEMBER_INCLUDES = %i[current_avatar delegate_role_metadata].freeze
+
+  V1_INFO_INCLUDES = [
+    :events,
+    :competition_events,
+    :tabs,
+    :championships,
+    :competition_venues,
+    { delegates: [*V1_INFO_TEAM_MEMBER_INCLUDES, { roles: %i[metadata group] }], organizers: V1_INFO_TEAM_MEMBER_INCLUDES },
+  ].freeze
+
+  def status
+    if cancelled?
+      "cancelled"
+    elsif announced? && !show_at_all?
+      "hidden"
+    elsif results_posted?
+      "results_posted"
+    elsif announced? && probably_over?
+      "results_pending"
+    elsif announced?
+      "announced"
+    elsif confirmed?
+      "confirmed"
+    else
+      "unconfirmed"
+    end
+  end
+
+  def to_v1_info_json
+    {
+      "id" => id,
+      "name" => name,
+      "short_name" => short_name,
+      "status" => status,
+      "information" => information,
+      "website" => website,
+      "contact" => contact.presence,
+      "start_date" => start_date,
+      "end_date" => end_date,
+      "scoretaking_software" => scoretaking_software,
+      "number_of_bookmarks" => number_of_bookmarks,
+      "competition_series_ids" => part_of_competition_series? ? series_competitions.visible.ids : [],
+      "championship_types" => championships.map(&:championship_type),
+      "tabs" => tabs.as_json(only: %w[id name]),
+      "events" => {
+        "event_ids" => event_ids,
+        "main_event_id" => main_event_id,
+      },
+      "venues" => competition_venues.as_json(V1_INFO_VENUE_SERIALIZE_OPTIONS),
+      "location" => {
+        "name" => venue,
+        "address" => venue_address,
+        "details" => venue_details,
+        "city" => city,
+        "country_iso2" => country_iso2,
+        "latitude_degrees" => latitude_degrees,
+        "longitude_degrees" => longitude_degrees,
+      },
+      "registration_info" => {
+        "opens_at" => registration_open,
+        "closes_at" => registration_close,
+        "competitor_limit" => (competitor_limit if competitor_limit_enabled?),
+        "spots_left" => spots_left,
+        "waiting_list_count" => waiting_list_count,
+        "on_the_spot_registration" => on_the_spot_registration,
+        "extra_requirements" => extra_registration_requirements,
+        "external_registration_page" => external_registration_page,
+        "event_change_deadline" => event_change_deadline_date,
+        "waiting_list_deadline" => waiting_list_deadline_date,
+        "competitor_can_cancel" => competitor_can_cancel,
+        "fees" => {
+          "currency_code" => currency_code,
+          "base_entry_lowest_denomination" => base_entry_fee_lowest_denomination,
+          "guests_entry_lowest_denomination" => guests_entry_fee_lowest_denomination,
+          "on_the_spot_entry_lowest_denomination" => on_the_spot_entry_fee_lowest_denomination,
+        },
+        "refund_policy" => {
+          "percent" => refund_policy_percent,
+          "limit_date" => refund_policy_limit_date,
+        },
+      },
+      "organization_team" => to_v1_organization_team_json,
+    }
+  end
+
+  def to_v1_organization_team_json
+    (delegates | organizers).sort_by(&:name).map do |member|
+      member.as_json(V1_INFO_TEAM_MEMBER_SERIALIZE_OPTIONS)
+            .except("class")
+            .merge("url" => member.url.presence, "roles" => v1_team_roles(member))
+    end
+  end
+
+  # Senior and Regional Delegate are administrative ranks; at a competition they act as full Delegates.
+  V1_DISTINCT_DELEGATE_STATUSES = RolesMetadataDelegateRegions.statuses.values_at(:trainee_delegate, :junior_delegate).freeze
+
+  # Delegates who retired before role history was recorded have no role at all; like `staff_delegates`, count them as full Delegates.
+  private def v1_delegate_role(member)
+    return unless delegates.include?(member)
+
+    status = member.delegate_status_on(start_date || Date.today)
+    V1_DISTINCT_DELEGATE_STATUSES.include?(status) ? status : RolesMetadataDelegateRegions.statuses[:delegate]
+  end
+
+  # TODO: add `lead_organizer` once lead organizers are stored
+  private def v1_team_roles(member)
+    [
+      ("organizer" if organizers.include?(member)),
+      v1_delegate_role(member),
+      ("lead_delegate" if member.id == lead_delegate_id),
+    ].compact
+  end
+
   def serializable_hash(options = nil)
     # The intent behind this is to have a "good" default setup for serialization.
     # We also want the caller to be able to be picky about the attributes included

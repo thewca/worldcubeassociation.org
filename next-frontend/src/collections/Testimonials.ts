@@ -1,6 +1,7 @@
 import type { CollectionConfig } from "payload";
 import { markdownConvertedField } from "@/collections/helpers";
 import { marketingTeamAccess } from "@/payload.access";
+import { revalidateCollection } from "@/collections/revalidateCollection";
 
 export const Testimonials: CollectionConfig = {
   slug: "testimonials",
@@ -11,6 +12,10 @@ export const Testimonials: CollectionConfig = {
     create: marketingTeamAccess,
     update: marketingTeamAccess,
     delete: marketingTeamAccess,
+  },
+  hooks: {
+    afterChange: [revalidateCollection],
+    afterDelete: [revalidateCollection],
   },
   fields: [
     {

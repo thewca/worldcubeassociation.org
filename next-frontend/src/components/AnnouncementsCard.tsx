@@ -2,18 +2,15 @@ import { Accordion, Link as ChakraLink, Stack, Text } from "@chakra-ui/react";
 import AnnouncementContent from "@/components/AnnouncementContent";
 import { Announcement, ColorPaletteSelect } from "@/types/payload";
 import { LuChevronsRight } from "react-icons/lu";
-import { announcementByline } from "@/components/announcements/announcement";
-import { getT } from "@/lib/i18n/get18n";
+import AnnouncementByline from "@/components/announcements/AnnouncementByline";
 
-async function AnnouncementItem({
+function AnnouncementItem({
   announcement,
   colorPalette,
 }: {
   announcement: Announcement;
   colorPalette: ColorPaletteSelect;
 }) {
-  const { lng } = await getT();
-
   return (
     <Accordion.Item
       value={announcement.id}
@@ -29,7 +26,9 @@ async function AnnouncementItem({
         <Accordion.ItemIndicator _open={{ display: "none" }} />
         <Stack gap={1} alignItems="flex-start">
           <Text textStyle="s1">{announcement.title}</Text>
-          <Text>{announcementByline(announcement, lng)}</Text>
+          <Text>
+            <AnnouncementByline announcement={announcement} />
+          </Text>
         </Stack>
       </Accordion.ItemTrigger>
       <Accordion.ItemContent>

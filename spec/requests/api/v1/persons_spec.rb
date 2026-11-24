@@ -43,6 +43,20 @@ RSpec.describe "API v1 Persons" do
       expect(json["delegate_status"]).to eq "delegate"
     end
 
+    it "serializes the id of the person's user" do
+      user = create(:user_with_wca_id)
+
+      get api_v1_person_path(user.wca_id)
+
+      expect(response.parsed_body["user_id"]).to eq user.id
+    end
+
+    it "serializes a null user id for a person without a user" do
+      get api_v1_person_path(person.wca_id)
+
+      expect(response.parsed_body).to include("user_id" => nil)
+    end
+
     it "serializes a rank per event the person has a single for" do
       create(:ranks_single, person_id: person.wca_id, event_id: "333")
 
