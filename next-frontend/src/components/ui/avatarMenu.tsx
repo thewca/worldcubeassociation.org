@@ -63,6 +63,16 @@ function EntryLink({
   );
 }
 
+export function AvatarMenuSkeleton() {
+  return (
+    <Skeleton
+      boxSize={{ base: 7, md: 10 }}
+      me={{ base: 0, md: 2 }}
+      rounded="full"
+    />
+  );
+}
+
 export default function Wrapper({
   session,
   cmsEntries,
@@ -73,7 +83,7 @@ export default function Wrapper({
   permissions?: UserPermissions;
 }) {
   return (
-    <ClientOnly fallback={<Skeleton boxSize={8} />}>
+    <ClientOnly fallback={<AvatarMenuSkeleton />}>
       <AvatarMenu
         session={session}
         cmsEntries={cmsEntries}

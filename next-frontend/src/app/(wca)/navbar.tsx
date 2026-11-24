@@ -22,7 +22,7 @@ import { LuChevronDown, LuExternalLink, LuMenu } from "react-icons/lu";
 import LanguageSelector from "@/components/ui/languageSelector";
 import IconDisplay from "@/components/IconDisplay";
 import type { IconName } from "@/types/payload";
-import AvatarMenu from "@/components/ui/avatarMenu";
+import AvatarMenu, { AvatarMenuSkeleton } from "@/components/ui/avatarMenu";
 import getPermissions from "@/lib/wca/permissions.server";
 import WCALogo from "@/components/WCALogo";
 import WcaSearch from "@/components/SearchBar/WcaSearch";
@@ -319,7 +319,7 @@ export default async function Navbar() {
               <LanguageSelector />
             </Box>
             <Box hideBelow="md">
-              <Suspense>
+              <Suspense fallback={<AvatarMenuSkeleton />}>
                 <SessionAvatarMenu />
               </Suspense>
             </Box>
@@ -495,7 +495,7 @@ export default async function Navbar() {
               <VStack align="stretch" hideFrom="md" gap={1}>
                 <ColorModeMobileNavButton />
                 <LanguageSelector />
-                <Suspense>
+                <Suspense fallback={<AvatarMenuSkeleton />}>
                   <SessionAvatarMenu />
                 </Suspense>
               </VStack>
