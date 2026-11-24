@@ -94,7 +94,7 @@
   "devDependencies": {
     "@chakra-ui/cli": "^3.38.0",
     "@eslint/eslintrc": "^3",
-    "@redocly/cli": "2.78.0",
+    "@redocly/cli": "2.82.0",
     "@stylistic/eslint-plugin": "^6.0.0",
     "@tanstack/eslint-plugin-query": "^5.108.3",
     "@testing-library/dom": "^10.4.2",
