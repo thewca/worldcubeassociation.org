@@ -1,4 +1,3 @@
-import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
 import TabEvents from "@/components/competitions/TabEvents";
 
 export default async function Events({
@@ -8,12 +7,5 @@ export default async function Events({
 }) {
   const { competitionId } = await params;
 
-  const competitionInfo = await getCompetitionInfo(competitionId)!;
-
-  return (
-    <TabEvents
-      competitionId={competitionId}
-      forceQualifications={competitionInfo.data!["uses_qualification?"]}
-    />
-  );
+  return <TabEvents competitionId={competitionId} />;
 }

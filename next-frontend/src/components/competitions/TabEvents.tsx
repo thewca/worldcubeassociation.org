@@ -15,13 +15,9 @@ import OpenapiError from "@/components/ui/openapiError";
 
 interface TabEventsProps {
   competitionId: string;
-  forceQualifications?: boolean;
 }
 
-export default async function TabEvents({
-  competitionId,
-  forceQualifications = false,
-}: TabEventsProps) {
+export default async function TabEvents({ competitionId }: TabEventsProps) {
   const { t } = await getT();
   const { data: events, error, response } = await getEvents(competitionId);
 
@@ -37,8 +33,9 @@ export default async function TabEvents({
     event.rounds.some((round) => Boolean(round.cutoff)),
   );
 
-  const showQualifications =
-    forceQualifications || events.some((event) => Boolean(event.qualification));
+  const showQualifications = events.some((event) =>
+    Boolean(event.qualification),
+  );
 
   return (
     <Card.Root>
@@ -130,10 +127,7 @@ export default async function TabEvents({
         </Table.ScrollArea>
       </Card.Body>
       <Card.Footer>
-        <TimeLimitCutoffFooter
-          events={events}
-          forceQualifications={forceQualifications}
-        />
+        <TimeLimitCutoffFooter events={events} />
       </Card.Footer>
     </Card.Root>
   );

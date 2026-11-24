@@ -10,14 +10,15 @@ import { hasPassed, hasPassedEndOfDay } from "../wca/dates";
 const LIVE_RESULT_BETA = !!process.env.LIVE_RESULT_BETA;
 
 export function competitionStatus(
-  competitionInfo: components["schemas"]["CompetitionInfo"],
+  competitionInfo: components["schemas"]["V1CompetitionInfo"],
 ) {
   const hasEnded =
     hasPassedEndOfDay(competitionInfo.end_date) && !LIVE_RESULT_BETA;
 
   const isOngoing = !hasEnded && hasPassed(competitionInfo.start_date);
 
-  const isAwaitingResults = hasEnded && !competitionInfo.results_posted_at;
+  const isAwaitingResults =
+    hasEnded && competitionInfo.status !== "results_posted";
 
   return { hasEnded, isOngoing, isAwaitingResults };
 }

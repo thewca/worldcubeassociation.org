@@ -32,7 +32,7 @@ export default async function Competitors({
   return (
     <TabCompetitors
       id={competitionId}
-      eventIds={competitionInfo.event_ids}
+      eventIds={competitionInfo.events.event_ids}
       isLive={isLive}
       addOnTheSpotSlot={
         isLive && (

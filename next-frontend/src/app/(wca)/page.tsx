@@ -325,7 +325,14 @@ const FeaturedCompetition = async ({
             {competition.name}
           </Card.Title>
           <CompetitionShortlist
-            comp={competition}
+            comp={{
+              city: competition.location.city,
+              country_iso2: competition.location.country_iso2,
+              start_date: competition.start_date,
+              end_date: competition.end_date,
+              spots_left: competition.registration_info.spots_left,
+              registration_close: competition.registration_info.closes_at,
+            }}
             t={t}
             lng={lng}
             items={["city", "start_date", "spots_left"]}
