@@ -5,6 +5,10 @@ FROM node:26-alpine AS base
 RUN npm install -g corepack
 RUN corepack enable
 
+# We only use this stage for its `vault` binary, which the `runner` stage copies.
+#   The Vault version sits in a `FROM` line because Dependabot reads no other line of a Dockerfile.
+FROM hashicorp/vault:1.19.5 AS vault
+
 FROM base AS deps
 
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
@@ -13,13 +17,6 @@ RUN apk add --no-cache libc6-compat
 # NewRelic v12 does not bundle Alpine-compatible binaries anymore. So they have to be built from scratch.
 #   See https://github.com/newrelic/node-native-metrics?tab=readme-ov-file#musl-libc-systems for details.
 RUN apk add g++ make py3-pip
-
-RUN apk add --update --virtual .deps --no-cache unzip && \
-    wget https://releases.hashicorp.com/vault/1.19.5/vault_1.19.5_linux_amd64.zip && \
-    unzip vault_1.19.5_linux_amd64.zip -d /tmp && \
-    mv /tmp/vault /usr/local/bin/vault && \
-    rm -f vault_1.19.5_linux_amd64.zip && \
-    apk del .deps
 
 WORKDIR /app
 
@@ -84,7 +81,7 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=deps /app/global-bundle.pem /app/global-bundle.pem
-COPY --from=deps /usr/local/bin/vault /usr/local/bin/vault
+COPY --from=vault /bin/vault /usr/local/bin/vault
 COPY --from=builder /app/docker-entrypoint.sh /app/docker-entrypoint.sh
 
 # jq = Reading JSON data transmitted from Vault to extract secrets
