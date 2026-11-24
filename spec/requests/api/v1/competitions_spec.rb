@@ -223,6 +223,16 @@ RSpec.describe "API v1 Competitions" do
       expect(response.parsed_body["competition_series_ids"]).to eq [announced_competition.id]
     end
 
+    it "lists the competitions of its series by start date" do
+      series = create(:competition_series)
+      later_competition = create(:competition, :visible, competition_series: series, latitude: 43_641_740, longitude: -79_376_902, start_date: '2023-01-02', end_date: '2023-01-02')
+      earlier_competition = create(:competition, :visible, competition_series: series, latitude: 43_641_740, longitude: -79_376_902, start_date: '2023-01-01', end_date: '2023-01-01')
+
+      get api_v1_competition_path(later_competition)
+
+      expect(response.parsed_body["competition_series_ids"]).to eq [earlier_competition.id, later_competition.id]
+    end
+
     it "lists the championships it holds" do
       championship = create(:competition, :visible, championship_types: %w[world PL])
 
@@ -293,6 +303,15 @@ RSpec.describe "API v1 Competitions" do
 
         get api_v1_competition_head_to_head_path(unannounced_competition)
         expect(response).to have_http_status(:not_found)
+      end
+
+      it "does not let shared caches store its results for its organizers" do
+        api_sign_in_as(unannounced_competition.organizers.first, scopes: Doorkeeper::OAuth::Scopes.from_string("manage_competitions"))
+
+        get api_v1_competition_results_path(unannounced_competition)
+
+        expect(response).to be_successful
+        expect(response.headers["Cache-Control"]).to include("private")
       end
 
       it "is not found for users who can't manage it" do
