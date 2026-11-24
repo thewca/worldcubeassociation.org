@@ -1652,6 +1652,11 @@ class User < ApplicationRecord
     highest_delegate_role&.metadata&.status
   end
 
+  def delegate_status_on(date)
+    roles.filter { it.metadata.is_a?(RolesMetadataDelegateRegions) && it.active_on?(date) }
+         .max_by(&:status_rank)&.metadata&.status
+  end
+
   def region_id
     highest_delegate_role&.group_id
   end
