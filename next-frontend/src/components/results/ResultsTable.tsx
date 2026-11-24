@@ -288,56 +288,22 @@ export function ByPersonTable({
   );
 }
 
-// Ids of the results that tied or beat every earlier one, scanning oldest-first.
-// Ports the old Rails `historical_pb_markers`, which coloured a result that was
-// a personal best at the time it was set.
-function personalBestIds(
-  chronologicalResults: components["schemas"]["V1Result"][],
-  value: (result: components["schemas"]["V1Result"]) => number,
-) {
-  const { ids } = chronologicalResults.reduce<{
-    best: number;
-    ids: number[];
-  }>(
-    ({ best, ids }, result) =>
-      value(result) > 0 && value(result) <= best
-        ? { best: value(result), ids: [...ids, result.id] }
-        : { best, ids },
-    { best: Infinity, ids: [] },
-  );
-
-  return new Set(ids);
-}
-
 const competitionStartMillis = (result: components["schemas"]["V1Result"]) =>
   DateTime.fromISO(result.competition_start_date).toMillis();
-
-function historicalPbMarkers(results: components["schemas"]["V1Result"][]) {
-  const chronological = _.orderBy(
-    results,
-    [competitionStartMillis, "id"],
-    ["asc", "asc"],
-  );
-
-  return {
-    single: personalBestIds(chronological, (result) => result.best),
-    average: personalBestIds(chronological, (result) => result.average),
-  };
-}
 
 export function ByCompetitionTable({
   results,
   t,
-  highlightPersonalBests = false,
 }: {
-  results: components["schemas"]["V1Result"][];
+  results: (components["schemas"]["V1Result"] &
+    Partial<
+      Pick<
+        components["schemas"]["V1PersonResult"],
+        "is_personal_best_single" | "is_personal_best_average"
+      >
+    >)[];
   t: TFunction;
-  highlightPersonalBests?: boolean;
 }) {
-  const pbMarkers = highlightPersonalBests
-    ? historicalPbMarkers(results)
-    : null;
-
   const attemptCount = maxAttemptCount(results);
 
   const anyAverages = results.some((res) => res.average !== 0);
@@ -378,8 +344,8 @@ export function ByCompetitionTable({
             return competitionResults.map((competitorResult, index) => {
               const eventId = competitorResult.event_id;
 
-              const isSingleRecord = pbMarkers?.single.has(competitorResult.id);
-              const isAvgRecord = pbMarkers?.average.has(competitorResult.id);
+              const isSingleRecord = competitorResult.is_personal_best_single;
+              const isAvgRecord = competitorResult.is_personal_best_average;
 
               const { definedAttempts, bestResultIndex, worstResultIndex } =
                 resultAttempts(competitorResult);

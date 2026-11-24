@@ -100,6 +100,39 @@ class Result < ApplicationRecord
     end
   end
 
+  PERSONAL_BEST_COLUMNS = %i[best average].freeze
+
+  # Ids of the results whose single (`best`) or `average` tied or beat every earlier one in the same
+  # event, oldest round first, keyed by type. This is `ResultsHelper#historical_pb_markers`
+  # ported to SQL, so that a page of results is judged against the person's whole history without loading it.
+  def self.personal_best_ids_by_type
+    # A result ties or beats every earlier one exactly when it equals the best so far including itself.
+    # Comparing against the earlier results only would need a frame ending at `1 PRECEDING`, which
+    # MySQL recomputes for every row instead of keeping a running minimum, several times slower.
+    bests_so_far = PERSONAL_BEST_COLUMNS.map do |column|
+      Arel.sql(<<~SQL.squish)
+        MIN(CASE WHEN results.#{column} > 0 THEN results.#{column} END)
+          OVER (PARTITION BY results.event_id ORDER BY competitions.start_date, competitions.id, round_types.rank
+                ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS #{column}_so_far
+      SQL
+    end
+
+    personal_best_conditions = PERSONAL_BEST_COLUMNS.map { "results.#{it} = #{it}_so_far" }
+
+    # Preloads don't matter for plucking ids, and an included association that is also joined
+    # turns into an eager load, which would replace our `select`.
+    ranked = except(:includes).joins(:competition, :round_type).select(:id, *PERSONAL_BEST_COLUMNS, *bests_so_far)
+
+    personal_best_rows = unscoped.from(ranked, :results)
+                                 .where(personal_best_conditions.join(" OR "))
+                                 .pluck(:id, :best, :best_so_far, :average, :average_so_far)
+
+    {
+      best: personal_best_rows.filter_map { |id, best, best_so_far, _, _| id if best == best_so_far }.to_set,
+      average: personal_best_rows.filter_map { |id, _, _, average, average_so_far| id if average == average_so_far }.to_set,
+    }
+  end
+
   def self.augment_attempts(result_attrs, id_key: "id")
     result_ids = result_attrs.pluck(id_key).uniq
 

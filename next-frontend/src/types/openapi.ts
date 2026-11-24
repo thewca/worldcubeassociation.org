@@ -622,7 +622,7 @@ export interface paths {
         };
         /**
          * Get results for a person
-         * @description Every result the person has ever earned, optionally narrowed to one event. Public: no authentication required.
+         * @description The person's results, optionally narrowed to one event. Paginated by competition, newest first, so a page holds every result of `per_page` competitions. Public: no authentication required.
          */
         get: operations["v1PersonResults"];
         put?: never;
@@ -1861,6 +1861,10 @@ export interface components {
         V1PersonResult: components["schemas"]["V1Result"] & {
             /** @description The head-to-head matches this competitor competed in during this round, including details about the opponent, ordered by match number. Empty for a round that is not head-to-head. For the whole bracket, use the competition's head-to-head endpoint. */
             participated_matches: components["schemas"]["H2hMatch"][];
+            /** @description Whether this single tied or beat every earlier single of the person in this event, judged against their whole history rather than just the requested page. */
+            is_personal_best_single: boolean;
+            /** @description Whether this average tied or beat every earlier average of the person in this event, judged against their whole history rather than just the requested page. */
+            is_personal_best_average: boolean;
         };
         V1PersonResults: components["schemas"]["V1PersonResult"][];
         V1Results: components["schemas"]["V1Result"][];
@@ -3509,6 +3513,10 @@ export interface operations {
         parameters: {
             query?: {
                 event_id?: string;
+                /** @description Page number to retrieve */
+                page?: number;
+                /** @description Number of competitions per page */
+                per_page?: number;
             };
             header?: never;
             path: {
