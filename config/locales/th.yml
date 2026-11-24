@@ -3039,6 +3039,11 @@ th:
       semifinal_stage: รองชนะเลิศ
       final_stage: ชิงชนะเลิศ
       third_place: ชิงอันดับสาม
+    results:
+      query_search: ค้นหาด้วยชื่อหรือ WCA ID
+      country_search: กรองตามประเทศ
+      no_results: ไม่พบผลการค้นหา
+      all_countries: ทุกประเทศ
   competition_tabs:
     headers:
       tabs: แท็บ
