@@ -19,11 +19,16 @@ const CARD_COLOR_PALETTES: ColorPaletteSelect[] = [
 export const announcementColorPalette = (index: number) =>
   CARD_COLOR_PALETTES[index % CARD_COLOR_PALETTES.length];
 
+// Six hex digits: the ObjectId's counter, see https://www.mongodb.com/docs/manual/reference/bson-types/#objectid
+const OBJECT_ID_COUNTER_LENGTH = 6;
+
 /// An announcement's own page is reached by link, not from a card, so there is
-/// no neighbouring color to match. Derived from the ObjectId's random tail rather
+/// no neighbouring color to match. Derived from the ObjectId's counter rather
 /// than `Math.random()`, so the page can be prerendered and cached.
 export const announcementColorPaletteFromId = (announcement: Announcement) =>
-  announcementColorPalette(parseInt(announcement.id.slice(-6), 16));
+  announcementColorPalette(
+    parseInt(announcement.id.slice(-OBJECT_ID_COUNTER_LENGTH), 16),
+  );
 
 /// The teaser shown before "Read More". Announcements written before the
 /// `summary` field existed fall back to the beginning of their content.
