@@ -25,7 +25,7 @@ import {
 import Link from "next/link";
 import { route } from "nextjs-routes";
 import _ from "lodash";
-import { CompetitionResultRow } from "@/lib/wca/results/competitionResults";
+import { ByPersonResultsRow } from "@/lib/wca/results/competitionResults";
 import { useT } from "@/lib/i18n/useI18n";
 import useIsScrolled from "@/lib/hooks/useIsScrolled";
 import BackToTopButton from "@/components/BackToTopButton";
@@ -37,7 +37,7 @@ import { countryName } from "@/components/CountryMap";
 import { toAvatarName } from "@/lib/utils";
 
 interface ByPersonResultsProps {
-  resultsByPerson: _.Dictionary<CompetitionResultRow[]>;
+  resultsByPerson: _.Dictionary<ByPersonResultsRow[]>;
   sessionWcaId?: string | null;
   countries: string[];
 }
@@ -108,7 +108,7 @@ function ResultsList({
   filteredResults,
   sessionWcaId,
 }: {
-  filteredResults: _.Dictionary<CompetitionResultRow[]>;
+  filteredResults: _.Dictionary<ByPersonResultsRow[]>;
   sessionWcaId?: string | null;
 }) {
   const { t } = useT();

@@ -2451,6 +2451,7 @@ en:
       results: "Results"
       events: "Events"
     h2h:
+      match_number: "Match %{number}"
       set_number: "Set %{number}"
       stage_of: "Stage of %{number}"
       quarterfinal_stage: "Quarterfinal Stage"

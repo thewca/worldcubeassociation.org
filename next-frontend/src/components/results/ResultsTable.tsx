@@ -322,13 +322,7 @@ export function ByCompetitionTable({
   results,
   t,
 }: {
-  results: (ByCompetitionResultsRow &
-    Partial<
-      Pick<
-        components["schemas"]["V1PersonResult"],
-        "is_personal_best_single" | "is_personal_best_average"
-      >
-    >)[];
+  results: ByCompetitionResultsRow[];
   t: TFunction;
 }) {
   const attemptCount = attemptColumnCount(results);
@@ -392,7 +386,6 @@ export function ByCompetitionTable({
                     attemptCount={attemptCount}
                     anyAverages={anyAverages}
                     isSinglePersonalBest={isSingleRecord}
-                    t={t}
                   />
                 );
               }
