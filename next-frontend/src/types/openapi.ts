@@ -1501,10 +1501,11 @@ export interface components {
              *     - `announced`: public, and not over yet
              *     - `results_pending`: over, but its results are not posted yet
              *     - `results_posted`: its results are posted
+             *     - `hidden`: announced, but taken down by the WCAT until an issue is resolved
              *     - `cancelled`: cancelled
              * @enum {string}
              */
-            status: "unconfirmed" | "confirmed" | "announced" | "results_pending" | "results_posted" | "cancelled";
+            status: "unconfirmed" | "confirmed" | "announced" | "results_pending" | "results_posted" | "hidden" | "cancelled";
             /** @example First WCA World Championship */
             information: string | null;
             /** @example https://cubingusa.org/worlds */

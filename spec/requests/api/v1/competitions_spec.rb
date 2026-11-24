@@ -370,6 +370,25 @@ RSpec.describe "API v1 Competitions" do
         expect(response.parsed_body["id"]).to eq unannounced_competition.id
       end
     end
+
+    context "when the competition was announced and then hidden" do
+      let(:hidden_competition) { create(:competition, :confirmed, :announced, :not_visible) }
+
+      it "is not found for anonymous users" do
+        get api_v1_competition_path(hidden_competition)
+
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it "is returned as hidden to its organizers" do
+        api_sign_in_as(hidden_competition.organizers.first, scopes: Doorkeeper::OAuth::Scopes.from_string("manage_competitions"))
+
+        get api_v1_competition_path(hidden_competition)
+
+        expect(response).to be_successful
+        expect(response.parsed_body["status"]).to eq "hidden"
+      end
+    end
   end
 
   describe "unknown competition" do

@@ -2179,6 +2179,12 @@ RSpec.describe Competition do
       expect(posted_competition.status).to eq "results_posted"
     end
 
+    it "is hidden when it was announced but is no longer visible" do
+      hidden_competition = create(:competition, :confirmed, :announced, :not_visible)
+
+      expect(hidden_competition.status).to eq "hidden"
+    end
+
     it "stays cancelled even though it was announced" do
       cancelled_competition = create(:competition, :confirmed, :visible, :cancelled)
 

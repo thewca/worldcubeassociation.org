@@ -2334,6 +2334,8 @@ class Competition < ApplicationRecord
   def status
     if cancelled?
       "cancelled"
+    elsif announced? && !show_at_all?
+      "hidden"
     elsif results_posted?
       "results_posted"
     elsif announced? && probably_over?

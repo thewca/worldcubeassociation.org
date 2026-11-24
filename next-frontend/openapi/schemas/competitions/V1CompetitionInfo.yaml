@@ -41,8 +41,9 @@ properties:
       - `announced`: public, and not over yet
       - `results_pending`: over, but its results are not posted yet
       - `results_posted`: its results are posted
+      - `hidden`: announced, but taken down by the WCAT until an issue is resolved
       - `cancelled`: cancelled
-    enum: [unconfirmed, confirmed, announced, results_pending, results_posted, cancelled]
+    enum: [unconfirmed, confirmed, announced, results_pending, results_posted, hidden, cancelled]
   information:
     type: [string, "null"]
     example: "First WCA World Championship"
