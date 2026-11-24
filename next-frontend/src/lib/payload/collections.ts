@@ -3,13 +3,19 @@ import { cacheTag } from "next/cache";
 import {
   getPayload,
   type CollectionSlug,
-  type TypedLocale,
-  type Where,
+  type FindOptions,
+  type SelectType,
 } from "payload";
-import { payloadCacheLife } from "@/lib/payload/globals";
+import {
+  collectionCacheTag,
+  payloadCacheLife,
+  type RuntimeCacheLife,
+} from "@/lib/payload/cache";
 
-export const collectionCacheTag = (slug: CollectionSlug) =>
-  `payload-collection:${slug}`;
+type FindCachedOptions<TSlug extends CollectionSlug> = Pick<
+  FindOptions<TSlug, SelectType>,
+  "locale" | "depth" | "sort" | "where" | "limit" | "page" | "pagination"
+>;
 
 export async function findCached<TSlug extends CollectionSlug>(
   collection: TSlug,
@@ -21,19 +27,14 @@ export async function findCached<TSlug extends CollectionSlug>(
     limit,
     page,
     pagination,
-  }: {
-    locale?: TypedLocale;
-    depth?: number;
-    sort?: string;
-    where?: Where;
-    limit?: number;
-    page?: number;
-    pagination?: boolean;
-  } = {},
+  }: FindCachedOptions<TSlug> = {},
+  // Use "minutes" when the options contain visitor input, so that arbitrary
+  //   input cannot fill the shared cache with long-lived entries.
+  runtimeCacheLife?: RuntimeCacheLife,
 ) {
   "use cache: remote";
   cacheTag(collectionCacheTag(collection));
-  payloadCacheLife();
+  payloadCacheLife(runtimeCacheLife);
 
   const payload = await getPayload({ config });
 
