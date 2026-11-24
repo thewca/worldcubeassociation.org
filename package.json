@@ -58,7 +58,7 @@
     "react-textarea-autosize": "^8.5.9",
     "regenerator-runtime": "^0.14.1",
     "sass": "^1.108.2",
-    "sass-loader": "^17.1.0",
+    "sass-loader": "^17.1.1",
     "semantic-ui-react": "^2.1.5",
     "style-loader": "^4.0.0",
     "webpack-merge": "^6.0.1",
