@@ -1,3 +1,5 @@
+"use client";
+
 import { ComponentProps, useState } from "react";
 import {
   Badge,

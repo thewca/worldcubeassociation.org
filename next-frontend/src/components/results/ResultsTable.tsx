@@ -1,5 +1,3 @@
-"use client";
-
 import { components } from "@/types/openapi";
 import events from "@/lib/wca/data/events";
 import { CssProperties, HStack, Link, Table } from "@chakra-ui/react";
@@ -14,7 +12,10 @@ import {
   WithRecordTag,
 } from "@/components/results/TableCells";
 import { maxAttemptCount, resultAttempts } from "@/lib/wca/results/attempts";
-import { CompetitionResultRow } from "@/lib/wca/results/competitionResults";
+import {
+  ByCompetitionResultsRow,
+  ByPersonResultsRow,
+} from "@/lib/wca/results/competitionResults";
 import WcaFlag from "@/components/WcaFlag";
 import { TFunction } from "i18next";
 import CountryMap from "@/components/CountryMap";
@@ -195,7 +196,7 @@ export function ByPersonTable({
   solveTextAlign = "left",
   showNationalityColumn = false,
 }: {
-  results: CompetitionResultRow[];
+  results: ByPersonResultsRow[];
   t: TFunction;
   isAdmin?: boolean;
   solveTextAlign?: CssProperties["textAlign"];
@@ -246,12 +247,12 @@ export function ByPersonTable({
                 </Table.Cell>
                 <RoundNameCell
                   roundTypeId={competitorResult.round_type_id}
-                  rankingMode={competitorResult.ranking_mode}
+                  rankingMode={competitorResult.rankingMode}
                   t={t}
                 />
                 <PositionCell
                   result={competitorResult}
-                  rankingMode={competitorResult.ranking_mode}
+                  rankingMode={competitorResult.rankingMode}
                 />
                 <Table.Cell fontWeight="bold">
                   <WithRecordTag
@@ -334,7 +335,7 @@ export function ByCompetitionTable({
   t,
   highlightPersonalBests = false,
 }: {
-  results: components["schemas"]["V1PersonResult"][];
+  results: ByCompetitionResultsRow[];
   t: TFunction;
   highlightPersonalBests?: boolean;
 }) {

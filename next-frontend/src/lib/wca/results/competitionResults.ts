@@ -5,18 +5,23 @@ import { components } from "@/types/openapi";
  * endpoint nests results inside their round, so views that list results on their own — by person,
  * say — have to carry that context down to each row.
  */
-export type CompetitionResultRow = components["schemas"]["V1PersonResult"];
+export type ByCompetitionResultsRow = components["schemas"]["V1PersonResult"];
+
+export type ByPersonResultsRow = components["schemas"]["V1RoundResult"] & {
+  event_id: string;
+  round_type_id: string;
+  rankingMode: components["schemas"]["RankingMode"];
+};
 
 export function roundResultRows(
   rounds: components["schemas"]["V1CompetitionRound"][],
-): CompetitionResultRow[] {
+): ByPersonResultsRow[] {
   return rounds.flatMap((round) =>
     round.results.map((result) => ({
       ...result,
       event_id: round.event_id,
       round_type_id: round.round_type_id,
       rankingMode: round.ranking_mode,
-      participated_matches: [],
     })),
   );
 }
