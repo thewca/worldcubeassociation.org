@@ -10,7 +10,6 @@ OPENAPI_CONTRACT_PREFIX = '/api/v1/'
 #   The PR that adds one of them to the OpenAPI spec has to remove it here, which the check below enforces.
 OPENAPI_UNDOCUMENTED_LEGACY_ROUTES = [
   %w[GET /v1/registrations/{registrationId}],
-  %w[GET /v1/registrations/{registrationId}/payment_ticket],
   %w[GET /v1/registrations/{registrationId}/payments],
   %w[GET /v1/competitions/{competitionId}/registrations/admin],
   %w[PATCH /v1/competitions/{competitionId}/registrations/bulk_update],

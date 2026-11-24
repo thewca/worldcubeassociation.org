@@ -4,7 +4,7 @@ import { cacheLife } from "next/cache";
 import { cache } from "react";
 
 async function getPublicIncident(id: string) {
-  "use cache";
+  "use cache: remote";
   cacheLife("days");
 
   return serverClient.GET("/v0/incidents/{id}", {

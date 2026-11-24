@@ -3,6 +3,7 @@ required:
   - registrantId
   - name
   - wcaUserId
+  - wcaId
   - countryIso2
   - gender
   - roles
@@ -16,6 +17,8 @@ properties:
     type: string
   wcaUserId:
     type: number
+  wcaId:
+    type: string
   countryIso2:
     type: string
   gender:

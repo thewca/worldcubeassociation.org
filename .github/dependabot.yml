@@ -99,3 +99,23 @@ updates:
   schedule:
     interval: weekly
   open-pull-requests-limit: 10
+- package-ecosystem: docker
+  directories:
+    - "/"
+    - "/docker"
+    - "/next-frontend"
+  schedule:
+    interval: weekly
+    day: monday
+    time: "06:00"
+  ignore:
+    # A new major version of an image is a migration that we plan ourselves.
+    - dependency-name: "*"
+      update-types:
+        - "version-update:semver-major"
+    # A new minor version of Ruby is a migration too: the lambda runtime in `infra/` has to follow it.
+    #   For a patch version, add a commit to the Dependabot PR that bumps `.ruby-version` and `infra/wca_on_rails/lambda/Gemfile`.
+    - dependency-name: ruby
+      update-types:
+        - "version-update:semver-minor"
+  open-pull-requests-limit: 10

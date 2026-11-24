@@ -372,12 +372,13 @@ Rails.application.routes.draw do
     get '/', to: redirect('/help/api', status: 302)
 
     namespace :v1 do
+      get '/persons/:wca_id' => 'persons#show', as: :person
       get '/persons/:wca_id/results' => 'persons#results', as: :person_results
       get '/persons/:wca_id/records' => 'persons#records', as: :person_records
       get '/geocoding/search' => 'geocoding#search', as: :geocoding_search
       get '/competitions/live' => 'competitions#live', as: :live_competitions
 
-      resources :competitions, only: [] do
+      resources :competitions, only: %i[show] do
         get '/results' => 'competitions#results', as: :results
         get '/podiums' => 'competitions#podiums', as: :podiums
         get '/head-to-head' => 'competitions#head_to_head', as: :head_to_head

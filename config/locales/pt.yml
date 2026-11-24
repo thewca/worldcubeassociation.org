@@ -177,8 +177,23 @@ pt:
       ranking: 'Top %{ranking} por média'
       any_result: Qualquer média
     deadline:
-      description: Data limite para Qualificação
+      description: Período limite para Qualificação
       by_date: 'até %{date}'
+    preview: Pré-visualizar qualificação
+    earliest_date:
+      description: Data de início do período de qualificação
+      from_date: em ou após %{date}
+      window_too_short: A data de início do período deve ser, pelo menos, 
+        %{days} dias anterior ao prazo do período.
+      explanation:
+        '1': A data de início do período de qualificação é opcional. Se este 
+          campo ficar vazio, será considerado qualquer resultado obtido antes do
+          prazo.
+        '2': Se for introduzida uma data de início do período, apenas os 
+          resultados obtidos nessa data ou posteriormente contam para a 
+          qualificação.
+        '3': A data de início do período deve ser, pelo menos, %{days} dias 
+          anterior ao prazo do período.
   activity:
     registration: Registo no local da competição
     checkin: Check-in
@@ -236,6 +251,10 @@ pt:
       secret: Senha
       scopes: Âmbitos
       callback_urls: Urls de callback
+      confidential: Confidencial?
+      confidentiality:
+        'yes': Sim
+        'no': Não
   helpers:
     submit:
       competition_medium:
@@ -698,6 +717,8 @@ pt:
         use_classic: Mudar para a página antiga de início de sessão
       destroy_other:
         success: Desconectou-se com sucesso de outros dispositivos.
+      destroy:
+        success: A sua sessão foi terminada.
     shared:
       links:
         sign_in: Entrar
@@ -750,6 +771,10 @@ pt:
             âmbito(s) padrão. Veja a lista de âmbitos suportados <a
             href="https://github.com/thewca/worldcubeassociation.org/blob/main/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">aqui</a>.
+          confidential: A aplicação será utilizada num contexto em que o segredo
+            do cliente possa ser mantido confidencial. As aplicações móveis 
+            nativas e as aplicações de página única (Single Page Apps) são 
+            consideradas não confidenciais.
       scopes:
         public: >-
           Aceda à sua informação pública (nome, ID da WCA, género, nacionalidade
@@ -848,6 +873,8 @@ pt:
         wic: Painel WIC
         weat: Painel WEAT
         wqac: Painel WQAC
+      switch_to_dark_mode: Mudar para o modo escuro
+      switch_to_light_mode: Mudar para o modo claro
   page:
     translators:
       title: Tradutores
@@ -1093,6 +1120,14 @@ pt:
       success_message_with_ticket_link_html: Pedido submetido - entraremos em 
         contacto consigo em breve. Para consultar o estado deste pedido, visite 
         <a href="%{link}">esta ligação</a>.
+    executives:
+      title: Executivos
+      joined_wca: Aderiu à WCA
+      joined_executives: Entrou para a Equipa Executiva
+      more_information: Mais Informação
+      close: Fechar
+      person_not_found: Não foi encontrada nenhuma pessoa com o ID da WCA 
+        %{wca_id}
   homepage:
     learn_more: Saber mais
     title: Bem-vindo à World Cube Association
@@ -1163,7 +1198,7 @@ pt:
         confirmation_link: Confirmar a minha conta.
         activate: >-
           Após a ativação poderá entrar na sua conta no website da World Cube Association:
-
+          
         login_form: formulário de login
         addendum: >-
           Este email é gerado automaticamente. Se não registou uma conta no
@@ -1912,6 +1947,7 @@ pt:
             name: Nome
             success: '%{count} competidores retirados com sucesso'
             failure: Não foi possível retirar os competidores em massa
+            select_all: Selecionar tudo
           scoresheet_warning: Certifique-se de que só retira um competidor da 
             ronda quando tiver em mãos a respetiva folha de resultados em 
             branco. Não é possível voltar a adicionar um competidor a uma ronda 
@@ -2007,6 +2043,7 @@ pt:
         past_month: Mês passado
         no_upcoming: Não há próximas competições com resultados em direto.
         search: Procurar competições
+      combined_title: Rondas Duplas Combinadas
     my_competitions:
       title: Minhas competições
       disclaimer: >-
@@ -2025,6 +2062,8 @@ pt:
         abbr_description: '%{short_name}: %{long_name}'
         cutoff: 'Corte: %{short_cutoff}'
         download_html: 'Descarregar todos os detalhes da competição como PDF %{here}.'
+        download_pdf: Descarregue aqui o PDF do horário
+        download: Download
       date: Data
       add_to_calendar: Adicionar ao calendário
       name: Nome
@@ -2177,6 +2216,8 @@ pt:
       is_bookmarked: Assinalou esta competição
       number_of_bookmarks: Número de vezes que a competição foi assinalada
       waiting_list_size: Tamanho da lista de espera
+      view_more_members: Ver mais %{count} membros da equipa
+      see_more: + mais %{count}
     index:
       title: Competições
       all_events: Todos
@@ -2214,14 +2255,15 @@ pt:
       use_admin_view: Usar vista de administração
       titles:
         in_progress: Competições em andamento
-        past: 'Competições passadas de %{year}'
-        past_all: Competições passadas de todos os anos
+        past: 'Competições passadas de %{year} (%{count})'
+        past_all: Competições passadas de todos os anos (%{count})
         recent: 'Competições recentes (últimos %{count} dias)'
-        upcoming: Competições futuras
+        upcoming: Competições futuras (%{count})
         ongoing_and_upcoming: Competições a decorrer e futuras
         custom: Competições no período de tempo selecionado
         by_announcement: 'Competições ordenadas por data de anúncio, mais recente
           no topo'
+        in_progress_count: Competições em curso (%{count})
       tooltips:
         hourglass:
           ended: 'Terminou há %{days} atrás'
@@ -2261,12 +2303,24 @@ pt:
         not_open: Ainda não Aberto
         closed: Fechado
         open: Aberto
+        all: Todas
       view_competition: Ver Competição
       why_compete_description_html: |-
         <p>As competições não servem apenas para descobrir quem é o mais rápido - são também eventos sociais! Qualquer pessoa que saiba resolver um cubo é bem-vinda e pode tentar alcançar um novo recorde pessoal. É fácil fazer amigos, porque todos colaboram para que a competição decorra da melhor forma.</p>
         <p>Utilize a ferramenta abaixo para encontrar uma competição perto de si e começar a sua jornada no speedcubing!</p>
       register_now: Registar Agora
       championship_only: Mostrar apenas campeonatos
+      sort:
+        order: Ordenação
+        start_date_asc: 'Data de início: ascendente'
+        start_date_desc: 'Data de início: descendente'
+        end_date_asc: 'Data de fim: ascendente'
+        end_date_desc: 'Data de fim: descendente'
+        announced_at_asc: 'Data de anúncio: ascendente'
+        announced_at_desc: 'Data de anúncio: descendente'
+        name_asc: 'Nome: A-Z'
+        name_desc: 'Nome: Z-A'
+      date_and_city: '%{date} – %{city}'
     my_competitions_table:
       edit: Editar
       registrations: Inscrições
@@ -2695,6 +2749,10 @@ pt:
           competição está cheia, mas a sua inscrição foi colocada numa lista de
           espera e receberá um e-mail se houver vagas suficientes para poder
           participar.
+        additional: Certifique-se de que seguiu todas as instruções adicionais 
+          acima relativas ao pagamento ou a outros requisitos de inscrição.
+        email: Receberá um email quando o estado da sua inscrição for 
+          atualizado.
       list:
         empty: Nenhum
         spots_remaining_plural:
@@ -2831,6 +2889,7 @@ pt:
           competing:
             title: Registo
             description: Escolha as suas modalidades
+            summary_title: Inscrição
           requirements:
             title: Requisitos
             description: Aceitar os termos da competição
@@ -3027,6 +3086,8 @@ pt:
         está no futuro.
       fto_not_yet_allowed: O Octaedro de faces rotativas (FTO) não pode ser 
         realizado em competições com início antes de %{date}.
+      fto_requires_internal_scoretaking: tem de estar definido como Resultados 
+        em Direto Integrados quando se realiza o Octaedro de Faces Rotativas.
     new:
       create_competition: Criar competição
       note_clone: >-
@@ -3211,6 +3272,12 @@ pt:
         register: Inscrever
         competitors: Competidores
         scrambles: Embaralhamentos
+        competitor_results: Resultados dos competidores
+      general: Geral
+      more: Mais
+      admin: Administração
+      results: Resultados
+      events: Eventos
     results_table:
       wca_profile: Perfil da WCA
       event: Evento
@@ -3220,12 +3287,33 @@ pt:
         national: Ranking Nacional
         continent: Ranking Continental
         world: Ranking Mundial
+      h2h_results_disclaimer_html: Resultados determinados por uma Final Frente 
+        a Frente. Apenas a ordem de classificação e a melhor resolução são 
+        apresentadas aqui; a tabela completa Frente a Frente está disponível na 
+        <a href="%{results_url}">nova página de resultados</a>.
+      show_all_linked_results: Mostrar resultados de ambas as rondas
+      linked_results_disclaimer_html: Esta ronda faz parte de uma Ronda Dupla. 
+        Os resultados abaixo são apresentados por ronda; os resultados 
+        combinados de ambas as rondas estão disponíveis na <a 
+        href="%{results_url}">nova página de resultados</a>.
     scrambles_table:
       group: Grupo
       scramble: Embaralhamento
     competition_series_fields:
       add_series: Adicionar a Série
       remove_series: Remover de Série
+    results:
+      query_search: Pesquisar por nome ou ID da WCA
+      country_search: Filtrar por país
+      no_results: Nenhum resultado encontrado
+      all_countries: Todos os países
+    h2h:
+      set_number: Conjunto %{number}
+      stage_of: Fase de %{number}
+      quarterfinal_stage: Fase dos Quartos de Final
+      semifinal_stage: Fase das Meias-Finais
+      final_stage: Fase Final
+      third_place: Terceiro Lugar
   competition_tabs:
     headers:
       tabs: Abas
@@ -3257,6 +3345,7 @@ pt:
         região"
     records:
       title: Recordes
+      load_error: Erro ao obter os recordes
     last_updated_html: 'Última atualização: %{timestamp}'
     filters_fixes_underway: >-
       Note que alguns filtros (como o de anos anteriores) estão temporariamente
@@ -3438,6 +3527,9 @@ pt:
     announcement_info_html: 'Anunciado por %{author_name} em %{date_time}'
     errors:
       unstick_at_future: tem de ser no futuro
+    search: Pesquisar anúncios
+    no_announcements: Ainda não há anúncios.
+    no_search_results: Nenhum anúncio corresponde à sua pesquisa.
   contacts:
     dob:
       title: Formulário de Alteração de Data de Nascimento

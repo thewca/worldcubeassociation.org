@@ -1,7 +1,6 @@
 type: object
 required:
   - person
-  - user_id
   - medals
   - records
   - personal_records
@@ -11,10 +10,6 @@ required:
 properties:
   person:
     $ref: './Person.yaml'
-  user_id:
-    type:
-      - integer
-      - "null"
   previous_persons:
     type: array
     items:

@@ -13,7 +13,7 @@ export const isInProgress = (competition: CompetitionDates) =>
   !hasPassedEndOfDay(competition.end_date) &&
   !competition.results_posted_at;
 
-export type RegistrationStatus = "open" | "notOpen" | "closed";
+export type RegistrationStatus = "open" | "notOpen" | "closed" | "all";
 
 type RegistrationDates = Pick<
   components["schemas"]["CompetitionIndex"],

@@ -80,16 +80,6 @@ export default function FilteredRecords({
       <RankingsFilterBox
         filterState={searchParams}
         filterActions={filterActions}
-        valueLabelMap={{
-          single: t("results.selector_elements.type_selector.single"),
-          average: t("results.selector_elements.type_selector.average"),
-          All: t("results.selector_elements.gender_selector.gender_all"),
-          Male: t("results.selector_elements.gender_selector.male"),
-          Female: t("results.selector_elements.gender_selector.female"),
-          "100 persons": t("results.selector_elements.show_selector.persons"),
-          "100 results": t("results.selector_elements.show_selector.results"),
-          "by region": t("results.selector_elements.show_selector.by_region"),
-        }}
       />
       {/* The same indeterminate bar the router shows for a normal navigation, so
           filtering here feels like filtering anywhere else on the site. */}

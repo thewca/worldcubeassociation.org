@@ -1,4 +1,3 @@
-import { io } from "next/cache";
 import { getCachedGlobal } from "@/lib/payload/globals";
 import { Heading, HStack, Image, Text, VStack } from "@chakra-ui/react";
 import { getT } from "@/lib/i18n/get18n";
@@ -17,20 +16,15 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function LogoPage() {
-  // `io()` marks the boundary the build-time prerender stops at, so the Payload read below
-  // never runs while building, where MongoDB is unreachable. It has to stay out here rather
-  // than inside `getCachedGlobal`: within a `"use cache"` scope `io()` resolves immediately.
-  await io();
+  const { t, lng } = await getT();
 
-  const logoPage = await getCachedGlobal("logo-page");
+  const logoPage = await getCachedGlobal("logo-page", lng);
 
   const logoItems = logoPage.blocks;
 
   if (logoItems.length === 0) {
     return <Heading>No Logo Items, add some!</Heading>;
   }
-
-  const { t } = await getT();
 
   return (
     <VStack gap="4" alignItems="left">

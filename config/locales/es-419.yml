@@ -181,8 +181,23 @@ es-419:
       ranking: 'Mejores %{ranking} por promedio'
       any_result: Cualquier promedio
     deadline:
-      description: Fecha límite de calificación
+      description: Fecha límite del período de calificación
       by_date: 'hasta el %{date}'
+    preview: Vista previa de la calificación
+    earliest_date:
+      description: Fecha de inicio del período de calificación
+      from_date: el %{date} o después
+      window_too_short: La fecha de inicio del período debe ser al menos %{days}
+        días anterior a la fecha límite del período.
+      explanation:
+        '1': La fecha de inicio del período de calificación es opcional. Si se 
+          deja en blanco, se tendrá en cuenta cualquier resultado obtenido antes
+          de la fecha límite.
+        '2': Si se ingresa una fecha de inicio del período, solo se tendrán en 
+          cuenta para la calificación los resultados obtenidos en esa fecha o 
+          después.
+        '3': La fecha de inicio del período debe ser al menos %{days} días 
+          anterior a la fecha límite del período.
   activity:
     registration: Registro in situ
     checkin: Registro
@@ -240,6 +255,10 @@ es-419:
       secret: Secretos
       scopes: Ámbitos
       callback_urls: URLs Callback
+      confidential: ¿Confidencial?
+      confidentiality:
+        'yes': Sí
+        'no': No
   helpers:
     submit:
       competition_medium:
@@ -766,6 +785,10 @@ es-419:
             href="https://github.com/thewca/worldcubeassociation.org/blob/main/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">este documento</a> para ver la lista completa de
             "scopes" soportados.
+          confidential: La aplicación se usará en un entorno donde el secreto 
+            del cliente pueda mantenerse confidencial. Las aplicaciones móviles 
+            nativas y las aplicaciones de página única se consideran no 
+            confidenciales.
       scopes:
         public: >-
           Acceder tus datos públicos (nombre, WCA ID, género, nacionalidad y
@@ -2164,6 +2187,8 @@ es-419:
         abbr_description: '%{short_name}: %{long_name}'
         cutoff: 'Corte: %{short_cutoff}'
         download_html: 'Descarga %{here} todos los detalles de la competición en PDF.'
+        download_pdf: Descarga aquí el PDF del cronograma
+        download: Descargar
       date: Fecha
       add_to_calendar: Añadir al calendario
       name: Nombre
@@ -2324,6 +2349,8 @@ es-419:
       is_bookmarked: Has marcado esta competición como favorita
       number_of_bookmarks: Número de veces marcada como favorita
       waiting_list_size: Tamaño de la lista de espera
+      view_more_members: Ver %{count} miembros más del equipo
+      see_more: + %{count} más
     index:
       title: Competiciones
       all_competitions: Todas las competiciones
@@ -2427,6 +2454,7 @@ es-419:
         announced_at_desc: 'Fecha de anuncio: descendente'
         name_asc: 'Nombre: A-Z'
         name_desc: 'Nombre: Z-A'
+      date_and_city: '%{date} – %{city}'
     my_competitions_table:
       edit: Editar
       registrations: Registro
@@ -2844,6 +2872,11 @@ es-419:
           No planifiques tu viaje, pero no abandones las esperanzas. La competición
           está llena, pero has sido colocado en la lista de espera. Recibirás un correo
           si se liberan suficientes lugares como para que puedas asistir.
+        additional: Por favor, asegúrate de haber seguido las instrucciones 
+          adicionales indicadas arriba sobre el pago u otros requisitos de 
+          registro.
+        email: Recibirás un correo electrónico cuando se actualice el estado de 
+          tu registro.
       list:
         empty: Ninguno
         spots_remaining_plural:
@@ -3182,8 +3215,8 @@ es-419:
       edited_deadline_not_in_future: >-
         Solo se permiten fechas límites en el futuro, pero %{new_timestamp} no
         lo está. ¿Viajaste en el tiempo?
-      fto_requires_internal_scoretaking: debe configurarse como "Integrated Live
-        Results" cuando se incluya FTO.
+      fto_requires_internal_scoretaking: debe configurarse como "Resultados en 
+        vivo integrados" cuando se incluya FTO.
     new:
       create_competition: Crear competición
       note_clone: >-

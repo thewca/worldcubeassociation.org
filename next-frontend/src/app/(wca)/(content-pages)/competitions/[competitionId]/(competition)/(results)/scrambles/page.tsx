@@ -35,7 +35,6 @@ export default async function ScramblesPage({
   return (
     <Card.Root>
       <Card.Body>
-        <Card.Title textStyle="s4">Scrambles</Card.Title>
         <FilteredScrambles
           competitionInfo={competitionInfo}
           resultsByEvent={scramblesByEvent}
