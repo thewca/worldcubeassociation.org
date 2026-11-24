@@ -10,7 +10,7 @@ const neverChanges = () => () => {};
  * when it hydrates.
  */
 export default function useLocalDateTime(
-  isoDateTime: string,
+  isoDateTime: string | null,
   format: Intl.DateTimeFormatOptions = DateTime.DATETIME_FULL,
 ) {
   const locale = useLocale();
@@ -19,6 +19,8 @@ export default function useLocalDateTime(
     () => DateTime.local().zoneName,
     () => "utc",
   );
+
+  if (isoDateTime === null) return null;
 
   return DateTime.fromISO(isoDateTime, { zone, locale }).toLocaleString(format);
 }

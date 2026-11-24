@@ -56,22 +56,38 @@ export const fullTimeDiff = (luxonDate: DateTime) => {
 
 /// / string parameters
 
-export function hasPassed(dateTime: string, timeZone?: string | Zone) {
-  return DateTime.fromISO(dateTime, { zone: timeZone }) < DateTime.now();
+export function hasPassed(dateTime: string | null, timeZone?: string | Zone) {
+  return (
+    dateTime !== null &&
+    DateTime.fromISO(dateTime, { zone: timeZone }) < DateTime.now()
+  );
 }
 
 // for date-only strings, which would otherwise parse as midnight
-export function hasPassedEndOfDay(date: string, timeZone?: string | Zone) {
+export function hasPassedEndOfDay(
+  date: string | null,
+  timeZone?: string | Zone,
+) {
   return (
+    date !== null &&
     DateTime.fromISO(date, { zone: timeZone }).endOf("day") < DateTime.now()
   );
 }
 
-export function hasNotPassed(dateTime: string, timeZone?: string | Zone) {
-  return DateTime.now() < DateTime.fromISO(dateTime, { zone: timeZone });
+export function hasNotPassed(
+  dateTime: string | null,
+  timeZone?: string | Zone,
+) {
+  return (
+    dateTime !== null &&
+    DateTime.now() < DateTime.fromISO(dateTime, { zone: timeZone })
+  );
 }
 
-export function hasNotPassedOrNull(dateTime: string, timeZone?: string | Zone) {
+export function hasNotPassedOrNull(
+  dateTime: string | null,
+  timeZone?: string | Zone,
+) {
   return dateTime === null || hasNotPassed(dateTime, timeZone);
 }
 
