@@ -291,19 +291,6 @@ export function ByPersonTable({
 const competitionStartMillis = (result: components["schemas"]["V1Result"]) =>
   DateTime.fromISO(result.competition_start_date).toMillis();
 
-function historicalPbMarkers(results: components["schemas"]["V1Result"][]) {
-  const chronological = _.orderBy(
-    results,
-    [competitionStartMillis, "id"],
-    ["asc", "asc"],
-  );
-
-  return {
-    single: personalBestIds(chronological, (result) => result.best),
-    average: personalBestIds(chronological, (result) => result.average),
-  };
-}
-
 // A regional record outranks a personal best, so the record's own tag wins and "PR"
 // is only shown for a result that was a personal best without being a record.
 function recordOrPersonalBestTag<RecordTag extends string | null | undefined>(
