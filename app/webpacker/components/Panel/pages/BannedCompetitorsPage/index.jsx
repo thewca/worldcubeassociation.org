@@ -73,10 +73,10 @@ export default function BannedCompetitorsPage() {
   return (
     <>
       <>
-        <Header>Banned Competitors</Header>
+        <Header>Suspended Competitors</Header>
         {canEditBannedCompetitors && (
         <Button onClick={() => setBanModalParams({ action: 'new' })}>
-          Ban new competitor
+          Suspend a competitor
         </Button>
         )}
         <BannedCompetitors
@@ -89,7 +89,7 @@ export default function BannedCompetitorsPage() {
         />
       </>
       <>
-        <Header>Past Banned Competitors</Header>
+        <Header>Past Suspended Competitors</Header>
         <BannedCompetitors
           bannedCompetitorRoles={pastBannedCompetitorRoles}
           canEditBannedCompetitors={canEditBannedCompetitors}
@@ -100,7 +100,7 @@ export default function BannedCompetitorsPage() {
         />
       </>
       <Modal open={!!banModalParams} onClose={() => setBanModalParams(null)}>
-        <Modal.Header>Add/Edit Banned Competitor</Modal.Header>
+        <Modal.Header>Add/Edit Suspended Competitor</Modal.Header>
         <Modal.Content>
           <BannedCompetitorForm
             sync={() => {

@@ -69,7 +69,7 @@ export default function BanendCompetitorForm({
     <Form onSubmit={formSubmitHandler}>
       {banAction === 'new' && (
         <Form.Field
-          label="New Banned competitor"
+          label="New Suspended Competitor"
           control={WcaSearch}
           name="user"
           value={formValues?.user}
@@ -106,13 +106,13 @@ export default function BanendCompetitorForm({
         })}
       />
       <Form.Input
-        label="Ban Reason"
+        label="Suspension Reason"
         name="banReason"
         value={formValues?.banReason}
         onChange={handleFormChange}
       />
       <Form.Dropdown
-        label="Ban Scope"
+        label="Suspension Scope"
         name="scope"
         value={formValues?.scope}
         onChange={handleFormChange}
