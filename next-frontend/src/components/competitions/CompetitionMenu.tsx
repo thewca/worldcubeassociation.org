@@ -1,4 +1,4 @@
-import { adminTabs, liveTab } from "@/lib/wca/competitions/tabs";
+import { adminTabs, isTabDisabled, liveTab } from "@/lib/wca/competitions/tabs";
 import { getPermissions } from "@/lib/wca/permissions.server";
 import TabMenu from "@/components/competitions/TabMenu";
 import { getT } from "@/lib/i18n/get18n";
@@ -18,11 +18,12 @@ export default async function CompetitionMenu({
   const { competitionId } = await params;
   const { t } = await getT();
 
-  const menu = await getCompetitionMenuData(competitionId);
+  const [menu, permissions] = await Promise.all([
+    getCompetitionMenuData(competitionId),
+    getPermissions(),
+  ]);
 
   if (!menu.ok) return <OpenapiError t={t} response={menu.response} />;
-
-  const permissions = await getPermissions();
 
   const tabs = [
     ...menu.tabs,
@@ -73,7 +74,7 @@ export async function AwaitingResultsAlert({
       <Alert.Indicator />
       <Alert.Content>
         <Alert.Title>{t("competitions.messages.upload_results")}</Alert.Title>
-        {!competitionLiveTab.disabled && (
+        {!isTabDisabled(competitionLiveTab) && (
           <Alert.Description>
             {t("competitions.messages.provisional_live_results")}{" "}
             <Link href={liveResultsHref}>{t("competitions.live.title")}</Link>
