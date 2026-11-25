@@ -26,6 +26,7 @@ export interface PermissionFunctions {
   canManageRegionalOrganizations: () => boolean;
   canAccessCms: () => boolean;
   canCreateCompetitions: () => boolean;
+  canAdminCompetitions: () => boolean;
   canSeeAdminCompetitions: () => boolean;
 }
 
@@ -142,6 +143,8 @@ export const hydrateUserPermissions = (
   canAccessCms: () => rawPermissions?.can_access_cms.scope === "*",
   canCreateCompetitions: () =>
     rawPermissions?.can_organize_competitions.scope === "*",
+  canAdminCompetitions: () =>
+    rawPermissions?.can_administer_competitions.scope === "*",
   canSeeAdminCompetitions: () =>
     rawPermissions?.can_see_admin_competitions.scope === "*",
 });

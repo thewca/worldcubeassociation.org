@@ -2519,6 +2519,8 @@ en:
         register: "Register"
         competitors: "Competitors"
         scrambles: "Scrambles"
+        upload_and_check_results: "Upload and check results"
+        check_existing_results: "Check existing results"
         competitor_results: "Competitor results"
       general: "General"
       more: "More"

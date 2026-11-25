@@ -1,3 +1,4 @@
+import { LuCloudUpload, LuListChecks, LuLock, LuUpload } from "react-icons/lu";
 import AboutTheRegulationsIcon from "@/components/icons/AboutTheRegulationsIcon";
 import AboutTheWcaIcon from "@/components/icons/AboutTheWcaIcon";
 import AdminResultsIcon from "@/components/icons/AdminResultsIcon";
@@ -211,3 +212,13 @@ export const iconMap = {
 } as const;
 
 export type IconName = keyof typeof iconMap;
+
+// Kept apart from `iconMap`, whose keys are offered as icon choices in the Payload CMS.
+export const lucideIconMap = {
+  Lock: LuLock,
+  Upload: LuUpload,
+  "Cloud Upload": LuCloudUpload,
+  "List Checks": LuListChecks,
+} as const;
+
+export type LucideIconName = keyof typeof lucideIconMap;
