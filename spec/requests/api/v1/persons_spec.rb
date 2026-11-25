@@ -43,6 +43,20 @@ RSpec.describe "API v1 Persons" do
       expect(json["delegate_status"]).to eq "delegate"
     end
 
+    it "serializes the id of the person's user" do
+      user = create(:user_with_wca_id)
+
+      get api_v1_person_path(user.wca_id)
+
+      expect(response.parsed_body["user_id"]).to eq user.id
+    end
+
+    it "serializes a null user id for a person without a user" do
+      get api_v1_person_path(person.wca_id)
+
+      expect(response.parsed_body).to include("user_id" => nil)
+    end
+
     it "serializes a rank per event the person has a single for" do
       create(:ranks_single, person_id: person.wca_id, event_id: "333")
 
@@ -149,6 +163,36 @@ RSpec.describe "API v1 Persons" do
 
       json = response.parsed_body
       expect(json.pluck("id")).to contain_exactly(other_event_result.id)
+    end
+
+    it "paginates by competition, newest first, keeping all of a competition's results on one page" do
+      newer_competition = create(:competition, starts: result.competition.start_date + 1.week)
+      newer_results = [
+        create(:result, person: person, competition: newer_competition),
+        create(:result, person: person, competition: newer_competition, event_id: "222", format_id: "a"),
+      ]
+
+      get api_v1_person_results_path(person.wca_id), params: { per_page: 1, page: 1 }
+
+      expect(response.parsed_body.pluck("id")).to match_array(newer_results.map(&:id))
+      expect(response.headers["Total"]).to eq "2"
+
+      get api_v1_person_results_path(person.wca_id), params: { per_page: 1, page: 2 }
+
+      expect(response.parsed_body.pluck("id")).to contain_exactly(result.id)
+    end
+
+    it "judges the newest page against results on older pages" do
+      older_competition = create(:competition, starts: result.competition.start_date - 1.week)
+      create(:result, person: person, competition: older_competition, best: result.best - 100, average: result.average + 100)
+
+      get api_v1_person_results_path(person.wca_id), params: { per_page: 1, page: 1 }
+
+      expect(response.parsed_body.first).to include(
+        "id" => result.id,
+        "is_personal_best_single" => false,
+        "is_personal_best_average" => true,
+      )
     end
 
     it "404s for an unknown WCA ID" do

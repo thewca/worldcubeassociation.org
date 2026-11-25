@@ -37,7 +37,14 @@ const baseWcaProvider: GenericOAuthConfig = {
   discoveryUrl: WCA_DISCOVERY_URL,
   // `manage_registrations` is what lets this frontend submit and edit registrations on the
   //   signed-in user's behalf; without it the registration endpoints answer 403.
-  scopes: ["openid", "profile", "email", "manage_registrations"],
+  //   `manage_competitions` lets organizers see their unannounced competitions.
+  scopes: [
+    "openid",
+    "profile",
+    "email",
+    "manage_registrations",
+    "manage_competitions",
+  ],
   mapProfileToUser: (profile) => {
     const wcaProfile = profile as unknown as WcaProfile;
 

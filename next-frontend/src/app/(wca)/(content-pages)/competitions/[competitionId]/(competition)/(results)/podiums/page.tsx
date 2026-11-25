@@ -19,14 +19,14 @@ export default async function PodiumsPage({
     await getPodiums(competitionId);
 
   if (podiumError) {
-    return <Text>Error fetching Podiums</Text>;
+    return <Text>{t("errors.next_frontend.load_error.podiums")}</Text>;
   }
 
   return (
     <Card.Root>
       <Card.Body>
         <Card.Title asChild>
-          <Text textStyle="s3">Podiums</Text>
+          <Text textStyle="s3">{t("competitions.nav.menu.podiums")}</Text>
         </Card.Title>
         <VStack align="left" gap={4}>
           {podiumResults.map((podium) => (

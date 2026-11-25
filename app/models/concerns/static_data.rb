@@ -5,20 +5,22 @@ module StaticData
 
   DATA_FOLDER = Rails.root.join('lib/static_data')
 
+  def self.parse_json_file(file_path, symbolize_names: true)
+    ::JSON.parse(File.read(file_path), symbolize_names: symbolize_names)
+  end
+
+  def self.write_json_file(file_path, hash_data)
+    json_output = ::JSON.pretty_generate(hash_data.as_json)
+
+    # Don't rewrite the file if it already exists and has the same content.
+    # It helps the asset pipeline or webpack understand that file wasn't changed.
+    return if File.exist?(file_path) && File.read(file_path) == json_output
+
+    File.write(file_path, json_output)
+  end
+
   class_methods do
-    def parse_json_file(file_path, symbolize_names: true)
-      ::JSON.parse(File.read(file_path), symbolize_names: symbolize_names)
-    end
-
-    def write_json_file(file_path, hash_data)
-      json_output = ::JSON.pretty_generate(hash_data.as_json)
-
-      # Don't rewrite the file if it already exists and has the same content.
-      # It helps the asset pipeline or webpack understand that file wasn't changed.
-      return if File.exist?(file_path) && File.read(file_path) == json_output
-
-      File.write(file_path, json_output)
-    end
+    delegate :parse_json_file, :write_json_file, to: :StaticData
   end
 
   included do

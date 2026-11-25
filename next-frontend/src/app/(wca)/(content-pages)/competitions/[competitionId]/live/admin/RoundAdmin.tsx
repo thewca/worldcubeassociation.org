@@ -25,6 +25,7 @@ export default function RoundAdmin({
 }) {
   const { t } = useT();
   const { rounds } = useAllRoundsInfo();
+  const { t } = useT();
 
   const roundsById = _.groupBy(rounds, (d) => parseActivityCode(d.id).eventId);
 
@@ -37,7 +38,7 @@ export default function RoundAdmin({
             query: { competitionId },
           })}
         >
-          Manage scoretakers
+          {t("competitions.live.admin.scoretakers.manage")}
         </Link>
       </Button>
       <SimpleGrid columns={3} gap={2}>

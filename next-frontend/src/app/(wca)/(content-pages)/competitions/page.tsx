@@ -286,7 +286,7 @@ export default function CompetitionsPage() {
         {!session.isPending && !session.data && (
           <RemovableCard
             imageUrl="newcomer.png"
-            heading="Why Compete?"
+            heading={t("competitions.index.why_compete_title")}
             descriptionAs="div"
             description={
               <Trans
@@ -294,7 +294,7 @@ export default function CompetitionsPage() {
                 i18nKey="competitions.index.why_compete_description_html"
               />
             }
-            buttonText="Learn More"
+            buttonText={t("homepage.learn_more")}
             buttonUrl="/faq"
           />
         )}
@@ -827,6 +827,21 @@ function AdvancedFilters({
     { value: "past", label: t("competitions.index.past") },
   ];
 
+  const changeTimeOrder = (value: string | null) => {
+    if (!value) return;
+    const isPresent = value === "present";
+    dispatchFilter({
+      type: "set_time_order",
+      timeOrder: value,
+    });
+
+    // If past or recent are selected, we want to sort order by start date descending by default, so that the most recent competitions are shown first.
+    dispatchFilter({
+      type: "set_sort_order",
+      sort: isPresent ? "start_date" : "-start_date",
+    });
+  };
+
   return (
     <Stack
       direction={{ base: "column", lg: "row" }}
@@ -840,9 +855,7 @@ function AdvancedFilters({
         <SegmentGroup.Root
           hideBelow="md"
           value={filterState.timeOrder}
-          onValueChange={(e) =>
-            dispatchFilter({ type: "set_time_order", timeOrder: e.value! })
-          }
+          onValueChange={(e) => changeTimeOrder(e.value)}
         >
           <SegmentGroup.Indicator />
           <SegmentGroup.Items items={timeOrderItems} />
@@ -850,12 +863,7 @@ function AdvancedFilters({
         <NativeSelect.Root hideFrom="md">
           <NativeSelect.Field
             value={filterState.timeOrder}
-            onChange={(e) =>
-              dispatchFilter({
-                type: "set_time_order",
-                timeOrder: e.target.value,
-              })
-            }
+            onChange={(e) => changeTimeOrder(e.target.value)}
           >
             {timeOrderItems.map(({ value, label }) => (
               <option key={value} value={value}>

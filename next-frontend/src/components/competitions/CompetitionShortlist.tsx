@@ -34,7 +34,9 @@ function ShortlistItem<T extends DataCompetition>({
     case "event_ids":
       return (
         <DataList.Item>
-          <DataList.ItemLabel>Events</DataList.ItemLabel>
+          <DataList.ItemLabel>
+            {t("competitions.competition_info.events")}
+          </DataList.ItemLabel>
           <DataList.ItemValue asChild>
             <Wrap gap="4">
               {comp.event_ids.map((event_id) => (
@@ -99,7 +101,6 @@ function ShortlistItem<T extends DataCompetition>({
             <CurrencyValue
               lowestDenomination={comp.base_entry_fee_lowest_denomination}
               currencyCode={comp.currency_code}
-              subunitToUnit={comp.currency_subunit_to_unit}
             />
           </DataList.ItemValue>
         </DataList.Item>

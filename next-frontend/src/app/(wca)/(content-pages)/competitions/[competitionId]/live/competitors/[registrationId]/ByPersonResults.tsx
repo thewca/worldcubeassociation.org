@@ -34,7 +34,7 @@ export default function ByPersonResults({
     );
     return (
       <Fragment key={key}>
-        <Heading textStyle="h2">{events.byId[key].name}</Heading>
+        <Heading textStyle="h3">{events.byId[key].name}</Heading>
         <ByPersonByRoundTable
           eventResults={eventResults}
           competitionId={competitionId}

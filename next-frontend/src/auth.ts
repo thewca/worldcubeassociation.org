@@ -3,6 +3,7 @@ import { customSession, genericOAuth } from "better-auth/plugins";
 import { getAccessToken } from "better-auth/api";
 import { parseSetCookieHeader, toCookieOptions } from "better-auth/cookies";
 import { headers } from "next/headers";
+import { cache } from "react";
 import {
   siteWcaProvider,
   wcaUserAdditionalFields,
@@ -96,7 +97,7 @@ export type Session = NonNullable<RawSession> & { accessToken: string };
  * spent and Rails will reject us, so a fresh login is the only way on. Collapsing the two cases
  * lets call sites keep one `if (!session)` guard and treat `accessToken` as always present.
  */
-export async function getSession(): Promise<Session | null> {
+export const getSession = cache(async (): Promise<Session | null> => {
   const session = await auth.api.getSession({ headers: await headers() });
 
   if (!session?.accessToken) {
@@ -104,4 +105,4 @@ export async function getSession(): Promise<Session | null> {
   }
 
   return session as Session;
-}
+});

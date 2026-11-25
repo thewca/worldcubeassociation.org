@@ -3,9 +3,11 @@ allOf:
   - type: object
     description: >-
       A result on a person's results page, which also carries the head-to-head matches the person
-      competed in during that round.
+      competed in during that round, and whether it was a personal best when it was set.
     required:
       - participated_matches
+      - is_personal_best_single
+      - is_personal_best_average
     properties:
       participated_matches:
         type: array
@@ -15,3 +17,13 @@ allOf:
           For the whole bracket, use the competition's head-to-head endpoint.
         items:
           $ref: './H2hMatch.yaml'
+      is_personal_best_single:
+        type: boolean
+        description: >-
+          Whether this single tied or beat every earlier single of the person in this event, judged
+          against their whole history rather than just the requested page.
+      is_personal_best_average:
+        type: boolean
+        description: >-
+          Whether this average tied or beat every earlier average of the person in this event, judged
+          against their whole history rather than just the requested page.

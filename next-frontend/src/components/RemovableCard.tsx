@@ -41,7 +41,7 @@ export default function RemovableCard({
       colorVariant="solid"
       colorPalette="wcaWhite"
     >
-      <Image src={imageUrl} alt="removable card image" maxW="1/3" />
+      <Image src={imageUrl} alt="" maxW="1/3" />
       <Box width="2/3">
         <Card.Body>
           <HStack justifyContent="space-between">

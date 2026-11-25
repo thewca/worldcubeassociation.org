@@ -11,14 +11,30 @@ class Api::V1::PersonsController < Api::V1::ApiController
   end
 
   def results
-    h2h_match_includes = [*H2hMatch::SERIALIZATION_INCLUDES, { round: { results: { person: :user } } }]
-    results = person_results.includes(person: { user: { h2h_matches: h2h_match_includes } })
+    results = person_results
     results = results.in_event(params[:event_id]) if params[:event_id].present?
 
-    render json: results.as_json(
+    # Paginated by competition rather than by result, so that a page never splits a competition's rounds.
+    competitions = paginate Competition.where(id: results.select(:competition_id)).order(start_date: :desc, id: :desc)
+
+    h2h_match_includes = [*H2hMatch::SERIALIZATION_INCLUDES, { round: { results: { person: :user } } }]
+    # MySQL does not support LIMIT inside an IN subquery, so the page's competition ids are plucked first.
+    page_results = results.where(competition_id: competitions.ids)
+                          .includes(person: { user: { h2h_matches: h2h_match_includes } })
+
+    personal_best_ids_by_type = results.personal_best_ids_by_type
+
+    serialized_results = page_results.as_json(
       only: Result::V1_STANDALONE_SERIALIZE_OPTIONS[:only],
       methods: Result::V1_STANDALONE_SERIALIZE_OPTIONS[:methods] | %w[participated_matches],
     )
+
+    render json: serialized_results.map { |result_json|
+      result_json.merge(
+        "is_personal_best_single" => personal_best_ids_by_type[:best].include?(result_json["id"]),
+        "is_personal_best_average" => personal_best_ids_by_type[:average].include?(result_json["id"]),
+      )
+    }
   end
 
   def records

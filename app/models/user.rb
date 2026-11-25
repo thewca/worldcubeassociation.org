@@ -879,6 +879,9 @@ class User < ApplicationRecord
       can_access_cms: {
         scope: can_access_cms? ? "*" : [],
       },
+      can_edit_users: {
+        scope: can_view_all_users? ? "*" : ([id] | Registration.where(competition: organized_competitions.not_over).pluck(:user_id)).map(&:to_s),
+      },
       can_see_admin_competitions: {
         scope: can_see_admin_competitions? ? "*" : [],
       },
@@ -1650,6 +1653,11 @@ class User < ApplicationRecord
 
   def delegate_status
     highest_delegate_role&.metadata&.status
+  end
+
+  def delegate_status_on(date)
+    roles.filter { it.metadata.is_a?(RolesMetadataDelegateRegions) && it.active_on?(date) }
+         .max_by(&:status_rank)&.metadata&.status
   end
 
   def region_id

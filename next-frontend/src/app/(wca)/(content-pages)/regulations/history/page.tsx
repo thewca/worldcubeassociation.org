@@ -1,9 +1,8 @@
 import { Heading, Link, List, Text, VStack } from "@chakra-ui/react";
-import { getPayload } from "payload";
-import config from "@payload-config";
-import { connection } from "next/server";
+import { findCached } from "@/lib/payload/collections";
 import { getT } from "@/lib/i18n/get18n";
 import { Metadata } from "next";
+import TransWithLinks from "@/components/TransWithLinks";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getT();
@@ -13,14 +12,9 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 export default async function RegulationsHistory() {
-  const { i18n, lng } = await getT();
+  const { t, i18n, lng } = await getT();
 
-  await connection();
-
-  const payload = await getPayload({ config });
-
-  const regulationsHistory = await payload.find({
-    collection: "regulationsHistoryItem",
+  const regulationsHistory = await findCached("regulationsHistoryItem", {
     locale: lng,
     limit: 0,
     depth: 1,
@@ -36,48 +30,49 @@ export default async function RegulationsHistory() {
     .reverse();
 
   if (regulationsHistoryItems.length === 0) {
-    return <Heading>No Regulation History Items, add some!</Heading>;
+    return (
+      <Heading>
+        {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
+        No Regulation History Items, add some!
+      </Heading>
+    );
   }
 
   return (
     <VStack gap="8" alignItems="left">
-      <Heading size="5xl">WCA Regulations</Heading>
-      <Heading size="2xl">Older Versions of the Regulations</Heading>
+      <Heading size="5xl">{t("regulations_history.title")}</Heading>
+      <Heading size="2xl">{t("regulations_history.older_versions")}</Heading>
       <Text>
-        Until 2011, the Regulations were maintained by Ron van Bruchem and the
-        WCA Board. Since then, the{" "}
-        <Link href="mailto:wrc@worldcubeassociation.org">
-          WCA Regulations Committee
-        </Link>{" "}
-        is in charge of them.
+        <TransWithLinks i18nKey="regulations_history.maintainers_html" />
       </Text>
-      <Text>
-        Previously, from the January 1st, 2013 release until the January 1st,
-        2025 release, the WCA Regulations were split into the WCA Regulations
-        and the WCA Guidelines. The former contents of both documents were
-        combined into the WCA Regulations for the July 17th, 2025 release.
-      </Text>
+      <Text>{t("regulations_history.guidelines_merge")}</Text>
       <List.Root indented>
         {regulationsHistoryItems.map((item) => (
           <List.Item key={item.id}>
             <Link href={item.url}>{item.version}</Link>{" "}
             {item.changesUrl && (
               <Text>
-                (<Link href={item.changesUrl}>Changes</Link>
-                {item.summarizedChangesUrl && (
-                  <Link href={item.summarizedChangesUrl}>
-                    , Summarized Changes
-                  </Link>
+                {item.summarizedChangesUrl ? (
+                  <TransWithLinks
+                    i18nKey="regulations_history.changes_with_summary_html"
+                    values={{
+                      changes_url: item.changesUrl,
+                      summary_url: item.summarizedChangesUrl,
+                    }}
+                  />
+                ) : (
+                  <TransWithLinks
+                    i18nKey="regulations_history.changes_html"
+                    values={{ changes_url: item.changesUrl }}
+                  />
                 )}
-                )
               </Text>
             )}
           </List.Item>
         ))}
       </List.Root>
       <Text>
-        Current updates to the Regulations are available{" "}
-        <Link href="https://github.com/thewca/wca-regulations/">on GitHub</Link>
+        <TransWithLinks i18nKey="regulations_history.current_updates_html" />
       </Text>
     </VStack>
   );

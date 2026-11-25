@@ -864,6 +864,13 @@ const customConfig = defineConfig({
               },
             },
           },
+          textAutoContrast: {
+            true: {
+              itemValue: {
+                color: { _light: "colorPalette.contrast", _dark: "fg.muted" },
+              },
+            },
+          },
         },
       },
       stat: {

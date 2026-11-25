@@ -31,16 +31,24 @@ export default function PsychsheetTable({
       <Table.Root width="100%">
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeader>Pos</Table.ColumnHeader>
-            <Table.ColumnHeader>Name</Table.ColumnHeader>
-            <Table.ColumnHeader>Representing</Table.ColumnHeader>
-            <Table.ColumnHeader>WR</Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("common.ranking_abbreviations.position")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("results.table_elements.name")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("common.user.representing")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("common.ranking_abbreviations.world")}
+            </Table.ColumnHeader>
             <Table.ColumnHeader
               cursor="pointer"
               aria-sort={sortBy === "single" ? "ascending" : "none"}
               onClick={() => setSortBy("single")}
             >
-              Single
+              {t("common.single")}
             </Table.ColumnHeader>
             {showAverage && (
               <>
@@ -49,9 +57,11 @@ export default function PsychsheetTable({
                   aria-sort={sortBy === "average" ? "ascending" : "none"}
                   onClick={() => setSortBy("average")}
                 >
-                  Average
+                  {t("common.average")}
                 </Table.ColumnHeader>
-                <Table.ColumnHeader>WR</Table.ColumnHeader>
+                <Table.ColumnHeader>
+                  {t("common.ranking_abbreviations.world")}
+                </Table.ColumnHeader>
               </>
             )}
           </Table.Row>

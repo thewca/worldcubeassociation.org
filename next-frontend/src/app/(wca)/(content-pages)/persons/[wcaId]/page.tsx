@@ -40,13 +40,14 @@ export default async function PersonOverview({
 }) {
   const { wcaId } = await params;
   const { data: personDetails, error } = await getPersonInfo(wcaId);
+  const { t } = await getT();
 
   if (error) {
-    return <Text>Error fetching person</Text>;
+    return <Text>{t("errors.next_frontend.load_error.person")}</Text>;
   }
 
   if (!personDetails) {
-    return <Text>Person does not exist</Text>;
+    return <Text>{t("persons.show.not_found")}</Text>;
   }
 
   const roles: {
@@ -125,6 +126,7 @@ export default async function PersonOverview({
             profilePicture={personDetails.avatar.url}
             roles={roles}
             wcaId={wcaId}
+            userId={personDetails.user_id}
             gender={personDetails.gender}
             regionIso2={personDetails.country_iso2}
             competitions={personDetails.competition_count}
@@ -170,19 +172,25 @@ export default async function PersonOverview({
                 >
                   <Card.Header padding={0}>
                     <Tabs.List>
-                      <Tabs.Trigger value="results">Results</Tabs.Trigger>
+                      <Tabs.Trigger value="results">
+                        {t("persons.show.results")}
+                      </Tabs.Trigger>
                       <Tabs.Trigger value="competitions">
-                        Competitions
+                        {t("competitions.index.title")}
                       </Tabs.Trigger>
                       {hasRecords && (
-                        <Tabs.Trigger value="records">Records</Tabs.Trigger>
+                        <Tabs.Trigger value="records">
+                          {t("persons.show.records")}
+                        </Tabs.Trigger>
                       )}
                       {hasChampionshipPodiums && (
                         <Tabs.Trigger value="championship-podiums">
-                          Championship Podiums
+                          {t("persons.show.championship_podiums")}
                         </Tabs.Trigger>
                       )}
-                      <Tabs.Trigger value="map">Map</Tabs.Trigger>
+                      <Tabs.Trigger value="map">
+                        {t("persons.show.competitions_map")}
+                      </Tabs.Trigger>
                       <Tabs.Indicator
                         bg="colorPalette.solid"
                         borderBottomRadius={0}
