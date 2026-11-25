@@ -34,7 +34,7 @@ function RegistrationFullMessage({
       <Alert.Indicator />
       <Alert.Content>
         <Alert.Title>
-          {t("registrations.registration_full_include_waiting_list", {
+          {t("registrations.registration_full", {
             competitor_limit:
               competitionInfo.registration_info.competitor_limit,
           })}
