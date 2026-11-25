@@ -22,7 +22,9 @@ export default async function TranslationDisclaimer() {
     lng,
   );
 
-  if (hiddenLocales?.includes(lng)) return null;
+  const isHiddenForLocale = hiddenLocales?.includes(lng);
+
+  if (isHiddenForLocale) return null;
 
   return (
     <ClientOnly>
