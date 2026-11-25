@@ -17,6 +17,7 @@ import { components } from "@/types/openapi";
 import { useT } from "@/lib/i18n/useI18n";
 import {
   CompetitionNavTab,
+  isTabDisabled,
   TabWithChildren,
   TabWithExternalLink,
   TabWithLink,
@@ -223,7 +224,7 @@ function TabLink({
     <Tabs.Trigger
       value={tab.menuKey}
       asChild
-      disabled={tab.disabled}
+      disabled={isTabDisabled(tab)}
       minHeight="fit-content"
       justifyContent="left"
     >
@@ -353,7 +354,7 @@ function CollapsibleTabChild({
     );
 
   return (
-    <Tabs.Trigger value={tab.menuKey} asChild disabled={tab.disabled}>
+    <Tabs.Trigger value={tab.menuKey} asChild disabled={isTabDisabled(tab)}>
       {link}
     </Tabs.Trigger>
   );

@@ -14,12 +14,12 @@ interface TabBase {
   i18nKeyAdmin?: string;
   menuKey: string;
   icon?: IconName | LucideIconName;
-  disabled?: boolean;
   tooltipI18nKey?: string;
 }
 
 export interface TabWithLink extends TabBase {
   type: "tab-link";
+  disabled?: boolean;
   badgeI18nKey?: string;
   href: RouteLiteral;
   hrefAdmin?: RouteLiteral;
@@ -38,6 +38,9 @@ export interface TabWithChildren extends TabBase {
 
 export type CompetitionNavTab =
   TabWithLink | TabWithExternalLink | TabWithChildren;
+
+export const isTabDisabled = (tab: CompetitionNavTab) =>
+  tab.type === "tab-link" && Boolean(tab.disabled);
 
 const eventsAndScheduleTabs = (
   competitionInfo: components["schemas"]["V1CompetitionInfo"],
