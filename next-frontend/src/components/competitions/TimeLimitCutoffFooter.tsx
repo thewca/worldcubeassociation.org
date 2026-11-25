@@ -58,20 +58,20 @@ const QualificationDateEventsList: React.FC<
 
 interface TimeLimitCutoffFooterProps {
   events: WcifEvent[];
-  forceQualifications?: boolean;
 }
 
 export const TimeLimitCutoffFooter: React.FC<
   TimeLimitCutoffFooterProps
-> = async ({ events, forceQualifications = false }) => {
+> = async ({ events }) => {
   const { t } = await getT();
 
   const showCutoff = events.some((event) =>
     event.rounds.some((round) => Boolean(round.cutoff)),
   );
 
-  const showQualifications =
-    forceQualifications || events.some((event) => Boolean(event.qualification));
+  const showQualifications = events.some((event) =>
+    Boolean(event.qualification),
+  );
 
   const showCumulativeOneRound = events.some((event) =>
     event.rounds.some(

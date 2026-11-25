@@ -16,7 +16,15 @@ import { hasPassed } from "@/lib/wca/dates";
 type CompetitionIndex = components["schemas"]["CompetitionIndex"];
 type CompetitionInfo = components["schemas"]["CompetitionInfo"];
 
-type DataCompetition = CompetitionIndex | CompetitionInfo;
+type V1CompetitionInfo = components["schemas"]["V1CompetitionInfo"];
+
+type FeaturedCompetition = Pick<V1CompetitionInfo, "start_date" | "end_date"> &
+  Pick<V1CompetitionInfo["location"], "city" | "country_iso2"> &
+  Pick<V1CompetitionInfo["registration_info"], "spots_left"> & {
+    registration_close: V1CompetitionInfo["registration_info"]["closes_at"];
+  };
+
+type DataCompetition = CompetitionIndex | CompetitionInfo | FeaturedCompetition;
 type DataListItem<T extends DataCompetition> = keyof T & string;
 
 function ShortlistItem<T extends DataCompetition>({
@@ -32,6 +40,8 @@ function ShortlistItem<T extends DataCompetition>({
 }) {
   switch (item) {
     case "event_ids":
+      if (!("event_ids" in comp)) return null;
+
       return (
         <DataList.Item>
           <DataList.ItemLabel>
@@ -57,6 +67,8 @@ function ShortlistItem<T extends DataCompetition>({
       );
     case "start_date":
     case "end_date":
+      if (!comp.start_date || !comp.end_date) return null;
+
       return (
         <DataList.Item>
           <DataList.ItemLabel asChild>
@@ -80,6 +92,8 @@ function ShortlistItem<T extends DataCompetition>({
         </DataList.Item>
       );
     case "venue_address":
+      if (!("venue_address" in comp)) return null;
+
       return (
         <DataList.Item>
           <DataList.ItemLabel asChild>
@@ -91,6 +105,8 @@ function ShortlistItem<T extends DataCompetition>({
         </DataList.Item>
       );
     case "base_entry_fee_lowest_denomination":
+      if (!("base_entry_fee_lowest_denomination" in comp)) return null;
+
       return (
         <DataList.Item>
           <DataList.ItemLabel asChild>
@@ -116,11 +132,13 @@ function ShortlistItem<T extends DataCompetition>({
           <DataList.ItemValue>
             {hasPassed(comp.registration_close)
               ? t("competitions.registration_v2.errors.-4008")
-              : comp.spots_left === 0
-                ? t("competitions.messages.no_spots_left")
-                : t("competitions.messages.spots_left", {
-                    count: comp.spots_left,
-                  })}
+              : comp.spots_left == null
+                ? t("competitions.competition_info.no_competitor_limit")
+                : comp.spots_left <= 0
+                  ? t("competitions.messages.no_spots_left")
+                  : t("competitions.messages.spots_left", {
+                      count: comp.spots_left,
+                    })}
           </DataList.ItemValue>
         </DataList.Item>
       );

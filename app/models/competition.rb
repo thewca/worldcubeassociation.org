@@ -1855,6 +1855,7 @@ class Competition < ApplicationRecord
     {
       stripePublishableKey: AppSecrets.STRIPE_PUBLISHABLE_KEY,
       connectedAccountId: payment_account_for(:stripe)&.account_id,
+      donationsEnabled: enable_donations?,
     }
   end
 

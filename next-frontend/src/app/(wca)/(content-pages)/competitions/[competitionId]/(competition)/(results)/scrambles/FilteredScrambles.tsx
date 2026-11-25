@@ -14,12 +14,12 @@ export default function FilteredScrambles({
   resultsByEvent,
   isAdmin = false,
 }: {
-  competitionInfo: components["schemas"]["CompetitionInfo"];
+  competitionInfo: components["schemas"]["V1CompetitionInfo"];
   resultsByEvent: Record<string, components["schemas"]["Scramble"][]>;
   isAdmin?: boolean;
 }) {
   const [activeEventId, setActiveEventId] = useState<string>(
-    competitionInfo.event_ids[0],
+    competitionInfo.events.event_ids[0],
   );
 
   const { t } = useT();
@@ -40,7 +40,7 @@ export default function FilteredScrambles({
         title=""
         selectedEvent={activeEventId}
         onEventClick={setActiveEventId}
-        eventList={competitionInfo.event_ids}
+        eventList={competitionInfo.events.event_ids}
       />
       <Accordion.Root
         defaultValue={["0"]}

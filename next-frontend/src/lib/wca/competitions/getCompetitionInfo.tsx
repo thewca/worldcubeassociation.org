@@ -6,7 +6,7 @@ export async function getCompetitionInfo(competitionId: string) {
   "use cache: remote";
   cacheLife("minutes");
 
-  return serverClient.GET("/v0/competitions/{competitionId}/", {
+  return serverClient.GET("/v1/competitions/{competitionId}", {
     params: { path: { competitionId } },
   });
 }

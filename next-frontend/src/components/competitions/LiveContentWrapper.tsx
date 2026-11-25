@@ -9,7 +9,7 @@ export default function LiveContentWrapper({
   competitionInfo,
   children,
 }: {
-  competitionInfo: components["schemas"]["CompetitionInfo"];
+  competitionInfo: components["schemas"]["V1CompetitionInfo"];
   children: React.ReactNode;
 }) {
   const { rounds } = useAllRoundsInfo();
