@@ -63,3 +63,34 @@ module "shared" {
   pma_auth_secret    = var.pma_auth_secret
   anycable_path      = var.anycable_path
 }
+
+# These alarms were created by hand. TODO: drop the import blocks once they have been applied.
+import {
+  to = module.production.aws_cloudwatch_metric_alarm.elb_5xx
+  id = "5XX Errors in Production"
+}
+
+import {
+  to = module.production.aws_cloudwatch_metric_alarm.request_count
+  id = "Prod requests warning"
+}
+
+import {
+  to = module.production.aws_cloudwatch_metric_alarm.db_free_storage
+  id = "Prob DB disk <50gb"
+}
+
+import {
+  to = module.production.aws_cloudwatch_metric_alarm.db_load
+  id = "Prod DB Load"
+}
+
+import {
+  to = module.production.aws_cloudwatch_metric_alarm.db_disk_queue_depth
+  id = "Prod DiskQueueDepth"
+}
+
+import {
+  to = module.production.aws_cloudwatch_metric_alarm.rails_cpu
+  id = "prod_cpu_maxout"
+}
