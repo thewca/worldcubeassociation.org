@@ -20,13 +20,13 @@ export default async function Tab({
   if (error) return <OpenapiError t={t} response={response} />;
 
   if (!tabs) {
-    return <Text>Competition does not exist</Text>;
+    return <Text>{t("competitions.registration_v2.errors.-1000")}</Text>;
   }
 
   const tab = tabs.find((t) => t.name === decodeURIComponent(tabName));
 
   if (!tab) {
-    return <Text>Tab does not exist</Text>;
+    return <Text>{t("competition_tabs.not_found")}</Text>;
   }
 
   return <TabContent content={tab.content} />;
@@ -35,7 +35,7 @@ export default async function Tab({
 // Keyed on the markdown itself, so the parsed output is reused until an organizer edits the tab.
 //   `getT` reads cookies and cannot run in here, which is why the error path stays in the page.
 async function TabContent({ content }: { content: string }) {
-  "use cache";
+  "use cache: remote";
   cacheLife("max");
 
   return (

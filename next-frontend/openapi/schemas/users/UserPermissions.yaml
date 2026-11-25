@@ -20,6 +20,8 @@ required:
   - can_create_posts
   - can_manage_regional_organizations
   - can_access_cms
+  - can_edit_users
+  - can_see_admin_competitions
 properties:
   can_attend_competitions:
     type: object
@@ -169,6 +171,13 @@ properties:
     properties:
       scope:
         $ref: "./CompetitionPermissions.yaml"
+  can_see_admin_competitions:
+    type: object
+    required:
+      - scope
+    properties:
+      scope:
+        $ref: "./CompetitionPermissions.yaml"
   can_request_to_edit_others_profile:
     type: object
     required:
@@ -183,3 +192,10 @@ properties:
             format: "Wildcard"
             enum:
               - "*"
+  can_edit_users:
+    type: object
+    required:
+      - scope
+    properties:
+      scope:
+        $ref: "./CompetitionPermissions.yaml"

@@ -24,7 +24,9 @@ export default function RoundLimits() {
       </Text>
       <Text>
         {t("competitions.events.cutoff")}:{" "}
-        {round.cutoff ? cutoffToString(t, round.cutoff, eventId) : "None"}
+        {round.cutoff
+          ? cutoffToString(t, round.cutoff, eventId)
+          : t("competitions.live.admin.no_cutoff")}
       </Text>
     </Stack>
   );

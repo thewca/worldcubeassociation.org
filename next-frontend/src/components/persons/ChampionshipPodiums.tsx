@@ -1,40 +1,40 @@
-import React from "react";
-import { Table, Heading } from "@chakra-ui/react";
+import { VStack } from "@chakra-ui/react";
 import { components } from "@/types/openapi";
+import { getT } from "@/lib/i18n/get18n";
+import PodiumTable from "@/components/persons/PodiumTable";
 
-const ChampionshipPodiumsTab: React.FC<{
-  championshipPodiums: components["schemas"]["PersonInfo"]["championship_podiums"];
-}> = () => {
-  const podiums = [
-    { event: "3x3x3 Cube", place: "1st", competition: "Nationals 2022" },
-    { event: "2x2x2 Cube", place: "2nd", competition: "Regionals 2023" },
-    // Add more podiums here
-  ];
+type ChampionshipPodiums =
+  components["schemas"]["V1PersonInfo"]["championship_podium_results"];
+type ChampionshipLevel = keyof ChampionshipPodiums;
+
+const CHAMPIONSHIP_LEVELS: ChampionshipLevel[] = [
+  "world",
+  "continental",
+  "greater_china",
+  "national",
+];
+
+const ChampionshipPodiumsTab = async ({
+  championshipPodiums,
+}: {
+  championshipPodiums: ChampionshipPodiums;
+}) => {
+  const { t } = await getT();
+
+  const levelsWithPodiums = CHAMPIONSHIP_LEVELS.filter(
+    (level) => championshipPodiums[level].length > 0,
+  );
 
   return (
-    <>
-      <Heading>Championship Podiums</Heading>
-      <Table.ScrollArea>
-        <Table.Root>
-          <Table.Header>
-            <Table.Row>
-              <Table.ColumnHeader>Event</Table.ColumnHeader>
-              <Table.ColumnHeader>Place</Table.ColumnHeader>
-              <Table.ColumnHeader>Competition</Table.ColumnHeader>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {podiums.map((podium, index) => (
-              <Table.Row key={index}>
-                <Table.Cell>{podium.event}</Table.Cell>
-                <Table.Cell>{podium.place}</Table.Cell>
-                <Table.Cell>{podium.competition}</Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table.Root>
-      </Table.ScrollArea>
-    </>
+    <VStack align="stretch" gap={8}>
+      {levelsWithPodiums.map((level) => (
+        <PodiumTable
+          key={level}
+          title={t(`persons.show.championship_podium_levels.${level}`)}
+          results={championshipPodiums[level]}
+        />
+      ))}
+    </VStack>
   );
 };
 

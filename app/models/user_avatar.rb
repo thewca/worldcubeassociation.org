@@ -63,7 +63,7 @@ class UserAvatar < ApplicationRecord
         Rails.application.routes.url_helpers.rails_representation_url(self.image)
       end
     when 'local'
-      ActionController::Base.helpers.asset_url(self.filename)
+      URI.join(EnvConfig.ROOT_URL, ActionController::Base.helpers.asset_url(self.filename)).to_s
     end
   end
 
@@ -309,6 +309,11 @@ class UserAvatar < ApplicationRecord
   DEFAULT_SERIALIZE_OPTIONS = {
     only: %w[id status thumbnail_crop_x thumbnail_crop_y thumbnail_crop_w thumbnail_crop_h],
     methods: %w[url thumb_url is_default can_edit_thumbnail],
+  }.freeze
+
+  V1_SERIALIZE_OPTIONS = {
+    only: [],
+    methods: %w[url thumb_url is_default],
   }.freeze
 
   def serializable_hash(options = nil)

@@ -62,7 +62,7 @@ th:
     444bf: 4x4x4 Blindfolded
     555bf: 5x5x5 Blindfolded
     333mbf: 3x3x3 Multi-Blind
-    fto: Face Turning Octahedron
+    fto: Face Turning Octahedron (FTO)
     magic: Magic
     mmagic: Master Magic
     333mbo: 3x3x3 Multi-Blind รูปแบบเก่า
@@ -247,6 +247,10 @@ th:
       secret: Secret
       scopes: Scopes
       callback_urls: Callback Urls
+      confidential: เป็นความลับหรือไม่?
+      confidentiality:
+        'yes': ใช่
+        'no': ไม่
   helpers:
     submit:
       competition_medium:
@@ -713,6 +717,11 @@ th:
             คั่นแต่ละขอบเขตด้วยช่องว่าง เว้นว่างไว้เพื่อใช้ขอบเขตเริ่มต้น ดู<a
             href="https://github.com/thewca/worldcubeassociation.org/blob/main/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">ที่นี่</a>สำหรับขอบเขตที่รองรับ
+          confidential: 
+            แอปพลิเคชันที่จะนำไปใช้งานจะต้องเป็นประเภทที่สามารถเก็บรักษาความลับของผู้ใช้ได้
+            ส่วนแอปพลิเคชันบนอุปกรณ์เคลื่อนที่ (Native Mobile Apps) 
+            และแอปพลิเคชันแบบหน้าเดียว (Single Page Apps) 
+            ถือเป็นแอปพลิเคชันประเภทที่ไม่สามารถรักษาความลับดังกล่าวได้
       scopes:
         public: 'เข้าถึงข้อมูลสาธารณะของคุณ (ชื่อ, WCA ID, เพศ, สัญชาติและภาพโปรไฟล์)'
         dob: เข้าถึงวันเดือนปีเกิดของคุณ
@@ -809,6 +818,9 @@ th:
         wic: สำหรับ WIC
         weat: สำหรับ WEAT
         wqac: สำหรับ WQAC
+        leader: สำหรับผู้นำ
+      switch_to_dark_mode: เปลี่ยนเป็นโหมดมืด
+      switch_to_light_mode: เปลี่ยนเป็นโหมดสว่าง
   page:
     translators:
       title: ผู้แปลภาษา
@@ -821,8 +833,8 @@ th:
         ประธานเป็นประธานในการประชุมคณะกรรมการทั้งหมด,
         เลขานุการดูแลเอกสารขององค์กร และเหรัญญิกจัดการเรื่องทางการเงินของ WCA
       board_description: >-
-        WCA Board มีหน้าที่รับผิดชอบในการเป็นผู้นำองค์กรโดยรวม
-        และปฏิบัติหน้าที่ใดๆ ที่ทีมและคณะกรรมการไม่ได้ปฏิบัติตาม
+        คณะกรรมการ WCA มีหน้าที่รับผิดชอบในการนำองค์กรโดยรวม รวมถึงปฏิบัติหน้าที่ต่าง
+        ๆ ที่ไม่ได้อยู่ในความรับผิดชอบของทีมหรือคณะทำงานอื่น ๆ
     teams_committees_councils:
       title: ทีมงานและคณะกรรมการของ WCA
       description: >-
@@ -852,43 +864,35 @@ th:
         wapc: WCA Appeals Committee
       groups_description:
         wat: >-
-          The WCA Archive Team (WAT)
-          มีหน้าที่รับผิดชอบในการจัดการการพัฒนาและการบำรุงรักษาเอกสารสำคัญทางประวัติศาสตร์ของ
-          WCA พวกเขาบันทึกเหตุการณ์สำคัญของ speedcubing และเหตุการณ์สำคัญ WCA
-          ที่โดดเด่นที่จะนำเสนอเป็นส่วนหนึ่งของไทม์ไลน์ WCA ที่กว้างขึ้น
-          เพื่อรักษามรดกของ WCA ใน speedcubing
+          ทีม WCA Archive Team (WAT) มีหน้าที่รับผิดชอบในการจัดการการพัฒนาและการบำรุงรักษาเอกสารสำคัญทางประวัติศาสตร์ของ
+          WCA พวกเขาบันทึกเหตุการณ์สำคัญของ speedcubing และเหตุการณ์สำคัญ WCA ที่โดดเด่นที่จะนำเสนอเป็นส่วนหนึ่งของไทม์ไลน์
+          WCA ที่กว้างขึ้น เพื่อรักษามรดกของ WCA ใน speedcubing
         wct: >-
-          The WCA Communication Team (WCT) ดูแลและสนับสนุนการสื่อสารของ WCA กับชุมชนและประชาชนทั่วไป
-          การสื่อสารของ WCA ควรมีส่วนสนับสนุนวัตถุประสงค์ของ WCA และสนับสนุนวัฒนธรรมเชิงบวกโดยทั่วไปในด้านความเป็นมิตร
-          ความโปร่งใส การไม่แบ่งแยก ความเปิดกว้าง และตอบสนองต่อความคิดเห็นต่างๆ
+          ทีม WCA Communication Team (WCT) มีหน้าที่ดูแลและสนับสนุนการสื่อสารของ WCA
+          กับชุมชนและประชาชนทั่วไป การสื่อสารของ WCA ควรมีส่วนสนับสนุนวัตถุประสงค์ของ
+          WCA และสนับสนุนวัฒนธรรมเชิงบวกโดยทั่วไปในด้านความเป็นมิตร ความโปร่งใส การไม่แบ่งแยก
+          ความเปิดกว้าง และตอบสนองต่อความคิดเห็นต่างๆ
         wcat: >-
-          WCA Competition Announcement Team (WCAT) อนุมัติและประกาศการแข่งขัน
-          WCA ที่ส่งโดย WCA Delegates
-          และเพื่อให้แน่ใจว่าการประกาศดังกล่าวเป็นไปตามมาตรฐานคุณภาพ WCA
-          และทีมนี้
-          ยังรับผิดชอบในการรักษาระเบียบการส่งการแข่งขันที่เหมาะสมจากเอกสารต่าง ๆ
-          เช่น นโยบายข้อกำหนดการแข่งขัน WCA โดย WCAT
-          จะไม่รับผิดชอบต่อการจัดองค์กรและการมอบหมายการแข่งขันรายบุคคล
+          ทีม WCA Competition Announcement Team (WCAT) มีหน้าที่อนุมัติและประกาศการแข่งขัน
+          WCA ที่ส่งโดย WCA Delegates และตรวจสอบว่าการประกาศดังกล่าวเป็นไปตามมาตรฐานคุณภาพ
+          WCA และทีมนี้ ยังรับผิดชอบในการรักษาระเบียบการส่งการแข่งขันที่เหมาะสมจากเอกสารต่าง
+          ๆ เช่น นโยบายข้อกำหนดการแข่งขัน WCA โดย WCAT จะไม่รับผิดชอบต่อการจัดองค์กรและการมอบหมายการแข่งขันรายบุคคล
         wic: >-
-          WCA Integrity Committee (WIC) ดำเนินการสอบสวนอิสระเกี่ยวกับสมาชิกใน
-          WCA และ incident ที่เกิดขึ้นระหว่างการแข่งขัน WCA
-          หรือบนแพลตฟอร์มออนไลน์อย่างเป็นทางการของ WCA. Incidents
-          เหล่านี้ถือเป็นการละเมิดค่านิยม, จรรยาบรรณ, จริยธรรม
-          และ/หรือระเบียบของ WCA
+          WCA Integrity Committee (WIC) ดำเนินการสอบสวนอิสระเกี่ยวกับสมาชิกใน WCA
+          และเหตุการณ์ที่เกิดขึ้นระหว่างการแข่งขัน WCA หรือบนแพลตฟอร์มออนไลน์อย่างเป็นทางการของ
+          WCA โดยเหตุการณ์เหล่านี้ถือเป็นการละเมิดค่านิยม, จรรยาบรรณ, จริยธรรม และ/หรือระเบียบของ
+          WCA
         weat: >-
-          WCA Executive Assistants Team (WEAT)
-          รับผิดชอบในการดำเนินงานด้านธุรการของคณะกรรมการ WCA
+          WCA Executive Assistants Team (WEAT) มีหน้าที่รับผิดชอบในการดำเนินงานด้านธุรการของคณะกรรมการ
+          WCA
         wfc: >-
-          WCA Financial Committee (WFC) จัดการการเงินโดยรวมของ WCA
-          รวมถึงการจัดทำงบประมาณ การรายงาน การวิเคราะห์ การทำบัญชี
-          และการยื่นภาษี พวกเขายังจัดการแหล่งรายได้ที่ใหญ่ที่สุดของ WCA
-          นั่นก็คือ WCA Dues System พร้อมด้วยโครงการระดมทุนต่างๆ
-          ที่ให้การสนับสนุนชุมชนท้องถิ่นในระยะต่างๆ ของการพัฒนา
-          รวมถึงการให้ทุนด้านการเดินทาง การระดมทุนด้านอุปกรณ์
-          และการสนับสนุนองค์กรระดับภูมิภาค
+          WCA Financial Committee (WFC) มีหน้าที่จัดการการเงินโดยรวมของ WCA รวมถึงการจัดทำงบประมาณ
+          การรายงาน การวิเคราะห์ การทำบัญชี และการยื่นภาษี พวกเขายังจัดการแหล่งรายได้ที่ใหญ่ที่สุดของ
+          WCA นั่นก็คือ WCA Dues System พร้อมด้วยโครงการระดมทุนต่างๆ ที่ให้การสนับสนุนชุมชนท้องถิ่นในระยะต่างๆ
+          ของการพัฒนา รวมถึงการให้ทุนด้านการเดินทาง การระดมทุนด้านอุปกรณ์ และการสนับสนุนองค์กรระดับภูมิภาค
         wmt: >-
-          The WCA Marketing Team (WMT) พัฒนาและจัดการแบรนด์ WCA,
-          ค้นหาผู้สนับสนุน, และทำการตลาดสินค้า WCA
+          WCA Marketing Team (WMT) พัฒนาและจัดการแบรนด์ WCA, ค้นหาผู้สนับสนุน, และทำการตลาดสินค้า
+          WCA
         wmct: >-
           ทีม WCA Major Championship (WMCT)
           ทำหน้าที่กำกับดูแลการประสานงานและความก้าวหน้าของ WCA Continental และ
@@ -1048,6 +1052,11 @@ th:
         โปรดไปที่ <a href="%{link}">ลิงก์นี้</a>
     executives:
       person_not_found: ไม่พบผู้เข้าแข่งขันที่มี WCA ID ตรงกับ %{wca_id}
+      title: ผู้บริหาร
+      joined_wca: เข้าร่วม WCA
+      joined_executives: เข้าร่วมทีมผู้บริหาร
+      more_information: ข้อมูลเพิ่มเติม
+      close: ปิด
   homepage:
     learn_more: เรียนรู้เพิ่มเติม
     title: ยินดีต้อนรับเข้าสู่สมาคมลูกบาศก์โลก
@@ -1831,6 +1840,7 @@ th:
             menu: ถอนผู้เข้าแข่งขันจำนวนมาก
             id: ID
             name: ชื่อ
+            select_all: เลือกทั้งหมด
           quit_menu: Quit
           no_next: ไม่มีผู้เข้าแข่งขันรายต่อไปที่จะผ่านเข้ารอบ
           cancel: ยกเลิก
@@ -1868,6 +1878,7 @@ th:
         search: ค้นหาการแข่งขัน
         upcoming: การแข่งขันในเร็ว ๆ นี้
         in_progress: การแข่งขันในขณะนี้
+      combined_title: Combined Dual Rounds
     my_competitions:
       title: การแข่งขันของฉัน
       disclaimer: >-
@@ -1885,6 +1896,8 @@ th:
         abbr_description: '%{short_name}: %{long_name}'
         cutoff: 'Cutoff: %{short_cutoff}'
         download_html: 'ดาวน์โหลดรายละเอียดการแข่งขันทั้งหมดเป็น PDF %{here}'
+        download_pdf: ดาวน์โหลดตารางการแข่งขันในรูปแบบ PDF ได้ที่นี่
+        download: Download
       date: วันที่
       add_to_calendar: เพิ่มลงในปฎิทิน
       name: ชื่อการแข่งขัน
@@ -2024,6 +2037,8 @@ th:
       is_bookmarked: คุณได้บุ๊คมาร์คการแข่งขันนี้แล้ว
       number_of_bookmarks: จำนวนครั้งที่ถูกบุ๊คมาร์ค
       waiting_list_size: จำนวนรายชื่อใน Waiting list
+      view_more_members: ดูสมาชิกในทีมเพิ่มเติมอีก %{count} คน
+      see_more: + %{count} รายการเพิ่มเติม
     index:
       title: การแข่งขัน
       all_competitions: การแข่งขันทั้งหมด
@@ -2072,14 +2087,15 @@ th:
       use_admin_view: ใช้มุมมองผู้ดูแลระบบ
       titles:
         in_progress: การแข่งขันที่กำลังดำเนินอยู่
-        past: 'การแข่งขันในอดีตตั้งแต่ปี %{year}'
-        past_all: การแข่งขันในอดีตทุกปี
+        past: 'การแข่งขันในอดีตตั้งแต่ปี %{year} (%{count})'
+        past_all: การแข่งขันในอดีตทุกปี (%{count})
         recent: 'การแข่งขันเร็ว ๆ นี้ (ย้อนหลัง %{count} วัน)'
-        upcoming: การแข่งขันที่จะเกิดขึ้น
+        upcoming: การแข่งขันที่จะเกิดขึ้น (%{count})
         ongoing_and_upcoming: การแข่งขันที่กำลังเกิดขึ้นและที่กำลังจะเกิดขึ้น
         custom: การแข่งขันในช่วงเวลาที่เลือก
         by_announcement: การแข่งขันเรียงตามการประกาศ 
           การแข่งขันที่ใหม่กว่าอยู่ด้านบน
+        in_progress_count: การแข่งขันที่กำลังดำเนินอยู่ (%{count})
       tooltips:
         hourglass:
           ended: 'สิ้นสุดไปแล้ว %{days} วัน'
@@ -2101,6 +2117,7 @@ th:
         open: เปิด
         not_open: ยังไม่เปิด
         closed: ปิด
+        all: ทั้งหมด
       register_now: สมัครการแข่งขันตอนนี้
       view_competition: ดูการแข่งขัน
       no_more_comps: ไม่มีการแข่งขัน
@@ -2124,6 +2141,11 @@ th:
         start_date_desc: เรียงลำดับตามวันที่เริ่มแข่งขัน (ใหม่สุดไปเก่าสุด)
         end_date_asc: เรียงลำดับตามวันที่สิ้นสุดการแข่งขัน (เก่าสุดไปใหม่สุด)
         end_date_desc: เรียงลำดับตามวันที่สิ้นสุดการแข่งขัน (ใหม่สุดไปเก่าสุด)
+        announced_at_asc: 'วันที่ประกาศ: เรียงจากน้อยไปมาก'
+        announced_at_desc: 'วันที่ประกาศ: เรียงจากใหม่ไปเก่า'
+        name_asc: 'ชื่อ: A-Z'
+        name_desc: 'ชื่อ: Z-A'
+      date_and_city: '%{date} – %{city}'
     my_competitions_table:
       edit: แก้ไข
       registrations: การสมัคร
@@ -2633,6 +2655,7 @@ th:
           competing:
             title: สมัครการแข่งขัน
             description: เลือกประเภทการแข่งขัน
+            summary_title: การสมัครการแข่งขัน
           requirements:
             title: Requirements
             description: ยอมรับเงื่อนไขการแข่งขัน
@@ -2807,6 +2830,8 @@ th:
       edited_deadline_not_in_future: >-
         คุณได้รับอนุญาตให้แก้ไขเวลาเป็นวันที่ในอนาคตได้เท่านั้น แต่
         %{new_timestamp} ไม่ได้เป็นเวลาในอนาคต
+      fto_requires_internal_scoretaking: ต้องตั้งค่าเป็น Integrated Live Results
+        ถ้ามีการแข่งขัน Face Turning Octahedron
     new:
       create_competition: สร้างการแข่งขัน
       note_clone: >-
@@ -2977,6 +3002,12 @@ th:
         register: สมัครการแข่งขัน
         competitors: ผู้เข้าแข่งขัน
         scrambles: โจทย์
+        competitor_results: ผลการแข่งขันของผู้เข้าแข่งขัน
+      general: ทั่วไป
+      more: เพิ่มเติม
+      admin: แอดมิน
+      results: ผลการแข่งขัน
+      events: ประเภทการแข่งขัน
     results_table:
       wca_profile: WCA profile
       event: ประเภทการแข่งขัน
@@ -2990,6 +3021,11 @@ th:
         Head-to-Head จะแสดงเพียงลำดับที่และเวลาที่ดีที่สุดเท่านั้น 
         ท่านสามารถดูผังการแข่งขันแบบตัวต่อตัวฉบับเต็มได้ที่ <a 
         href="%{results_url}">หน้าแสดงผลการแข่งขันแบบใหม่</a>.
+      show_all_linked_results: แสดงผลลัพธ์จากทั้งสองรอบ
+      linked_results_disclaimer_html: รอบนี้เป็นส่วนหนึ่งของ Dual Round 
+        ผลลัพธ์ด้านล่างนี้แสดงแยกตามแต่ละรอบ 
+        ส่วนผลลัพธ์รวมของทั้งสองรอบสามารถดูได้ที่ <a 
+        href="%{results_url}">หน้าแสดงผลการแข่งขันใหม่</a>.
     scrambles_table:
       group: กลุ่ม
       scramble: โจทย์
@@ -3003,6 +3039,11 @@ th:
       semifinal_stage: รองชนะเลิศ
       final_stage: ชิงชนะเลิศ
       third_place: ชิงอันดับสาม
+    results:
+      query_search: ค้นหาด้วยชื่อหรือ WCA ID
+      country_search: กรองตามประเทศ
+      no_results: ไม่พบผลการค้นหา
+      all_countries: ทุกประเทศ
   competition_tabs:
     headers:
       tabs: แท็บ
@@ -3031,6 +3072,7 @@ th:
       unknown_show: 'ไม่รู้จักพารามิเตอร์นี้ ต้องเป็น "N คน", หรือ "โดยทวีป"'
     records:
       title: สถิติ
+      load_error: เกิดข้อผิดพลาดในการดึงข้อมูล
     last_updated_html: 'แก้ไขครั้งล่าสุดเมื่อ: %{timestamp}'
     filters_fixes_underway: >-
       ขอแจ้งให้ทราบว่า filter บางอย่า (เช่น ปีในอดีต) ไม่สามารถใช้ได้ชั่วคราว
@@ -3203,6 +3245,9 @@ th:
     announcement_info_html: 'ประกาศโดย %{author_name} เมื่อ %{date_time}'
     errors:
       unstick_at_future: ต้องอยู่ในอนาคต
+    no_search_results: ไม่มีการประกาศที่ตรงตามคำค้นหา
+    search: ค้นหาประกาศ
+    no_announcements: ขณะนี้ยังไม่มีข้อความประกาศ
   contacts:
     dob:
       title: ฟอร์มการขอเปลี่ยนวันเกิด
@@ -3464,11 +3509,12 @@ th:
         <strong>Regional Delegates</strong>, <strong>Full Delegates </strong>, <strong>Junior
         Delegates</strong>, และ <strong>Trainee Delegates</strong>%{see_link}</p>
         <p>นอกเหนือจากการทำหน้าที่ของ WCA Delegate แล้ว WCA Senior Delegates ยังมีหน้าที่ในการจัดการ
-        WCA Delegates ในพื้นที่ของพวกเขาและสามารถติดต่อกับชุมชนเพื่อรับเรื่องระดับภูมิภาคได้</p>
+        WCA Delegates ในพื้นที่ของพวกเขาและสามารถติดต่อกับผู้คนภายในภูมิภาคเพื่อรับเรื่องระดับภูมิภาคได้</p>
         <p>Delegates ใหม่จะได้รับการแต่งตั้งเป็น Junior Delegates ก่อน หลังจากนั้นพวกเขาจะถูกขอให้แสดงความสามารถในการจัดการการแข่งขัน
         WCA ก่อนที่จะได้รับการเลื่อนตำแหน่งให้เป็น WCA Delegates</p><p>Trainee Delegates
         จะได้รับการฝึกสอนเพื่อที่จะเป็น WCA Delegate และสามารถดูแลได้แค่การแข่งขันที่มี
-        WCA Delegate คนอื่นด้วยเท่านั้น</p>
+        WCA Delegate คนอื่นด้วยเท่านั้น</p><p>หากท่านมีความประสงค์ต้องการเป็น Trainee
+        Delegate กรุณาติดต่อ Delegate ประจำภูมิภาคหรือพื้นที่ของท่านก่อนเพื่อประเมินความเหมาะสม</p>
       see_link_html: '(ดู%{link})'
       members_html: >-
         ผู้เข้าแข่งขันทุกคนจะเข้าร่วมการเป็น<strong>สมาชิก</strong>ของ WCA

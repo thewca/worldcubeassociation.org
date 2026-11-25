@@ -22,11 +22,12 @@ import { LuChevronDown } from "react-icons/lu";
 import _ from "lodash";
 import RailsLink from "@/components/RailsLink";
 import { type UserPermissions } from "@/lib/wca/permissions";
-import type { AvatarMenuEntry } from "@/types/payload";
+import type { AvatarMenu as AvatarMenuGlobal } from "@/types/payload";
 import { useT } from "@/lib/i18n/useI18n";
 import buildAvatarMenuEntries, {
   type FlatMenuEntry,
 } from "@/lib/wca/avatarMenuEntries";
+import { toAvatarName } from "@/lib/utils";
 
 const AVATAR_COLORS = ["green", "white", "red", "yellow", "blue", "orange"];
 
@@ -44,7 +45,7 @@ function EntryLink({
 } & React.ComponentPropsWithoutRef<"a">) {
   if (entry.kind === "rails") {
     return (
-      <RailsLink {...rest} href={entry.href}>
+      <RailsLink {...rest} href={entry.href} fontWeight="inherit">
         {entry.label}
       </RailsLink>
     );
@@ -62,17 +63,27 @@ function EntryLink({
   );
 }
 
+export function AvatarMenuSkeleton() {
+  return (
+    <Skeleton
+      boxSize={{ base: 7, md: 10 }}
+      me={{ base: 0, md: 2 }}
+      rounded="full"
+    />
+  );
+}
+
 export default function Wrapper({
   session,
   cmsEntries,
   permissions,
 }: {
   session: Session | null;
-  cmsEntries: AvatarMenuEntry[];
+  cmsEntries: AvatarMenuGlobal["entries"];
   permissions?: UserPermissions;
 }) {
   return (
-    <ClientOnly fallback={<Skeleton boxSize={8} />}>
+    <ClientOnly fallback={<AvatarMenuSkeleton />}>
       <AvatarMenu
         session={session}
         cmsEntries={cmsEntries}
@@ -88,7 +99,7 @@ function AvatarMenu({
   permissions,
 }: {
   session: Session | null;
-  cmsEntries: AvatarMenuEntry[];
+  cmsEntries: AvatarMenuGlobal["entries"];
   permissions?: UserPermissions;
 }) {
   const { t } = useT();
@@ -104,10 +115,10 @@ function AvatarMenu({
           px={2}
           justifyContent="flex-start"
         >
-          Sign in
+          {t("devise.sessions.new.sign_in")}
         </Button>
         <MobileNavButton hideFrom="md" onClick={() => signIn()}>
-          Sign in
+          {t("devise.sessions.new.sign_in")}
         </MobileNavButton>
       </>
     );
@@ -136,7 +147,7 @@ function AvatarMenu({
       size={{ base: "xs", md: "md" }}
       boxSize={{ base: 7, md: 10 }}
     >
-      <Avatar.Fallback name={session.user?.name ?? undefined} />
+      <Avatar.Fallback name={toAvatarName(session.user?.name) ?? undefined} />
       <Avatar.Image src={session.user?.image ?? undefined} />
     </Avatar.Root>
   );
@@ -184,7 +195,7 @@ function AvatarMenu({
               })}
               <Menu.Separator />
               <Menu.Item value="logout" onSelect={handleSignOut}>
-                Log Out
+                {t("layouts.navigation.sign_out")}
               </Menu.Item>
             </Menu.Content>
           </Menu.Positioner>
@@ -231,7 +242,9 @@ function AvatarMenu({
                 );
               })}
               <Separator />
-              <MobileNavButton onClick={handleSignOut}>Log Out</MobileNavButton>
+              <MobileNavButton onClick={handleSignOut}>
+                {t("layouts.navigation.sign_out")}
+              </MobileNavButton>
             </VStack>
           </Collapsible.Content>
         </Collapsible.Root>

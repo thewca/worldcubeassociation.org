@@ -5,6 +5,8 @@ import { ClientOnly, IconButton, Skeleton, Span } from "@chakra-ui/react";
 import { useTheme } from "@wrksz/themes/client";
 import * as React from "react";
 import { LuMoon, LuSun } from "react-icons/lu";
+import { MobileNavButton } from "@/components/MobileNav";
+import { useT } from "@/lib/i18n/useI18n";
 
 export type ColorMode = "light" | "dark";
 
@@ -42,13 +44,18 @@ export const ColorModeButton = React.forwardRef<
   HTMLButtonElement,
   ColorModeButtonProps
 >(function ColorModeButton(props, ref) {
-  const { toggleColorMode } = useColorMode();
+  const { t } = useT();
+  const { colorMode, toggleColorMode } = useColorMode();
   return (
     <ClientOnly fallback={<Skeleton boxSize="8" />}>
       <IconButton
         onClick={toggleColorMode}
         variant="ghost"
-        aria-label="Toggle color mode"
+        aria-label={
+          colorMode === "dark"
+            ? t("layouts.navigation.switch_to_light_mode")
+            : t("layouts.navigation.switch_to_dark_mode")
+        }
         size="sm"
         ref={ref}
         {...props}
@@ -64,6 +71,23 @@ export const ColorModeButton = React.forwardRef<
     </ClientOnly>
   );
 });
+
+export function ColorModeMobileNavButton() {
+  const { t } = useT();
+  const { colorMode, toggleColorMode } = useColorMode();
+  const isDarkMode = colorMode === "dark";
+
+  return (
+    <ClientOnly fallback={<Skeleton height="8" />}>
+      <MobileNavButton onClick={toggleColorMode}>
+        <ColorModeIcon />
+        {isDarkMode
+          ? t("layouts.navigation.switch_to_light_mode")
+          : t("layouts.navigation.switch_to_dark_mode")}
+      </MobileNavButton>
+    </ClientOnly>
+  );
+}
 
 export const LightMode = React.forwardRef<HTMLSpanElement, SpanProps>(
   function LightMode(props, ref) {

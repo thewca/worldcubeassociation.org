@@ -18,6 +18,8 @@ class User < ApplicationRecord
   has_many :scoretaking_competitions, through: :competition_scoretakers, source: "competition"
   has_many :votes
   has_many :registrations
+  has_many :h2h_match_competitors
+  has_many :h2h_matches, -> { order(:match_number) }, through: :h2h_match_competitors
   has_many :newcomer_results, through: :registrations, source: :newcomer_results
   has_many :competitions_registered_for, through: :registrations, source: "competition"
   belongs_to :person, -> { current }, primary_key: "wca_id", foreign_key: "wca_id", optional: true, inverse_of: :user
@@ -877,6 +879,12 @@ class User < ApplicationRecord
       can_access_cms: {
         scope: can_access_cms? ? "*" : [],
       },
+      can_edit_users: {
+        scope: can_view_all_users? ? "*" : ([id] | Registration.where(competition: organized_competitions.not_over).pluck(:user_id)).map(&:to_s),
+      },
+      can_see_admin_competitions: {
+        scope: can_see_admin_competitions? ? "*" : [],
+      },
     }
     if banned?
       permissions[:can_attend_competitions][:scope] = []
@@ -1377,7 +1385,7 @@ class User < ApplicationRecord
     end
   end
 
-  private def deprecated_team_roles
+  def team_roles
     # Reuse the already-loaded association (with its metadata/group preloaded) when the
     # caller eager loaded it; otherwise build the query with the includes we need. Calling
     # `.includes` unconditionally would discard any preloaded `active_roles` and re-query.
@@ -1392,7 +1400,10 @@ class User < ApplicationRecord
         ].include?(role.group_type)
       end
       .reject { |role| role.group.is_hidden }
-      .map(&:deprecated_team_role)
+  end
+
+  private def deprecated_team_roles
+    team_roles.map(&:deprecated_team_role)
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
@@ -1642,6 +1653,11 @@ class User < ApplicationRecord
 
   def delegate_status
     highest_delegate_role&.metadata&.status
+  end
+
+  def delegate_status_on(date)
+    roles.filter { it.metadata.is_a?(RolesMetadataDelegateRegions) && it.active_on?(date) }
+         .max_by(&:status_rank)&.metadata&.status
   end
 
   def region_id

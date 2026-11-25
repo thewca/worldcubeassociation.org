@@ -7,13 +7,13 @@ export default function RefundPolicyText({
   refundPolicyPercent,
   refundPolicyLimitDate,
 }: {
-  refundPolicyPercent: number;
-  refundPolicyLimitDate: string;
+  refundPolicyPercent: number | null;
+  refundPolicyLimitDate: string | null;
 }) {
   const { t } = useT();
   const limitDateAndTime = useLocalDateTime(refundPolicyLimitDate);
 
-  if (refundPolicyPercent <= 0) {
+  if (!refundPolicyPercent) {
     return t("competitions.competition_info.no_refunds");
   }
 

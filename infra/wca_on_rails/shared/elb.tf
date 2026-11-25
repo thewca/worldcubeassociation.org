@@ -687,6 +687,29 @@ resource "aws_lb_listener_rule" "rails_forward_next_production" {
   }
 }
 
+# Separate from `rails_forward_next_production` because a rule can hold at most five condition values.
+resource "aws_lb_listener_rule" "rails_forward_next_icons_production" {
+  listener_arn = aws_lb_listener.https.arn
+  priority     = 32
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.nextjs-production-results.arn
+  }
+
+  condition {
+    host_header {
+      values = ["www.worldcubeassociation.org"]
+    }
+  }
+
+  condition {
+    path_pattern {
+      values = ["/icon.svg", "/apple-icon.png"]
+    }
+  }
+}
+
 resource "aws_lb_listener_rule" "rails_forward_staging_api" {
   listener_arn = aws_lb_listener.https.arn
   priority     = 40

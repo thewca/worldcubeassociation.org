@@ -112,6 +112,7 @@ variable "shared" {
     }),
     lb: object({
       id: string
+      arn_suffix: string
     })
     https_listener: object({
       arn: string
@@ -137,10 +138,10 @@ variable "shared" {
     redis_subnet_group: object({
       name: string
     })
-    redis_cache_parameter_group: object({
+    valkey_cache_parameter_group: object({
       name: string
     })
-    redis_sidekiq_parameter_group: object({
+    valkey_sidekiq_parameter_group: object({
       name: string
     })
     # These are booth arrays

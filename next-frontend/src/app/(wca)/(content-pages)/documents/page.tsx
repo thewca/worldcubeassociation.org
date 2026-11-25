@@ -7,11 +7,9 @@ import {
   List,
   VStack,
 } from "@chakra-ui/react";
-import { io } from "next/cache";
 import { getCachedGlobal } from "@/lib/payload/globals";
 import _ from "lodash";
 import IconDisplay from "@/components/IconDisplay";
-import { Document } from "@/types/payload";
 import { Metadata } from "next";
 import { getT } from "@/lib/i18n/get18n";
 
@@ -23,32 +21,30 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 export default async function Documents() {
-  // `io()` marks the boundary the build-time prerender stops at, so the Payload read below
-  // never runs while building, where MongoDB is unreachable. It has to stay out here rather
-  // than inside `getCachedGlobal`: within a `"use cache"` scope `io()` resolves immediately.
-  await io();
+  const { t, lng } = await getT();
 
-  const documentsResult = await getCachedGlobal("documents-page");
+  const documentsResult = await getCachedGlobal("documents-page", lng);
 
-  const documentRelation = documentsResult.documents;
+  const { documents } = documentsResult;
 
-  if (documentRelation.length === 0) {
-    return <Heading>No documents found. Add some</Heading>;
+  if (documents.length === 0) {
+    return (
+      <Heading>
+        {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
+        No documents found. Add some
+      </Heading>
+    );
   }
-
-  const documents = documentRelation.map(
-    ({ document }) => document as Document,
-  );
 
   const [categorizedRaw, uncategorized] = _.partition(documents, "category");
   const categorized = _.groupBy(categorizedRaw, "category");
 
   return (
     <VStack gap="8" alignItems="left">
-      <Heading size="5xl">Documents</Heading>
+      <Heading size="5xl">{t("documents.title")}</Heading>
       <Accordion.Root variant="enclosed" multiple>
         {uncategorized.map((doc) => (
-          <Accordion.Item key={doc.title} value={doc.title}>
+          <Accordion.Item key={doc.id} value={doc.title}>
             <LinkBox asChild>
               <Accordion.ItemTrigger>
                 <LinkOverlay asChild>
@@ -63,7 +59,7 @@ export default async function Documents() {
         {Object.entries(categorized).map(([category, docs]) => (
           <Accordion.Item key={category} value={category}>
             <Accordion.ItemTrigger>
-              <IconDisplay name="List" /> {category}
+              <IconDisplay name="List" /> {t(`documents.${category}`)}
             </Accordion.ItemTrigger>
             <Accordion.ItemContent>
               <Accordion.ItemBody>

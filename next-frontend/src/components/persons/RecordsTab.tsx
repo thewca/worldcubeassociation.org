@@ -28,7 +28,7 @@ const RecordsTab: React.FC<RecordsTabProps> = ({ wcaId }) => {
   }
 
   if (!recordsQuery) {
-    return <Text>Failed fetching records</Text>;
+    return <Text>{t("results.records.load_error")}</Text>;
   }
 
   return <RecordsTable recordResults={recordsQuery} t={t} />;

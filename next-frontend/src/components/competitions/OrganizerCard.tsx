@@ -23,10 +23,16 @@ import {
   // LuFlag,
 } from "react-icons/lu";
 import { useT } from "@/lib/i18n/useI18n";
-import WcaFlag from "../WcaFlag";
+import { toAvatarName } from "@/lib/utils";
+import RailsLink from "@/components/RailsLink";
 
-type OrganizerPerson =
-  components["schemas"]["Person"] | components["schemas"]["Organizer"];
+type OrganizerPerson = components["schemas"]["V1OrganizationTeamMember"];
+
+const DELEGATE_ROLES: OrganizerPerson["roles"] = [
+  "delegate",
+  "junior_delegate",
+  "trainee_delegate",
+];
 
 // Lead section commented out for future implementation
 
@@ -40,12 +46,12 @@ function ClickableOrganizer({
   return (
     <HStack key={organizer.id} minW={0}>
       <Avatar.Root flexShrink={0} size={{ base: "md", lg: "sm", xl: "md" }}>
-        <Avatar.Fallback name={organizer.name} />
+        <Avatar.Fallback name={toAvatarName(organizer.name)} />
         <Avatar.Image src={organizer.avatar.thumb_url} />
       </Avatar.Root>
       <Stack gap={0.5} justify="start" minW={0}>
         <ChakraLink
-          href={organizer.url}
+          href={organizer.url ?? undefined}
           display="flex"
           alignItems="center"
           minW={0}
@@ -55,12 +61,6 @@ function ClickableOrganizer({
           <Text as="span" truncate minW={0}>
             {organizer.name}
           </Text>
-          <WcaFlag
-            code={organizer.country_iso2}
-            size="xs"
-            flexShrink={0}
-            aria-hidden
-          />
         </ChakraLink>
         {/* {isLead && (
           <Badge
@@ -144,7 +144,7 @@ function OrganizersSection({
                       .filter((_, i) => i < avatarLimit)
                       .map((delegate) => (
                         <Avatar.Root key={delegate.id} size="xs">
-                          <Avatar.Fallback name={delegate.name} />
+                          <Avatar.Fallback name={toAvatarName(delegate.name)} />
                           <Avatar.Image src={delegate.avatar.thumb_url} />
                         </Avatar.Root>
                       ))}
@@ -181,9 +181,16 @@ function OrganizersSection({
 export default function OrganizationTeamCard({
   competitionInfo,
 }: {
-  competitionInfo: components["schemas"]["CompetitionInfo"];
+  competitionInfo: components["schemas"]["V1CompetitionInfo"];
 }) {
   const { t } = useT();
+
+  const organizers = competitionInfo.organization_team.filter((member) =>
+    member.roles.includes("organizer"),
+  );
+  const delegates = competitionInfo.organization_team.filter((member) =>
+    member.roles.some((role) => DELEGATE_ROLES.includes(role)),
+  );
 
   const isPlural = (arr: OrganizerPerson[]) => arr.length > 1;
 
@@ -198,39 +205,44 @@ export default function OrganizationTeamCard({
         <Stat.Root variant="competition" minW={0}>
           <Stat.Label fontWeight="medium">
             {t(
-              `competitions.competition_info.organizer_plural.${isPlural(competitionInfo.organizers) ? "other" : "one"}`,
+              `competitions.competition_info.organizer_plural.${isPlural(organizers) ? "other" : "one"}`,
             )}
           </Stat.Label>
           <Stat.ValueText minW={0} maxW="full">
-            <OrganizersSection
-              organizers={competitionInfo.organizers}
-              mode="organizers"
-            />
+            <OrganizersSection organizers={organizers} mode="organizers" />
           </Stat.ValueText>
         </Stat.Root>
 
         <Stat.Root variant="competition" minW={0}>
           <Stat.Label fontWeight="medium">
             {t(
-              `competitions.competition_info.delegate.${isPlural(competitionInfo.delegates) ? "other" : "one"}`,
+              `competitions.competition_info.delegate.${isPlural(delegates) ? "other" : "one"}`,
             )}
           </Stat.Label>
           <Stat.ValueText minW={0} maxW="full">
-            <OrganizersSection
-              organizers={competitionInfo.delegates}
-              mode="delegates"
-            />
+            <OrganizersSection organizers={delegates} mode="delegates" />
           </Stat.ValueText>
         </Stat.Root>
 
-        {competitionInfo.contact && (
-          <Stat.Root variant="competition">
-            <Stat.Label>Contact</Stat.Label>
+        <Stat.Root variant="competition">
+          <Stat.Label>{t("competitions.competition_info.contact")}</Stat.Label>
+          {competitionInfo.contact ? (
             <ChakraMarkdown paragraphAs={Stat.ValueText}>
               {competitionInfo.contact}
             </ChakraMarkdown>
-          </Stat.Root>
-        )}
+          ) : (
+            <Stat.ValueText>
+              <RailsLink
+                href={`/contact?${new URLSearchParams({
+                  contactRecipient: "competition",
+                  competitionId: competitionInfo.id,
+                })}`}
+              >
+                {t("competitions.competition_info.organization_team")}
+              </RailsLink>
+            </Stat.ValueText>
+          )}
+        </Stat.Root>
       </Card.Body>
     </Card.Root>
   );

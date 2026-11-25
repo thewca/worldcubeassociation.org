@@ -204,6 +204,235 @@ RSpec.describe "API v1 Competitions" do
     end
   end
 
+  describe "GET #show" do
+    it "is reachable without logging in" do
+      get api_v1_competition_path(competition)
+
+      expect(response).to be_successful
+      expect(response.parsed_body).to include("id" => competition.id, "short_name" => competition.short_name, "events" => include("event_ids" => ["333"]))
+      expect(response.parsed_body["location"]).to include("latitude_degrees" => competition.latitude_degrees, "longitude_degrees" => competition.longitude_degrees)
+    end
+
+    it "lists only the announced competitions of its series" do
+      series = create(:competition_series)
+      announced_competition = create(:competition, :visible, competition_series: series, latitude: 43_641_740, longitude: -79_376_902, start_date: '2023-01-01', end_date: '2023-01-01')
+      create(:competition, :not_visible, competition_series: series, latitude: 43_641_740, longitude: -79_376_902, start_date: '2023-01-02', end_date: '2023-01-02')
+
+      get api_v1_competition_path(announced_competition)
+
+      expect(response.parsed_body["competition_series_ids"]).to eq [announced_competition.id]
+    end
+
+    it "lists the competitions of its series by start date" do
+      series = create(:competition_series)
+      later_competition = create(:competition, :visible, competition_series: series, latitude: 43_641_740, longitude: -79_376_902, start_date: '2023-01-02', end_date: '2023-01-02')
+      earlier_competition = create(:competition, :visible, competition_series: series, latitude: 43_641_740, longitude: -79_376_902, start_date: '2023-01-01', end_date: '2023-01-01')
+
+      get api_v1_competition_path(later_competition)
+
+      expect(response.parsed_body["competition_series_ids"]).to eq [earlier_competition.id, later_competition.id]
+    end
+
+    it "returns no contact when the organizers left it blank" do
+      blank_contact_competition = create(:competition, :visible, contact: "")
+
+      get api_v1_competition_path(blank_contact_competition)
+
+      expect(response.parsed_body["contact"]).to be_nil
+    end
+
+    it "lists the championships it holds" do
+      championship = create(:competition, :visible, championship_types: %w[world PL])
+
+      get api_v1_competition_path(championship)
+
+      expect(response.parsed_body["championship_types"]).to match_array %w[world PL]
+    end
+
+    describe "competitor limit" do
+      it "is returned when the limit is enabled" do
+        limited_competition = create(:competition, :visible, :with_competitor_limit)
+
+        get api_v1_competition_path(limited_competition)
+
+        expect(response.parsed_body.dig("registration_info", "competitor_limit")).to eq 100
+      end
+
+      it "is null when the limit is disabled, even if a number is stored" do
+        unlimited_competition = create(:competition, :visible, competitor_limit_enabled: false, competitor_limit: 100)
+
+        get api_v1_competition_path(unlimited_competition)
+
+        expect(response.parsed_body.dig("registration_info", "competitor_limit")).to be_nil
+      end
+    end
+
+    it "serializes its organization team without their deprecated team data" do
+      get api_v1_competition_path(competition)
+
+      expect(response.parsed_body["organization_team"].first.keys).to contain_exactly("id", "name", "url", "avatar", "roles")
+    end
+
+    it "has no URL for team members without a WCA ID" do
+      organizer = create(:user)
+      organizer_competition = create(:competition, :visible, organizers: [organizer])
+
+      get api_v1_competition_path(organizer_competition)
+
+      organizer_json = response.parsed_body["organization_team"].find { it["id"] == organizer.id }
+      expect(organizer_json["url"]).to be_nil
+    end
+
+    it "lists the roles of each team member" do
+      get api_v1_competition_path(competition)
+
+      roles_by_id = response.parsed_body["organization_team"].to_h { [it["id"], it["roles"]] }
+      expect(roles_by_id).to eq({
+                                  competition.lead_delegate_id => %w[delegate lead_delegate],
+                                  competition.organizers.first.id => %w[organizer],
+                                })
+    end
+
+    it "lists a delegate who also organizes only once" do
+      delegate = create(:delegate)
+      self_organized_competition = create(:competition, :visible, delegates: [delegate], organizers: [delegate])
+
+      get api_v1_competition_path(self_organized_competition)
+
+      expect(response.parsed_body["organization_team"].pluck("id", "roles")).to eq [[delegate.id, %w[organizer delegate lead_delegate]]]
+    end
+
+    it "marks trainee and junior delegates" do
+      trainee_delegate = create(:trainee_delegate)
+      junior_delegate = create(:junior_delegate)
+      upcoming_competition = create(:competition, :visible, :future, delegates: [create(:delegate), trainee_delegate, junior_delegate])
+
+      get api_v1_competition_path(upcoming_competition)
+
+      roles_by_id = response.parsed_body["organization_team"].to_h { [it["id"], it["roles"]] }
+      expect(roles_by_id[trainee_delegate.id]).to eq %w[trainee_delegate]
+      expect(roles_by_id[junior_delegate.id]).to eq %w[junior_delegate]
+    end
+
+    it "reports a delegate's status at the time of the competition" do
+      promoted_delegate = create(:user_with_wca_id)
+      create(:trainee_delegate_role, user: promoted_delegate, start_date: 1.year.ago, end_date: 1.month.ago)
+      create(:delegate_role, user: promoted_delegate, start_date: 1.month.ago)
+      past_competition = create(:competition, :visible, starts: 3.months.ago, delegates: [create(:delegate), promoted_delegate])
+
+      get api_v1_competition_path(past_competition)
+
+      promoted_json = response.parsed_body["organization_team"].find { it["id"] == promoted_delegate.id }
+      expect(promoted_json["roles"]).to eq %w[trainee_delegate]
+    end
+
+    it "counts delegates without any recorded role as full delegates" do
+      retired_delegate = create(:user_with_wca_id)
+      past_competition = create(:competition, :visible, :past, delegates: [create(:delegate), retired_delegate])
+
+      get api_v1_competition_path(past_competition)
+
+      retired_json = response.parsed_body["organization_team"].find { it["id"] == retired_delegate.id }
+      expect(retired_json["roles"]).to eq %w[delegate]
+    end
+
+    it "gives organizers no delegate role" do
+      organizer = create(:user_with_wca_id)
+      organizer_competition = create(:competition, :visible, organizers: [organizer])
+
+      get api_v1_competition_path(organizer_competition)
+
+      organizer_json = response.parsed_body["organization_team"].find { it["id"] == organizer.id }
+      expect(organizer_json["roles"]).to eq %w[organizer]
+    end
+
+    it "lists its schedule venues" do
+      scheduled_competition = create(:competition, :visible, with_schedule: true)
+
+      get api_v1_competition_path(scheduled_competition)
+
+      expect(response.parsed_body["venues"].pluck("wcif_id")).to match_array scheduled_competition.competition_venues.pluck(:wcif_id)
+    end
+
+    context "when the competition is unannounced" do
+      let(:unannounced_competition) { create(:competition, :not_visible, :with_organizer) }
+
+      it "is not found for anonymous users, exactly like a missing competition" do
+        get api_v1_competition_path("NotAComp2026")
+        missing_body = response.parsed_body
+
+        get api_v1_competition_path(unannounced_competition)
+
+        expect(response).to have_http_status(:not_found)
+        expect(response.parsed_body.to_json).to eq missing_body.to_json.gsub("NotAComp2026", unannounced_competition.id)
+      end
+
+      it "hides its results, podiums and head-to-head rounds from anonymous users" do
+        get api_v1_competition_results_path(unannounced_competition)
+        expect(response).to have_http_status(:not_found)
+
+        get api_v1_competition_podiums_path(unannounced_competition)
+        expect(response).to have_http_status(:not_found)
+
+        get api_v1_competition_head_to_head_path(unannounced_competition)
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it "does not let shared caches store its results for its organizers" do
+        api_sign_in_as(unannounced_competition.organizers.first, scopes: Doorkeeper::OAuth::Scopes.from_string("manage_competitions"))
+
+        get api_v1_competition_results_path(unannounced_competition)
+
+        expect(response).to be_successful
+        expect(response.headers["Cache-Control"]).to include("private")
+      end
+
+      it "is not found for users who can't manage it" do
+        api_sign_in_as(create(:user))
+
+        get api_v1_competition_path(unannounced_competition)
+
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it "is not found for its organizers when their token lacks the manage_competitions scope" do
+        api_sign_in_as(unannounced_competition.organizers.first)
+
+        get api_v1_competition_path(unannounced_competition)
+
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it "is returned to its organizers when their token has the manage_competitions scope" do
+        api_sign_in_as(unannounced_competition.organizers.first, scopes: Doorkeeper::OAuth::Scopes.from_string("manage_competitions"))
+
+        get api_v1_competition_path(unannounced_competition)
+
+        expect(response).to be_successful
+        expect(response.parsed_body["id"]).to eq unannounced_competition.id
+      end
+    end
+
+    context "when the competition was announced and then hidden" do
+      let(:hidden_competition) { create(:competition, :confirmed, :announced, :not_visible) }
+
+      it "is not found for anonymous users" do
+        get api_v1_competition_path(hidden_competition)
+
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it "is returned as hidden to its organizers" do
+        api_sign_in_as(hidden_competition.organizers.first, scopes: Doorkeeper::OAuth::Scopes.from_string("manage_competitions"))
+
+        get api_v1_competition_path(hidden_competition)
+
+        expect(response).to be_successful
+        expect(response.parsed_body["status"]).to eq "hidden"
+      end
+    end
+  end
+
   describe "unknown competition" do
     it "returns not found for the results" do
       get api_v1_competition_results_path("NotAComp2026")

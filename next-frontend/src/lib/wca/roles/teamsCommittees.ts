@@ -1,8 +1,12 @@
-import { cache } from "react";
 import { serverClient } from "@/lib/wca/wcaAPI";
 
-export const getTeamsCommittees = cache(async () => {
-  return await serverClient.GET("/v0/user_groups", {
+import { cacheLife } from "next/cache";
+
+export async function getTeamsCommittees() {
+  "use cache: remote";
+  cacheLife("hours");
+
+  return serverClient.GET("/v0/user_groups", {
     params: {
       query: {
         isActive: true,
@@ -11,18 +15,22 @@ export const getTeamsCommittees = cache(async () => {
       },
     },
   });
-});
+}
 
-export const getTeamCommitteeMembers = cache(
-  async (groupId: number, pastMembers: boolean = false) => {
-    return await serverClient.GET("/v0/user_roles", {
-      params: {
-        query: {
-          groupId,
-          isActive: pastMembers,
-          sort: "status:desc,name:asc",
-        },
+export async function getTeamCommitteeMembers(
+  groupId: number,
+  pastMembers: boolean = false,
+) {
+  "use cache: remote";
+  cacheLife("hours");
+
+  return serverClient.GET("/v0/user_roles", {
+    params: {
+      query: {
+        groupId,
+        isActive: pastMembers,
+        sort: "status:desc,name:asc",
       },
-    });
-  },
-);
+    },
+  });
+}

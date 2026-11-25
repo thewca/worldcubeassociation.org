@@ -1,7 +1,7 @@
 import { revalidateTag } from "next/cache";
 import type { GlobalAfterChangeHook } from "payload";
 
-import { globalCacheTag } from "@/lib/payload/globals";
+import { globalCacheTag } from "@/lib/payload/cache";
 
 export const revalidateGlobal: GlobalAfterChangeHook = ({ global }) => {
   // `{ expire: 0 }` rather than a named profile such as "max": every other profile lets Next keep

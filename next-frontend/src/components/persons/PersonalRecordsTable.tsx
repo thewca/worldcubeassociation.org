@@ -9,12 +9,13 @@ import events from "@/lib/wca/data/events";
 import countries from "@/lib/wca/data/countries";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import EventIcon from "@/components/EventIcon";
+import { getT } from "@/lib/i18n/get18n";
 import ShareProfileButton from "@/components/persons/ShareProfileButton";
 
 const REGION_WORLD = "world";
 
 interface RecordsProps {
-  records: components["schemas"]["PersonInfo"]["personal_records"];
+  records: components["schemas"]["V1PersonInfo"]["ranks_by_event"];
   countryIso2: string;
   wcaId: string;
 }
@@ -80,18 +81,22 @@ function RankCell({
   );
 }
 
-const PersonalRecordsTable: React.FC<RecordsProps> = ({
+const PersonalRecordsTable: React.FC<RecordsProps> = async ({
   records,
   countryIso2,
   wcaId,
 }) => {
+  const { t } = await getT();
+
   const continentId = countries.byIso2[countryIso2].continent_id;
 
   return (
     <Card.Root overflow="hidden" width="full">
       <Card.Header>
         <HStack justify="space-between">
-          <Card.Title textStyle="s4">Current Personal Records</Card.Title>
+          <Card.Title textStyle="s4">
+            {t("persons.show.personal_records")}
+          </Card.Title>
           <ShareProfileButton wcaId={wcaId} />
         </HStack>
       </Card.Header>
@@ -103,31 +108,44 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({
                 <Table.ColumnHeader paddingStart={4}>
                   <HStack>
                     <SpeedcubingHistoryIcon fontSize="md" />
-                    <Text fontWeight="medium">Event</Text>
+                    <Text fontWeight="medium">
+                      {t("results.table_elements.event")}
+                    </Text>
                   </HStack>
                 </Table.ColumnHeader>
                 <RankHeader
-                  label="NR"
-                  description="National Ranking"
+                  label={t("common.ranking_abbreviations.national")}
+                  description={t("competitions.results_table.rank.national")}
                   textAlign="end"
                 />
                 <RankHeader
-                  label="CR"
-                  description="Continental Ranking"
+                  label={t("common.ranking_abbreviations.continental")}
+                  description={t("competitions.results_table.rank.continent")}
                   textAlign="end"
                 />
                 <RankHeader
-                  label="WR"
-                  description="World Ranking"
+                  label={t("common.ranking_abbreviations.world")}
+                  description={t("competitions.results_table.rank.world")}
                   textAlign="end"
                 />
-                <Table.ColumnHeader textAlign="end">Single</Table.ColumnHeader>
-                <Table.ColumnHeader paddingStart={3}>
-                  Average
+                <Table.ColumnHeader textAlign="end">
+                  {t("common.single")}
                 </Table.ColumnHeader>
-                <RankHeader label="WR" description="World Ranking" />
-                <RankHeader label="CR" description="Continental Ranking" />
-                <RankHeader label="NR" description="National Ranking" />
+                <Table.ColumnHeader paddingStart={3}>
+                  {t("common.average")}
+                </Table.ColumnHeader>
+                <RankHeader
+                  label={t("common.ranking_abbreviations.world")}
+                  description={t("competitions.results_table.rank.world")}
+                />
+                <RankHeader
+                  label={t("common.ranking_abbreviations.continental")}
+                  description={t("competitions.results_table.rank.continent")}
+                />
+                <RankHeader
+                  label={t("common.ranking_abbreviations.national")}
+                  description={t("competitions.results_table.rank.national")}
+                />
               </Table.Row>
             </Table.Header>
             <Table.Body>

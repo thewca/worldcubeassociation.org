@@ -270,10 +270,12 @@ export interface UtilityValues {
     | "tableSection"
     | "body"
     | "bodyEmphasis"
+    | "bestResult"
     | "annotation"
     | "quote"
     | "hyperlink"
     | "headerLink"
+    | "mobileTabItem"
     | "darkModeFg"
   layerStyle:
     | "fill.muted"

@@ -11,6 +11,7 @@ import type { components } from "@/types/openapi";
 import RegistrationSummary from "@/components/competitions/Registration/RegistrationSummary";
 import RegistrationStatus from "@/components/competitions/Registration/RegistrationStatus";
 import RegistrationProcessing from "@/components/competitions/Registration/RegistrationProcessing";
+import { PaymentStatus } from "@/components/competitions/Registration/PaymentStep";
 import {
   initialStepIndex,
   isStepComplete,
@@ -35,7 +36,7 @@ import {
 } from "@/lib/wca/registrations/registrationForm";
 import { LuCheck, LuHourglass, LuSend } from "react-icons/lu";
 
-type CompetitionInfo = components["schemas"]["CompetitionInfo"];
+type CompetitionInfo = components["schemas"]["V1CompetitionInfo"];
 type StepConfig = components["schemas"]["RegistrationConfig"];
 type Registration = components["schemas"]["RegistrationDataV2"];
 
@@ -241,10 +242,19 @@ export default function StepPanel({
           <RegistrationStatus
             registration={registration}
             hasAdditionalRequirements={Boolean(
-              competitionInfo.extra_registration_requirements,
+              competitionInfo.registration_info.extra_requirements,
             )}
           />
         )}
+        {/* Withdrawing does not refund, so whatever they paid still counts if they sign up again. */}
+        {registration?.payment !== undefined &&
+          currentStep < steps.length &&
+          registration.payment.paid_amount_iso > 0 && (
+            <PaymentStatus
+              competitionInfo={competitionInfo}
+              payment={registration.payment}
+            />
+          )}
 
         {/* `Steps.Content` only hides the steps that are not current, so only the current one is
             mounted - each step then starts out fresh when the competitor reaches it. */}

@@ -12,8 +12,8 @@ import MapTab from "@/components/persons/MapTab";
 import ChampionshipPodiumsTab from "@/components/persons/ChampionshipPodiums";
 import { StaffColor } from "@/components/RoleBadge";
 import _ from "lodash";
-import { FULL_EVENT_IDS } from "@/lib/wca/data/events";
 import { Metadata } from "next";
+import { getT } from "@/lib/i18n/get18n";
 
 type TitleProps = {
   params: Promise<{ wcaId: string }>;
@@ -29,7 +29,7 @@ export async function generateMetadata({
   if (error || !personDetails) return { title: "Person Not Found" };
 
   return {
-    title: `${personDetails.person.name}`,
+    title: `${personDetails.name}`,
   };
 }
 
@@ -40,27 +40,32 @@ export default async function PersonOverview({
 }) {
   const { wcaId } = await params;
   const { data: personDetails, error } = await getPersonInfo(wcaId);
+  const { t } = await getT();
 
   if (error) {
-    return <Text>Error fetching person</Text>;
+    return <Text>{t("errors.next_frontend.load_error.person")}</Text>;
   }
 
   if (!personDetails) {
-    return <Text>Person does not exist</Text>;
+    return <Text>{t("persons.show.not_found")}</Text>;
   }
 
   const roles: {
     teamRole: string;
     teamText: string;
     staffColor: StaffColor;
-  }[] = personDetails.person.teams.map((team) => {
+  }[] = personDetails.teams.map((team) => {
     const teamText = team.friendly_id.toUpperCase();
 
     const roleMap = [
       { condition: teamText === "BOARD", teamRole: "", staffColor: "black" },
-      { condition: team.leader, teamRole: "LEADER", staffColor: "blue" },
       {
-        condition: team.senior_member,
+        condition: team.status === "leader",
+        teamRole: "LEADER",
+        staffColor: "blue",
+      },
+      {
+        condition: team.status === "senior_member",
         teamRole: "SENIOR MEMBER",
         staffColor: "yellow",
       },
@@ -72,8 +77,8 @@ export default async function PersonOverview({
     return { teamRole, teamText, staffColor: staffColor as StaffColor };
   });
 
-  if (personDetails.person.delegate_status) {
-    const delegateText = personDetails.person.delegate_status
+  if (personDetails.delegate_status) {
+    const delegateText = personDetails.delegate_status
       .toUpperCase()
       .replace(/_/g, " ")
       .replace("DELEGATE", "");
@@ -95,21 +100,14 @@ export default async function PersonOverview({
     personDetails.records.continental +
     personDetails.records.world;
 
-  const podiums = personDetails.championship_podiums;
-
-  const championshipPodiumCount =
-    (podiums?.continental?.length ?? 0) +
-    (podiums?.national?.length ?? 0) +
-    (podiums?.world?.length ?? 0);
+  const championshipPodiumCount = _.sumBy(
+    Object.values(personDetails.championship_podium_results),
+    "length",
+  );
 
   const hasRecords = recordCount > 0;
   const hasMedals = medalCount > 0;
   const hasChampionshipPodiums = championshipPodiumCount !== 0;
-
-  const eventsWithResults = _.intersection(
-    FULL_EVENT_IDS,
-    Object.keys(personDetails.personal_records),
-  );
 
   return (
     <VStack align="center">
@@ -122,14 +120,15 @@ export default async function PersonOverview({
       >
         <GridItem colSpan={{ base: 1, lg: 7 }}>
           <ProfileCard
-            name={personDetails.person.name}
-            profilePicture={personDetails.person.avatar.url}
+            name={personDetails.name}
+            profilePicture={personDetails.avatar.url}
             roles={roles}
             wcaId={wcaId}
-            gender={personDetails.person.gender}
-            regionIso2={personDetails.person.country_iso2}
+            userId={personDetails.user_id}
+            gender={personDetails.gender}
+            regionIso2={personDetails.country_iso2}
             competitions={personDetails.competition_count}
-            completedSolves={personDetails.total_solves}
+            completedSolves={personDetails.completed_solves_count}
             medalCount={medalCount}
             recordCount={recordCount}
             championshipPodiumCount={championshipPodiumCount}
@@ -138,8 +137,8 @@ export default async function PersonOverview({
         {/* Records and Medals */}
         <GridItem colSpan={{ base: 1, lg: 17 }}>
           <PersonalRecordsTable
-            records={personDetails.personal_records}
-            countryIso2={personDetails.person.country_iso2}
+            records={personDetails.ranks_by_event}
+            countryIso2={personDetails.country_iso2}
             wcaId={wcaId}
           />
           <SimpleGrid gap={8} columns={{ base: 1, md: 6 }} padding={0} pt={8}>
@@ -175,19 +174,25 @@ export default async function PersonOverview({
                 >
                   <Card.Header padding={0}>
                     <Tabs.List>
-                      <Tabs.Trigger value="results">Results</Tabs.Trigger>
+                      <Tabs.Trigger value="results">
+                        {t("persons.show.results")}
+                      </Tabs.Trigger>
                       <Tabs.Trigger value="competitions">
-                        Competitions
+                        {t("competitions.index.title")}
                       </Tabs.Trigger>
                       {hasRecords && (
-                        <Tabs.Trigger value="records">Records</Tabs.Trigger>
+                        <Tabs.Trigger value="records">
+                          {t("persons.show.records")}
+                        </Tabs.Trigger>
                       )}
                       {hasChampionshipPodiums && (
                         <Tabs.Trigger value="championship-podiums">
-                          Championship Podiums
+                          {t("persons.show.championship_podiums")}
                         </Tabs.Trigger>
                       )}
-                      <Tabs.Trigger value="map">Map</Tabs.Trigger>
+                      <Tabs.Trigger value="map">
+                        {t("persons.show.competitions_map")}
+                      </Tabs.Trigger>
                       <Tabs.Indicator
                         bg="colorPalette.solid"
                         borderBottomRadius={0}
@@ -198,7 +203,7 @@ export default async function PersonOverview({
                     <Tabs.Content value="results">
                       <ResultsTab
                         wcaId={wcaId}
-                        eventsWithResults={eventsWithResults}
+                        eventsWithResults={personDetails.event_ids_with_results}
                       />
                     </Tabs.Content>
                     <Tabs.Content value="competitions">
@@ -209,15 +214,15 @@ export default async function PersonOverview({
                         <RecordsTab wcaId={wcaId} />
                       </Tabs.Content>
                     )}
-                    <Tabs.Content value="championship-podiums">
-                      {hasChampionshipPodiums && (
+                    {hasChampionshipPodiums && (
+                      <Tabs.Content value="championship-podiums">
                         <ChampionshipPodiumsTab
                           championshipPodiums={
-                            personDetails.championship_podiums
+                            personDetails.championship_podium_results
                           }
                         />
-                      )}
-                    </Tabs.Content>
+                      </Tabs.Content>
+                    )}
                     <Tabs.Content value="map">
                       <MapTab wcaId={wcaId} />
                     </Tabs.Content>

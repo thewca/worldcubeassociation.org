@@ -7,7 +7,7 @@ import { useLocale } from "@/lib/i18n/LocaleProvider";
 import type { components } from "@/types/openapi";
 import { DateTime } from "luxon";
 
-type CompetitionInfo = components["schemas"]["CompetitionInfo"];
+type CompetitionInfo = components["schemas"]["V1CompetitionInfo"];
 type RegistrationEligibility = components["schemas"]["RegistrationEligibility"];
 type MissingProfileField =
   RegistrationEligibility["missing_profile_fields"][number];

@@ -196,21 +196,36 @@ class UserRole < ApplicationRecord
     sort(roles, sort_param, SORT_WEIGHT_LAMBDAS)
   end
 
-  def deprecated_team_role
-    friendly_id = if group_type == UserGroup.group_types[:board]
-                    UserGroup.group_types[:board]
-                  else
-                    group.metadata.friendly_id
-                  end
+  private def team_friendly_id
+    if group_type == UserGroup.group_types[:board]
+      UserGroup.group_types[:board]
+    else
+      group.metadata.friendly_id
+    end
+  end
+
+  def team_membership
     {
       id: self.id,
-      friendly_id: friendly_id,
+      friendly_id: team_friendly_id,
       leader: metadata&.status == "leader",
       senior_member: metadata&.status == "senior_member",
+    }
+  end
+
+  def v1_team_membership
+    {
+      friendly_id: team_friendly_id,
+      status: metadata&.status,
+    }
+  end
+
+  def deprecated_team_role
+    team_membership.merge(
       name: user.name,
       wca_id: user.wca_id,
       avatar: user.avatar,
-    }
+    )
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

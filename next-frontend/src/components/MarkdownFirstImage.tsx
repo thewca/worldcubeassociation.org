@@ -6,7 +6,7 @@ type CardRootProps = ComponentPropsWithoutRef<typeof Card.Root>;
 type MarkdownFirstImageProps = {
   content: string | null;
   alt?: string;
-} & CardRootProps;
+} & Omit<CardRootProps, "content">;
 
 export const extractMarkdownImage = (content: string | null) =>
   content?.match(/!\[.*?\]\((.*?)\)/);
