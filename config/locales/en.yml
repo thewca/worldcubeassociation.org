@@ -810,6 +810,10 @@ en:
     #context: the link in <a> leads to the feedback form
     description_html: "You are viewing the English-only beta version of the redesigned WCA Website. This is intended to give the community a sneak peek at the website, for feedback and discussion. <br /> You should expect to find glitches and issues when browsing the website - when you do, please report them via <a>the feedback form</a>."
     accept: "I understand, let me in!"
+  translation_disclaimer:
+    title: "Translation Disclaimer"
+    description: "Translations are provided by volunteers from within the speedcubing community. This means that sometimes translations will be incomplete. If you would like to help with translating for your language, please contact your local delegate."
+    accept: "I understand"
   page:
     translators:
       title: "Translators"
