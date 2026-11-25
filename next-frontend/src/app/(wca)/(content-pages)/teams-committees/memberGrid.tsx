@@ -25,7 +25,7 @@ export default function MemberGrid({
 
   return (
     <>
-      <SimpleGrid columns={{ md: 1, sm: 1, lg: 2 }} gap="4">
+      <SimpleGrid columns={{ base: 1, lg: 2 }} gap="4">
         {roles.map((role) => (
           <UserBadge
             t={t}

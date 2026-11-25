@@ -31,6 +31,7 @@ export default function useInfiniteUserRoles(
   );
 
   return {
+    // `openapi-react-query` does not narrow `data` when `initialData` is given.
     roles: data?.pages.flat() ?? initialRoles,
     pagination,
   };
