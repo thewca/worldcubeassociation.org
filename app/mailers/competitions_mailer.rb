@@ -135,10 +135,12 @@ class CompetitionsMailer < ApplicationMailer
 
   def submit_report_reminder(competition)
     @competition = competition
+    @regional_delegates = delegates_to_regional_delegates_email(competition.delegates)
     senior_and_regional_delegates = delegates_to_senior_and_regional_delegates_email(competition.delegates)
     mail(
       from: UserGroup.teams_committees_group_weat.metadata.email,
       to: competition.delegates.pluck(:email),
+      cc: @regional_delegates,
       reply_to: senior_and_regional_delegates,
       subject: "Friendly reminder to submit #{competition.name} Delegate Report",
     )
@@ -193,8 +195,11 @@ class CompetitionsMailer < ApplicationMailer
 
   private def delegates_to_senior_and_regional_delegates_email(delegates)
     seniors = delegates.flat_map { |delegate| delegate.senior_delegates.map(&:email) }
-    regionals = delegates.flat_map { |delegate| delegate.regional_delegates.map(&:email) }
-    (seniors + regionals).uniq.compact
+    (seniors + delegates_to_regional_delegates_email(delegates)).uniq.compact
+  end
+
+  private def delegates_to_regional_delegates_email(delegates)
+    delegates.flat_map { |delegate| delegate.regional_delegates.map(&:email) }.uniq.compact
   end
 
   private def delegate_report_email_subject(competition)
