@@ -272,6 +272,18 @@ export type ColorSwatchVariantMap = {
   [K in keyof ColorSwatchVariant]: Array<ColorSwatchVariant[K]>
 }
 
+export interface H2hSolveVariant {
+  outcome?: "win" | "loss" | "tie" | undefined
+}
+
+export type H2hSolveVariantProps = {
+  [K in keyof H2hSolveVariant]?: ConditionalValue<H2hSolveVariant[K]> | undefined
+}
+
+export type H2hSolveVariantMap = {
+  [K in keyof H2hSolveVariant]: Array<H2hSolveVariant[K]>
+}
+
 export interface TextVariant {}
 
 export type TextVariantProps = {
@@ -302,6 +314,7 @@ export interface ConfigRecipes {
   checkmark: SystemRecipeFn<CheckmarkVariantProps, CheckmarkVariantMap>
   radiomark: SystemRecipeFn<RadiomarkVariantProps, RadiomarkVariantMap>
   colorSwatch: SystemRecipeFn<ColorSwatchVariantProps, ColorSwatchVariantMap>
+  h2hSolve: SystemRecipeFn<H2hSolveVariantProps, H2hSolveVariantMap>
   text: SystemRecipeFn<TextVariantProps, TextVariantMap>
 }
 

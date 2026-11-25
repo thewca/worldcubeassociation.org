@@ -2520,7 +2520,13 @@ en:
       results: "Results"
       events: "Events"
     h2h:
+      match_number: "Match %{number}"
       set_number: "Set %{number}"
+      #context: score of a head-to-head match or set, with W/L short for won/lost
+      score:
+        win: "W %{own}–%{opponent}"
+        loss: "L %{own}–%{opponent}"
+        tie: "= %{own}–%{opponent}"
       stage_of: "Stage of %{number}"
       quarterfinal_stage: "Quarterfinal Stage"
       semifinal_stage: "Semifinal Stage"
@@ -2732,6 +2738,10 @@ en:
       world_records: "History of World Records"
       continental_records: "History of Continental Records"
       national_records: "History of National Records"
+      #context: number of head-to-head matches and the result, with W/L short for won/lost
+      h2h_summary:
+        one: "%{count} Match · %{wins}W %{losses}L"
+        other: "%{count} Matches · %{wins}W %{losses}L"
   posts:
     confirm_delete_post: "Are you sure you want to delete this post? This action is not reversible."
     announcement_info_html: "Announced by %{author_name} on %{date_time}"
