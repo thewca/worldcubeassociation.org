@@ -2614,7 +2614,7 @@ ko:
         event: 종목
       type_selector:
         type: 유형
-        single: 단일 기록
+        single: 단일
         average: 평균
       show_selector:
         show: 보기
