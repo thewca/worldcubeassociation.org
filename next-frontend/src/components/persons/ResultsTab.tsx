@@ -81,11 +81,11 @@ const Results: React.FC<{ wcaId: string; eventId: string }> = ({
   });
 
   if (isLoading) {
-    return <Text>Loading...</Text>;
+    return <Loading />;
   }
 
   if (!resultsQuery) {
-    return <Text>Failed fetching results</Text>;
+    return <Text>{t("errors.next_frontend.load_error.results")}</Text>;
   }
 
   const loadedResults = resultsQuery.pages.flat();

@@ -95,14 +95,18 @@ export default function TimeZoneSelector({
           {t("competitions.schedule.timezone_setting")}
         </Combobox.Label>
         <Combobox.Control>
-          <Combobox.Input placeholder="Nothing selected" />
+          <Combobox.Input
+            placeholder={t("competitions.schedule.no_timezone_selected")}
+          />
           <Combobox.IndicatorGroup>
             <Combobox.Trigger />
           </Combobox.IndicatorGroup>
         </Combobox.Control>
         <Combobox.Positioner>
           <Combobox.Content>
-            <Combobox.Empty>No items found</Combobox.Empty>
+            <Combobox.Empty>
+              {t("search_results.index.not_found.generic")}
+            </Combobox.Empty>
             {collection.items.map((item) => (
               <Combobox.Item item={item} key={item}>
                 <Combobox.ItemText>{item}</Combobox.ItemText>

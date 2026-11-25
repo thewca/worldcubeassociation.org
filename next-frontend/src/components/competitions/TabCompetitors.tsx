@@ -48,7 +48,7 @@ const TabCompetitors: React.FC<CompetitorData> = ({
         {addOnTheSpotSlot}
         <Card.Title>
           <FormEventSelector
-            title="Events"
+            title={t("competitions.competition_info.events")}
             selectedEvents={psychSheetEvent ? [psychSheetEvent] : []}
             eventList={eventIds}
             onEventClick={setPsychSheetEvent}

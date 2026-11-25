@@ -134,7 +134,7 @@ function ResultsProjector({
                   <IconButton
                     variant="ghost"
                     onClick={() => setStatus("hiding")}
-                    aria-label="Play"
+                    aria-label={t("competitions.live.projector.play")}
                     size="lg"
                     me={2}
                   >
@@ -144,7 +144,7 @@ function ResultsProjector({
                   <IconButton
                     variant="ghost"
                     onClick={() => setStatus("paused")}
-                    aria-label="Pause"
+                    aria-label={t("competitions.live.projector.pause")}
                     size="lg"
                     me={2}
                   >
@@ -153,7 +153,7 @@ function ResultsProjector({
                 )}
                 <IconButton
                   variant="ghost"
-                  aria-label="Close"
+                  aria-label={t("page.executives.close")}
                   size="lg"
                   onClick={disableProjectorView}
                 >
