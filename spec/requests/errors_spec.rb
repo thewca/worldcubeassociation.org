@@ -40,6 +40,17 @@ RSpec.describe "Error pages" do
     end
   end
 
+  context "when the competition does not exist" do
+    it_behaves_like "HTML error page", "/competitions/NoSuchComp2099", :not_found
+    it_behaves_like "HTML error page", "/competitions/NoSuchComp2099.json", :not_found
+
+    it "renders the competition not found page" do
+      get "/competitions/NoSuchComp2099.json"
+
+      expect(response.body).to include(I18n.t("wca.errors.error_pages.comp_not_found"))
+    end
+  end
+
   context "when the request fails unexpectedly" do
     before { allow_any_instance_of(CompetitionsController).to receive(:index).and_raise("Unexpected failure") }
 
