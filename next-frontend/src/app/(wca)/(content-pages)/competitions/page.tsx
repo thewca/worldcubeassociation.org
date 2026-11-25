@@ -834,7 +834,7 @@ function AdvancedFilters({
       type: "set_time_order",
       timeOrder: value,
     });
-    
+
     // If past or recent are selected, we want to sort order by start date descending by default, so that the most recent competitions are shown first.
     dispatchFilter({
       type: "set_sort_order",
