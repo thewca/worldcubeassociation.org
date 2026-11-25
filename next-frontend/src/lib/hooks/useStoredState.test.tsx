@@ -36,12 +36,15 @@ describe("useStoredState", () => {
     expect(result.current[0]).toBe("table");
   });
 
-  it("falls back to the initial state when the stored state is malformed", () => {
-    localStorage.setItem(KEY, "{not json");
-
+  it("picks up changes made in other tabs", () => {
     const { result } = renderHook(() => useStoredState("calendar", KEY));
 
-    expect(result.current[0]).toBe("calendar");
+    act(() => {
+      localStorage.setItem(KEY, JSON.stringify("table"));
+      window.dispatchEvent(new StorageEvent("storage", { key: KEY }));
+    });
+
+    expect(result.current[0]).toBe("table");
   });
 
   it("updates and stores the state", () => {

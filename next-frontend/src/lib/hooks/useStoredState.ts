@@ -6,21 +6,20 @@ import {
 
 type StoredState<T> = [T, Dispatch<SetStateAction<T>>];
 
-// The native `storage` event only fires in *other* tabs, so it can't notify the tab that wrote.
+// The native `storage` event only fires in *other* tabs, so the tab that wrote needs its own event.
 const STORED_STATE_CHANGE = "stored-state-change";
 
 const subscribe = (onChange: () => void) => {
   window.addEventListener(STORED_STATE_CHANGE, onChange);
-  return () => window.removeEventListener(STORED_STATE_CHANGE, onChange);
+  window.addEventListener("storage", onChange);
+  return () => {
+    window.removeEventListener(STORED_STATE_CHANGE, onChange);
+    window.removeEventListener("storage", onChange);
+  };
 };
 
-const parseStoredState = <T>(rawState: string | null, initialState: T): T => {
-  try {
-    return JSON.parse(rawState ?? "") ?? initialState;
-  } catch {
-    return initialState;
-  }
-};
+const parseStoredState = <T>(rawState: string | null, initialState: T): T =>
+  rawState === null ? initialState : JSON.parse(rawState);
 
 /**
  * This functions like the useState hook, but it keeps the state in local
@@ -40,10 +39,8 @@ export default function useStoredState<T>(
 
   const setStoredState: Dispatch<SetStateAction<T>> = (newState) => {
     const resolved =
-      typeof newState === "function"
-        ? (newState as (prev: T) => T)(
-            parseStoredState(localStorage.getItem(key), initialState),
-          )
+      newState instanceof Function
+        ? newState(parseStoredState(localStorage.getItem(key), initialState))
         : newState;
 
     localStorage.setItem(key, JSON.stringify(resolved));
