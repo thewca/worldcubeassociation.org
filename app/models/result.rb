@@ -62,7 +62,7 @@ class Result < ApplicationRecord
   alias_attribute :wca_id, :person_id
 
   delegate :iso2, to: :country, prefix: true
-  delegate :short_name, :start_date, to: :competition, prefix: true
+  delegate :short_name, :start_date, :championship_types, to: :competition, prefix: true
   delegate :ranking_mode, to: :round
 
   DEFAULT_SERIALIZE_OPTIONS = {
@@ -84,15 +84,9 @@ class Result < ApplicationRecord
   V1_SERIALIZE_OPTIONS = {
     only: V1_ROUND_SERIALIZE_OPTIONS[:only],
     methods: V1_ROUND_SERIALIZE_OPTIONS[:methods] |
-             %w[competition_id competition_short_name competition_start_date competition_is_championship
+             %w[competition_id competition_short_name competition_start_date competition_championship_types
                 event_id round_type_id format_id ranking_mode],
   }.freeze
-
-  def competition_championship?
-    competition.championships.any?
-  end
-
-  alias_method :competition_is_championship, :competition_championship?
 
   def serializable_hash(options = nil)
     super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
