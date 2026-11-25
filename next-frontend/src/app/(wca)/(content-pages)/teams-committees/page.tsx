@@ -17,6 +17,8 @@ import {
 import OpenapiError from "@/components/ui/openapiError";
 import getPermissions from "@/lib/wca/permissions.server";
 import { Metadata } from "next";
+import { Suspense } from "react";
+import Loading from "@/components/ui/loading";
 import EmailCopyButton from "@/components/EmailCopyButton";
 import ResponsiveTabsList from "@/components/ui/responsiveTabsList";
 import { route } from "nextjs-routes";
@@ -35,11 +37,21 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function TeamsCommitteesPage({
-  searchParams,
-}: {
+type TeamsCommitteesPageProps = {
   searchParams: Promise<{ team?: string }>;
-}) {
+};
+
+export default function TeamsCommitteesPage({
+  searchParams,
+}: TeamsCommitteesPageProps) {
+  return (
+    <Suspense fallback={<Loading />}>
+      <TeamsCommittees searchParams={searchParams} />
+    </Suspense>
+  );
+}
+
+async function TeamsCommittees({ searchParams }: TeamsCommitteesPageProps) {
   const { t } = await getT();
   const { team } = await searchParams;
 
