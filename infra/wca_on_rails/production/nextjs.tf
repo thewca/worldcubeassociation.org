@@ -300,7 +300,7 @@ resource "aws_ecs_service" "nextjs" {
   # container image, so we want use data.aws_ecs_task_definition to
   # always point to the active task definition
   task_definition                    = data.aws_ecs_task_definition.nextjs.arn
-  desired_count                      = 3
+  desired_count                      = 5
   scheduling_strategy                = "REPLICA"
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 50
