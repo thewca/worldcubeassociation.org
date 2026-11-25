@@ -246,6 +246,9 @@ export function sortSetsForAutoMatch(scrSets, autoMatchSettings) {
     (scrSet) => events.byId[scrSet.event_id].rank,
     'round_number',
     'scramble_set_number',
+    // In attempt mode, extra scrambles share `scramble_number` with standard ones
+    //   (Extra 1 and Attempt 1 both have number 1), so they must be sorted last.
+    'is_extra',
     'scramble_number',
   ]);
 }
