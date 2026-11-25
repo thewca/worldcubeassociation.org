@@ -301,7 +301,7 @@ export const afterCompetitionTabs = (
 };
 
 // Mirrors the permission-gated links of the legacy `competitions/_nav.html.erb`, approximated
-//   from `/users/me/permissions`. The Rails pages enforce the exact permissions themselves.
+// from `/users/me/permissions`. The Rails pages enforce the exact permissions themselves.
 export const adminTabs = (
   competitionInfo: components["schemas"]["V1CompetitionInfo"],
   permissions: PermissionFunctions,
