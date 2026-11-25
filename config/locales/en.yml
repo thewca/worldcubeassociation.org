@@ -1840,6 +1840,8 @@ en:
       championship_only: "Show only championships"
       sort:
         order: "Sort order"
+        asc: "Ascending"
+        desc: "Descending"
         start_date_asc: "Start date: ascending"
         start_date_desc: "Start date: descending"
         end_date_asc: "End date: ascending"
