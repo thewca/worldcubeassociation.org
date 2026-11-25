@@ -829,17 +829,17 @@ function AdvancedFilters({
 
   const changeTimeOrder = (value: string | null) => {
     if (!value) return;
+    const isPresent = value === "present";
     dispatchFilter({
       type: "set_time_order",
       timeOrder: value,
     });
     // If past or recent are selected, we want to sort order by start date descending by default, so that the most recent competitions are shown first.
-    if (value === "past" || value === "recent") {
-      dispatchFilter({
-        type: "set_sort_order",
-        sort: "-start_date",
-      });
-    }
+
+    dispatchFilter({
+      type: "set_sort_order",
+      sort: isPresent ? "start_date" : "-start_date",
+    });
   };
 
   return (
