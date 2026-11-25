@@ -138,6 +138,16 @@ RSpec.describe "API v1 Persons" do
       )
     end
 
+    it "serializes the championship types of the competition" do
+      championship = create(:competition, :world_championship, event_ids: ["333oh"])
+      championship_result = create(:result, person: person, competition: championship)
+
+      get api_v1_person_results_path(person.wca_id)
+
+      championship_types_by_result_id = response.parsed_body.to_h { [it["id"], it["competition_championship_types"]] }
+      expect(championship_types_by_result_id).to eq(result.id => [], championship_result.id => ["world"])
+    end
+
     it "does not serialize the derivable attempt indices" do
       get api_v1_person_results_path(person.wca_id)
 

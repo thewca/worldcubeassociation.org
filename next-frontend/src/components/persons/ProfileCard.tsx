@@ -78,7 +78,8 @@ const ProfileCard: React.FC<ProfileData> = async ({
             rounded="md"
             alt={t("common.user.profile_picture")}
             minW={0}
-            maxW={{ base: "3xs", md: "sm" }}
+            maxW="full"
+            maxH={{ base: "3xs", md: "xs" }}
           />
         </Center>
       </Card.Header>

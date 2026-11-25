@@ -10,6 +10,7 @@ allOf:
       - competition_id
       - competition_short_name
       - competition_start_date
+      - competition_championship_types
       - event_id
       - round_type_id
       - format_id
@@ -28,6 +29,13 @@ allOf:
         type: string
         format: date
         example: "2024-11-16"
+      competition_championship_types:
+        type: array
+        description: 'The different championship types the competition holds. Values can be: `world`, a continent ID, a country ISO2 code, or a multi-country group such as `greater_china`. Empty if not a championship.'
+        items:
+          type: string
+        example:
+          - world
       event_id:
         type: string
         example: "222"

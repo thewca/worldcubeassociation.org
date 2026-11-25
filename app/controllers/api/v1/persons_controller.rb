@@ -51,6 +51,6 @@ class Api::V1::PersonsController < Api::V1::ApiController
 
   private def person_results
     person = Person.current.find_by!(wca_id: params.require(:wca_id))
-    person.results.includes(:competition, :result_attempts, round: :linked_round)
+    person.results.includes(:result_attempts, round: :linked_round, competition: :championships)
   end
 end

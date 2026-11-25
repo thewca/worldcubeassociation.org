@@ -62,7 +62,7 @@ class Result < ApplicationRecord
   alias_attribute :wca_id, :person_id
 
   delegate :iso2, to: :country, prefix: true
-  delegate :short_name, :start_date, to: :competition, prefix: true
+  delegate :short_name, :start_date, :championship_types, to: :competition, prefix: true
   delegate :ranking_mode, to: :round
 
   DEFAULT_SERIALIZE_OPTIONS = {
@@ -82,7 +82,7 @@ class Result < ApplicationRecord
   V1_STANDALONE_SERIALIZE_OPTIONS = {
     only: V1_ROUND_SERIALIZE_OPTIONS[:only],
     methods: V1_ROUND_SERIALIZE_OPTIONS[:methods] |
-             %w[competition_id competition_short_name competition_start_date
+             %w[competition_id competition_short_name competition_start_date competition_championship_types
                 event_id round_type_id format_id ranking_mode],
   }.freeze
 

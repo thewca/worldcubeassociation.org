@@ -2739,6 +2739,7 @@ en:
       world_records: "History of World Records"
       continental_records: "History of Continental Records"
       national_records: "History of National Records"
+      copy_profile_link: "Copy link to profile"
       #context: number of head-to-head matches and the result, with W/L short for won/lost
       h2h_summary:
         one: "%{count} Match · %{wins}W %{losses}L"

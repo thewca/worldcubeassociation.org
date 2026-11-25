@@ -1979,6 +1979,13 @@ export interface components {
              * @example 2024-11-16
              */
             competition_start_date: string;
+            /**
+             * @description The different championship types the competition holds. Values can be: `world`, a continent ID, a country ISO2 code, or a multi-country group such as `greater_china`. Empty if not a championship.
+             * @example [
+             *       "world"
+             *     ]
+             */
+            competition_championship_types: string[];
             /** @example 222 */
             event_id: string;
             /** @example f */

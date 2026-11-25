@@ -23,6 +23,7 @@ import _ from "lodash";
 import roundTypes from "@/lib/wca/data/roundTypes";
 import formats from "@/lib/wca/data/formats";
 import { DateTime } from "luxon";
+import NationalChampionshipIcon from "@/components/icons/NationalChampionshipIcon";
 import { HeadToHeadRoundRows } from "./H2HRoundRows";
 import { attemptColumnCount } from "@/lib/wca/competitions/h2hMatches";
 
@@ -363,8 +364,8 @@ export function ByCompetitionTable({
   );
 
   return (
-    <Table.ScrollArea rounded="md" width="full">
-      <Table.Root>
+    <Table.ScrollArea rounded="wca" width="full">
+      <Table.Root striped>
         <Table.Header>
           <Table.Row>
             <Table.ColumnHeader>
@@ -420,18 +421,22 @@ export function ByCompetitionTable({
                 <Table.Row key={competitorResult.id}>
                   <Table.Cell>
                     {index === 0 && (
-                      <Link asChild>
-                        <NextLink
-                          href={route({
-                            pathname: "/competitions/[competitionId]",
-                            query: {
-                              competitionId: competitorResult.competition_id,
-                            },
-                          })}
-                        >
-                          {competitorResult.competition_short_name}
-                        </NextLink>
-                      </Link>
+                      <HStack gap="1">
+                        {competitorResult.competition_championship_types
+                          .length > 0 && <NationalChampionshipIcon />}
+                        <Link asChild>
+                          <NextLink
+                            href={route({
+                              pathname: "/competitions/[competitionId]",
+                              query: {
+                                competitionId: competitorResult.competition_id,
+                              },
+                            })}
+                          >
+                            {competitorResult.competition_short_name}
+                          </NextLink>
+                        </Link>
+                      </HStack>
                     )}
                   </Table.Cell>
                   <RoundNameCell
