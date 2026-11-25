@@ -137,23 +137,6 @@ export default async function RegisterPage({
           </Card.Body>
         </Card.Root>
       )}
-      <Alert.Root status="warning">
-        <Alert.Indicator />
-        <Alert.Content flexDirection="row">
-          {t("competitions.registration_v2.preview.notice")}{" "}
-          <Link
-            href={`https://www.worldcubeassociation.org/competitions/${competitionInfo.id}/register`}
-            variant="underline"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {t("competitions.registration_v2.preview.link")}
-            <Icon>
-              <LuExternalLink />
-            </Icon>
-          </Link>
-        </Alert.Content>
-      </Alert.Root>
       <Card.Root width="full">
         <Card.Body>
           <RegistrationPanel
