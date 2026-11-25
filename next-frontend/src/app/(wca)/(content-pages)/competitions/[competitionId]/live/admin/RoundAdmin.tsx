@@ -25,7 +25,6 @@ export default function RoundAdmin({
 }) {
   const { t } = useT();
   const { rounds } = useAllRoundsInfo();
-  const { t } = useT();
 
   const roundsById = _.groupBy(rounds, (d) => parseActivityCode(d.id).eventId);
 

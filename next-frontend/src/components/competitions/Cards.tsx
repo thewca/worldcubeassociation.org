@@ -330,7 +330,6 @@ export async function RegistrationCard({
 
 export async function EventCard({
   competitionInfo,
-  t,
 }: {
   competitionInfo: components["schemas"]["V1CompetitionInfo"];
 }) {
