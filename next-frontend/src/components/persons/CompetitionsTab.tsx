@@ -1,15 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { orderBy, sortBy } from "lodash";
-import {
-  createListCollection,
-  Link,
-  Select,
-  Stack,
-  Table,
-  Text,
-} from "@chakra-ui/react";
+import { Button, Icon, Link, Stack, Table, Text } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useT } from "@/lib/i18n/useI18n";
 import { formatDateRange } from "@/lib/dates/format";
@@ -18,11 +11,9 @@ import { route } from "nextjs-routes";
 import countries from "@/lib/wca/data/countries";
 import useAPI from "@/lib/wca/useAPI";
 import Loading from "@/components/ui/loading";
+import { LuArrowDown, LuArrowUp } from "react-icons/lu";
 
 type SortOrder = "asc" | "desc";
-
-const isSortOrder = (value: string): value is SortOrder =>
-  value === "asc" || value === "desc";
 
 interface CompetitionsTabProps {
   wcaId: string;
@@ -58,14 +49,33 @@ export default function CompetitionsTab({ wcaId }: CompetitionsTabProps) {
 
   const orderedCompetitions = orderBy(numberedCompetitions, "number", order);
 
+  const toggleOrder = () =>
+    setOrder((current) => (current === "asc" ? "desc" : "asc"));
+
   return (
     <Stack>
-      <OrderSelect value={order} onChange={setOrder} />
       <Table.ScrollArea maxW="full">
         <Table.Root>
           <Table.Header>
             <Table.Row>
-              <Table.ColumnHeader>#</Table.ColumnHeader>
+              <Table.ColumnHeader
+                aria-sort={order === "asc" ? "ascending" : "descending"}
+              >
+                <Button
+                  variant="plain"
+                  size="sm"
+                  p={0}
+                  h="auto"
+                  fontWeight="inherit"
+                  onClick={toggleOrder}
+                  title={t(`competitions.index.sort.${order}`)}
+                >
+                  #
+                  <Icon size="sm">
+                    {order === "asc" ? <LuArrowUp /> : <LuArrowDown />}
+                  </Icon>
+                </Button>
+              </Table.ColumnHeader>
               <Table.ColumnHeader>
                 {t("persons.show.competition")}
               </Table.ColumnHeader>
@@ -109,58 +119,5 @@ export default function CompetitionsTab({ wcaId }: CompetitionsTabProps) {
         </Table.Root>
       </Table.ScrollArea>
     </Stack>
-  );
-}
-
-interface OrderSelectProps {
-  value: SortOrder;
-  onChange: (value: SortOrder) => void;
-}
-
-function OrderSelect({ value, onChange }: OrderSelectProps) {
-  const { t } = useT();
-
-  const collection = createListCollection({
-    items: [
-      { value: "asc", label: t("competitions.index.sort.asc") },
-      { value: "desc", label: t("competitions.index.sort.desc") },
-    ],
-  });
-
-  return (
-    <Select.Root
-      collection={collection}
-      value={[value]}
-      onValueChange={({ value: [selected] }) => {
-        if (selected && isSortOrder(selected)) {
-          onChange(selected);
-        }
-      }}
-      variant="outline"
-      width={{ base: "100%", md: "fit-content" }}
-      minWidth="xs"
-    >
-      <Select.HiddenSelect />
-      <Select.Label>{t("competitions.index.sort.order")}</Select.Label>
-
-      <Select.Control>
-        <Select.Trigger>
-          <Select.ValueText />
-        </Select.Trigger>
-        <Select.IndicatorGroup>
-          <Select.Indicator />
-        </Select.IndicatorGroup>
-      </Select.Control>
-
-      <Select.Positioner>
-        <Select.Content>
-          {collection.items.map((item) => (
-            <Select.Item key={item.value} item={item}>
-              {item.label}
-            </Select.Item>
-          ))}
-        </Select.Content>
-      </Select.Positioner>
-    </Select.Root>
   );
 }
