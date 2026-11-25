@@ -32,6 +32,7 @@ import { AboutRegulations } from "@/globals/AboutRegulations";
 import { SpeedCubingHistoryPage } from "@/globals/SpeedcubingHistory";
 import { Privacy } from "@/globals/Privacy";
 import { Disclaimer } from "@/globals/Disclaimer";
+import { TranslationDisclaimer } from "@/globals/TranslationDisclaimer";
 import { AboutUsPage } from "@/globals/About";
 import { languageConfig, fallbackLng } from "@/lib/i18n/settings";
 import { DocumentsPage } from "@/globals/Documents";
@@ -177,6 +178,7 @@ export const wcaConfig = {
     AboutUsPage,
     Privacy,
     Disclaimer,
+    TranslationDisclaimer,
     SpeedCubingHistoryPage,
     AboutRegulations,
     DocumentsPage,
