@@ -22,9 +22,6 @@ export async function getTeamCommitteeMembers(
   groupId: number,
   isActive: boolean,
 ) {
-  "use cache: remote";
-  cacheLife("hours");
-
   return serverClient.GET("/v0/user_roles", {
     params: { query: teamCommitteeMembersQuery(groupId, isActive) },
   });

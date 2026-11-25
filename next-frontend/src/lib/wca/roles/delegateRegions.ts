@@ -16,14 +16,14 @@ export const getDelegateRegions = cache(async () => {
   });
 });
 
-export const getDelegatesInGroup = cache(async (groupId: number) => {
+export const getDelegatesInGroup = async (groupId: number) => {
   return await serverClient.GET("/v0/user_roles", {
     params: { query: delegatesInGroupQuery(groupId) },
   });
-});
+};
 
-export const getDelegatesInSubgroups = cache(async (groupId: number) => {
+export const getDelegatesInSubgroups = async (groupId: number) => {
   return await serverClient.GET("/v0/user_roles", {
     params: { query: delegatesInSubgroupsQuery(groupId) },
   });
-});
+};
