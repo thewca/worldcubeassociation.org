@@ -5,19 +5,25 @@ import Link from "next/link";
 import { route } from "nextjs-routes";
 import type { ComponentProps } from "react";
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
+import { useT } from "@/lib/i18n/useI18n";
 
-const pageRoute = (page: number) =>
-  route({ pathname: "/posts", query: { page: page.toString() } });
+const pageRoute = (page: number, searchQuery?: string) =>
+  route({
+    pathname: "/posts",
+    query: { page: page.toString(), q: searchQuery },
+  });
 
 // An anchor cannot be disabled, so render the step out of bounds as a plain button.
 function StepLink({
   targetPage,
+  searchQuery,
   disabled,
   label,
   children,
   ...buttonProps
 }: {
   targetPage: number;
+  searchQuery?: string;
   disabled: boolean;
   label: string;
   children: React.ReactNode;
@@ -32,7 +38,7 @@ function StepLink({
 
   return (
     <IconButton {...buttonProps} asChild>
-      <Link href={pageRoute(targetPage)} aria-label={label}>
+      <Link href={pageRoute(targetPage, searchQuery)} aria-label={label}>
         {children}
       </Link>
     </IconButton>
@@ -43,12 +49,15 @@ export default function AnnouncementsPagination({
   page,
   totalAnnouncements,
   pageSize,
+  searchQuery,
 }: {
   page: number;
   totalAnnouncements: number;
   pageSize: number;
+  searchQuery?: string;
 }) {
   const totalPages = Math.ceil(totalAnnouncements / pageSize);
+  const { t } = useT();
 
   if (totalPages <= 1) {
     return null;
@@ -65,8 +74,9 @@ export default function AnnouncementsPagination({
         <Pagination.PrevTrigger asChild>
           <StepLink
             targetPage={page - 1}
+            searchQuery={searchQuery}
             disabled={page === 1}
-            label="Previous page"
+            label={t("posts.previous_page")}
           >
             <LuChevronLeft />
           </StepLink>
@@ -78,7 +88,9 @@ export default function AnnouncementsPagination({
               asChild
               variant={{ base: "ghost", _selected: "outline" }}
             >
-              <Link href={pageRoute(pageItem.value)}>{pageItem.value}</Link>
+              <Link href={pageRoute(pageItem.value, searchQuery)}>
+                {pageItem.value}
+              </Link>
             </IconButton>
           )}
         />
@@ -86,8 +98,9 @@ export default function AnnouncementsPagination({
         <Pagination.NextTrigger asChild>
           <StepLink
             targetPage={page + 1}
+            searchQuery={searchQuery}
             disabled={page === totalPages}
-            label="Next page"
+            label={t("posts.next_page")}
           >
             <LuChevronRight />
           </StepLink>

@@ -15,6 +15,9 @@
       <h4><%= t('oauth.applications.scopes') %>:</h4>
       <p><code id="scopes"><%= @application.scopes %></code></p>
 
+      <h4><%= t('oauth.applications.confidential') %></h4>
+      <p><code id="confidential"><%= @application.confidential? %></code></p>
+
       <h4><%= t('oauth.applications.callback_urls') %>:</h4>
 
       <table>

@@ -573,6 +573,7 @@ export interface DataListVariant {
   /** @default "subtle" */
   variant?: "subtle" | "bold" | undefined
   iconLabel?: boolean | undefined
+  textAutoContrast?: boolean | undefined
 }
 
 export type DataListVariantProps = {

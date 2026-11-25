@@ -28,12 +28,14 @@ export default function PendingResultsTable({
       <Collapsible.Content>
         <VStack align="start">
           <Heading textStyle="h3" textAlign="start">
-            Processing
+            {t("competitions.live.results.processing")}
           </Heading>
           <Table.Root>
             <Table.Header>
               <Table.Row>
-                <Table.ColumnHeader>ID</Table.ColumnHeader>
+                <Table.ColumnHeader>
+                  {t("competitions.live.admin.quit.bulk.id")}
+                </Table.ColumnHeader>
                 <Table.ColumnHeader>
                   {t("competitions.live.results.competitor")}
                 </Table.ColumnHeader>

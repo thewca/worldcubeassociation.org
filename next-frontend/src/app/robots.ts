@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { isLiveSite } from "@/lib/wca/isLiveSite";
 
 // Ported from the Rails app's `app/views/static_pages/robots.txt.erb`, which serves the same
 //   rules for www; these paths exist on both frontends, so the two files should stay in step.
@@ -14,7 +15,7 @@ const WCA_DISALLOW = [
 const BLOCKED_CRAWLERS = ["AionBot"];
 
 export default function robots(): MetadataRoute.Robots {
-  if (!process.env.WCA_LIVE_SITE) {
+  if (!isLiveSite()) {
     return { rules: { userAgent: "*", disallow: "/" } };
   }
 

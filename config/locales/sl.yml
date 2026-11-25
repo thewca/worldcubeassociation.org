@@ -2239,11 +2239,6 @@ sl:
         open: Odprte
         not_open: Še niso odprte
         closed: Zaprte
-      currently_displaying:
-        one: 'Trenutno prikazano: %{count} tekmovanje'
-        two: 'Trenutno prikazani: %{count} tekmovanji'
-        few: 'Trenutno prikazana: %{count} tekmovanja'
-        other: 'Trenutno prikazanih: %{count} tekmovanj'
       register_now: Prijavi se zdaj
       view_competition: Ogled tekmovanja
       why_compete_description_html: |-

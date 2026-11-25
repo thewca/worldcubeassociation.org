@@ -92,9 +92,7 @@ describe("ChakraMarkdown", () => {
     const first = screen.getByText("First paragraph");
     const second = screen.getByText("Second paragraph");
 
-    expect(getComputedStyle(first).marginTop).toBe("0");
-    expect(getComputedStyle(second).marginTop).toContain(
-      "var(--chakra-spacing-4)",
-    );
+    expect(getComputedStyle(first).marginTop).toBe("0px");
+    expect(getComputedStyle(second).marginTop).toBe("16px");
   });
 });

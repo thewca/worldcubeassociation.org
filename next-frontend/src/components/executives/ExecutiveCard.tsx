@@ -16,17 +16,15 @@ export default async function ExecutiveCard({
   showsImages: boolean;
 }) {
   const { t } = await getT();
-  const { data: personDetails } = await getPersonInfo(executive.wcaId);
+  const { data: person } = await getPersonInfo(executive.wcaId);
 
-  if (!personDetails) {
+  if (!person) {
     return (
       <Text>
         {t("page.executives.person_not_found", { wca_id: executive.wcaId })}
       </Text>
     );
   }
-
-  const { person } = personDetails;
 
   return (
     <Card.Root
@@ -52,7 +50,7 @@ export default async function ExecutiveCard({
             colorPalette={executive.colorPalette}
           />
         </Card.Title>
-        <DataList.Root variant="bold">
+        <DataList.Root variant="bold" textAutoContrast>
           <DataList.Item>
             <DataList.ItemLabel>
               {t("page.executives.joined_wca")}

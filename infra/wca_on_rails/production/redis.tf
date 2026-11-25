@@ -28,12 +28,12 @@ resource "aws_security_group" "redis" {
 resource "aws_elasticache_replication_group" "cache" {
   replication_group_id       = "wca-main-cache"
   description                = " "
-  engine                     = "redis"
-  engine_version             = "7.0"
-  node_type                  = "cache.t4g.small"
+  engine                     = "valkey"
+  engine_version             = "8.2"
+  node_type                  = "cache.t4g.medium"
   num_cache_clusters         = 1
   port                       = 6379
-  parameter_group_name       = var.shared.redis_cache_parameter_group.name
+  parameter_group_name       = var.shared.valkey_cache_parameter_group.name
   subnet_group_name          = var.shared.redis_subnet_group.name
   security_group_ids         = [aws_security_group.redis.id]
   automatic_failover_enabled = false
@@ -41,6 +41,7 @@ resource "aws_elasticache_replication_group" "cache" {
   snapshot_retention_limit   = 3
   snapshot_window            = "07:00-08:00"
   maintenance_window         = "sat:10:30-sat:11:30"
+  apply_immediately          = true
   at_rest_encryption_enabled = false
   transit_encryption_enabled = false
 
@@ -55,12 +56,12 @@ resource "aws_elasticache_replication_group" "cache" {
 resource "aws_elasticache_replication_group" "sidekiq" {
   replication_group_id       = "wca-main-sidekiq"
   description                = " "
-  engine                     = "redis"
-  engine_version             = "7.0"
+  engine                     = "valkey"
+  engine_version             = "8.2"
   node_type                  = "cache.t4g.small"
   num_cache_clusters         = 2
   port                       = 6379
-  parameter_group_name       = var.shared.redis_sidekiq_parameter_group.name
+  parameter_group_name       = var.shared.valkey_sidekiq_parameter_group.name
   subnet_group_name          = var.shared.redis_subnet_group.name
   security_group_ids         = [aws_security_group.redis.id]
   automatic_failover_enabled = true
@@ -68,6 +69,7 @@ resource "aws_elasticache_replication_group" "sidekiq" {
   snapshot_retention_limit   = 1
   snapshot_window            = "10:00-11:00"
   maintenance_window         = "mon:12:30-mon:13:30"
+  apply_immediately          = true
   at_rest_encryption_enabled = false
   transit_encryption_enabled = false
 

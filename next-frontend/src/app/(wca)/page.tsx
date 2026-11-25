@@ -28,7 +28,7 @@ import { ChakraMarkdown } from "@/components/Markdown";
 import AnnouncementsCard from "@/components/AnnouncementsCard";
 import { getPayload } from "payload";
 import config from "@payload-config";
-import { connection } from "next/server";
+import { getCachedGlobal } from "@/lib/payload/globals";
 
 import type {
   TextCardBlock,
@@ -340,33 +340,42 @@ const FeaturedCompetitions = async ({
   block,
 }: {
   block: FeaturedCompetitionsBlock;
-}) => (
-  <Card.Root width="full">
-    <Card.Body>
-      <Card.Title asChild>
-        <HStack justify="space-between" wrap="wrap">
-          <Text textStyle={{ base: "h2", md: "h1" }}>
-            Upcoming Competitions
-          </Text>
-          <Button asChild variant="pastelSolid">
-            <ChakraLink asChild textStyle={undefined}>
-              <Link href="/competitions">View all Competitions</Link>
-            </ChakraLink>
-          </Button>
-        </HStack>
-      </Card.Title>
-      <SimpleGrid columns={{ base: 1, md: block.competitions?.length }} gap={4}>
-        {block.competitions?.map((featuredComp) => (
-          <FeaturedCompetition
-            key={featuredComp.id}
-            competitionId={featuredComp.competitionId}
-            colorPalette={featuredComp.colorPalette}
-          />
-        ))}
-      </SimpleGrid>
-    </Card.Body>
-  </Card.Root>
-);
+}) => {
+  const { t } = await getT();
+
+  return (
+    <Card.Root width="full">
+      <Card.Body>
+        <Card.Title asChild>
+          <HStack justify="space-between" wrap="wrap">
+            <Text textStyle={{ base: "h2", md: "h1" }}>
+              {t("competitions.index.titles.upcoming")}
+            </Text>
+            <Button asChild variant="pastelSolid">
+              <ChakraLink asChild textStyle={undefined}>
+                <Link href="/competitions">
+                  {t("competitions.index.all_competitions")}
+                </Link>
+              </ChakraLink>
+            </Button>
+          </HStack>
+        </Card.Title>
+        <SimpleGrid
+          columns={{ base: 1, md: block.competitions?.length }}
+          gap={4}
+        >
+          {block.competitions?.map((featuredComp) => (
+            <FeaturedCompetition
+              key={featuredComp.id}
+              competitionId={featuredComp.competitionId}
+              colorPalette={featuredComp.colorPalette}
+            />
+          ))}
+        </SimpleGrid>
+      </Card.Body>
+    </Card.Root>
+  );
+};
 
 const TestimonialsSpinner = ({ block }: { block: TestimonialsBlock }) => {
   const slides = block.slides;
@@ -537,16 +546,18 @@ const renderBlock = (
 };
 
 const PayloadContents = async () => {
-  const payload = await getPayload({ config });
   const { isEnabled: isDraftMode } = await draftMode();
   const { lng } = await getT();
-
-  const homepage = await payload.findGlobal({
-    slug: "home",
-    draft: isDraftMode,
-    locale: lng,
-    fallbackLocale: "en",
-  });
+  const homepage = isDraftMode
+    ? await (
+        await getPayload({ config })
+      ).findGlobal({
+        slug: "home",
+        draft: true,
+        locale: lng,
+        fallbackLocale: "en",
+      })
+    : await getCachedGlobal("home", lng);
 
   const homepageEntries = homepage.layout;
 
@@ -554,11 +565,13 @@ const PayloadContents = async () => {
     return (
       <Center p={HOMEPAGE_SPACING} asChild>
         <Text>
+          {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
           No homepage content yet, go ahead and{" "}
           <ChakraLink asChild>
             <Link
               href={route({ pathname: "/payload/[[...segments]]", query: {} })}
             >
+              {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
               add some!
             </Link>
           </ChakraLink>
@@ -579,8 +592,6 @@ export default async function Homepage({
 }: {
   searchParams: Promise<{ signed_out?: string }>;
 }) {
-  await connection();
-
   const { t } = await getT();
 
   // Rails redirects here with this flag once it has ended its own session.

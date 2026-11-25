@@ -1,6 +1,10 @@
-import { cache } from "react";
 import { serverClient } from "@/lib/wca/wcaAPI";
 
-export const getExportDetails = cache(async () => {
-  return await serverClient.GET("/v0/export/public");
-});
+import { cacheLife } from "next/cache";
+
+export async function getExportDetails() {
+  "use cache: remote";
+  cacheLife("days");
+
+  return serverClient.GET("/v0/export/public");
+}

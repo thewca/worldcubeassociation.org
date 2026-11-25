@@ -56,10 +56,12 @@ async function AddOnTheSpotButton({
 
   if (!permissions?.canAdministerCompetition(competitionId)) return null;
 
+  const { t } = await getT();
+
   return (
     <Button asChild alignSelf="flex-end" mb={2}>
       <Link href={`/competitions/${competitionId}/registrations/add`}>
-        Add on the spot registration
+        {t("registrations.add.add_on_the_spot")}
       </Link>
     </Button>
   );

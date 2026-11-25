@@ -245,7 +245,10 @@ async function DelegateGrid({
                 asChild
                 variant="ghost"
                 size="sm"
-                aria-label={`Edit ${role.user.name}`}
+                aria-label={
+                  // eslint-disable-next-line no-restricted-syntax -- Backoffice-only text
+                  `Edit ${role.user.name}`
+                }
               >
                 <RailsLink href={`/users/${role.user.id}/edit`}>
                   <LuPencil />

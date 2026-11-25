@@ -1,7 +1,7 @@
 de:
   countries:
     AG: Antigua und Barbuda
-    BA: Bosnien und Herzegovina
+    BA: Bosnien und Herzegowina
     CD: Demokratische Republik Kongo
     CG: Kongo
     CI: Elfenbeinküste
@@ -9,7 +9,7 @@ de:
     FM: Föderierte Staaten von Mikronesien
     GW: Guinea-Bissau
     HK: 'Hongkong, China'
-    KN: St. Kitts and Nevis
+    KN: St. Kitts und Nevis
     KP: Demokratische Volksrepublik Korea
     KR: Republik Korea
     LC: St. Lucia
@@ -97,10 +97,10 @@ de:
       name: B-Finale
       cell_name: B-Finale
     c:
-      name: Kombiniertes Finale
-      cell_name: Kombiniertes Finale
+      name: Finale
+      cell_name: Finale
     d:
-      name: Kombinierte Erste Runde
+      name: Erste Runde
       cell_name: Erste Runde
     e:
       name: Zweite Runde
@@ -174,8 +174,22 @@ de:
       ranking: 'Top %{ranking} nach Durchschnitt'
       any_result: Beliebiger Schnitt
     deadline:
-      description: Deadline zur Qualifikation
-      by_date: 'nach %{date}'
+      description: Ende des Qualifikationszeitraums
+      by_date: 'bis %{date}'
+    preview: Qualifikations Vorschau
+    earliest_date:
+      description: Start des Qualifikations Zeitfensters
+      from_date: am oder nach dem %{date}
+      window_too_short: Das Startdatum des Zeitfensters muss mindestens %{days} 
+        Tage for der Deadline des Zeitfensters liegen.
+      explanation:
+        '1': Das Zeitfenster für die Qualifikation ist optional. Wenn es frei 
+          bleibt, zählen alle Ergebnisse vor der Deadline.
+        '2': Wenn ein Startdatum des Zeitfensters angegeben ist, zählen nur 
+          Ergebnisse für die Qualifikation, die an oder nach diesem Datum 
+          erzielt wurden.
+        '3': Das Startdatum des Zeitfensters muss mindestens %{days} Tage vor 
+          der Deadline des Zeitfensters liegen.
   common:
     world: Welt
     continent: Kontinent
@@ -220,6 +234,10 @@ de:
       secret: Client Secret
       scopes: Scopes
       callback_urls: Callback-URLs
+      confidential: Vertraulich?
+      confidentiality:
+        'yes': Ja
+        'no': Nein
   helpers:
     submit:
       competition_medium:
@@ -242,8 +260,8 @@ de:
         remember_me: Angemeldet bleiben
         pending_avatar: Neues Profilbild hochladen
         remove_avatar: Profilbild entfernen
-        results_notifications_enabled: 'Benachrichtige mich, wenn Ergebnisse von mir
-          veröffentlicht werden.'
+        results_notifications_enabled: 'Benachrichtige mich, wenn meine Ergebnisse
+          veröffentlicht wurden.'
         registration_notifications_enabled: >-
           Wenn ich einen Wettbewerb organisiere oder delegiere, möchte ich per
           E-Mail benachrichtigt werden, wenn neue Anmeldungen übermittelt
@@ -319,12 +337,12 @@ de:
         title: Titel
         private_description: Beschreibung (privat)
         private_wrc_decision: Entscheidung (privat)
-        public_summary: Zusammenfassung (privat)
+        public_summary: Zusammenfassung (öffentlich)
         digest_worthy: Digestwürdig
         tags: Tags
         competition_id: Passierte bei
       competition_medium:
-        competition_id: Competition
+        competition_id: Wettbewerb
         media_type: Typ
         text: Text
         uri: Link
@@ -406,8 +424,7 @@ de:
     hints:
       incident:
         title: >-
-          Beachte dass dies öffentlich ist und es in Englisch ausgefüllt werden
-          sollte.
+          Beachte dass dies öffentlich ist und es in Englisch ausgefüllt werden sollte!
         private_description: >-
           Eine Beschreibung des Incidents, welche nur von Delegates gesehen
           werden kann. Bitte in Englisch ausfüllen.
@@ -422,10 +439,10 @@ de:
           Trage das Geburtsdatum des Teilnehmers / der Teilnehmerin im Format
           JJJJ-MM-TT ein.
         name: >-
-          Trage den vollen Namen des Teilnehmers / der Teilnehmerin sorgfältig
-          ein, zum Beispiel <strong>Stefan Pochmann</strong>. Nicht unachtsam
-          wie etwa <strong>s pochman</strong>. Zweite Vornamen (entweder ganz
-          oder als Initial) sind optional.
+          Trage den vollen Namen des Teilnehmers / der Teilnehmerin sorgfältig ein,
+          zum Beispiel <strong>Stefan Pochmann</strong>. Nicht unachtsam wie etwa
+          <strong>s pochman</strong>. <br/>Zweite Vornamen (entweder ganz oder als
+          Initial) sind optional.
         pending_avatar: >-
           Nachdem Du ein neues Profilbild hochgeladen hast, muss dieses erst vom
           WCA Results Team bestätigt werden.
@@ -483,18 +500,13 @@ de:
           Bitte die Zeilen mit dem nicht verwendeten Equipment entsprechend
           entfernen.
         venue: >-
-          Die oben genannten Punkte sind lediglich eine Empfehlung für einen
-          vollständigen Report. Nutze diese nach eigenem Ermessen und
-          entscheide, was für dich relevant ist. Bitte entferne nicht verwendete
-          Abschnitte.
+          Die oben genannten Punkte sind lediglich eine Empfehlung für einen vollständigen
+          Report. Nutze diese nach eigenem Ermessen und entscheide, was für dich relevant
+          ist. Bitte entferne nicht verwendete Abschnitte!
         organization: >-
-          Berichte über das Organisationsteam und darüber, wie sie den
-          Wettbewerb bewältigt haben, ob und wie Du dabei involviert warst,
-          deren Vorerfahrung und ob Du Fortschritte feststellen konntest, ob sie
-          sich den Tag über professionell und aktiv verhalten haben, über
-          Probleme, die auftraten (z.B. hinter den Zeitplan zurückzufallen) und
-          wie sie gelöst wurden... Bitte kurz und bündig schreiben und keine
-          unnötigen Details berichten.
+          Die oben aufgeführten Punkte dienen nur als Orientierung für einen vollständigen
+          Bericht. Nutze sie nach eigenem Ermessen so, wie es für dich passt. Bitte
+          entferne nicht verwendete Abschnitte!
         incidents: >-
           Berichte über alle unüblichen Zwischenfälle. Nummeriere die Vorfälle
           beginnend bei 1., sodass andere Delegierte über diese Nummerierung
@@ -541,16 +553,16 @@ de:
       person:
       results_submission:
       regional_organization:
-        website: Muss eine gültige http(s) Adresse sein. HTTPS ist empfohlen.
+        website: Muss eine gültige http(s) Adresse sein. HTTPS ist empfohlen
         logo: >-
           Muss im PNG-Format sein, in guter Auflösung und mit einem
           transparenten Hintergrund.
         email: Sollte eine Mailingliste mit allen Direktoren und Beauftragten 
-          sein.
-        bylaws: Muss im PDF-Format sein.
+          sein
+        bylaws: Muss im PDF-Format sein
         extra_file: >-
-          Muss im PDF-Format sein. Falls du mehrere Dateien hinzufügen willst,
-          fasse diese bitte zu einer zusammen.
+          Muss im PDF-Format sein. Falls du mehrere Dateien hinzufügen willst, fasse
+          diese bitte zu einer zusammen
     options:
       registration:
         status:
@@ -570,18 +582,32 @@ de:
         wca_id: Deine WCA ID
         dob: Korrektes Geburtsdatum
         document: Dokument
+      contact_wrt:
+        wca_id: WCA ID
     errors:
       dob_contact:
         dob_invalid: ist falsch formatiert
+    competition_link_html: Klicke <a href='%{url}'>hier</a>, um die 
+      Wettbewerbsseite zu besuchen
   errors:
     messages:
       wrong_size: 'hat die falsche Größe (erwartet: %{file_size})'
       size_too_small: 'ist zu klein (erwartet: mindestens %{file_size})'
       size_too_big: 'ist zu groß (erwartet: höchstens %{file_size})'
+      no_permission: Du hast nicht die erforderlichen Berechtigungen, um auf 
+        diese Seite zuzugreifen.
+    next_frontend:
+      title: Beim Darstellen der Seite ist ein Fehler aufgetreten
+      description: Wenn dieser Fehler weiterhin auftritt, melde ihn dem WST mit 
+        den unten aufgeführten Details
+      details: Fehlerdetails
   devise:
     passwords:
       edit:
         new_password_confirmation: Password erneut eingeben
+      send_paranoid_instructions: Ein Link zum Zurücksetzen des Passworts wird 
+        an die E-Mail-Adresse gesendet, sofern für diese ein Benutzerkonto bei 
+        der WCA registriert ist.
     sessions:
       new:
         sign_in: Anmelden
@@ -605,7 +631,7 @@ de:
             Minuten gültig. Du kannst in 2 Minuten erneut einen Code abrufen.
           errors:
             cant_send_email: Du kannst aktuell keine E-Mail generieren
-            invalid_otp: Ungültiger Zwei-Faktor-Code
+            invalid_otp: Ungültiger Zwei-Faktor-Code.
             not_enabled: Zwei-Faktor-Authentifizierung ist nicht aktiviert
             unknown: >-
               Unbekannter Fehler beim Senden der E-Mail. Bitte kontaktiere das
@@ -651,20 +677,19 @@ de:
             die Anmeldung zu generieren. Diese sind hier beschrieben.
           dedicated_app: Eine dedizierte Zwei-Faktor Anwendung verwenden
           dedicated_app_desc_html: >-
-            Das WST empfiehlt die Nutzung von %{authy} auf deinem eigenen Gerät
-            um Einmal-Passwörter bei der Anmeldung zu erhalten.<br/> Andere
-            Alternativen sind %{google} oder %{microsoft}.
+            Das WST empfiehlt, %{authy} auf deinem eigenen Gerät bzw. deinen eigenen
+            Geräten zu nutzen, um bei der Anmeldung dein Einmal-Passwort zu erhalten.<br/>Weitere
+            Alternativen sind %{google}, %{apple} und %{microsoft}.
           scan_qrcode_html: >-
             Scanne den QR Code wenn du dazu von deiner 2FA Anwendung
             aufgefordert wirst (oder klicke %{here} wenn du dein Mobiltelefon
             benutzt).
           backup_codes: Backup Codes
           backup_codes_desc: >-
-            Backup Codes können als Ersatz für ein Einmal-Passwort verwendet
-            werden falls du einmal keinen Zugang zu einem Gerät mit deiner
-            ausgewählten Zwei-Faktor Anwendung hast. Jeder Code kann nur einmal
-            verwendet werden. Stelle sicher, dass diese geschützt aufbewahrt
-            werden.
+            Backup-Codes kannst du stattdessen als Einmal-Passwort verwenden, falls
+            du keinen Zugriff auf das Gerät mit deiner Zwei-Faktor-Authentifizierungs-App
+            hast. Jeder Code kann nur einmal verwendet werden. Bewahre sie an einem
+            sicheren Ort auf!
           no_backup_codes: >-
             Du hast bisher keinen Backup Code generiert. Klicke den Button um
             dies zu tun.
@@ -692,8 +717,13 @@ de:
           disabled_failed: >-
             Kontte 2FA nicht deaktivieren. Bitte sieh dir die Fehlermeldung
             unten an.
+        redesign_notice: Du siehst die neue Anmeldeseite. Sie wird die alte 
+          Seite bis Ende des Jahres ersetzen.
+        use_classic: Zur alten Anmeldeseite wechseln
       destroy_other:
         success: Erfolgreich von allen anderen Geräten abgemeldet.
+      destroy:
+        success: Du wurdest abgemeldet.
     shared:
       links:
         sign_in: Anmelden
@@ -708,7 +738,10 @@ de:
     mailer:
       confirmation_instructions:
         subject: Bitte bestätige deine neue E-Mail-Adresse
-    registrations: {}
+    registrations:
+      new:
+        redesign_notice: Du siehst die neue Registrierungsseite. Sie wird die 
+          alte Seite bis Ende des Jahres ersetzen.
   wca:
     errors:
       messages:
@@ -718,6 +751,20 @@ de:
       error_pages:
         500_error: 'Entschuldige, etwas ist schiefgelaufen.'
         400_error: Die angeforderte Seite existiert nicht.
+        comp_not_found: Wettbewerb nicht gefunden
+        comp_not_found_action: Wir konnten keinen Wettbewerb mit der ID 
+          "%{comp_id}" finden. Bitte suche danach in der Suchleiste.
+        comp_not_found_action_2: Wenn du über einen Link von einer anderen Seite
+          hierhin gekommen bist, benachrichtige bitte diese Webseite, dass der 
+          Link nicht korrekt ist.
+        500_contact_html: <a href=%{contact_url}>Klicke hier</a>, um den Fehler 
+          zu melden.
+        400_contact_html: Wenn du glaubst, dass dies ein Fehler ist, <a 
+          href=%{contact_url}>klicke bitte hier</a>, um ihn zu melden.
+        session_expired: Sitzung abgelaufen
+        session_expired_action: Deine Sitzung ist abgelaufen. Bitte lade die 
+          Seite neu, versuche deine Aktion erneut oder melde dich neu an, um 
+          fortzufahren.
     doorkeeper:
       applications:
         help:
@@ -727,31 +774,37 @@ de:
             <a
             href="https://github.com/thewca/worldcubeassociation.org/blob/main/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">hier</a> für eine Liste unterstützter Scopes.
+          confidential: Die Anwendung wird in einer Umgebung verwendet, in der 
+            das Client-Geheimnis vertraulich gehalten werden kann. Native mobile
+            Apps und Single-Page-Apps gelten als nicht vertraulich.
       scopes:
         public: >-
-          Zugriff auf öffentliche Daten (Name, WCA-ID, Geschlecht,
-          Staatsbürgerschaft und Profilbild)
+          Zugriff auf öffentliche Daten (Name, WCA-ID, Geschlecht, Staatsangehörigkeit
+          und Profilbild)
         dob: Zugriff auf das Geburtsdatum
         email: Zugriff auf die E-Mail-Adresse
         manage_competitions: 'Zukünftige Wettbewerbe, die du organisierst, verwalten'
+        manage_registrations: Dich für Wettbewerbe anmelden und deine 
+          Anmeldungen ändern oder stornieren
+        translations: Auf die Liste der Sprachen zugreifen, für die du 
+          WCA-Übersetzer bist
     devise:
       no_account: Kein Benutzerkonto?
       have_competed: Ich habe bereits an einem WCA-Wettbewerb teilgenommen.
       have_never_competed: Ich habe noch nie an einem WCA-Wettbewerb 
         teilgenommen.
       let_us_know: >-
-        Bitte teile uns mit, ob Du bereits an einem WCA-Wettbewerb teilgenommen
-        hast.
+        Bitte teile uns mit, ob Du bereits an einem WCA-Wettbewerb teilgenommen hast:
       welcome_back: >-
         Willkommen zurück! Um Dein WCA-Benutzerkonto zu erstellen, müssen wir
         die WCA-ID kennen, mit der Du teilgenommen hast.
       welcome_html: >-
-        Willkommen! Bevor Du an deinem ersten WCA-Wettbewerb teilnehmen kannst,
-        brauchen wir ein paar zusätzliche Informationen zur Verwaltung der
-        Ergebnisse. Bitte beachte, dass Dein Geburtsdatum nie ohne Dein
-        Einverständnis weitergereicht wird.<br/><br/>Wenn Du die Anmeldung im
-        Namen einer anderen Person durchführst, gib bitte die Details
-        <strong>des Teilnehmers / der Teilnehmerin</strong> an.
+        Willkommen! Bevor du an deinem ersten WCA-Wettbewerb teilnehmen kannst, brauchen
+        wir ein paar zusätzliche Informationen zur Verwaltung der Ergebnisse.<br/><br/>Wenn
+        du die Anmeldung im Namen einer anderen Person durchführst, gib bitte die
+        Angaben zur <strong>teilnehmenden Person</strong> an.
+      dob_privacy: Diese Information wird niemals ohne deine Zustimmung 
+        veröffentlicht.
   layouts:
     navigation:
       information: Informationen
@@ -810,6 +863,25 @@ de:
       privacy: Datenschutz
       disclaimer: Haftungsausschluss
       find_us: Finde uns
+      officers_and_board: WCA-Amtsträger und WCA Board
+      translators: Übersetzer
+      regulations_full: Regelwerk
+      panels:
+        admin: Administrationsbereich
+        volunteer: Bereich für Freiwillige
+        delegate: Delegiertenbereich
+        wapc: WAC-Bereich
+        wfc: WFC-Bereich
+        wrt: WRT-Bereich
+        wst: WST-Übersicht
+        board: Vorstandsübersicht
+        leader: Übersicht für Leiter
+        senior_delegate: Übersicht für Senior-Delegierte
+        wic: WIC-Übersicht
+        weat: WEAT-Übersicht
+        wqac: WQAC-Übersicht
+      switch_to_dark_mode: Zum Darkmode wechseln
+      switch_to_light_mode: Zum Lightmode wechseln
   homepage:
     learn_more: Erfahre mehr
     title: Willkommen bei der World Cube Association
@@ -825,9 +897,9 @@ de:
     competitions:
       title: Wettbewerbe
       text_html: >-
-        Finde heraus, welche Wettbewerbe es in deiner Nähe gibt oder schau dir
-        Ergebnisse an. Falls du aktuell bei einem Wettbewerb bist und deine
-        Ergebnisse sehen willst, schau auf %{wca_live_link} nach.
+        Finde Wettbewerbe in deiner Nähe oder sieh dir Wettbewerbsergebnisse an. Du
+        bist gerade bei einem Wettbewerb und willst die Ergebnisse sehen? Schau auf
+        %{wca_live_link} vorbei!
     merchandise:
       title: Merchandise
       ad_new: Neu
@@ -849,9 +921,9 @@ de:
     contact:
       title: Kontakt
       text_html: >-
-        Falls du uns gerne kontaktieren willst, kannst du dies über das
-        Kontaktformular tun. Falls du Fragen zu einzelnen Abläufen und Verfahren
-        der WCA hast, schau zunächst in unsere %{faq_link}.
+        Falls du uns gerne kontaktieren willst, kannst du dies über das Kontaktformular
+        tun. Falls du Fragen zu einzelnen Abläufen und Verfahren der WCA hast, schau
+        zunächst in unsere %{faq_link}!
       faq: Häufig gestellte Fragen
       button: Bring mich zum WCA Kontakt Formular
     support:
@@ -863,6 +935,11 @@ de:
         helfen, unsere Vision von mehr unterhaltsamen Wettbewerben auf der
         ganzen Welt zu verwirklichen.
       button: 'Erfahre mehr darüber, wie du die WCA unterstützen kannst'
+    volunteer:
+      title: Ehrenamtlich mithelfen
+      text: Mach mit! Die WCA hat in verschiedenen Teams offene Stellen für 
+        ehrenamtlich Mitarbeitende. Du musst kein Speedcuber sein, um 
+        ehrenamtlich mitzuhelfen.
   users:
     update_locale:
       success: Aktualisierte Locale.
@@ -873,13 +950,12 @@ de:
         header: Anleitung für die Bestätigung
         welcome: 'Willkommen %{user_email}!'
         confirm: >-
-          Dein Konto wurde erstellt und muss aktiviert werden, bevor du es
-          nutzen kannst. Bitte bestätige dein Konto mit dem unten angegebenen
-          Link:
-        confirmation_link: Bestätige mein Konto
+          Dein Konto wurde erstellt und muss aktiviert werden, bevor du es nutzen
+          kannst. Bitte bestätige dein Konto mit dem unten angegebenen Link: 
+        confirmation_link: Bestätige mein Konto.
         activate: >-
-          Nach der Aktivierung kannst du dich auf der Webseite der World Cube
-          Association anmelden:
+          Nach der Aktivierung kannst du dich auf der Webseite der World Cube Association
+          anmelden: 
         login_form: Anmeldeformular
         addendum: >-
           Diese Email wurde automatisch generiert. Falls du kein Konto auf der
@@ -903,8 +979,8 @@ de:
           dem WCAT übermittelt. Sobald das WCAT den Wettbewerb offiziell
           angekündigt hat, erhältst du eine weitere Benachrichtigung.
         contact: >-
-          Wenn du mehr Fragen hast, kontaktiere den Delegierten des Wettbewerbs
-          per E-Mail:
+          Wenn du mehr Fragen hast, kontaktiere den Delegierten des Wettbewerbs per
+          E-Mail: 
       competition_announcement_email:
         header: 'Das WCAT kündigte %{competition} an'
         announced: Das WCAT hat deinen Wettbewerb bestätigt und offiziell 
@@ -925,7 +1001,7 @@ de:
           %{confirmer} hat dich als Organisator der %{competition} hinzugefügt.
           Du kannst diesen Wettbewerb hier bearbeiten:
       organizer_removal_email:
-        header: 'Du bist als Organisator von %{competition} entfernt worden.'
+        header: 'Du wurdest als Organisator von %{competition} entfernt'
         information: '%{remover} entfernte dich als Organisator von %{competition}.'
       registration_reminder_email:
         header: '%{competition} Anmeldung öffnet bald'
@@ -940,7 +1016,7 @@ de:
           Bitte besuche die <a href=%{competition_url}>WCA-Webseite der
           Competition</a> für weitere Informationen und die Anmeldebedingungen.
       results_presence_email:
-        header: 'Die Ergebnisse von %{competition} wurden veröffentlicht.'
+        header: 'Die Ergebnisse von %{competition} wurden veröffentlicht'
         intro_html: >-
           Deine Ergebnisse von den %{competition_link} wurden gerade
           veröffentlicht.
@@ -982,11 +1058,12 @@ de:
         Änderung des Vorschaubildes mehrere Minuten vergehen können, bis es
         korrekt angezeigt wird.
       cdn_warning: >-
-        Bitte wundere dich nicht, wenn dein Vorschaubild nicht direkt nach dem
-        Speichern aktualisiert wird.
+        Bitte wundere dich nicht, wenn dein Vorschaubild nicht direkt nach dem Speichern
+        aktualisiert wird!
       current: 'Aktuelles Vorschaubild:'
       new: 'Neues Vorschaubild:'
       save: Speichern
+      reset: Zurücksetzen
     edit:
       general: Allgemein
       email: E-Mail
@@ -1041,6 +1118,7 @@ de:
         reason:
           assigned: Du hast eine verknüpfte WCA-ID
           registered: Du hast dich für einen Wettbewerb angemeldet
+          no_access: du hast keine Berechtigung, diesen Nutzer zu bearbeiten
       guidelines_confirmation: 'Ich bestätige, dass mein Avatar den Avatar Richtlinien
         entspricht.'
       confirm_guidelines: >-
@@ -1067,8 +1145,8 @@ de:
           Das Bild sollte keine Overlay Texte oder unnatürliche Filter (auch
           Rahmen) haben.
         '6': Das Bild muss in korrekter Ausrichtung eingeschickt werden.
-        '7': Der Avatar darf keine offensiven Inhalte haben (z.B. offensive 
-          Gesten)
+        '7': Das Profilbild darf keine anstößigen Inhalte enthalten (z. B. 
+          beleidigende Gesten).
       staff_avatar_guidelines:
         title: 'Zusätzliche Richtlinien für Mitarbeiter:'
         paragraphs:
@@ -1095,6 +1173,15 @@ de:
         identity_error: >-
           Kann deine Daten nicht ändern. Bitte bestätige deine Identität bevor
           du es erneut versuchst.
+      approve_confirm: Bist du sicher, dass du die WCA-ID %{wca_id} bestätigen 
+        möchtest?
+      clear_claim: Zuordnungsanfrage löschen
+      clear_claim_confirm: Bist du sicher, dass du die Zuordnungsanfrage für die
+        WCA-ID %{wca_id} löschen möchtest?
+      pending_avatar_edit_action: 'Klicke hier, wenn du es stattdessen bearbeiten
+        möchtest:'
+      pending_avatar_edit_warning: Du bearbeitest ein noch nicht freigegebenes 
+        Profilbild!
     errors:
       not_found: nicht gefunden
       already_assigned: bereits mit einem anderen Nutzer verknüpft
@@ -1149,8 +1236,8 @@ de:
           Erfolgreich WCA-ID %{wca_id} angefordert. Lies deine E-Mails und warte
           darauf dass %{user} die Verknüpfung bestätigt!
         account_updated_confirm: >-
-          Benutzerkonto aktualisiert und E-Mail an %{email} gesendet um deine
-          neue E-Mail-Adresse zu bestätigen
+          Benutzerkonto aktualisiert. Wir haben eine E-Mail an %{email} gesendet,
+          um deine neue E-Mail-Adresse zu bestätigen.
     select_nearby_delegate:
       select_delegate_html: >-
         Um dich mit deiner WCA-ID zu verknüpfen, brauchen wir einen <a
@@ -1167,22 +1254,23 @@ de:
         kontaktiere das WCA Results Team über <a href="%{dob_form_path}">dieses
         spezielle Formular</a>, um das zu beheben.
       unknown_wca_id_html: 'Die WCA-ID %{link_id} existiert nicht.'
+      search_for_delegate: Nach Delegierten suchen
   registrations:
     errors:
       need_name: Name benötigt
       need_gender: Geschlecht benötigt
       need_dob: Geburtsdatum benötigt
       need_country: Region benötigt
-      must_register: muss sich für mindestens eine Disziplin anmelden
+      must_register: Du musst dich für mindestens ein Event anmelden.
       exceeds_event_limit:
-        one: Du darfst dich in genau einem Event anmelden
-        other: 'Du darfst dich maximal %{count} Events anmelden'
+        one: Du darfst dich zu genau einem Event anmelden.
+        other: Du darfst dich zu maximal %{count} Events anmelden.
       banned_html: >-
         Du bist gebannt. Falls du denkst dass dies ein Fehler ist, kontaktiere
         bitte das <a href='mailto:disciplinary@worldcubeassociation.org'
         target='_blank'>WDC</a>.
       undelete_banned: ist ein gebannter Teilnehmer und kann nicht 
-        wiederhergestellt werden.
+        wiederhergestellt werden
       series_more_than_one_accepted: Du kannst nur für einen Wettbewerb aus 
         einer Serie akzeptiert werden.
       can_only_register_for_qualified_events: >-
@@ -1193,13 +1281,20 @@ de:
         Anmeldevoraussetzungen gelesen hast, um zu wissen, was in diesem Feld
         eingetragen werden muss (z.B. für eine FM Multi-Location Competition, an
         welchem Ort du teilnehmen wirst).
+      exceeding_competitor_limit: Teilnehmendenlimit erreicht.
+      edit_deadline_passed: Die Frist zur Bearbeitung der Anmeldung ist 
+        abgelaufen! Änderungen sollten nur unter außergewöhnlichen Umständen 
+        vorgenommen werden.
+      banned_until: Deine Sperre endet voraussichtlich am %{date}.
+      cannot_change_events_when_cancelling: Du kannst deine Disziplinen nicht 
+        ändern, während du deine Anmeldung stornierst.
     registration_info_people:
       newcomer:
         one: Neuling
         other: Neulinge
       returner:
-        one: Wiederkehrer
-        other: Wiederkehrer
+        one: Wiederkehrende Person
+        other: Wiederkehrende
       person:
         one: Person
         other: Personen
@@ -1250,14 +1345,30 @@ de:
         causes:
           missing_info: Du hast nicht alle benötigten Angaben gemacht
           incomplete: >-
-            Du hast nicht die Kriterien für die Registrierung erfüllt (zum
-            Beispiel die Registrierungsgebühren im Voraus gezahlt oder
-            Qualifikationszeiten nicht erreicht).
+            Du hast die Anmeldekriterien nicht erfüllt (zum Beispiel die Anmeldegebühr
+            im Voraus zu bezahlen oder die Qualifikationszeiten für Disziplinen zu
+            erreichen)
           registrations_full: >-
-            Das Teilnehmerlimit wurde erreicht und es sind keine Plätze mehr
-            verfügbar.
+            Das Teilnehmerlimit wurde erreicht und es sind keine Plätze mehr verfügbar
           multiple_registrations: Du hast dich zweimal oder mehr registriert
           competition_canceled: Die Competition wurde abgesagt
+        email_if_error: Wenn du glaubst, dass dies ein Fehler ist, antworte 
+          bitte auf diese E-Mail.
+      waiting_list:
+        mail_subject: 'Du stehst auf der Warteliste: %{comp_name}'
+        waitlisted_html: Der Wettbewerb ist voll, aber du wurdest auf eine 
+          Warteliste gesetzt und erhältst eine E-Mail, wenn genügend Plätze frei
+          werden, damit du teilnehmen kannst. Deine Position auf der Warteliste 
+          kannst du %{here} einsehen.
+        email_if_error: Wenn du glaubst, dass dies ein Fehler ist, antworte 
+          bitte auf diese E-Mail.
+      formerly_banned:
+        ban_count: 'Der Teilnehmende wurde %{ban_count}-mal gesperrt, mit folgenden
+          Geltungsbereichen und Gründen:'
+        scope_and_reason: 'Geltungsbereich: %{ban_scope}, Grund: %{ban_reason}'
+        wic_message: Wenn du Fragen zu früheren Disziplinarmaßnahmen gegen den 
+          Teilnehmenden hast, wende dich bitte an das WIC, indem du auf diese 
+          E-Mail antwortest.
     list:
       title: 'Anmeldung für %{comp}'
       edit: Bearbeiten
@@ -1273,6 +1384,10 @@ de:
       payment_requested_on: 'Zahlung angefordert am: %{date}'
       series_registrations: Serien Anmeldungen
       total: Gesamt
+      export_to_csv:
+        one: '%{count} Anmeldung als CSV exportieren'
+        other: '%{count} Anmeldungen als CSV exportieren'
+      export_all_to_csv: Alle Anmeldungen als CSV exportieren
     new_registration:
       title: 'Für %{comp} anmelden'
     sign_in: Einloggen
@@ -1282,7 +1397,7 @@ de:
     refund_confirmation: 'Bist du sicher, dass du die Zahlung zurückerstatten willst?'
     update: Anmeldung aktualisieren
     delete_confirm: 'Bist Du sicher, dass du deine Anmeldung löschen willst?'
-    delete_registration: Anmeldung löschen.
+    delete_registration: Anmeldung löschen
     will_open_html: 'Die Anmeldung öffnet in <strong>%{days}</strong> um %{time}.'
     will_close_html: >-
       Es dauert noch <strong>%{days}</strong> (am %{time}) bis die Anmeldung
@@ -1344,12 +1459,13 @@ de:
         payment_information: Zahlungsinformationen
         ajax_error: WCA Server Fehler
         subtotal: Zwischensumme
+        payment_service_error: Fehler beim Zahlungsdienst
       alerts:
         amount_too_low: Der Gesamtbetrag muss mindestens die zu zahlende 
           Eintrittsgebühr sein.
         amount_rather_high: >-
-          Du bist dabei, mindestens das Doppelte des notwendigen Betrages für
-          die Anmeldung zu zahlen. Bitte bestätige die Zahlung mit Klick auf OK.
+          Du bist dabei, mindestens das Doppelte des notwendigen Betrages für die
+          Anmeldung zu zahlen.
       errors:
         already_paid: >-
           Die Gebühr wurde nicht erhoben da die Anmeldegebühren bereits
@@ -1357,13 +1473,36 @@ de:
         not_allowed: Du kannst für diese Anmeldung nicht zahlen.
         payment_reset: Die Zahlung wurde von Stripe abgelehnt.
         payment_pending: Die Zahlung wurde noch nicht abgeschlossen.
+        registration_closed: Die Anmeldung ist geschlossen – weitere Zahlungen 
+          sind nicht zulässig.
+        cpi_disconnected: Es wurde versucht, eine Zahlung zu bestätigen, aber 
+          die Zahlungsintegration war deaktiviert. Bitte kontaktiere die 
+          Organisatoren des Wettbewerbs.
+        generic:
+          failed: Bitte überprüfe die Transaktion bei %{provider}.
+          not_found: '%{provider} hat eine Transaktions-ID zurückgemeldet, die nicht
+            gefunden werden konnte.'
+          intent_not_found: '%{provider} hat eine Transaktions-ID zurückgemeldet,
+            für die bei uns kein Zahlungsversuch vorliegt.'
+          remote_not_found: '%{provider} konnte keine API-Details zur gemeldeten Transaktions-ID
+            bereitstellen.'
+          secret_invalid: '%{provider} hat einen geheimen Transaktionsschlüssel zurückgemeldet,
+            der nicht mit unseren Aufzeichnungen übereinstimmt.'
+        paypal_canceled: PayPal hat gemeldet, dass die Bestellung manuell 
+          storniert wurde. Bitte versuche es erneut.
+        payment_failed: Die Zahlung war nicht erfolgreich. Bitte überprüfe deine
+          Zahlungsdaten und versuche es erneut.
+        payment_canceled: Die Zahlung wurde abgebrochen und wird nicht 
+          abgeschlossen.
+      payment_partial: Deine Zahlung wurde bestätigt, deckt aber nicht den 
+        gesamten Betrag ab. Bitte bezahle auch die restliche Gebühr.
     preferred_events_prompt_html: >-
       Um weitere Anmeldungen in der Zukunft zu beschleunigen, kannst Du deine
       bevorzugten Disziplinen %{link} festlegen.
     preferred_events_populated_html: >-
       Wir haben dies mit deinen Lieblingsevents ausgefüllt, die du hier ändern
       kannst %{link}.
-    registration_requirements: Bedingungen zur Anmeldung beim Wettbewerb
+    registration_requirements: 'Bedingungen zur Anmeldung beim Wettbewerb:'
     import:
       title: 'Importiere Anmeldungen für %{comp}'
       info: >-
@@ -1371,8 +1510,8 @@ de:
         festgestellt und die Datenbank wird entsprechend aktualisiert.
       registrations_file_label: Datei mit Anmeldungen
       registrations_file_hint: >-
-        CSV-Datei mit Spalten: Status, Name, Region, WCA ID, Birth Date, Gender,
-        Email, und eine Spalte je Event.
+        CSV-Datei mit den Spalten: Status, Name, Region, WCA ID, Birth Date, Gender,
+        Email und einer Spalte je Disziplin oder JSON-Datei mit WCIF-Daten.
       import: Importieren
       errors:
         error: 'Fehler beim Importieren von %{registration}: %{error}.'
@@ -1385,8 +1524,8 @@ de:
           in Spalte %{column} gefunden.
         non_existent_wca_id: 'De WCA ID %{wca_id} existiert nicht.'
         email_user_with_different_wca_id: >-
-          Es gibt bereits einen Nutzer mit der E-Mail-Adresse %{email}, aber die
-          WCA ID ist %{user_wca_id} anstatt %{registration_wca_id}
+          Es gibt bereits einen Nutzer mit der E-Mail-Adresse %{email}, aber die WCA
+          ID ist %{user_wca_id} anstatt %{registration_wca_id}.
         email_user_with_different_unconfirmed_wca_id: >-
           Es gibt bereits einen Nutzer mit der E-Mail-Adresse %{email}, aber ihr
           ist die unbestätigte WCA ID %{unconfirmed_wca_id} anstatt
@@ -1397,6 +1536,16 @@ de:
         wca_id_duplicates: >-
           WCA ID muss einmalig sein. Folgende Duplikate wurden gefunden:
           %{wca_ids}.
+        wrong_dob_format: 'Das Geburtsdatum muss dem Format YYYY-mm-dd entsprechen
+          (Jahr-Monat-Tag, zum Beispiel 1944-07-13). Die folgenden Datumsangaben konnten
+          nicht verarbeitet werden: %{raw_dobs}.'
+        invalid_country: 'Ungültiges Land: %{country}.'
+        invalid_wcif: Die JSON-Datei enthält keine gültigen WCIF-Daten.
+        empty_file: Die Datei ist leer.
+        unsupported_file_format: Nicht unterstütztes Dateiformat. Bitte lade 
+          eine JSON- oder CSV-Datei hoch.
+      preview: Vorschau der Anmeldedaten
+      cancel: Abbrechen
     add:
       title: 'Füge Anmeldung für %{comp} hinzu'
       info: >-
@@ -1405,6 +1554,23 @@ de:
       add: Füge Anmeldung hinzu
       errors:
         already_registered: Diese Person hat bereits eine Anmeldung.
+      ots_not_enabled: Die Anmeldung ist geschlossen und die Anmeldung vor Ort 
+        ist nicht aktiviert – du musst zuerst den Wettbewerb bearbeiten, um sie 
+        zu aktivieren
+      ots_before_registration_open: Die Anmeldung vor Ort kann erst genutzt 
+        werden, wenn die Anmeldung geöffnet wurde.
+      competition_over: Du kannst nach dem Ende des Wettbewerbs keine 
+        Anmeldungen vor Ort hinzufügen.
+    entry_fees_partially_paid: Du hast %{paid} von %{total} bezahlt. Kläre mit 
+      den Organisatoren, ob du den Rest bezahlen musst.
+    entry_fees_fully_refunded: Deine Anmeldegebühren wurden vollständig 
+      erstattet. Wenn du erneut bezahlen musst, kannst du dies unten tun
+    entry_fees_pay_again: Ich möchte erneut bezahlen
+    registration_history:
+      acting_user: Ausführender Benutzer
+      action: Aktion
+      changes: Änderungen
+      title: Anmeldungsverlauf
   competitions:
     messages:
       not_visible: Dieser Wettbewerb ist nicht öffentlich sichtbar.
@@ -1503,6 +1669,19 @@ de:
         der Warteliste. Wenn du eine Warteliste verwendest, gib bitte eine
         Deadline an. Wenn du keine Warteliste verwendest, bitte denke daran,
         dies in den Anmeldebedingungen zu erwähnen.
+      results_still_processing: Wir verarbeiten gerade die Ergebnisse dieses 
+        Wettbewerbs – sie sollten in Kürze verfügbar sein.
+      provisional_live_results: 'In der Zwischenzeit kannst du hier die vorläufigen
+        Ergebnisse ansehen:'
+      tooltip_pending: Deine Anmeldung wartet auf eine manuelle Bestätigung. 
+        Bitte stelle sicher, dass du alle Anweisungen (z. B. zur Zahlung) auf 
+        der Wettbewerbsseite befolgt hast.
+      schedule_locked_after_results_submitted: Der Zeitplan kann nicht mehr 
+        bearbeitet werden, nachdem die Ergebnisse eingereicht wurden.
+      spots_left:
+        one: Noch ein Platz frei
+        other: Noch %{count} Plätze frei
+      no_spots_left: Wettbewerb ausgebucht
     my_competitions:
       title: Meine Wettbewerbe
       disclaimer: >-
@@ -1522,6 +1701,8 @@ de:
         abbr_description: '%{short_name}: %{long_name}'
         cutoff: 'Cutoff: %{short_cutoff}'
         download_html: 'Lade alle Informationen zu Teilnehmern als PDF %{here} herunter.'
+        download_pdf: Lade hier den Zeitplan als PDF herunter
+        download: Herunterladen
       date: Datum
       add_to_calendar: Zum Kalender hinzufügen
       city: Stadt
@@ -1647,9 +1828,32 @@ de:
         sar: Südamerikanische Rekorde
       regional_single_record: '%{event_name} %{result} (Einzelergebnis)'
       regional_average_record: '%{event_name} %{result} (Durchschnitt)'
-      bookmark: Füge diese Competition zu den Lesezeichen hinzu.
-      is_bookmarked: Du hast diese Competition zu den Lesezeichen hinzugefügt.
+      bookmark: Diesen Wettbewerb zu den Lesezeichen hinzufügen
+      is_bookmarked: Du hast diese Competition zu den Lesezeichen hinzugefügt
       number_of_bookmarks: Lesezeichen für diese Competition
+      name: Name
+      location: Ort
+      location_and_venue: Ort und Veranstaltungsort
+      name_and_location: Name und Ort
+      delegates: Delegierte(r)
+      announced: Angekündigt
+      report_posted: Bericht veröffentlicht
+      results_submitted: Ergebnisse eingereicht
+      relative_days:
+        before: '%{amount_of_days} vorher'
+        after: '%{amount_of_days} danach'
+      pending: Ausstehend
+      submitted_by_other: Von jemand anderem eingereicht
+      view_more_members: '%{count} weitere Teammitglieder anzeigen'
+      see_more: + %{count} weitere
+      waiting_list_size: Größe der Warteliste
+      no_winner: Die Hauptdisziplin war %{event_name}. Es wurde kein Sieger 
+        ermittelt, da keine Teilnehmenden gültige Ergebnisse in dieser Disziplin
+        erzielt haben.
+      h2h_winner: '%{winner} hat das Head-to-Head-Finale in der Disziplin %{event_name}
+        gewonnen.'
+      h2h_first_runner_up: '%{first_runner_up} wurde Zweiter'
+      h2h_second_runner_up: '%{second_runner_up} wurde Dritter.'
     index:
       title: Wettbewerbe
       all_events: Alle
@@ -1682,6 +1886,7 @@ de:
         custom: Wettbewerbe im ausgewählten Zeitraum
         by_announcement: 'Wettbewerbe sortiert nach Datum der Ankündigung, neueste
           oben'
+        ongoing_and_upcoming: Laufende und bevorstehende Wettbewerbe
       tooltips:
         hourglass:
           ended: 'Vor %{days} beendet'
@@ -1692,13 +1897,63 @@ de:
         search: Name oder Stadt
         recent: 'Letzte %{count} Tage'
         registration:
-          opens_in: 'Anmeldung wird in %{duration} öffnen'
+          opens_in: 'Anmeldung wird in %{relativeDate} öffnen.'
           closed: 'Die Anmeldung wurde geschlossen. Der Wettbewerb beginnt in %{days}.'
           open: Die Anmeldung ist geöffnet!
           full: >-
             Das Teilnehmerlimit wurde erreicht, neue Anmeldungen gelangen auf
             die Warteliste.
       no_comp_found: Keine Wettbewerbe gefunden.
+      all_competitions: Alle Wettbewerbe
+      event: Disziplin
+      name: Name
+      location: Standort
+      location_placeholder: Adresse eingeben
+      use_my_location: Meinen Standort verwenden
+      location_sign_in_required: Melde dich an, um nach einer Adresse zu suchen
+      location_not_found: Für diese Adresse wurde kein Standort gefunden
+      location_search_failed: Die Adresssuche ist fehlgeschlagen. Bitte versuche
+        es in einer Minute erneut
+      distance: Entfernung
+      distance_units:
+        km: km
+        mi: mi
+      advanced_filters: Erweiterte Filter
+      admin_status: Admin-Status
+      status_flags:
+        all: Alle
+        warning: Warnung
+        danger: Gefahr
+      show_filters: Filter anzeigen
+      hide_filters: Filter ausblenden
+      reset_filters: Filter zurücksetzen
+      no_delegates: Keine
+      delegates_loading: Warte, bis alle Delegierten vollständig geladen sind...
+      no_delegates_found: Keine Delegierten gefunden.
+      championship_only: Zeige nur Meisterschaften
+      sort:
+        order: Sortierreihenfolge
+        start_date_asc: 'Startdatum: aufsteigend'
+        start_date_desc: 'Startdatum: absteigend'
+        end_date_asc: 'Enddatum: aufsteigend'
+        end_date_desc: 'Enddatum: absteigend'
+        announced_at_asc: 'Ankündigungsdatum: aufsteigend'
+        announced_at_desc: 'Ankündigungsdatum: absteigend'
+        name_asc: 'Name: A-Z'
+        name_desc: 'Name: Z-A'
+      use_admin_view: Adminansicht verwenden
+      date_and_city: '%{date} – %{city}'
+      registration_key: 'Anmeldeschlüssel:'
+      registration_status:
+        open: Offen
+        not_open: Noch nicht offen
+        closed: Geschlossen
+      register_now: Jetzt anmelden
+      view_competition: Wettbewerb ansehen
+      no_more_comps: Keine weiteren Wettbewerbe.
+      why_compete_description_html: |-
+        <p>Bei Wettbewerben geht es nicht nur darum, herauszufinden, wer am schnellsten ist – sie sind auch soziale Veranstaltungen! Alle, die einen Würfel lösen können, sind willkommen, vorbeizukommen und einen neuen persönlichen Rekord aufzustellen. Es ist leicht, Freundschaften zu schließen, denn alle arbeiten zusammen, damit der Wettbewerb reibungslos abläuft.</p>
+        <p>Nutze die Suchfunktion unten, um einen Wettbewerb in deiner Nähe zu finden und deine Cubing-Reise zu beginnen!</p>
     my_competitions_table:
       edit: Bearbeiten
       registrations: Anmeldungen
@@ -1747,8 +2002,8 @@ de:
         Anschluss deine E-Mails um sicherzustellen, dass das WCA Competition
         Announcement Team benachrichtigt wurde.
       submit_delete: >-
-        Bist Du sicher, dass Du diesen Wettbewerb löschen möchtest? Danach gibt
-        es kein Zurück
+        Diese Aktion kann nicht rückgängig gemacht werden. Bitte gib zur Bestätigung
+        des Löschens unten die Wettbewerbs-ID „%{competition_id}“ ein.
       coordinates: Koordinaten
       add_championship: Wettbewerb hinzufügen
       championship_types:
@@ -1767,6 +2022,7 @@ de:
         admin:
           is_confirmed: Lasse dieser Turnier nicht von Organisatoren editieren
           is_visible: Wettbewerb öffentlich sichtbar machen
+          uses_new_registration_system: Das neue Anmeldesystem verwenden
         competition_id: ID
         name: Name
         short_name: Spitzname
@@ -1777,6 +2033,7 @@ de:
           name: Veranstaltungsort
           details: Details zum Veranstaltungsort
           address: Adresse des Veranstaltungsortes
+          coordinates: Koordinaten
         start_date: Startdatum
         end_date: Enddatum
         series:
@@ -1789,11 +2046,19 @@ de:
           enabled: Teilnehmerlimit
           count: Maximale Anzahl an Teilnehmern
           reason: Der Grund für das Teilnehmerlimit
+          auto_close_threshold: Schwellenwert für das automatische Schließen der
+            Anmeldung
+          newcomer_month_reserved_spots: Anzahl der für Neulinge zu 
+            reservierenden Plätze
+          auto_accept_preference: Anmeldungen automatisch akzeptieren
+          auto_accept_disable_threshold: Limit für das automatische Akzeptieren 
+            von Anmeldungen
         staff:
           staff_delegate_ids: WCA-Delegierte
           trainee_delegate_ids: WCA Trainee Delegate(s)
           organizer_ids: Organisator(en)
           contact: Kontakt
+          lead_delegate_id: Leitender Delegierter
         website:
           generate_website: Ich würde gerne die WCA-Website statt einer externen
             Seite für zusätzliche Informationen verwenden.
@@ -1801,6 +2066,7 @@ de:
           external_registration_page: Anmeldeseite
           uses_wca_registration: Ich würde gerne die WCA-Website für die 
             Registrierung benutzen
+          scoretaking_software: Zur Ergebniserfassung verwendete Software
         entry_fees:
           currency_code: Währungscode
           base_entry_fee: Grundgebühr
@@ -1826,11 +2092,13 @@ de:
           extra_requirements: Zusätzliche Bedingungen für die Registrierung
           force_comment: Zwinge Teilnehmer dazu, bei der Anmeldung einen 
             Kommentar zu hinterlassen
+          competitor_can_cancel: Wann können Teilnehmende ihre Anmeldungen 
+            stornieren
         event_restrictions:
           early_puzzle_submission:
             enabled: Ich möchte festlegen, dass Teilnehmer ihre Puzzle zu einem 
               bestimmten Zeitpunkt vor dem eigentlichen Beginn des Events 
-              abgeben.
+              abgeben
             reason: Grund und Details dafür, die Puzzle früher abzugeben
           qualification_results:
             enabled: Ich möchte Qualifikationszeiten nutzen, um die Anzahl der 
@@ -1843,7 +2111,15 @@ de:
             reason: Grund und Details zur Einschränkung von Events
             per_registration_limit: Events pro Anmeldung - Limit
           main_event_id: Hauptevent
+          forbid_newcomers:
+            enabled: Neulinge von der Anmeldung ausschließen
+            reason: Begründung und Einzelheiten zum Ausschluss von Neulingen von
+              der Anmeldung
         remarks: Bemerkungen
+        championships: Meisterschaften
+        cloning:
+          clone_tabs: Ich möchte auch alle Tabs mit zusätzlichen Informationen 
+            kopieren
       hints:
         name: Der volle Name eines Wettbewerbs, inklusive Jahreszahl am Ende 
           (z.B. Danish Open 2016). Achte auf Großschreibung. Der Name darf nur 
@@ -1889,14 +2165,34 @@ de:
             verhindert nicht, dass sich weitere Personen registrieren. Wir 
             arbeiten an einer expliziten Unterstützung des Anmeldeprozesses.
           reason: Was ist der Grund für das Teilnehmerlimit? Bitte fülle dieses 
-            Feld in Englisch aus.
+            Feld in Englisch aus!
+          auto_close_threshold: Die Anmeldung wird automatisch geschlossen, 
+            sobald diese Anzahl bezahlter Anmeldungen eingegangen ist. Lasse das
+            Feld leer, um diese Funktion zu deaktivieren. Ignoriere diese 
+            Option, wenn du keine integrierte Zahlungsabwicklung verwendest.
+          newcomer_month_reserved_spots: Nur während des Neulingsmonats erlaubt 
+            – die Anzahl der reservierten Plätze darf höchstens die Hälfte des 
+            Teilnehmendenlimits betragen.
+          auto_accept_preference: Dies aktiviert im Anmeldemenü die Schaltfläche
+            „Gesammelt automatisch akzeptieren“. Damit werden alle bezahlten 
+            Anmeldungen auf der Warteliste und alle bezahlten ausstehenden 
+            Anmeldungen bis zum Teilnehmendenlimit oder dem unten festgelegten 
+            Limit akzeptiert. Verwendung auf eigene Gefahr.
+          auto_accept_disable_threshold: Sobald diese Anzahl akzeptierter 
+            Anmeldungen erreicht ist, wird das automatische Akzeptieren 
+            deaktiviert, damit die Organisatoren die letzten Anmeldungen manuell
+            bestätigen können. Der Wert muss unter dem Teilnehmendenlimit 
+            liegen. Lasse das Feld leer, wenn dies nicht gewünscht ist.
         staff:
-          staff_delegate_ids: WCA-Delegierte des Wettbewerbs
+          staff_delegate_ids: WCA-Delegierte des Wettbewerbs.
           trainee_delegate_ids: WCA Trainee Delegate für diesen Wettbewerb.
           organizer_ids: Organisatoren (Account zum Eintragen benötigt).
           contact_html: 'Optionale Kontaktinformationen. Wenn Du das nicht ausfüllst,
             werden Kontaktanfragen mit einem Formular übermittelt, ohne die Emails
             der Organisatoren zu veröffentlichen. %{md}. Beispiel: [Text zum Anzeigen](mailto:some@email.com)'
+          lead_delegate_id: Der leitende Delegierte ist für die administrativen 
+            Aspekte eines Wettbewerbs verantwortlich (Ergebnisse, Bericht, 
+            Rechnung über WCA-Gebühren).
         championships:
         website:
           external_website: Die Website des Wettbewerbs. Muss als gültige 
@@ -1904,6 +2200,8 @@ de:
           external_registration_page: Die Seite, auf der Teilnehmer sich für die
             Competition anmelden können. Dies muss eine gültige http(s) Adresse 
             sein.
+          scoretaking_software: Wähle '%{choice_ilr}' oder ein externes Tool, 
+            wenn du Dual-Runden verwenden möchtest
         entry_fees:
           currency_code: Der Währungscode für Eintrittsgebühren.
           base_entry_fee: 'Eintrittsgebühr für den Wettbewerb. Die Eintrittsgebühr
@@ -1923,8 +2221,8 @@ de:
             und Rückerstattungen müssen manuell veranlasst werden. Wenn dies auf
             0 gesetzt wird, wird ein Hinweis angezeigt, dass Eintrittsgebühren 
             unter keinen Bedingungen erstattet werden.
-          refund_policy_limit_date: Datum, nachdem keine Rückerstattungen mehr 
-            erfolgen
+          refund_policy_limit_date: Datum, nach dem keine Rückerstattungen mehr 
+            erfolgen.
         registration:
           opening_date_time: 'Anmerkung: Anmeldebeginn und -schluss sind in UTC anzugeben'
           waiting_list_deadline_date: Der Zeitpunkt, ab welchem Personen auf der
@@ -1943,12 +2241,12 @@ de:
           guests_per_registration: Die Anzahl erlaubter Gäste pro Anmeldung bei 
             dieser Competition. Eine Anmeldung mit zu vielen Gästen wird 
             blockiert. Lasse dies frei, wenn es keine Begrenzung gibt.
-          extra_requirements: Bitte führe hier zusätzliche 
-            Registrierungsbedingungen auf, die oben nicht genannt wurden, z.B. 
-            Zahlungsmöglichkeiten.<br/> Bitte fülle diese <b>auf Englisch</b> 
-            und in jeder anderen Sprache, die die Teilnehmer sprechen, aus. Dies
-            wird auf der Seite des Wettbewerbs und auf der Registrierungsseite 
-            angezeigt.
+          extra_requirements: Bitte gib hier zusätzliche Anmeldebedingungen an, 
+            die oben nicht abgedeckt sind, zum Beispiel Hinweise zur Bezahlung. 
+            <br/>Bitte fülle dies <b>auf Englisch</b> und in allen anderen 
+            Sprachen aus, die deine Teilnehmenden sprechen. Der Text wird auf 
+            der Informationsseite des Wettbewerbs angezeigt und, wenn du die 
+            Anmeldung über die WCA-Website nutzt, auch auf der Anmeldeseite.
         event_restrictions:
           early_puzzle_submission:
             reason: Bitte führe aus, warum du möchtest, dass Teilnehmer ihre 
@@ -1967,9 +2265,18 @@ de:
               werden blockiert. Lasse dies frei, wenn es kein Limit gibt.
           main_event_id: Der Gewinner dieses Events ist der Gewinner der 
             Competition.
+          forbid_newcomers:
+            reason: Bitte erläutere hier, warum du nicht möchtest, dass sich 
+              Neulinge für deinen Wettbewerb anmelden. Bitte fülle dieses Feld 
+              auf Englisch aus!
         remarks: Zusätzliche Informationen, die du zum WCAT weitergeben willst. 
           Zum Beispiel ob es Unklarheiten gibt oder ob es spezielle Anfragen an 
           das WCAT gibt. Bitte fülle dies in Englisch aus!
+        admin:
+          uses_new_registration_system: Wenn diese Option deaktiviert ist, führt
+            ein Wechsel des Anmeldesystems zu technischen Problemen. Bitte 
+            kontaktiere das WST, wenn du das Anmeldesystem dennoch wechseln 
+            musst.
       choices:
         guests_enabled:
           'true': Nach Gästen fragen
@@ -1978,6 +2285,13 @@ de:
           enabled:
             'true': Ich möchte ein Teilnehmerlimit angeben
             'false': Ich will KEIN Teilnehmerimit angeben
+          auto_accept_preference:
+            "disabled": Schaltfläche „Gesammelt automatisch akzeptieren“ 
+              deaktivieren
+            "bulk": Schaltfläche „Gesammelt automatisch akzeptieren“ im 
+              Anmeldemenü aktivieren
+            "live": Anmeldungen automatisch akzeptieren, sobald die Zahlung 
+              erfolgt
         registration:
           allow_on_the_spot:
             'true': Vor-Ort Registrierung wird akzeptiert
@@ -1994,9 +2308,22 @@ de:
               Bereich "Zusätzliche Anmeldebedingungen“)
             free: '"Jeder Gast kann die Competition kostenlos besuchen"'
             restricted: '"Gäste werden nur als Begleitung von Teilnehmern zugelassen"'
+          competitor_can_cancel:
+            "always": Immer
+            "not_accepted": Bis ihre Anmeldung akzeptiert wurde
+            "unpaid": Bis sie bezahlt haben
         event_restrictions:
-          qualification_results: {}
-        website: {}
+          qualification_results:
+            allow_registration_without:
+              "true": Teilnehmende dürfen sich für Disziplinen anmelden, für die
+                sie nicht qualifiziert sind (ich werde sie später entfernen)
+              "false": Teilnehmende MÜSSEN qualifiziert sein, um sich für eine 
+                Disziplin anzumelden
+        website:
+          scoretaking_software:
+            external: Ein externes Tool, das nicht von der WCA gepflegt wird
+            wca_live: WCA Live, gehostet auf live.worldcubeassociation.org
+            internal: Integrierte Live-Ergebnisse
     errors:
       invalid_name_message: >-
         muss mit einem Jahr enden und darf nur alphanumerische Zeichen,
@@ -2015,7 +2342,8 @@ de:
       not_all_delegates: sind nicht alle Delegierte
       registration_close_after_open: Anmeldeschluss muss nach Anmeldebeginn 
         liegen
-      registration_already_closed: Anmeldung darf nicht bereits geschlossen sein
+      registration_already_closed: Die Anmeldung darf nicht bereits geschlossen 
+        sein.
       start_date_must_be_28_days_in_advance: Anfangsdatum muss mindestens 28 
         Tage in der Zukunft liegen.
       end_date_before_start: Ende des Wettbewerbs kann nicht vor Anfang des 
@@ -2054,11 +2382,56 @@ de:
       must_ask_about_guests_if_specifying_limit: >-
         Es muss nach Gästen gefragt werden, wenn eine Begrenzung festgelegt
         wurde.
+      must_use_wca_registration: Die automatische Annahme kann nur verwendet 
+        werden, wenn du die WCA-Website für Anmeldungen nutzt
+      must_use_payment_integration: Du musst eine Zahlungsintegration (z. B. 
+        Stripe) aktivieren, um die automatische Annahme zu verwenden
+      auto_accept_limit: Das Limit für automatisch akzeptierte Anmeldungen muss 
+        unter dem Teilnehmendenlimit liegen
+      auto_accept_not_negative: Das Limit für automatisch akzeptierte 
+        Anmeldungen darf nicht kleiner als 0 sein.
+      auto_accept_accept_paid_pending: Die automatische Annahme kann nicht 
+        aktiviert werden, solange es bezahlte, noch ausstehende Anmeldungen gibt
+        – akzeptiere diese entweder oder verschiebe sie auf die Warteliste
+      auto_accept_accept_waitlisted: Die automatische Annahme kann nicht 
+        aktiviert werden – bitte akzeptiere so viele Personen von der Warteliste
+        wie möglich.
+      auto_close_exceed_paid: Der Schwellenwert für das automatische Schließen 
+        der Anmeldung muss größer sein als die Anzahl der derzeit bezahlten 
+        Anmeldungen
+      auto_close_positive_nonzero: Der Schwellenwert für das automatische 
+        Schließen der Anmeldung muss größer als 0 sein
+      must_exceed_competitor_limit: Der Schwellenwert für das automatische 
+        Schließen der Anmeldung muss größer als das Teilnehmendenlimit sein
+      use_wca_registration: Der Wettbewerb muss das Anmeldesystem der WCA 
+        verwenden
+      newcomer_month_reservations_percentage: Es dürfen nicht mehr als 50% der 
+        Plätze für Neulinge reserviert werden
+      newcomer_month_reservations_available: Die gewünschte Anzahl reservierter 
+        Plätze für den Neulingsmonat überschreitet die Anzahl der reservierbaren
+        Plätze
+      fto_not_yet_allowed: Face Turning Octahedron darf bei Wettbewerben, die 
+        vor dem %{date} beginnen, nicht ausgetragen werden.
+      fto_requires_internal_scoretaking: muss auf „Integrierte Live-Ergebnisse“ 
+        eingestellt sein, wenn Face Turning Octahedron durchgeführt wird.
+      must_contain_organizer: muss mindestens einen Organisator enthalten
+      on_the_spot_with_past_event_change_deadline: Anmeldungen vor Ort können 
+        nicht aktiviert werden, wenn die Frist zum Aktualisieren der Disziplinen
+        in der Vergangenheit liegt.
+      not_full_url: Dein Inhalt enthält eine relative URL (%{url}). Bitte gib 
+        vollständige URLs mit dem Präfix http:// oder https:// ein.
+      editing_deadline_already_passed: Du darfst nur Fristen ändern, die noch 
+        nicht abgelaufen sind, aber der ursprüngliche Zeitpunkt %{timestamp} 
+        liegt bereits in der Vergangenheit.
+      edited_deadline_not_after_original: Du darfst Fristen nur verlängern, aber
+        %{new_timestamp} liegt vor dem ursprünglichen Zeitpunkt %{timestamp}.
+      edited_deadline_not_in_future: Du darfst nur Fristen festlegen, die in der
+        Zukunft liegen, aber %{new_timestamp} liegt nicht in der Zukunft.
     new:
       create_competition: Wettbewerb erstellen
       note_clone: >-
-        Um einen bestehenden Wettbewerb zu kopieren, die Informationsseite für
-        diesen Wettbewerb aufrufen und im Menü auf "Clone" drücken
+        Um einen bestehenden Wettbewerb zu kopieren, öffne die Informationsseite dieses
+        Wettbewerbs und klicke im Menü auf „Kopieren“.
     update:
       save_success: Wettbewerb erfolgreich gespeichert.
       confirm_success: >-
@@ -2088,6 +2461,8 @@ de:
       events: Disziplinen
       show_events: Zeige Disziplinen
       hide_events: Blende Disziplinen aus
+      save_first: Bitte speichere diesen Wettbewerb, bevor du ihn zu einer Serie
+        hinzufügst.
     colliding_registration_start_competitions:
       label: 'Überlappende Anmeldezeiträume (Beginn innerhalb von %{hours} Stunden)'
       no_comp_colliding: Keine überlappenden Anmeldezeiträume!
@@ -2150,11 +2525,17 @@ de:
         qualification_some_events_html: >-
           Qualifikationszeiten in %{events} müssen vor dem <b>%{date}</b>
           erreicht werden.
+        advancement_condition_html: Die angezeigte Anzahl der Teilnehmenden, die
+          in die nächste Runde weiterkommen, ist die geplante Höchstzahl. Die 
+          tatsächliche Anzahl kann geringer sein, wenn es weniger Teilnehmende 
+          als erwartet gibt oder wenn es an der Grenze zum Weiterkommen 
+          Gleichstände gibt.
       format: Format
       time_limit: Zeitlimit
       cutoff: Cutoff
       proceed: Weiterkommen
       qualification: Qualifikation
+      advancement_condition: Bedingung zum Weiterkommen
     schedule:
       display_as:
         table: Tabelle
@@ -2169,6 +2550,39 @@ de:
       room_in_venue: '%{room} in %{venue}'
       timezone_message: 'Der Zeitplan wird in der Zeitzone %{timezone} angezeigt.'
       schedule_for_date: 'Zeitplan für %{day_name} (%{full_date})'
+      no_activities: Keine Aktivitäten für die ausgewählten Räume/Disziplinen.
+      all_venues: Alle Veranstaltungsorte
+      room_or_stage: Raum oder Bühne
+      more_details: Rundendetails anzeigen
+      time_zone: Zeitzone
+      rooms_panel:
+        title: Räume
+        all: Alle
+        none: Keine
+        show_buttons: Zeitzonen-Schaltflächen anzeigen
+        hide_buttons: Zeitzonen-Schaltflächen ausblenden
+        use_time_zone: Diese Zeitzone verwenden
+      venue_selection_html:
+        one: Du siehst den Zeitplan für den Veranstaltungsort %{venue_name}, den
+          einzigen Veranstaltungsort dieses Wettbewerbs.
+        other: Du siehst den Zeitplan für den Veranstaltungsort %{venue_name}, 
+          einen von %{count} Veranstaltungsorten dieses Wettbewerbs.
+      venue_selection_all: Du siehst den Zeitplan für alle %{venueCount} 
+        Veranstaltungsorte gleichzeitig.
+      timezone_setting: 'Du siehst diesen Zeitplan in der folgenden Zeitzone:'
+      multiple_timezones_available: Beachte, dass einige Veranstaltungsorte in 
+        unterschiedlichen Zeitzonen liegen – sei bitte vorsichtig!
+      select_a_timezone: Wähle eine Zeitzone aus
+      select_a_venue_to_view: Wähle oben einen Veranstaltungsort aus, um den 
+        Zeitplan anzusehen.
+      timezone_set_local: Auf lokale Zeitzone setzen
+      timezone_set_venue: Auf Zeitzone des Veranstaltungsorts setzen
+      timezone_follow_venue: Automatisch die Zeitzone des aktiven 
+        Veranstaltungsorts verwenden
+      schedule_for_full_date: Zeitplan für %{date}
+      schedule_change_warning: Zeitpläne können angepasst werden, insbesondere 
+        sobald die Gesamtzahl der Anmeldungen bekannt ist. Angemeldete 
+        Teilnehmende werden per E-Mail über wesentliche Änderungen informiert.
     nav:
       menu:
         results: Ergebnisse
@@ -2191,6 +2605,8 @@ de:
         register: Anmelden
         competitors: Teilnehmer
         scrambles: Scrambles
+        newcomer_checks: Überprüfung von Neulingen
+        upload_scrambles: Scrambles hochladen
     results_table:
       wca_profile: WCA-Profil
       event: Disziplin
@@ -2201,6 +2617,15 @@ de:
         continent: Kontinentale Ranglistenplatzierung (engl. Continental Rank / 
           Record)
         world: Weltweite Ranglistenplatzierung (engl. World Rank / Record)
+      h2h_results_disclaimer_html: Die Ergebnisse wurden durch ein 
+        Head-to-Head-Finale ermittelt. Hier werden nur die Platzierungen und der
+        beste Versuch angezeigt; der vollständige Head-to-Head-Turnierbaum ist 
+        auf der <a href="%{results_url}">neuen Ergebnisseite</a> verfügbar.
+      show_all_linked_results: Ergebnisse aus beiden Runden anzeigen
+      linked_results_disclaimer_html: Diese Runde ist Teil einer Doppelrunde. 
+        Die folgenden Ergebnisse werden pro Runde angezeigt; kombinierte 
+        Ergebnisse aus beiden Runden sind auf der <a href="%{results_url}">neuen
+        Ergebnisseite</a> verfügbar.
     scrambles_table:
       group: Gruppe
       scramble: Scramble
@@ -2208,11 +2633,398 @@ de:
       add_series: Zur Serie hinzufügen
       remove_series: Von der Serie entfernen
     live:
-      connection: {}
-      admin: {}
+      connection:
+        initialized: Verbindung wird initialisiert
+        connected: Verbunden, Live-Ergebnisaktualisierungen werden empfangen
+        disconnected: Verbindung unterbrochen, Ergebnisse werden nicht 
+          aktualisiert
+        status:
+          initialized: Wird initialisiert
+          connected: Verbunden
+          disconnected: Getrennt
+      admin:
+        open: Öffnen
+        clear: Leeren
+        close: Schließen
+        competitors_entered: '%{competitors_live_results_entered}/%{total_competitors}
+          erfasst'
+        round_locked: gesperrt
+        first_timer: Neulinge
+        edit: Bearbeiten
+        results: Ergebnisse
+        registration: Anmeldung
+        admin_view: Administrationsansicht
+        results_view: Ergebnisansicht
+        double_check: Gegenprüfen
+        submit_results: Ergebnisse übermitteln
+        add_to_batch: Zum Stapel hinzufügen
+        remove_from_batch: Aus dem Stapel entfernen
+        batch_mode: Stapelmodus
+        submit_batch: Stapel übermitteln (%{count})
+        warnings:
+          omitted: Du hast Versuch %{attempt_number} ausgelassen. Stelle sicher,
+            dass dies beabsichtigt ist.
+          DNS: Auf mindestens ein DNS folgt ein gültiges Ergebnis. Bitte stelle 
+            sicher, dass es sich tatsächlich um ein DNS und nicht um ein DNF 
+            handelt.
+          impossible: 'Das Ergebnis, das du übermitteln möchtest, scheint unmöglich
+            zu sein: Versuch %{attempt_number} wurde in weniger als 30 Sekunden pro
+            versuchtem Würfel abgeschlossen. Wenn du Minuten eingeben möchtest, vergiss
+            nicht, am Ende des Ergebnisses zwei Nullen für die Hundertstelsekunden
+            hinzuzufügen'
+          inconsistent: Das Ergebnis, das du übermitteln möchtest, scheint 
+            unstimmig zu sein. Es gibt einen großen Unterschied zwischen dem 
+            besten Einzelergebnis (%{best_single}) und dem schlechtesten 
+            Einzelergebnis (%{worst_single}). Bitte überprüfe, ob die Ergebnisse
+            korrekt sind.
+          round_locked: Die nächste Runde wurde bereits geöffnet. Änderungen 
+            wirken sich nicht mehr auf sie aus!
+          9m_violated: Für die vorherige Runde wurden nicht genügend Ergebnisse 
+            eingetragen, um Regel 9m3 zu erfüllen. Wenn für die vorherige Runde 
+            zum Zeitpunkt der Ergebnisübermittlung nicht mindestens 
+            %{competitor_count_needed} Ergebnisse eingetragen sind, werden die 
+            Ergebnisse dieser Runde nicht anerkannt.
+        quit:
+          title: Teilnehmenden zurückziehen
+          next_to_advance:
+            one: Der nächste Teilnehmende, der weiterkommt, ist %{competitors}
+            other: Die nächsten Teilnehmenden, die weiterkommen, sind 
+              %{competitors}
+          advance: Nächsten Teilnehmenden weiterkommen lassen
+          quit_confirm:
+            one: Teilnehmenden aus der Runde zurückziehen
+            other: Teilnehmende aus der Runde zurückziehen
+          bulk:
+            success: '%{count} Teilnehmende erfolgreich als zurückgezogen markiert'
+            failure: Mehrere Teilnehmende konnten nicht als zurückgezogen 
+              markiert werden
+            menu: Mehrere Teilnehmende zurückziehen
+            id: ID
+            name: Name
+            select_all: Alle auswählen
+          quit_menu: Zurückziehen
+          no_next: Es gibt keinen nächsten Teilnehmenden, der nachrücken kann.
+          cancel: Abbrechen
+          failed_to_fetch: Der nächste nachrückende Teilnehmende konnte nicht 
+            abgerufen werden
+          still_processing: Die Aktion „Teilnehmenden zurückziehen“ kann nicht 
+            ausgeführt werden, solange noch Ergebnisse verarbeitet werden
+          in_batch: Ein Teilnehmender, dessen Ergebnisse Teil eines noch nicht 
+            eingereichten Stapels sind, kann nicht zurückgezogen werden
+          scoresheet_warning: Markiere Teilnehmende nur dann als ausgeschieden, 
+            wenn du ihren leeren Ergebniszettel tatsächlich in der Hand hältst. 
+            Du kannst Teilnehmende nicht wieder zu einer abgeschlossenen Runde 
+            hinzufügen.
+        add_competitor:
+          single_round: Teilnehmenden zur Runde hinzufügen
+          multiple_rounds:
+            one: Teilnehmenden zu beiden Runden der Doppelrunde hinzufügen.
+            other: Teilnehmenden zur Runde hinzufügen. Da die zweite Runde der 
+              Doppelrunde noch nicht geöffnet ist, musst du ihn dort separat 
+              hinzufügen.
+          event_edit_warning: Dieser Teilnehmende ist nicht für diese Disziplin 
+            angemeldet, und bei diesem Wettbewerb sind Änderungen der 
+            Disziplinen in den Anmeldungen nicht mehr möglich. Du kannst ihn 
+            trotzdem hinzufügen, aber vergewissere dich, dass dies beabsichtigt 
+            ist.
+          round_closed: Du kannst Teilnehmende nicht zu einer bereits 
+            abgeschlossenen Runde hinzufügen
+      title: Live-Ergebnisse
+      combined_title: Kombinierte Doppelrunden
+      overview:
+        upcoming: Bevorstehend
+        in_progress: Aktuell
+        past_month: Letzter Monat
+        no_upcoming: Es gibt keine bevorstehenden Wettbewerbe mit 
+          Live-Ergebnissen.
+        search: Wettbewerbe suchen
+      manage_rounds: Runden verwalten
+      incompatible:
+        external: Dieser Wettbewerb verwendet externe Software zur 
+          Ergebniserfassung. Bitte sieh in den Wettbewerbsinformationen nach, wo
+          du die Live-Ergebnisse einsehen kannst.
+        wca_live: 'Dieser Wettbewerb verwendet WCA Live zur Ergebniserfassung. Bitte
+          folge diesem Link, um die Live-Ergebnisse zu sehen:'
+      round_state:
+        ongoing: live
+        done: abgeschlossen
+      podiums:
+        title: Podiumsplätze
+        undetermined: Noch zu bestimmen
+        none: Es stehen noch keine Podiumsplätze fest!
+      results:
+        competitor: Teilnehmender
+        mean: Mittelwert
+      errors:
+        round_closed: Die Runde ist noch nicht geöffnet
     registration_v2:
       register:
-        panel: {}
+        panel:
+          approval:
+            title: Bestätigung
+            description: Durch das Organisationsteam
+          payment:
+            title: Zahlungsinformationen
+            description: Rechnungsinformationen eingeben
+          competing:
+            title: Anmelden
+            description: Wähle deine Disziplinen
+            summary_title: Anmeldung
+          requirements:
+            title: Voraussetzungen
+            description: Wettbewerbsbedingungen akzeptieren
+        will_open_countdown: Die Anmeldung öffnet in %{minutes} Minuten und 
+          %{seconds} Sekunden. Diese Seite wird automatisch aktualisiert, sobald
+          die Anmeldung öffnet.
+        will_close_countdown: Die Anmeldung schließt in %{minutes} Minuten und 
+          %{seconds} Sekunden. Diese Seite wird automatisch aktualisiert, sobald
+          die Anmeldung schließt.
+        success: Du bist für %{comp_name} angemeldet
+        error: Die Anmeldung ist mit dem Fehler %{error} fehlgeschlagen
+        early_registration: Die Anmeldung ist noch nicht geöffnet – du meldest 
+          dich als Organisator/Delegierter vorzeitig an
+        comment: Zusätzliche Kommentare an die Organisatoren
+        comment_overview: Deine Kommentare
+        until: Du kannst deine Anmeldung bis %{date} aktualisieren
+        passed: Du kannst deine Anmeldung nicht mehr aktualisieren
+        view_registration: Anmeldung anzeigen
+        editing_disabled: Das Bearbeiten der Anmeldung ist für diesen Wettbewerb
+          deaktiviert
+        registration_status:
+          accepted: Deine Anmeldung wurde akzeptiert.
+          pending: Deine Anmeldung wartet auf die Bestätigung durch die 
+            Organisatoren.
+          cancelled: Deine Anmeldung wurde gelöscht.
+          rejected: Deine Anmeldung wurde abgelehnt.
+          waiting_list: Du stehst auf Platz %{waiting_list_position} der 
+            Warteliste.
+        disclaimer: Das Absenden der Anmeldung bedeutet noch keine Zulassung zur
+          Teilnahme
+        processing: Deine Anmeldung wird verarbeitet...
+        processing_longer: Deine Anmeldung ist eingegangen und wird bald 
+          verarbeitet – bei hoher Auslastung unserer Server kann dies einen 
+          Moment dauern.
+        processing_queue: Es werden viele Anmeldungen verarbeitet, %{queueCount}
+          befinden sich in der Warteschlange.
+        event_limit: Bei diesem Wettbewerb kannst du dich für höchstens 
+          %{max_events} Events anmelden.
+        waiting_list_count:
+          one: Es steht %{count} Teilnehmender auf der Warteliste.
+          other: Es stehen %{count} Teilnehmende auf der Warteliste.
+      auto_accept:
+        bulk_auto_accept: Teilnehmende automatisch akzeptieren
+        cant_bulk_auto_accept: Beim automatischen Bestätigen mehrerer 
+          Anmeldungen ist ein Fehler aufgetreten – wende dich bei Bedarf an das 
+          WST
+        bulk_auto_accepted: Mehrere Anmeldungen wurden erfolgreich automatisch 
+          bestätigt
+        nothing_to_accept: Keine Anmeldungen für die automatische Bestätigung 
+          geeignet
+      pdf:
+        link: Als <0>%{pdfLink}</0>
+      info:
+        download: Lade alle Details zum Wettbewerb herunter.
+        payment_missing: Deine Anmeldung wird erst bestätigt, wenn du die 
+          Anmeldegebühr bezahlt hast, es sei denn, du hast eine besondere 
+          Vereinbarung mit den Organisatoren getroffen oder über eine 
+          alternative Zahlungsmethode bezahlt.
+        needs_approval: Buche deine Reise noch nicht – die Organisatoren müssen 
+          deine Anmeldung noch manuell bestätigen. Das kann einige Zeit dauern.
+        is_accepted: Buche deine Reise und packe deine Koffer – du hast einen 
+          Platz beim Wettbewerb!
+        is_cancelled: Deine Anmeldung wurde storniert und du wirst nicht am 
+          Wettbewerb teilnehmen, aber du kannst dich erneut anmelden.
+        is_rejected: Deine Anmeldung wurde von den Organisatoren abgelehnt. 
+          Bitte kontaktiere das Organisationsteam, wenn du glaubst, dass dies 
+          ein Fehler war.
+        is_waitlisted: Buche deine Reise noch nicht, aber gib die Hoffnung nicht
+          auf. Der Wettbewerb ist voll, aber du stehst auf der Warteliste und 
+          erhältst eine E-Mail, wenn genügend Plätze frei werden, sodass du 
+          teilnehmen kannst.
+        additional: Bitte stelle sicher, dass du alle zusätzlichen Anweisungen 
+          oben bezüglich der Zahlung oder anderer Anmeldebedingungen befolgt 
+          hast.
+        email: Du erhältst eine E-Mail, wenn der Status deiner Anmeldung 
+          aktualisiert wird.
+      list:
+        empty: Keine
+        spots_remaining_plural:
+          one: Noch %{count} Platz frei
+          other: Noch %{count} Plätze frei
+        no_spots_remaining: keine Plätze mehr frei
+        pending:
+          title: Ausstehende Anmeldungen
+          information: Der Status „Ausstehend“ sollte nur für unvollständige (z.
+            B. unbezahlte) Anmeldungen verwendet werden – bitte verwende die 
+            Warteliste, wenn dein Wettbewerb zu voll ist, um weitere 
+            Teilnehmende aufzunehmen.
+          waitlist_skipped_warning: Du hast %{count} frühere ausstehende 
+            Anmeldung(en) übersprungen. Bist du sicher, dass du die 
+            ausgewählte(n) Anmeldung(en) auf die Warteliste verschieben 
+            möchtest?
+          approve_skipped_warning: Du hast %{count} frühere ausstehende 
+            Anmeldung(en) übersprungen. Bist du sicher, dass du die 
+            ausgewählte(n) Anmeldung(en) akzeptieren möchtest?
+        waitlist:
+          title: Anmeldungen auf der Warteliste
+          information: Teilnehmende werden am Ende der Warteliste hinzugefügt. 
+            Wenn du mehrere gleichzeitig hinzufügst, werden zuerst die 
+            Teilnehmenden, die bereits bezahlt haben, in der Reihenfolge ihrer 
+            Zahlung am Ende hinzugefügt, gefolgt von den übrigen in der 
+            Reihenfolge ihrer Anmeldung. Du kannst die Reihenfolge bei Bedarf im
+            Bearbeitungsmodus manuell anpassen.
+          skipped_warning: Du hast %{count} Anmeldung(en) auf der Warteliste 
+            übersprungen. Bist du sicher, dass du die ausgewählte(n) 
+            Anmeldung(en) akzeptieren möchtest?
+        approved:
+          title: Akzeptierte Anmeldungen
+          information: Für bestätigte Teilnehmende steht fest, dass sie am 
+            Wettbewerb in den Disziplinen teilnehmen können, für die sie 
+            angemeldet sind.
+          pending_waitlist_combined_skipped_warning: Du hast %{count} frühere 
+            ausstehende Anmeldung(en) bzw. Anmeldung(en) auf der Warteliste 
+            übersprungen. Bist du sicher, dass du die ausgewählte(n) 
+            Anmeldung(en) akzeptieren möchtest?
+        cancelled:
+          title: Stornierte Anmeldungen
+          information: Teilnehmende, deren Anmeldung storniert wurde, dürfen 
+            sich erneut anmelden.
+        rejected:
+          title: Abgelehnte Anmeldungen
+          information: Abgelehnte Teilnehmende können sich nicht erneut 
+            anmelden.
+        non_competing:
+          title: Anmeldungen ohne Teilnahme
+          information: Für Personen, die nicht teilnehmen und denen du im WCIF 
+            Helferaufgaben zuweisen kannst.
+        payment:
+          refunded_status: Zurückerstattet
+          initialized: Der Zahlungsvorgang wurde am %{date} begonnen, aber nicht
+            abgeschlossen.
+          refunded: Die Zahlung wurde am %{date} zurückerstattet.
+        psychsheets:
+          show_me: Mich anzeigen
+          rank: 'Rang: %{userPosition}'
+        timestamp: Zeitstempel
+        comment_and_note: Kommentar & Notiz
+        edit_waiting_list: Bearbeitungsmodus für die Warteliste aktivieren
+      bookmark:
+        unbookmark: Du hast dein Lesezeichen entfernt
+      requirements:
+        acknowledgement: Ich habe alle Informationen im Reiter „Anmelden“, 
+          einschließlich der Eintrittsgebühren, Rückerstattungsbedingungen und 
+          aller oben aufgeführten zusätzlichen Anforderungen, gelesen und zur 
+          Kenntnis genommen.
+        next_step: Weiter zum nächsten Schritt
+        accept: Akzeptieren
+      update:
+        being_updated: Die Anmeldung wird aktualisiert...
+        being_deleted: Anmeldung wird gelöscht...
+        update_confirm: Bist du sicher, dass du deine Anmeldung aktualisieren 
+          möchtest?
+        organizer_update_confirm: Bist du sicher, dass du die Anmeldung des 
+          Benutzers aktualisieren möchtest?
+        update_confirm_contact: Du musst die Organisatoren kontaktieren, um 
+          deine Anmeldung zu aktualisieren. Klicke auf Ja, um zum 
+          Kontaktformular zu gelangen.
+        delete_confirm_contact: Du musst die Organisatoren kontaktieren, um 
+          deine Anmeldung zu löschen. Klicke auf Ja, um zum Kontaktformular zu 
+          gelangen.
+        update_contact_message: 'Ich möchte meine Anmeldedaten wie folgt aktualisieren:
+          %{update_params}'
+        delete_contact_message: Ich möchte meine Anmeldung löschen
+        no_changes: Es gibt keine Änderungen
+        send_email:
+          one: E-Mail an %{count} E-Mail-Adresse senden
+          other: E-Mail an %{count} E-Mail-Adressen senden
+        copy_emails:
+          one: '%{count} E-Mail-Adresse kopieren'
+          other: '%{count} E-Mail-Adressen kopieren'
+        email_message: In die Zwischenablage kopiert. Denk daran, Bcc zu 
+          verwenden!
+        scroll_to: Scrollen zu
+        move_to:
+          one: '%{count} Anmeldung verschieben nach'
+          other: '%{count} Anmeldungen verschieben nach'
+        move_to_none_selected: Anmeldungen verschieben nach
+        pending: Ausstehend
+        waitlist: Warteliste
+        approved: Bestätigt
+        cancelled: Storniert
+        rejected: Abgelehnt
+        non_competing: Nicht teilnehmend
+        amount: Betrag
+        too_many: Wenn alle diese Anmeldungen akzeptiert werden, wird die 
+          maximale Anzahl an Teilnehmenden um %{count} überschritten.
+        no_self_update: Kontaktiere das Organisationsteam, um deine Anmeldung zu
+          aktualisieren.
+      errors:
+        events: Die Disziplinen konnten nicht geladen werden. Bitte versuche es 
+          erneut
+        '-1': Du hast ein ungültiges Token gesendet. Bitte lade die Seite neu. 
+          Wenn das Problem weiterhin besteht, kontaktiere das WST
+        '-2': Die Authentifizierung ist abgelaufen. Bitte lade die Seite neu
+        '-3': Die Authentifizierung fehlt. Bitte melde dich an
+        '-4': Beim Anmeldedienst ist ein interner Fehler aufgetreten. Wenn das 
+          Problem weiterhin besteht, kontaktiere das WST
+        '-1000': Der Wettbewerb existiert nicht
+        '-1001': Fehler beim Abrufen der Wettbewerbsdetails. Bitte versuche es 
+          später erneut
+        '-2001': Du bist für die Teilnahme an WCA-Wettbewerben gesperrt
+        '-2002': Dein Profil ist unvollständig
+        '-2003': Du hast nicht die erforderlichen Berechtigungen, um diese 
+          Aktion auszuführen
+        '-2004': Du darfst dich nicht anmelden, da die Organisatoren deine 
+          Anmeldung abgelehnt haben. Bitte kontaktiere sie, wenn du glaubst, 
+          dass ein Fehler vorliegt.
+        '-3000': Die Anmeldung existiert nicht
+        '-3001': Du hast dich bereits für einen anderen Wettbewerb der Serie 
+          angemeldet
+        '-4000': Die Anfrage enthält ungültige Daten
+        '-4001': Die Frist zur Änderung der Disziplinen ist abgelaufen
+        '-4002': Die Anzahl der Gäste überschreitet die zulässige Grenze
+        '-4003': Der angegebene Kommentar ist zu lang
+        '-4004': Es wurde eine ungültige Disziplinenauswahl übermittelt
+        '-4005': Für diesen Wettbewerb ist ein Kommentar erforderlich
+        '-4006': Das Limit für Teilnehmende wurde erreicht
+        '-4007': Es wurde ein ungültiger Anmeldestatus angegeben
+        '-4008': Die Anmeldung ist geschlossen
+        '-4009': Nur Organisatoren können Anmeldungen für diesen Wettbewerb 
+          stornieren
+        '-4010': Der Platz auf der Warteliste ist ungültig
+        '-4011': Du kannst nur die erste Person auf der Warteliste akzeptieren
+        '-4012': Du bist nicht für die Teilnahme an den ausgewählten Disziplinen
+          qualifiziert
+        '-4013': Teilnehmende, die keine Neulinge sind, können nicht akzeptiert 
+          werden, wenn nur noch für Neulinge reservierte Plätze verfügbar sind
+        '-4014': Du bist bereits für diesen Wettbewerb angemeldet.
+        '-4015': Bitte gib eine angemessene Anzahl an Gästen an oder kontaktiere
+          die Organisatoren, wenn du außergewöhnlich viele Gäste mitbringen 
+          musst.
+        '-6001': WCA Payment ist für diesen Wettbewerb nicht aktiviert
+        '-6002': Du musst deine Anmeldung abschließen, bevor du bezahlen kannst
+        '-6003': Keine ausstehende Zahlung gefunden – vermutlich hast du bereits
+          für deine Anmeldung bezahlt.
+        '-7001': Für die teilnehmende Person stehen noch Anmeldegebühren aus
+        '-7002': Die automatische Annahme von Anmeldungen ist für diesen 
+          Wettbewerb nicht aktiviert.
+        '-7003': Nur ausstehende Anmeldungen oder die Anmeldung auf dem ersten 
+          Platz der Warteliste können automatisch akzeptiert werden
+        '-7004': Der Wettbewerb hat auto_accept_disable_threshold erreicht
+        '-7005': Anmeldungen können nicht automatisch akzeptiert werden, solange
+          die Anmeldung nicht geöffnet ist
+    announce_confirm: Bist du sicher, dass du diesen Wettbewerb ankündigen 
+      möchtest?
+    user_preferences: Benutzereinstellungen
+    receive_registration_emails: Benachrichtige mich per E-Mail, wenn sich 
+      jemand für diesen Wettbewerb anmeldet
+    h2h:
+      set_number: Satz %{number}
+      stage_of: Runde der letzten %{number}
+      quarterfinal_stage: Viertelfinalrunde
+      semifinal_stage: Halbfinalrunde
+      final_stage: Finalrunde
+      third_place: Dritter Platz
   competition_tabs:
     headers:
       tabs: Tabs
@@ -2245,6 +3057,7 @@ de:
         oder "per Region" sein
     records:
       title: Rekorde
+      load_error: Fehler beim Abrufen der Rekorde
     last_updated_html: 'Zuletzt aktualisiert: %{timestamp}'
     filters_fixes_underway: >-
       Bitte beachte, dass manche Filter (wie beispielsweise zurückliegende
@@ -2284,6 +3097,7 @@ de:
       date_circa: Datum etwa
   notifications:
     connect_wca_id: Verknüpfe deine WCA-ID mit deinem Benutzerkonto!
+    copied_to_clipboard: In die Zwischenablage kopiert
   persons:
     index:
       name_or_wca_id: Teile des Namens oder WCA-ID
@@ -2319,6 +3133,7 @@ de:
       world_records: Übersicht der Weltrekorde
       continental_records: Übersicht der kontinentalen Rekorde
       national_records: Übersicht der nationalen Rekorde
+      dual: Doppelte Staatsangehörigkeit
   posts:
     confirm_delete_post: >-
       Bist Du dir sicher, dass Du diesen Post löschen willst? Diese Aktion lässt
@@ -2326,6 +3141,9 @@ de:
     announcement_info_html: 'Angekündigt von %{author_name} am %{date_time}'
     errors:
       unstick_at_future: muss in der Zukunft liegen
+    search: Ankündigungen durchsuchen
+    no_announcements: Es gibt noch keine Ankündigungen.
+    no_search_results: Keine Ankündigungen entsprechen deiner Suche.
   contacts:
     dob:
       title: Formular zur Änderung des Geburtsdatums
@@ -2340,7 +3158,7 @@ de:
       submit: Änderung anfragen
     messages:
       success: Danke für deine Nachricht. Wir werden uns bald bei dir melden!
-      delivery_error: Fehler beim Senden der Nachricht
+      delivery_error: Fehler beim Senden der Nachricht.
   faq:
     title: Häufig gestellte Fragen (FAQ)
     contact_html: 'Wenn keine der Antworten geholfen hat, bitte %{contact_us}!'
@@ -2365,8 +3183,7 @@ de:
         title: Wie kann ich einen WCA-Wettbewerb finden?
         content:
           '1': >-
-            Sieh Dir unsere Liste von <a href='/competitions'>Wettbewerben</a>
-            an.
+            Sieh Dir unsere Liste von <a href='/competitions'>Wettbewerben</a> an
       '3':
         title: >-
           Wie kann ich mich für einen Wettbewerb anmelden? Bei wem kann ich mich
@@ -2413,11 +3230,8 @@ de:
             Der WCA-Delegerte unterstützt das Organisationsteam auch bei der
             erfolgreichen Organisation des Wettbewerbs.
           '4': >-
-            Besuche die <a target='_blank'
-            href='https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf'>WCA
-            Competition Organizer Handbook</a> oder das <a target='_blank'
-            href='http://cube.hackvalue.de/tutorials/competition.php'>deutsche
-            Organisations-Tutorial</a> für weitere Informationen.
+            Besuche das <a target='_blank' href='https://documents.worldcubeassociation.org/edudoc/organizer-handbook/organizer-handbook.pdf'>WCA
+            Competition Organizer Handbook</a> für weiterführende Informationen.
       '6':
         title: >-
           Wofür sind die WCA-Benutzerkonten da? Was ist der Unterschied zwischen
@@ -2450,9 +3264,8 @@ de:
           '1': '%{current_user_claim}'
       '9':
         title: >-
-          Ich bin für einen Wettbewerb registriert und will mich für eine
-          weitere Disziplin anmelden, was soll ich machen? Kann ich Gäste
-          mitbringen?
+          Ich bin für einen Wettbewerb registriert und will mich für ein weiteres
+          Event anmelden, was soll ich machen? Kann ich Gäste mitbringen?
         content:
           '1': >-
             Bitte setze dich mit dem Veranstalter in Verbindung. Seine
@@ -2529,21 +3342,18 @@ de:
     mission_footer: WCA Leitbild
     who_we_are_title: Wer wir sind
     who_we_are_content_html: >-
-      <p>Die World Cube Association verwaltet Wettbewerbe für mechanische
-      Puzzles, die sich durch das Drehen von Gruppen von Teilen auszeichnen.
-      Diese werden auch "Twisty Puzzles" oder "Drehpuzzle" genannt. Das
-      berühmteste jener Puzzles ist der Rubik's Cube, erfunden von Professor
-      Rubik aus Ungarn. Eine Auswahl solcher Puzzles wurde zu offiziellen Events
-      der WCA erklärt.</p> <p>Während die WCA sich innerhalb des letzten
-      Jahrzehnts weiterentwickelt hat, haben über 200.000 Personen an unseren
-      Wettbewerben teilgenommen. Trotz dieses Wachstums bleiben wir eine
-      Organisation die fast ausschließlich von Ehrenamtlichen getragen wird, von
-      lokalen Organisatoren, über WCA Delegates, bis hin zum WCA Vorstand. Wir
-      sind allen sehr dankbar, die sich die Zeit nehmen, die Arbeit der WCA zu
-      ermöglichen. Wir hoffen, dass wir mit mehr finanzieller Unterstützung ein
-      noch höheres Maß an Professionalität in unsere Wettbewerbe einbringen
-      können, während wir immer mehr Veranstaltungen in der ganzen Welt
-      genehmigen.</p>
+      <p>Die World Cube Association regelt Turniere für mechanische Puzzles, die durch
+      das Drehen von Gruppen von Teilen bedient werden und allgemein als „Twisty Puzzles“
+      bekannt sind. Das bekannteste dieser Puzzles ist der Rubik's Cube, erfunden
+      von Professor Rubik aus Ungarn. Eine Auswahl dieser Puzzles wurde als offizielle
+      Disziplinen der WCA festgelegt.</p> <p>Im Laufe der Entwicklung der WCA im vergangenen
+      Jahrzehnt haben über 245.000 Menschen an unseren Turnieren teilgenommen. Trotz
+      dieses Wachstums sind wir nach wie vor eine Organisation, die fast vollständig
+      von Ehrenamtlichen getragen wird – von den Organisatoren vor Ort über die WCA-Delegierten
+      bis hin zum WCA-Board. Wir sind allen sehr dankbar, die sich die Zeit nehmen,
+      damit die WCA funktionieren kann. Mit mehr finanzieller Unterstützung hoffen
+      wir, unseren Turnieren ein noch höheres Maß an Professionalität zu verleihen,
+      während wir weltweit immer mehr Turniere genehmigen.</p>
     spirit: >-
       Unser Wunsch ist es, dass Menschen in aller Welt in einer freundlichen
       Atmosphäre Spaß zusammen haben, anderen helfen und sich fair verhalten.
@@ -2582,7 +3392,7 @@ de:
       Paypal %{here_paypal}. Wenn du es vorziehst, einen Scheck auszustellen,
       kannst du diese Adresse nutzen:
     tax_deductible_note: Spenden sind in den Vereinigten Staaten von der Steuer 
-      absetzbar
+      absetzbar.
     other_help_title: Andere Wege zu helfen
     other_help_content_html: >-
       <p>Falls du denkst, dass du in nicht-finanzieller Weise zum Erfolg der
@@ -2603,8 +3413,9 @@ de:
       title: Zusammensetzung
       board:
         description: >-
-          Die World Cube Association wird vom WCA Board geleitet, das aus
-          folgenden Mitgliedern besteht:
+          Das WCA Board ist für die Leitung der gesamten Organisation und die Erfüllung
+          aller Aufgaben verantwortlich, die nicht von anderen Teams und Komitees
+          übernommen werden
       users:
         profile: '%{user_name}s Profil'
       operations_html: >-
@@ -2612,24 +3423,24 @@ de:
         der WCA durchgeführt.
       teams_committees: Teams und Komitees
       delegates_html: >-
-        <p><strong>WCA Delegate</strong> ist eine Rolle die in den WCA Motions
-        definiert ist und in den WCA Regeln weiter beschrieben wird. Die
-        Hauptaufgabe eines Delegierten ist es, Wettbewerbe im Auftrag der WCA zu
-        überwachen. Ein WCA Delegierter ist verantwortlich dafür
-        sicherzustellen, dass alle WCA Wettbewerbe entsprechend der Aufgabe, des
-        Spirits und der Regeln abgehalten wird. Die WCA unterscheidet zwischen
-        <strong>WCA Senior Delegates</strong>, <strong>WCA Delegates</strong>
-        und <strong>WCA Candidate Delegates</strong>%{see_link}.</p>
-        <p>Zusätzlich zu den Aufgaben eines WCA Delegierten ist ein WCA Senior
-        Delegate dafür verantwortlich, WCA Delegierte in ihrer Region zu
-        verwalten und er kann auch von der Community bei regionalen
-        Angelegenheiten kontaktiert werden.</p> <p>Neue Delegierte werden
-        zunächst als WCA Junior Delegates aufgeführt. Danach ist es ihre
-        Aufgabe, ihre Fähigkeiten bei der Leitung von WCA Wettbewerben unter
-        Beweis zu stellen, bevor sie zu WCA Delegierten befördert werden.</p>
-        <p>Trainee Delegates werden auf die Rolle als WCA Delegierter
-        vorbereitet und dürfen nur Wettbewerbe betreuen, wenn ein WCA Delegate
-        anwesend ist.</p>
+        <p><strong>WCA-Delegierter</strong> ist eine Rolle, die in den WCA Motions
+        definiert und in den WCA-Regeln beschrieben wird. Die Hauptaufgabe eines Delegierten
+        ist es, Wettbewerbe im Auftrag der WCA zu beaufsichtigen. Ein WCA-Delegierter
+        ist dafür verantwortlich, sicherzustellen, dass alle WCA-Wettbewerbe im Einklang
+        mit dem Leitbild, dem Spirit und den Regeln der WCA durchgeführt werden. Die
+        WCA unterscheidet zwischen <strong>Senior Delegates</strong>, <strong>Regional
+        Delegates</strong>, <strong>Full Delegates</strong>, <strong>Junior Delegates</strong>
+        und <strong>Trainee Delegates</strong>%{see_link}.</p> <p>Zusätzlich zu den
+        Aufgaben eines WCA-Delegierten ist ein Senior Delegate oder Regional Delegate
+        dafür verantwortlich, die WCA-Delegierten in seinem Gebiet zu koordinieren,
+        und kann von der Community auch bei regionalen Angelegenheiten kontaktiert
+        werden.</p> <p>Neue Delegierte werden zunächst als Junior Delegates geführt.
+        Anschließend müssen sie ihre Fähigkeiten bei der Betreuung von WCA-Wettbewerben
+        unter Beweis stellen, bevor sie zu WCA-Delegierten befördert werden.</p> <p>Trainee
+        Delegates werden auf die Rolle als WCA-Delegierter vorbereitet und dürfen
+        nur Wettbewerbe beaufsichtigen, bei denen ein WCA-Delegierter anwesend ist.</p>
+        <p>Wenn du daran interessiert bist, Trainee Delegate zu werden, kontaktiere
+        deinen Regional Delegate, um zu klären, ob du die Voraussetzungen erfüllst.</p>
       see_link_html: ' (siehe %{link})'
       members_html: >-
         Alle Turnierteilnehmer werden automatisch bei ihrem ersten WCA-Turnier
@@ -2643,9 +3454,13 @@ de:
     motions: Anträge
     minutes: Protokolle
     policies: WCA Regelwerk
-    codeofethics: Code of Ethics
-    codeofconduct: Code of Conduct
+    codeofethics: Ethikkodex
+    codeofconduct: Verhaltenskodex
     finances: Finances
+    motion_not_found: Beschluss nicht gefunden
+    motion_not_found_action: Wir konnten keinen Beschluss mit der Nummer 
+      „%{motion_id}“ finden. Möglicherweise wurde er aufgehoben.
+    strategic_plan: Strategischer Plan
   education:
     title: WCA Anleitungen und Tutorials
     description: >-
@@ -2655,6 +3470,7 @@ de:
     judge_tutorial: Judging Tutorial für Neulinge
     competition_templates: Competition Vorlagen
     certificates: Vordrucke des WCT (Zertifikate)
+    orga_handbook: Handbuch für Organisatoren
   delegates_page:
     title: WCA-Delegierte
     acknowledges: 'Die WCA erkennt die folgenden WCA Delegierten an:'
@@ -2663,6 +3479,13 @@ de:
       name: Name
       role: Rolle
       region: Region
+      first_delegated: Erster betreuter Wettbewerb
+      last_delegated: Letzter betreuter Wettbewerb
+      total_delegated: Betreute Wettbewerbe insgesamt
+      lead_delegated: Als leitender Delegierter betreute Wettbewerbe
+      history: Verlauf
+    all_regions: Alle Regionen
+    copy_email: E-Mail-Adresse kopieren
   regional_organizations:
     title: Regionale Organisationen
     content: 'Die WCA erkennt die folgenden regionalen Organisationen an:'
@@ -2703,13 +3526,13 @@ de:
         Um die Anerkennung zu beantragen, fülle bitte <a
         href='/regional-organizations/new'>dieses Formular</a> aus.
     regional_organization_form:
-      filling_instructions_html: Bitte fülle alles in <b>in English</b> aus.
+      filling_instructions_html: Bitte fülle alles <b>auf Englisch</b> aus!
       public_information: Öffentliche Informationen
       private_information: Vertrauliche Informationen
       private_information_disclaimer: Die Informationen unten werden nur für den
-        WCA Vorstand sichtbar sein.
+        WCA Vorstand sichtbar sein
     errors:
-      end_date_after_start_date: kann nicht anerkannt werden bis
+      end_date_after_start_date: muss nach dem Beginn der Anerkennung liegen
     create:
       create_success: >-
         Bewerbung erfolgreich übertragen. Bitte checke deine E-Mails und warte
@@ -2774,7 +3597,7 @@ de:
           persönlichen Zeitplänen, Zusammenfassungen ... Sieh dir die Webseite
           für weitere Informationen an.
       scorecards:
-        title: Scorecards
+        title: Scoresheets
         description: Drucke Scorecards für WCA Wettbewerbe mit WCA Live
       tnoodle:
         title: TNoodle (Scrambles)
@@ -2809,7 +3632,45 @@ de:
     title: WCA-Logo
     headings:
       usage_guidelines:
-        color: {}
+        color:
+          title: Farbe
+          paragraph: Das WCA-Logo gibt es in vier Farbvarianten. Je nach 
+            Hintergrundfarbe des Mediums, auf dem das Logo platziert wird, 
+            sollte die passende Farbvariante verwendet werden.
+          primary:
+            title: Primärvariante
+            paragraph: Verwende nach Möglichkeit die Primärvariante.
+          mono:
+            title: Einfarbig
+            paragraph: Verwende die einfarbige Variante nur, wenn die 
+              Primärvariante nicht geeignet ist.
+        title: Nutzungsrichtlinien
+        paragraph:
+          acceptable_usage: Die zulässige Verwendung des WCA-Logos ist in der <a
+            href="https://documents.worldcubeassociation.org/documents/policies/external/Logo%20Usage.pdf">Richtlinie
+            zur Verwendung des WCA-Logos</a> beschrieben. Bitte lies dieses 
+            Dokument, bevor du das WCA-Logo in deinen eigenen Projekten 
+            verwendest. Richte weitere Fragen zur Verwendung des WCA-Logos an 
+            das <a href="mailto:marketing@worldcubeassociation.org">WCA 
+            Marketing Team</a>.
+          see_below: Nachfolgend findest du zusätzliche Gestaltungsrichtlinien 
+            für die korrekte Verwendung des WCA-Logos.
+        logo_only:
+          title: Nur Bildmarke
+          paragraph: Das WCA-Logo darf ohne den Schriftzug verwendet werden, 
+            wobei dieselben oben genannten Farbrichtlinien gelten.
+      download_logo_assets:
+        title: Logodateien herunterladen
+        paragraph: Hochauflösende PNG-Dateien und Vektorversionen des WCA-Logos 
+          stehen zum Download bereit.
+        accept_terms_and_conditions: Ich habe die <a 
+          href="https://documents.worldcubeassociation.org/documents/policies/external/Logo%20Usage.pdf">Richtlinie
+          zur Nutzung des WCA-Logos</a> gelesen und akzeptiere sie.
+        download_button_text: Logo-Dateien herunterladen
+    intro: Das WCA-Logo wurde von Justin Eastman im Rahmen eines 
+      Designwettbewerbs im Januar 2005 entworfen. Uns gefiel das Logo wegen 
+      seines Designs, seiner Farben und der Tatsache, dass es nicht ausdrücklich
+      einen 3x3x3 Cube zeigt.
   search_results:
     index:
       competitions: Wettbewerbe
@@ -2826,11 +3687,55 @@ de:
         posts: Keine Beiträge gefunden für
         incidents: Keine Zwischenfälle gefunden für
         regulations_and_guidelines: Keine Regeln oder Richtlinien gefunden für
+      empty_query: Versuche, nach etwas zu suchen!
   incidents_log:
     i18n_disclaimer: >-
       Bitte beachte dass der Bereich für Zwischenfälle nur auf Englisch
       verfügbar ist, die Inhalte wurden nicht übersetzt.
     incident: 'Zwischenfall:'
+    title: Zwischenfallprotokoll
+    page_title: 'Zwischenfall: %{title}'
+    not_found: Zwischenfall nicht gefunden
+    back_to_log: Zurück zum Zwischenfallprotokoll
+    search_placeholder: Suchen
+    status: Status
+    resolved: Geklärt
+    pending: Ausstehend
+    sent_in_digest: In Zusammenfassung versendet
+    sent: Versendet
+    showing_entries: Einträge %{first} bis %{last} von %{total} Einträgen werden
+      angezeigt, mit <select></select> pro Seite
+    not_public_warning: 'Hinweis: Dieser Protokolleintrag wurde noch nicht geklärt
+      und ist daher nicht öffentlich sichtbar.'
+    public_summary: Beschreibung und Klärung des Zwischenfalls
+    private_description: Beschreibung (nur für Delegierte sichtbar)
+    private_wrc_decision: WRC-Entscheidung (nur für Delegierte sichtbar)
+    tags:
+      regulation: Regel
+      guideline: Richtlinie
+      search_with_tag: Zwischenfälle mit diesem Schlagwort suchen
+      filter_by_tag: Nach diesem Schlagwort filtern
+      competition_page: Wettbewerbsseite
+      delegate_report: Delegiertenbericht
+    admin:
+      publish: Veröffentlichen
+      unpublish: Veröffentlichung zurücknehmen
+      edit: Bearbeiten
+      destroy: Löschen
+      cancel: Abbrechen
+      confirm: Bestätigen
+      change_status: Status ändern
+      destroy_title: Zwischenfall löschen
+      confirm_publish: Du bist dabei, diesen Zwischenfallprotokolleintrag 
+        öffentlich sichtbar zu machen. Bist du sicher?
+      confirm_unpublish: Du bist dabei, die Veröffentlichung dieses 
+        Zwischenfallprotokolls zurückzunehmen. Bist du sicher?
+      confirm_destroy: Bist du sicher, dass du diesen Zwischenfall löschen 
+        möchtest?
+      publish_error: Dieser Zwischenfall konnte nicht veröffentlicht werden.
+      unpublish_error: Die Veröffentlichung dieses Zwischenfalls konnte nicht 
+        zurückgenommen werden.
+      destroy_error: Dieser Zwischenfall konnte nicht gelöscht werden.
   about_regulations:
     title: Über die Regeln
     panel1:
@@ -2986,18 +3891,16 @@ de:
       paragraph3: 'Die Rolle des Hosts kann so zusammenegfasst werden:'
       short_intro: 'Eine kurze Einleitung machen, dich selbst und das Turnier vorstellen'
       venue_feel: >-
-        Einige Video-Clips erstellen, um einen Eindruck vom Veranstaltungsort
-        und der Leute zu bekommen. Das kann ein Bild vom Teilnehmerbereich oder
-        von den Stationen sein, an denen die Puzzle gelöst werden.
+        Nimm ein paar Clips auf, die einen Eindruck vom Veranstaltungsort und den
+        Leuten vermitteln. Das kann auch einfach eine Aufnahme vom Teilnehmerbereich
+        und vom Lösebereich sein
       people_solving: >-
         Versuche einige Ausschnitte von Personen zu erstellen (vorzugsweise
         schnelle Teilnehmer bei ihren besten Events)
       mini_interviews: >-
-        Du kannst vesuchen, Mini-Interviews mit Personen zu machen
-        (Organisatoren, Delegierte, etc.) und sie nach ihrer Meinung zum Turnier
-        zu befragen.
-      pictures_too: 'Du kannst uns auch Bilder schicken, es müssen nicht nur Videos
-        sein.'
+        Du kannst vesuchen, Mini-Interviews mit Personen zu machen (Organisatoren,
+        Delegierte, etc.) und sie nach ihrer Meinung zum Turnier zu befragen
+      pictures_too: 'Du kannst auch Bilder schicken, es müssen nicht nur Videos sein'
       paragraph4: >-
         Unsere Kommunikation über das Wochenende verläuft meist in einer
         WhatsApp Gruppe. Bitte stelle sicher, dass du mit dieser Plattform
@@ -3013,9 +3916,9 @@ de:
         wissen</a>!
   footer:
     privacy: Datenschutz
-    disclaimer: Disclaimer
+    disclaimer: Haftungsausschluss
   api:
-    manage_oauth_html: 'Gehe zu %{oauth_link}, um deine OAuth Anwendungen zu verwalten'
+    manage_oauth_html: 'Gehe zu %{oauth_link}, um deine OAuth Anwendungen zu verwalten.'
     token_request_intro: >-
       Hier ist ein Beispiel, welches curl verwendet, um ein Access-Token
       mithilfe von Application ID, Client Secret, deiner WCA E-Mail, und deinem
@@ -3063,9 +3966,14 @@ de:
           Tabulator-getrennte Werte, für Tabellenkalkulation in OpenOffice.org,
           Excel, etc.
       hint_readme_html: >-
-        Die enthaltene %{readme_filename} Datei beinhaltet die
-        Nutzungsbedingungen und eine allgemeine Beschreibung (in Englisch, nicht
-        übersetzt).
+        Die enthaltene %{readme_filename} Datei beinhaltet die Nutzungsbedingungen
+        und eine allgemeine Beschreibung (in Englisch, nicht übersetzt):
+      deprecation_warning: 'HINWEIS ZUR ABKÜNDIGUNG: Version %{old_version} des Ergebnisexports
+        ist veraltet und wird ab dem %{deprecation_date} nicht mehr unterstützt. Bitte
+        wechsle vorher zu Version %{new_version}.'
+      permalink_note: 'Hinweis: Permalinks liefern den neuesten Ergebnisexport innerhalb
+        einer bestimmten Version – der v2-Permalink liefert also den neuesten v2-Export,
+        bleibt aber auch dann bei v2, wenn v3 veröffentlicht wird.'
     developer_export:
       heading: WST Entwickler-Export
       description_html: >-
@@ -3073,26 +3981,678 @@ de:
         SQL dump bereit. Details sind auf %{github_link} zu finden.
       download: Download
   payments:
-    errors: {}
-  validators: {}
+    errors:
+      refund:
+        provider_disconnected: Du kannst für diesen Wettbewerb keine 
+          Rückerstattungen mehr vornehmen. Bitte nutze dafür das Dashboard 
+          deines Zahlungsanbieters.
+        refund_amount_too_high: Du darfst nicht mehr zurückerstatten, als der 
+          Teilnehmende bezahlt hat.
+        refund_amount_too_low: Der Rückerstattungsbetrag muss größer als null 
+          sein.
+    header: Zahlungsverlauf
+    messages:
+      charge_refunded: Die Zahlung wurde zurückerstattet
+      charges_refunded: Alle abgebuchten Beträge wurden zurückerstattet
+      no_payments: Für diese Anmeldung wurden keine Zahlungen geleistet.
+    labels:
+      net_payment: Nettozahlung
+      original_payment: Ursprüngliche Zahlung
+    payment_providers:
+      paypal: PayPal
+      stripe: Stripe
+      manual: Manuell/Extern
+    payment_setup:
+      external_dashboard: '%{provider}-Dashboard'
+      account_connected: Du hast deinen %{provider}-Account erfolgreich 
+        verknüpft und kannst jetzt Anmeldezahlungen für diesen Wettbewerb 
+        empfangen.
+      account_disconnected_success: Die Verknüpfung mit deinem 
+        %{provider}-Account wurde erfolgreich aufgehoben.
+      account_disconnected_failure: Beim Aufheben der Verknüpfung mit dem 
+        %{provider}-Account ist ein Fehler aufgetreten.
+      account_not_connected: Es ist ein Problem aufgetreten und wir konnten 
+        deinen %{provider}-Account nicht verknüpfen.
+      disconnect_account: Verknüpfung mit %{provider}-Account aufheben
+      confirm_account_disconnect: Bist du sicher, dass du die Verknüpfung mit 
+        dem %{provider}-Account aufheben möchtest? Diese Aktion kann nicht 
+        rückgängig gemacht werden.
+      edit_account: Account bearbeiten
+      supported_currency_warning: 'Bitte stelle sicher, dass die von dir ausgewählte
+        Währung von deiner gewählten Zahlungsintegration unterstützt wird! Die unterstützten
+        Währungen hängen davon ab, in welchem Land der Account geführt wird. Du kannst
+        sie unten überprüfen:'
+      supported_currencies: Von %{provider} unterstützte Währungen
+      provider_heading: Zahlungen über %{provider}
+      accept_payments_header: Zahlungen für Anmeldungen akzeptieren
+      manual_payments_header: Manuelle Zahlungen konfigurieren
+      connect_button: '%{provider} einrichten'
+      connect_account_info:
+        stripe: Um Zahlungen für diesen Wettbewerb zu akzeptieren, musst du 
+          deinen eigenen Stripe-Account mit dem Stripe-Account der WCA 
+          verknüpfen, indem du auf den Button unten klickst. Wenn du noch keinen
+          eigenen Stripe-Account hast, kannst du trotzdem auf den Button unten 
+          klicken und wirst dann durch den Vorgang geführt.
+        paypal: Ein PayPal-Geschäftskonto ist erforderlich, um PayPal-Zahlungen 
+          über die Wettbewerbsseite zu akzeptieren. Wenn du noch kein 
+          PayPal-Geschäftskonto hast, kannst du trotzdem auf den Button unten 
+          klicken und wirst dann durch den Vorgang geführt.
+        manual: Lege Zahlungsanweisungen für Teilnehmende fest. Teilnehmende 
+          können angeben, wann sie bezahlt haben, und eine Zahlungsreferenz 
+          angeben, die du mit deinen Aufzeichnungen beim verwendeten externen 
+          Zahlungsdienst abgleichen kannst.
+      connect_account_warning:
+        stripe: Durch die Verknüpfung deines Stripe-Accounts erhält die 
+          WCA-Website die Möglichkeit, direkt über deinen Stripe-Account 
+          Zahlungen einzuziehen und Rückerstattungen vorzunehmen.
+        paypal: Durch die Verknüpfung deines PayPal-Accounts erhält die 
+          WCA-Website die Möglichkeit, Zahlungen an dich weiterzuleiten und 
+          direkt über deinen PayPal-Account Rückerstattungen vorzunehmen.
+      currently_connected_info: Dieser Wettbewerb ist so eingerichtet, dass 
+        Zahlungen über %{provider} angenommen werden. Der bzw. die Delegierten 
+        des Wettbewerbs sollten sich an das WCAT wenden, um Änderungen an 
+        verknüpften Accounts vorzunehmen.
+      before_disconnect_warning: Wenn du die Verknüpfung auf dieser Seite 
+        trennst, entfernt unsere Website die Verbindung zu deinem 
+        %{provider}-Account. In deinem %{provider}-Dashboard (siehe Link unten) 
+        wird die WCA-Website jedoch möglicherweise weiterhin aufgrund der zuvor 
+        von dir erteilten Autorisierung aufgeführt. Beachte, dass der Widerruf 
+        der Autorisierung im %{provider}-Dashboard auch alle anderen Wettbewerbe
+        betrifft, die mit diesem Account verknüpft sind, um darüber Zahlungen 
+        anzunehmen!
+      before_disconnect_info: Beachte, dass die Verknüpfung eines Accounts nur 
+        in Ausnahmefällen getrennt werden sollte, etwa wenn der aktuell 
+        verknüpfte Account keine Zahlungen empfangen kann.
+      account_details:
+        stripe:
+          email: E-Mail
+          country: Land
+          business_name: Unternehmensname
+        paypal:
+          display_name: Name
+          primary_email: E-Mail
+        manual:
+          payment_instructions: Zahlungsanweisungen (werden auf der 
+            Wettbewerbsseite angezeigt)
+          payment_reference_label: Welche Informationen soll der Nutzer angeben,
+            damit du seine Zahlung zuordnen kannst? (z. B. 
+            Zahlungsreferenznummer / Account-ID / usw.)
+        fallback_not_applicable: Nicht zutreffend
+  validators:
+    persons:
+      dob_is_jan_one_warning: Das Geburtsdatum von %{name} ist der 1. Januar. 
+        Bitte stelle sicher, dass es korrekt ist.
+      dob_is_too_young_warning: '%{name} scheint jünger als 3 Jahre zu sein. Bitte
+        stelle sicher, dass das korrekt ist.'
+      dob_is_too_old_warning: '%{name} scheint etwa 100 Jahre alt zu sein. Bitte stelle
+        sicher, dass das korrekt ist.'
+      person_doesnt_have_any_results_error: Es gibt keine Ergebnisse für 
+        %{person_name} mit der Personen-ID %{person_id}
+      results_not_associated_with_any_person_error: Es gibt Ergebnisse für eine 
+        unbekannte Person mit der Personen-ID %{person_id}
+      whitespace_in_name_error: Der Name der Person '%{name}' enthält führende, 
+        nachgestellte oder doppelte Leerzeichen.
+      person_with_non_existing_wca_id_error: 'Die Person %{name} hat eine WCA-ID,
+        die nicht existiert: %{wca_id}.'
+      no_space_before_parenthesis_error: Vor der öffnenden Klammer in '%{name}' 
+        muss ein Leerzeichen stehen.
+      same_person_name_warning: Es gibt bereits mindestens eine Person mit dem 
+        Namen '%{name}' in der WCA-Datenbank (%{wca_ids}). Bitte stelle sicher, 
+        dass es sich bei deiner Person '%{name}' um eine andere Person handelt. 
+        Falls nicht, weise dem Benutzerkonto bitte die korrekte WCA-ID zu und 
+        erstelle die Ergebnis-JSON-Datei erneut.
+      non_matching_dob_warning: Das für %{name} (%{wca_id}) angegebene 
+        Geburtsdatum '%{dob}' stimmt nicht mit dem aktuellen Eintrag in der 
+        WCA-Datenbank ('%{expected_dob}') überein. Falls dies ein Fehler ist, 
+        korrigiere ihn. Hinterlasse andernfalls einen Kommentar dazu für das 
+        WRT.
+      non_matching_gender_warning: Das für %{name} (%{wca_id}) angegebene 
+        Geschlecht '%{gender}' stimmt nicht mit dem aktuellen Eintrag in der 
+        WCA-Datenbank ('%{expected_gender}') überein. Falls dies ein Fehler ist,
+        korrigiere ihn. Hinterlasse andernfalls einen Kommentar dazu für das 
+        WRT.
+      empty_gender_warning: Das Geschlecht für den Neuling %{name} ist nicht 
+        angegeben. Gültige Werte für das Geschlecht sind 'female', 'male' und 
+        'other'. Bitte hinterlasse dazu einen Kommentar für das WRT.
+      non_matching_name_warning: "Der für %{wca_id} angegebene Name '%{name}' stimmt
+        nicht mit dem aktuellen Eintrag in der WCA-Datenbank ('%{expected_name}')
+        überein. "
+      non_matching_country_warning: Das für %{name} (%{wca_id}) angegebene Land 
+        '%{country}' stimmt nicht mit dem aktuellen Eintrag in der WCA-Datenbank
+        ('%{expected_country}') überein. Falls dies ein Fehler ist, korrigiere 
+        ihn. Hinterlasse andernfalls einen Kommentar dazu für das WRT.
+      multiple_newcomers_with_same_name_warning: 'Es gibt mehrere neue Teilnehmende
+        mit exakt demselben Namen: %{name}. Bitte stelle sicher, dass alle Ergebnisse
+        für diese Teilnehmenden korrekt sind und dass alle Ergebnisse anhand der jeweiligen
+        ID korrekt voneinander getrennt sind.'
+      wrong_parenthesis_type_error: Das in '%{name}' verwendete Klammerzeichen 
+        ist ein ungewöhnliches Zeichen. Bitte ersetze es durch eine normale 
+        Klammer '(' oder ')' mit den passenden Leerzeichen.
+      special_characters_in_name_warning: Der Name '%{name}' enthält ungültige 
+        Sonderzeichen (wie Zahlen, Anführungszeichen oder andere Symbole). Namen
+        sollten nur Buchstaben, Leerzeichen, Bindestriche, Apostrophe, Punkte 
+        und runde Klammern enthalten.
+      suspicious_last_name_warning: "'%{name}' hat '%{suffix}' als Nachnamen, was
+        möglicherweise kein tatsächlicher Nachname ist (z. B. ein ausgeschriebener
+        Generationszusatz). Bitte bestätige, dass dies der amtliche Nachname der Person
+        ist, oder ersetze/entferne ihn entsprechend."
+      successive_uppercase_name_warning: "'%{name}' hat aufeinanderfolgende Großbuchstaben
+        im Namen. Bitte bestätige, dass dies tatsächlich die korrekte Schreibweise
+        ist, oder korrigiere den Namen."
+      lowercase_name_warning: "'%{name}' hat einen kleingeschriebenen Namen. Bitte
+        bestätige, dass dies tatsächlich die korrekte Schreibweise ist, oder korrigiere
+        den Namen."
+      missing_period_in_single_letter_middle_name_warning: "'%{name}' hat einen zweiten
+        Vornamen, der aus einem einzelnen Buchstaben ohne Abkürzungspunkt besteht.
+        Bitte bestätige, dass dies tatsächlich die korrekte Schreibweise ist, oder
+        korrigiere den Namen."
+      letter_after_period_warning: Bei '%{name}' fehlt ein Leerzeichen nach 
+        einem Punkt im Namen. Bitte bestätige, dass dies tatsächlich die 
+        korrekte Schreibweise ist, oder korrigiere den Namen.
+      single_letter_first_or_last_name_warning: "'%{name}' hat einen einzelnen Buchstaben
+        als Vor- oder Nachnamen. Bitte korrigiere den Namen oder bestätige, dass dies
+        tatsächlich der korrekte Name der teilnehmenden Person laut einem amtlichen
+        Dokument ist."
+      single_name_warning: "'%{name}' hat nur einen Namen. Bitte bestätige, dass dies
+        tatsächlich der vollständige Name der teilnehmenden Person laut einem amtlichen
+        Dokument ist."
+      competitor_limit_exceeded_warning: Die Anzahl der Personen im Wettbewerb 
+        (%{n_competitors}) liegt über dem Teilnehmerlimit (%{competitor_limit}).
+        Die Ergebnisse der Teilnehmenden, die nach Erreichen des 
+        Teilnehmerlimits angemeldet wurden, müssen entfernt werden.
+      registration_details_mismatch_warning: 'Die Angaben zur Person mit der Anmelde-ID
+        %{person_id} (%{name}) stimmen nicht mit ihrer Anmeldung überein: %{mismatches}'
+      missing_matching_registration_warning: Für die Person %{name} liegt keine 
+        passende Anmeldung vor.
+      unaccepted_registration_with_results_warning: Die Person %{name} hat 
+        Ergebnisse im Wettbewerb, aber ihre Anmeldung ist nicht als 'akzeptiert'
+        markiert.
+    results:
+      automatically_position_fixed_info: '[%{round_id}] Die Platzierung von %{person_name}
+        wurde automatisch von %{pos} auf %{expected_pos} korrigiert.'
+      automatically_global_position_fixed_info: '[%{round_id}] Die Gesamtplatzierung
+        von %{person_name} wurde automatisch von %{pos} auf %{expected_pos} korrigiert.'
+      mbf_result_over_time_limit_warning: "[%{round_id}] Das Ergebnis '%{result}'
+        von %{person_name} überschreitet das Zeitlimit. Bitte stelle vor dem Einsenden
+        der Ergebnisse sicher, dass dies auf Zeitstrafen zurückzuführen ist, oder
+        korrigiere das Ergebnis zu DNF."
+      result_after_dns_warning: '[%{round_id}] %{person_name} hat mindestens ein DNS-Ergebnis,
+        auf das ein gültiges Ergebnis folgt. Bitte stelle sicher, dass es sich tatsächlich
+        um ein DNS handelt, und erkläre dem WRT in diesem Fall, was passiert ist.'
+      similar_results_warning: '[%{round_id}] Die Ergebnisse von %{person_name} ähneln
+        den Ergebnissen von %{similar_person_name}. Bitte stelle sicher, dass diese
+        Ergebnisse für beide Teilnehmenden korrekt erfasst wurden.'
+      met_cutoff_but_missing_results_error: '[%{round_id}] %{person_name} hat den
+        Cutoff erreicht, aber es fehlen Ergebnisse für die zweite Phase der Runde.
+        Der Cutoff war %{cutoff}.'
+      didnt_meet_cutoff_but_has_results_error: '[%{round_id}] %{person_name} hat mindestens
+        ein Ergebnis für die zweite Phase der Runde, hat aber den Cutoff nicht erreicht.
+        Der Cutoff war %{cutoff}.'
+      wrong_attempts_for_cutoff_error: '[%{round_id}] Für %{person_name} fehlt mindestens
+        ein Versuch in der Cutoff-Phase. Bitte bearbeite das Ergebnis, um die fehlenden
+        Versuche hinzuzufügen, oder aktualisiere die Angaben zur Runde auf der Seite
+        „Disziplinen verwalten“ des Wettbewerbs.'
+      result_over_time_limit_error: '[%{round_id}] Mindestens ein Ergebnis von %{person_name}
+        überschreitet das Zeitlimit der Runde, das %{time_limit} pro Versuch beträgt.
+        Alle Lösungen, die das Zeitlimit überschreiten, müssen zu DNF geändert werden.'
+      results_over_cumulative_time_limit_error: '[%{round_ids}] Die Summe der Ergebnisse
+        von %{person_name} überschreitet das kumulative Zeitlimit, das %{time_limit}
+        betrug.'
+      undefined_time_limit_warning: '[%{round_id}] Für diese Runde ist kein Zeitlimit
+        definiert; die Überprüfung der Zeitlimits wurde übersprungen. Dies ist nur
+        bei Wettbewerben vor 2013 zu erwarten.'
+      suspicious_dnf_warning: '[%{round_ids}] Die Runde hat ein kumulatives Zeitlimit.
+        Eine Hochrechnung anhand der erfolgreichen Lösungen von %{person_name} ergibt,
+        dass für mindestens eines der DNFs nur sehr wenig Zeit übrig gewesen wäre.
+        Bitte stelle sicher, dass jedes DNF und DNS tatsächlich korrekt ist. Wenn
+        die teilnehmende Person einen Versuch nicht begonnen hat oder vor Beginn eines
+        Versuchs keine Zeit mehr übrig hatte, muss dieser als DNS eingetragen werden.'
+      missing_cumulative_round_id_error: '[%{original_round_id}] Die Runde %{wcif_id}
+        für das im WCIF angegebene kumulative Zeitlimit konnte nicht gefunden werden.
+        Bitte gehe auf die Seite „Disziplinen verwalten“ des Wettbewerbs und entferne
+        %{wcif_id} aus dem kumulativen Zeitlimit für %{original_round_id}. Das WST
+        kennt diesen Fehler (GitHub-Issue #3254).'
+      wrong_position_in_results_error: '[%{round_id}] %{person_name} steht an der
+        falschen Position: erwartet wurde %{expected_pos}, tatsächlich ist es aber
+        %{pos}.'
+      wrong_global_position_in_results_error: '[%{round_id}] %{person_name} hat die
+        falsche Gesamtplatzierung: Erwartet wurde %{expected_pos}, gefunden wurde
+        jedoch %{pos}.'
+    rounds:
+      too_many_qualified_warning: 'Runde %{round_id}: Es haben sich mehr Teilnehmende
+        qualifiziert, als die Bedingung zum Weiterkommen vorsah (%{actual} statt %{expected},
+        die Bedingung war: %{condition}). Bitte aktualisiere die Rundeninformationen
+        auf der Seite zur Verwaltung der Disziplinen.'
+      regulation_9m1_error: Runde %{round_id} hat 99 oder weniger Teilnehmende, 
+        aber mehr als zwei nachfolgende Runden, was gemäß Regel 9m1 nicht 
+        zulässig ist.
+      regulation_9m2_error: Runde %{round_id} hat 15 oder weniger Teilnehmende, 
+        aber mehr als eine nachfolgende Runde, was gemäß Regel 9m2 nicht 
+        zulässig ist.
+      regulation_9m3_error: Runde %{round_id} hat 7 oder weniger Teilnehmende, 
+        aber mindestens eine nachfolgende Runde, was gemäß Regel 9m3 nicht 
+        zulässig ist.
+      regulation_9p1_error: 'Runde %{round_id}: Weniger als 25% der Teilnehmenden
+        sind ausgeschieden, was gemäß Regel 9p1 nicht zulässig ist.'
+      no_competitor_eliminated_error: 'Runde %{round_id}: Mindestens eine teilnehmende
+        Person muss ausscheiden, wie es Regel 9p vorschreibt (Wettbewerbe vor April
+        2010).'
+      less_than_twenty_five_percent_eliminated_error: 'Runde %{round_id}: Gemäß der
+        Bedingung zum Weiterkommen (%{condition}) würden weniger als 25%% der Teilnehmenden
+        ausscheiden, was gemäß Regel 9p1 nicht zulässig ist. Bitte aktualisiere die
+        Rundeninformationen auf der Seite zur Verwaltung der Disziplinen.'
+      not_enough_qualified_warning: 'Runde %{round_id}: Laut den Disziplindaten hätten
+        höchstens %{expected} Teilnehmende weiterkommen können, aber nur %{actual}
+        haben an der Runde teilgenommen. Bitte hinterlasse dazu einen Kommentar (oder
+        korrigiere die Disziplindaten, falls du eine andere Bedingung zum Weiterkommen
+        angewendet hast).'
+      competed_not_qualified_error: 'Runde %{round_id}: %{ids} haben teilgenommen,
+        aber die auf dem Versuchsergebnis basierende Bedingung zum Weiterkommen (%{condition})
+        nicht erfüllt. Bitte stelle sicher, dass die Bedingung zum Weiterkommen der
+        im Wettbewerb verwendeten entspricht, und entferne gegebenenfalls die Ergebnisse.'
+      round_not_found_error: Runde %{round_id} konnte nicht gefunden werden. 
+        Bitte stelle sicher, dass der Bereich „Disziplinen bearbeiten“ auf der 
+        WCA-Website und WCA Live synchron sind.
+      missing_round_results_error: Für Runde %{round_id} liegen keine Ergebnisse
+        vor, sie ist jedoch im Tab „Disziplinen“ aufgeführt. Falls diese Runde 
+        nicht stattgefunden hat, entferne sie bitte auf der Seite zur Verwaltung
+        der Disziplinen des Wettbewerbs.
+    events:
+      not_333_main_event_warning: 'Die ausgewählte Hauptdisziplin ist %{main_event_id}.
+        Obwohl dies VOR dem Wettbewerb vom WCAT genehmigt wurde, ist das WRT dafür
+        verantwortlich, NACH dem Wettbewerb sicherzustellen, dass die einschlägigen
+        Richtlinien zur Hauptdisziplin aus der WCA Competition Requirements Policy
+        eingehalten wurden. Bitte nenne eine Maßnahme, die ergriffen wurde, um %{main_event_id}
+        WÄHREND des Wettbewerbs als Hauptdisziplin zu behandeln (gültige Beispiele:
+        Ausrufung des Wettbewerbssiegers, höchste Anzahl an Runden, größerer Preis).'
+      no_main_event_warning: Für diesen Wettbewerb ist keine Hauptdisziplin 
+        ausgewählt. Bitte teile dem WRT mit, dass dies korrekt ist.
+      missing_results_warning: Für %{event_id} liegen keine Ergebnisse vor, die 
+        Disziplin ist jedoch als offizielle Disziplin aufgeführt. Falls die 
+        Disziplin stattgefunden hat, lade bitte deine JSON-Datei erneut mit den 
+        enthaltenen Ergebnissen hoch. Falls die Disziplin nicht stattgefunden 
+        hat, hinterlasse einen Kommentar für das WRT.
+    scrambles:
+      missing_scrambles_for_round_error: '[%{round_id}] Fehlende Scrambles. Verwende
+        den Scrambles Matcher, um der Runde die richtigen Scrambles hinzuzufügen.'
+      missing_scrambles_for_competition_error: Für den Wettbewerb fehlen 
+        Scrambles. Verwende den Scrambles Matcher, um Scrambles hinzuzufügen.
+      missing_scrambles_for_group_error: '[%{round_id}] Gruppe %{group_id}: Scrambles
+        fehlen, es wurden nur %{actual} statt %{expected} erkannt.'
+      missing_scrambles_for_multi_error: '[%{round_id}] Bei 3x3x3 Multi-Blind sind
+        zwar mehrere Gruppen erlaubt, aber mindestens eine der Gruppen muss Scrambles
+        für alle Versuche enthalten.'
+      mbld_scrambles_warning: '[%{round_id}] Diese Runde enthält Ergebnisse für 3x3x3
+        Multi-Blind. Bitte gib im Kommentar zu deiner Einreichung an, wie viele Scrambles
+        aus jedem Scramble-Satz tatsächlich von den Teilnehmenden verwendet wurden,
+        damit das WRT die ungenutzten zusätzlichen Scrambles entfernen kann.'
+      multiple_fmc_groups_warning: '[%{round_id}] Es wurden mehrere FMC-Gruppen verwendet.
+        Falls nur eine FMC-Gruppe verwendet wurde, entferne bitte im Scrambles Matcher
+        die Häkchen bei den ungenutzten Scrambles. Andernfalls füge bitte einen Kommentar
+        an das WRT hinzu, in dem du erklärst, warum mehrere FMC-Gruppen verwendet
+        wurden.'
+      wrong_number_of_scramble_sets_error: '[%{round_id}] Die Anzahl der Scramble-Sätze
+        in dieser Runde (%{actual}) weicht von der Angabe im Reiter „Disziplinen verwalten“
+        (%{expected}) ab. Bitte passe die Anzahl der Scramble-Sätze im Reiter „Disziplinen
+        verwalten“ an die Anzahl der tatsächlich verwendeten Sätze an.'
+    schedule:
+      activity_outside_competition_dates_warning: "Die Aktivität '%{activity_name}'
+        (Code: %{activity_code}) liegt in der lokalen Zeitzone des Veranstaltungsorts
+        außerhalb des Datumsbereichs des Wettbewerbs. Bitte aktualisiere den Zeitplan
+        des Wettbewerbs, sodass er die tatsächlichen Wettbewerbsdaten widerspiegelt."
   page:
     contacts:
       form:
-        user_data: {}
-        contact_recipient: {}
-        competition: {}
-        wct: {}
+        user_data:
+          name:
+            label: Name
+          email:
+            label: E-Mail
+        contact_recipient:
+          label: Wen möchtest du kontaktieren?
+          competition:
+            label: Organisatoren/Delegierte eines Wettbewerbs kontaktieren (bei 
+              Fragen zu diesem Wettbewerb, einschließlich noch nicht auf der 
+              WCA-Website veröffentlichter Ergebnisse)
+          wct:
+            label: Die WCA bei allgemeinen Fragen kontaktieren (z. B. zu 
+              WCA-ID/Profil, der Organisation von Wettbewerben, 
+              Wettbewerbsregeln, Wettbewerbsmedien usw.)
+          wrt:
+            label: Das Results Team kontaktieren (bei allen Anliegen zu 
+              Ergebnissen oder Profildaten auf der WCA-Website)
+          wst:
+            label: Das Software Team kontaktieren (um Probleme mit der 
+              WCA-Website zu melden oder bei Fragen zu Software)
+        competition:
+          competition:
+            label: Wettbewerb
+          message:
+            label: Nachricht
+        wct:
+          message:
+            label: Nachricht
         wrt:
-          query_type: {}
-          profile_data_to_change: {}
-        wst: {}
+          query_type:
+            label: Welche der folgenden Optionen beschreibt dein Anliegen am 
+              besten?
+            edit_profile:
+              label: Meine Profildaten ändern (Name, Land, Geschlecht oder 
+                Geburtsdatum)
+            edit_others_profile:
+              label: Die Profildaten einer anderen Person ändern
+            report_result_issue:
+              label: Ein Problem mit einem Ergebnis melden
+            other_query:
+              label: Sonstige Anfrage
+          profile_data_to_change:
+            label: Zu ändernde Profildaten
+            options:
+              name: Name
+              country: Land
+              gender: Geschlecht
+              dob: Geburtsdatum
+          message:
+            label: Nachricht
+          new_profile_data_name:
+            label: Neuer Name
+          new_profile_data_country:
+            label: Neues Land
+          new_profile_data_gender:
+            label: Neues Geschlecht
+          new_profile_data_dob:
+            label: Neues Geburtsdatum
+          edit_profile_reason:
+            label: Grund für die Änderung
+          edit_profile_proof_attach:
+            label: Nachweis anhängen
+        wst:
+          message:
+            label: Nachricht
+        captcha:
+          validation_error: Bitte bestätige, dass du kein Roboter bist.
+        next_button: Weiter
+        submit_button: Absenden
+      title: WCA-Kontaktformular
+      faq_note_html: Bevor du eine Anfrage stellst, wirf einen Blick auf unsere 
+        <a href="/faq">häufig gestellten Fragen</a>! Wenn du ein bestimmtes 
+        Komitee oder Team kontaktieren möchtest, das hier nicht aufgeführt ist, 
+        findest du die Kontaktdaten auf <a href="/teams-committees">dieser 
+        Seite</a>.
+      success_message: E-Mail gesendet – wir melden uns bald bei dir.
+      prefilled: Um deine Anmeldung zu aktualisieren, musst du die Organisatoren
+        des Wettbewerbs kontaktieren. Wir haben das Kontaktformular mit deinen 
+        gewünschten Änderungen vorausgefüllt – bitte sende das Formular ab.
     contact_edit_profile:
-      form: {}
-  trainee_delegate_application: {}
+      form:
+        contact_email:
+          label: E-Mail-Adresse für Rückfragen
+        wca_id:
+          label: WCA-ID eingeben
+        wca_id_search:
+          label: Suche nach der WCA-ID, deren Profil du bearbeiten möchtest.
+        edit_reason:
+          label: Grund für die Änderung
+        edit_reason_for:
+          label: Grund für die Änderung von %{attribute}
+        proof_attach:
+          label: Nachweis anhängen
+        submit_edit_request_button:
+          label: Änderungsantrag absenden
+        captcha:
+          validation_error: Bitte bestätige, dass du kein Roboter bist.
+        verified_checkbox:
+          label: Mit dem Absenden dieses Formulars bestätigst du, dass du das 
+            Ausweisdokument der betreffenden Person bereits geprüft und die 
+            angegebenen Informationen verifiziert hast.
+      title: Formular zur Profiländerung
+      not_logged_in_error: Du scheinst nicht angemeldet zu sein. Bitte melde 
+        dich an, um dein Profil zu bearbeiten. Bei anderen Anliegen <a 
+        href="https://www.worldcubeassociation.org/contact?contactRecipient=wrt">kontaktiere
+        uns</a> bitte.
+      no_profile_error: Du scheinst noch kein WCA-Profil zu haben, da du noch an
+        keinem Wettbewerb teilgenommen hast. Bei anderen Anliegen <a 
+        href="https://www.worldcubeassociation.org/contact?contactRecipient=wrt">kontaktiere
+        uns</a> bitte.
+      no_permission_error: Du hast keine Berechtigung, Änderungen an den 
+        Profilen anderer Personen zu beantragen.
+      success_message: Anfrage abgeschickt – wir melden uns bald bei dir.
+      success_message_with_ticket_link_html: Anfrage abgeschickt – wir melden 
+        uns bald bei dir. Um den Status dieser Anfrage einzusehen, öffne bitte 
+        <a href="%{link}">diesen Link</a>.
+    translators:
+      title: Übersetzer
+    executives:
+      title: Geschäftsleitung
+      joined_wca: Beitritt zur WCA
+      joined_executives: Beitritt zum Team der Geschäftsleitung
+      more_information: Weitere Informationen
+      close: Schließen
+      person_not_found: Keine Person mit der WCA-ID %{wca_id} gefunden
+    officers_and_board:
+      title: WCA-Amtsträger und WCA Board
+      officers_description: Die Amtsträger der WCA übernehmen Aufgaben im 
+        Zusammenhang mit dem gemeinnützigen Status der WCA. Diese Amtsträger 
+        werden vom WCA Board gewählt. Der Executive Director ist der 
+        Geschäftsführer der WCA, der Chair leitet alle Sitzungen des WCA Board, 
+        der Secretary verwaltet die Dokumente der Organisation und der Treasurer
+        kümmert sich um die finanziellen Angelegenheiten der WCA.
+      board_description: Das WCA Board ist für die Leitung der gesamten 
+        Organisation und die Erfüllung aller Aufgaben verantwortlich, die nicht 
+        von anderen Teams und Komitees übernommen werden
+    teams_committees_councils:
+      title: WCA-Teams und -Komitees
+      description: Die Teams und Komitees der WCA sind ein wesentlicher 
+        Bestandteil der Organisation und erledigen die täglichen Aufgaben, die 
+        für ihren Betrieb erforderlich sind. Diese Komitees bestehen aus 
+        Mitgliedern der WCA-Community, darunter WCA-Delegierte und Teilnehmende.
+        Jedes Team hat eine Leitung, deren Aufgabe es ist, das ordnungsgemäße 
+        Funktionieren des Teams sicherzustellen und die anderen Teammitglieder 
+        anzuleiten. Wenn es offene Stellen in Teams oder Komitees gibt, werden 
+        Informationen zur Bewerbung auf der Startseite veröffentlicht.
+      contact_button: Kontakt
+      no_contact_description: Die Kontaktdaten dieses Teams oder Komitees sind 
+        nicht öffentlich zugänglich.
+      empty: Keine Teams oder Komitees gefunden. Bitte schau später noch einmal 
+        vorbei.
+      groups_name:
+        wat: WCA Archive Team
+        wct: WCA Communication Team
+        wcat: WCA Competition Announcement Team
+        wic: WCA Integrity Committee
+        weat: WCA Executive Assistants Team
+        wfc: WCA Financial Committee
+        wmt: WCA Marketing Team
+        wmct: WCA Major Championship Team
+        wqac: WCA Quality Assurance Committee
+        wrc: WCA Regulations Committee
+        wrt: WCA Results Team
+        wst: WCA Software Team
+        wsot: WCA Sports Organization Team
+        wapc: WCA Appeals Committee
+      groups_description:
+        wat: Das WCA Archive Team (WAT) ist für den Aufbau und die Pflege des 
+          historischen Archivs der WCA zuständig. Es dokumentiert wichtige 
+          Ereignisse im Speedcubing und bedeutende Meilensteine der WCA, die als
+          Teil einer umfassenderen WCA-Zeitleiste präsentiert werden sollen, um 
+          das Vermächtnis der WCA im Speedcubing zu bewahren.
+        wct: Das WCA Communication Team (WCT) beaufsichtigt und unterstützt die 
+          Kommunikation der WCA mit der Community und der allgemeinen 
+          Öffentlichkeit. Die Kommunikation der WCA soll zu den Zielen der WCA 
+          beitragen und eine insgesamt positive Kultur der Freundlichkeit, 
+          Transparenz, Inklusion, Offenheit und Reaktionsbereitschaft fördern.
+        wcat: Das WCA Competition Announcement Team (WCAT) genehmigt die von 
+          WCA-Delegierten eingereichten WCA-Wettbewerbe, kündigt sie an und 
+          stellt sicher, dass diese Ankündigungen den Qualitätsstandards der WCA
+          entsprechen. Dieses Team ist außerdem dafür verantwortlich, dass das 
+          in Dokumenten wie der WCA-Richtlinie zu Wettbewerbsanforderungen 
+          festgelegte Verfahren zur Einreichung von Wettbewerben ordnungsgemäß 
+          eingehalten wird. Das WCAT ist NICHT für die Organisation einzelner 
+          Wettbewerbe oder deren Betreuung durch WCA-Delegierte verantwortlich.
+        wic: Das WCA Integrity Committee (WIC) führt unabhängige Untersuchungen 
+          zu Mitgliedern der WCA-Community und zu Zwischenfällen bei 
+          WCA-Wettbewerben oder auf offiziellen Online-Plattformen der WCA 
+          durch. Bei diesen Zwischenfällen handelt es sich um mutmaßliche 
+          Verstöße gegen die Werte, den Verhaltenskodex, den Ethikkodex und/oder
+          die Regeln der WCA.
+        weat: Das WCA Executive Assistants Team (WEAT) übernimmt die 
+          Verwaltungsaufgaben des WCA-Vorstands.
+        wfc: Das WCA Financial Committee (WFC) verwaltet die gesamten Finanzen 
+          der WCA, einschließlich Budgetplanung, Berichterstattung, Analyse, 
+          Buchführung und Steuererklärungen. Es verwaltet außerdem die größte 
+          Einnahmequelle der WCA, das WCA-Beitragssystem, sowie verschiedene 
+          Förderprogramme, die lokale Gemeinschaften in unterschiedlichen 
+          Entwicklungsstadien unterstützen. Dazu gehören Reisekostenförderung, 
+          Ausstattungsförderung und die Unterstützung regionaler Organisationen.
+        wmt: Das WCA Marketing Team (WMT) betreut die Marke WCA, sucht Sponsoren
+          und vermarktet WCA-Merchandise.
+        wmct: Das WCA Major Championship Team (WMCT) betreut die Koordination 
+          und Weiterentwicklung der WCA-Kontinental- und Weltmeisterschaften, 
+          indem es Richtlinien und strategische Pläne entwickelt, die Auswahl 
+          der Austragungsorte verwaltet, Organisationsteams unterstützt und ein 
+          einheitliches Meisterschaftserlebnis gewährleistet.
+        wqac: Das WCA Quality Assurance Committee (WQAC) fördert die 
+          kontinuierliche Qualitätsverbesserung innerhalb der WCA sowie die 
+          weltweite Anwendung von Qualitätsstandards, um eine gleichbleibend 
+          hohe Qualität der Prozesse, der Ehrenamtlichen der WCA, der regionalen
+          Organisationen, der Turnierorganisatoren und der Turnierhelfer 
+          sicherzustellen.
+        wrc: Das WCA Regulations Committee (WRC) befasst sich mit allen Fragen 
+          zur Anwendung, Verbesserung und Weiterentwicklung der WCA-Regeln. Es 
+          unterstützt WCA-Delegierte bei sämtlichen Verfahrensfragen, die bei 
+          Wettbewerben auftreten, und entscheidet über ungeklärte sowie nicht 
+          durch die Regeln abgedeckte Zwischenfälle.
+        wrt: Das WCA Results Team (WRT) verwaltet sämtliche Daten in den 
+          Datenbanken der WCA, einschließlich Wettbewerbsergebnissen und 
+          Personendaten.
+        wst: Das WCA Software Team (WST) verwaltet die Software der WCA 
+          (Website, Scramble-Generatoren, Arbeitsmappen, Verwaltungswerkzeuge).
+        wsot: Das WCA Sports Organization Team (WSOT) betreut und unterstützt 
+          die Anerkennung der WCA als internationale Sportorganisation.
+        wapc: Das WCA Appeals Committee (WAC) prüft Einsprüche gegen 
+          Entscheidungen anderer Ehrenamtlicher der WCA und entscheidet darüber.
+          Das WAC bietet ein unabhängiges und unparteiisches Prüfverfahren, um 
+          sicherzustellen, dass Entscheidungen fair und angemessen sind und den 
+          Richtlinien und Regeln der WCA entsprechen.
+  trainee_delegate_application:
+    title: Bewerbung als Trainee-Delegierter
+    introduction: Dieses Formular richtet sich an registrierte Speedcuber, die 
+      sich als Trainee-Delegierte bewerben. Deine Bewerbung wird an die 
+      Delegierten gesendet, die für die von dir ausgewählte Region zuständig 
+      sind.
+    success_title: Bewerbung eingereicht
+    success: Deine Bewerbung wurde erfolgreich versendet. Eine Kopie wurde an 
+      die E-Mail-Adresse deines WCA-Benutzerkontos gesendet.
+    eligibility:
+      title: Du kannst diese Bewerbung noch nicht einreichen
+      missing_wca_id: Dein WCA-Benutzerkonto muss mit einer WCA-ID verknüpft 
+        sein.
+      missing_date_of_birth: Für dein WCA-Benutzerkonto muss ein bestätigtes 
+        Geburtsdatum hinterlegt sein.
+      underage: Bewerber müssen mindestens %{minimum_age} Jahre alt sein.
+      claim_wca_id: Fordere deine WCA-ID an.
+      edit_profile: Fordere eine Aktualisierung deines Profils an.
+    errors:
+      invalid_region: Wähle eine gültige, aktive Delegiertenregion aus.
+      missing_reviewer: Die ausgewählte Region hat derzeit keinen Regional- oder
+        Senior-Delegierten, der die Bewerbung entgegennehmen kann.
+      recommender_required: Wähle mindestens einen empfehlenden Delegierten aus.
+      invalid_recommender: Mindestens einer der ausgewählten empfehlenden 
+        Delegierten ist für die ausgewählte Region nicht mehr berechtigt, eine 
+        Empfehlung abzugeben.
+      spoken_delegate_required: Wähle mindestens einen Junior- oder 
+        Full-Delegierten aus, mit dem du gesprochen hast.
+      invalid_spoken_delegate: Mindestens einer der ausgewählten Delegierten, 
+        mit denen du gesprochen hast, ist kein aktiver Junior- oder 
+        Full-Delegierter in der ausgewählten Region mehr.
+      declarations_required: Alle Erklärungen müssen bestätigt werden.
+      business_involvement_required: Gib an, ob du an einem Unternehmen mit 
+        Bezug zum Cubing beteiligt bist.
+      business_involvement_explanation_required: Erläutere deine Beteiligung an 
+        einem Unternehmen mit Bezug zum Cubing.
+    form:
+      declaration_and_basic_information: Erklärung und grundlegende 
+        Informationen
+      name: Name
+      wca_id: WCA-ID
+      email: E-Mail
+      age: Alter
+      competition_count: Anzahl der Wettbewerbe
+      region_and_references: Region und Referenzen
+      region: In welcher Delegiertenregion lebst du derzeit?
+      region_placeholder: Wähle deine Region aus
+      subregion: In welcher Delegiertenunterregion lebst du derzeit?
+      subregion_placeholder: Wähle deine Unterregion aus
+      reviewing_delegate: Prüfender Delegierter
+      spoken_delegates: Mit welchen Junior- oder Full-Delegierten hast du 
+        darüber gesprochen, Trainee-Delegierter zu werden?
+      recommenders: Welche Junior- oder Full-Delegierten in deiner Region haben 
+        zugestimmt, dich als Kandidaten für die Rolle eines Trainee-Delegierten 
+        zu empfehlen?
+      delegates_placeholder: Wähle mindestens einen Delegierten aus
+      experience_and_motivation: Erfahrung und Motivation
+      introduction: Stelle dich kurz in zwei bis vier Sätzen vor.
+      competition_contributions: Fasse zusammen, wie du bei Wettbewerben in 
+        deiner Umgebung über das hinaus geholfen hast, was von allen 
+        Teilnehmenden erwartet wird.
+      volunteer_history: Falls du ehrenamtliche Positionen bei der WCA 
+        innehattest, gib hier einen zeitlichen Überblick an (optional).
+      role_history_warning: Dieser auf der Website gespeicherte Verlauf deiner 
+        Rollen wird automatisch in deine Bewerbung aufgenommen. Ältere Rollen 
+        wurden nicht vollständig nachgetragen. Ergänze daher unten alle 
+        fehlenden Positionen oder Korrekturen.
+      present: heute
+      board_member: Vorstandsmitglied
+      motivation: Beschreibe kurz in zwei bis vier Sätzen deine Motivation, dich
+        als Trainee-Delegierter zu bewerben.
+      relevant_skills: Liste deine wichtigsten Fähigkeiten und Erfahrungen auf, 
+        die dir dabei helfen würden, als Trainee-Delegierter erfolgreich zu 
+        sein.
+      declaration_understands_application: Ich verstehe, dass dieses Formular 
+        für registrierte Speedcuber bestimmt ist, die sich als 
+        Trainee-Delegierte bewerben.
+      declaration_has_delegate_support: Ich bestätige, dass ich mit einem 
+        qualifizierten Delegierten in meiner Region gesprochen habe, der meine 
+        Kandidatur unterstützt.
+      declaration_proficient_in_english: Ich bestätige, dass ich über gute 
+        Englischkenntnisse im Lesen und Schreiben verfüge.
+      declaration_read_regulations_html: Ich bestätige, dass ich die <a 
+        href="%{regulations_url}" target="_blank" 
+        rel="noreferrer">WCA-Regeln</a> gelesen habe.
+      regulations_note: 'Hinweis: Von Delegierten wird nicht erwartet, dass sie jede
+        Regel kennen. Es wird jedoch erwartet, dass sie die Grundlagen kennen und
+        bei Unsicherheiten nachschlagen.'
+      cubing_business_involvement: Bist du an einem Unternehmen mit Bezug zum 
+        Speedcubing beteiligt?
+      cubing_business_involvement_details: Bitte erläutere deine Beteiligung an 
+        dem Unternehmen mit Bezug zum Speedcubing.
+      "yes": Ja
+      "no": Nein
+      submit: Bewerbung einreichen
   user_roles:
-    email: {}
-  user_groups: {}
-  tickets: {}
+    email:
+      role_metadata:
+        region_name: Name der Region
+        status: Status
+        locale: Sprache
+        group_name: Name des Teams/Komitees
+        delegated_competitions_count: Anzahl der als Delegierter betreuten 
+          Wettbewerbe
+        wca_id: WCA-ID
+        location: Standort
+        email: E-Mail
+  user_groups:
+    group_types:
+      board: WCA-Vorstand
+      officers: WCA-Amtsträger
+      translators: Übersetzer
+  tickets:
+    type:
+      edit_person: Person bearbeiten
+      competition_result: Wettbewerbsergebnis
+    stakeholder_role:
+      actioner: Bearbeiter
+      requester: Antragsteller
   scramble_set:
     name: Scramble Set %{letter_code}
     group: Gruppe %{number}
@@ -3109,3 +4669,10 @@ de:
     setup: Aufbauen
     teardown: Abbauen
     misc: Sonstiges
+  misc:
+    forum_age_requirement: Du musst mindestens 13 Jahre alt sein, um auf das 
+      WCA-Forum zugreifen zu können.
+    forum_enter_dob: Für den Zugriff auf das Forum ist ein Geburtsdatum 
+      erforderlich. Bitte gib dein Geburtsdatum ein und versuche anschließend 
+      erneut, auf das Forum zuzugreifen.
+    refresh: Aktualisieren

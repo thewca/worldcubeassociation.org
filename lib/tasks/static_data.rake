@@ -25,6 +25,7 @@ namespace :static_data do
     RoundType.write_json_data!
     SanityCheckCategory.write_json_data!
     SanityCheck.write_json_data!
+    CurrencyData.write_json_data!
   end
 end
 

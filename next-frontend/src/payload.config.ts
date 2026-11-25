@@ -24,8 +24,6 @@ import {
 import { Users } from "@/collections/Users";
 import { Tools } from "@/collections/Tools";
 import { RegulationsHistoryItem } from "@/collections/RegulationsHistory";
-import { Documents } from "@/collections/Documents";
-import { AvatarMenuEntries } from "@/collections/AvatarMenuEntries";
 import { Nav } from "@/globals/Nav";
 import { Footer } from "@/globals/Footer";
 import { SocialLinks } from "@/globals/SocialLinks";
@@ -40,6 +38,7 @@ import { DocumentsPage } from "@/globals/Documents";
 import { FaqPage } from "@/globals/FaqPage";
 import { LogoPage } from "@/globals/LogoPage";
 import { ExecutivesPage } from "@/globals/ExecutivesPage";
+import { AvatarMenu } from "@/globals/AvatarMenu";
 import {
   compatibilityOptions,
   mongooseAdapter,
@@ -49,13 +48,14 @@ import { fromContainerMetadata } from "@aws-sdk/credential-providers";
 import { withWeblateSync } from "@/lib/translate/hooks";
 import { weblateSyncEndpoint } from "@/lib/translate/endpoint";
 import { WCA_CMS_PROVIDER_ID, WCA_ROLES_FIELD } from "@/auth.config";
+import { PHASE_PRODUCTION_BUILD } from "next/constants";
+import { isLiveSite } from "@/lib/wca/isLiveSite";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
 
 function plugins() {
   const isProduction = process.env.NODE_ENV === "production";
-  const isLiveSite = !!process.env.WCA_LIVE_SITE;
 
   return [
     betterAuthCollections({
@@ -91,7 +91,7 @@ function plugins() {
       enabled: isProduction,
       collections: {
         media: {
-          prefix: isLiveSite ? "media" : "media-staging",
+          prefix: isLiveSite() ? "media" : "media-staging",
           generateFileURL: ({ prefix, filename }) => {
             return `${process.env.MEDIA_BUCKET_CDN!}/${prefix}/${filename}`;
           },
@@ -107,7 +107,10 @@ function plugins() {
 }
 
 function dbOptions(): Args {
-  if (process.env.NODE_ENV === "production") {
+  // The build prerenders against a local MongoDB seeded from the public dump, see .github/actions/build-js-image
+  const isBuildPhase = process.env.NEXT_PHASE === PHASE_PRODUCTION_BUILD;
+
+  if (process.env.NODE_ENV === "production" && !isBuildPhase) {
     return {
       url: process.env.DATABASE_URI || "",
       connectOptions: {
@@ -163,10 +166,8 @@ export const wcaConfig = {
     FaqCategories,
     FaqQuestions,
     Users,
-    Documents,
     RegulationsHistoryItem,
     Tools,
-    AvatarMenuEntries,
   ].map(withWeblateSync),
   globals: [
     Nav,
@@ -182,6 +183,7 @@ export const wcaConfig = {
     FaqPage,
     LogoPage,
     ExecutivesPage,
+    AvatarMenu,
   ].map(withWeblateSync),
   endpoints: [weblateSyncEndpoint],
   editor: lexicalEditor(),

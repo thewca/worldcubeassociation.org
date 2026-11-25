@@ -34,7 +34,9 @@ function ShortlistItem<T extends DataCompetition>({
     case "event_ids":
       return (
         <DataList.Item>
-          <DataList.ItemLabel>Events</DataList.ItemLabel>
+          <DataList.ItemLabel>
+            {t("competitions.competition_info.events")}
+          </DataList.ItemLabel>
           <DataList.ItemValue asChild>
             <Wrap gap="4">
               {comp.event_ids.map((event_id) => (

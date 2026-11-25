@@ -56,7 +56,16 @@ ENV NEXT_ASSET_PREFIX=$NEXT_ASSET_PREFIX
 # Create the types and build
 RUN LOCALE_DIR="./src/lib/i18n/locales" yarn run build:translations
 RUN yarn types:openapi
-RUN NODE_ENV=production yarn run build
+ # Pages are prerendered against the throwaway MongoDB started by .github/actions/build-js-image,
+#   so these credentials only ever exist inside the CI runner.
+RUN NODE_ENV=production \
+    DATABASE_URI="mongodb://localhost:27017/payload" \
+    DATABASE_USER=root \
+    DATABASE_PASSWORD=root \
+    PAYLOAD_SECRET=build-only \
+    AUTH_SECRET=build-only \
+    MEDIA_BUCKET_CDN="https://assets-nextjs.worldcubeassociation.org" \
+    yarn run build
 
 # Export-only stage. Building with `--target assets --output type=local` writes the
 # client bundle to the local filesystem for the S3 sync. It shares the `builder` stage

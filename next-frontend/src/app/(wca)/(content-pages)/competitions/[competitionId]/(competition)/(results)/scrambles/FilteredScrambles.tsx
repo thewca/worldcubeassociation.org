@@ -1,8 +1,8 @@
 "use client";
 
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import { components } from "@/types/openapi";
-import { Heading, Table, VStack } from "@chakra-ui/react";
+import { Accordion, Heading, Table, VStack } from "@chakra-ui/react";
 import _ from "lodash";
 import events from "@/lib/wca/data/events";
 import { useT } from "@/lib/i18n/useI18n";
@@ -32,7 +32,7 @@ export default function FilteredScrambles({
   const orderedRounds = _.sortBy(
     _.keys(scramblesByRoundFormat),
     (roundType) => roundTypes.byId[roundType].rank,
-  );
+  ).toReversed();
 
   return (
     <VStack align="left" gap={4}>
@@ -42,58 +42,97 @@ export default function FilteredScrambles({
         onEventClick={setActiveEventId}
         eventList={competitionInfo.event_ids}
       />
-      {_.map(orderedRounds, (roundFormat) => {
-        const scramblesForRound = scramblesByRoundFormat[roundFormat];
-        const scramblesByGroup = _.groupBy(scramblesForRound, "group_id");
+      <Accordion.Root
+        defaultValue={["0"]}
+        multiple
+        variant="enclosed"
+        key={activeEventId}
+        p="0.5"
+        borderRadius="sm"
+        lazyMount
+        unmountOnExit
+      >
+        {_.map(orderedRounds, (roundFormat, index) => {
+          const scramblesForRound = scramblesByRoundFormat[roundFormat];
+          const scramblesByGroup = _.groupBy(scramblesForRound, "group_id");
 
-        return (
-          <Fragment key={`${activeEventId}-${roundFormat}`}>
-            <Heading size="2xl">
-              {events.byId[activeEventId].name}{" "}
-              {t(`rounds.${roundFormat}.name`)}
-            </Heading>
-            <Table.ScrollArea>
-              <Table.Root>
-                <Table.Header>
-                  <Table.Row>
-                    {isAdmin && <Table.ColumnHeader>Edit</Table.ColumnHeader>}
-                    <Table.ColumnHeader>Group</Table.ColumnHeader>
-                    <Table.ColumnHeader>#</Table.ColumnHeader>
-                    <Table.ColumnHeader>Scramble</Table.ColumnHeader>
-                  </Table.Row>
-                </Table.Header>
-
-                <Table.Body>
-                  {Object.entries(scramblesByGroup).map(
-                    ([groupId, groupScrambles]) =>
-                      groupScrambles.map((scramble, index) => (
-                        <Table.Row key={scramble.id}>
-                          {isAdmin && <Table.Cell>EDIT</Table.Cell>}
-
-                          {/* Only show group_id in the first row of the group */}
-                          {index === 0 && (
-                            <Table.Cell
-                              rowSpan={groupScrambles.length}
-                              verticalAlign="top"
-                            >
-                              {groupId}
-                            </Table.Cell>
+          return (
+            <Accordion.Item
+              key={`${activeEventId}-${roundFormat}`}
+              value={index.toString()}
+              bg="bg"
+              _open={{ bg: "bg" }}
+            >
+              <Accordion.ItemTrigger justifyContent="space-between">
+                <Heading textStyle="s1">
+                  {events.byId[activeEventId].name}{" "}
+                  {t(`rounds.${roundFormat}.name`)}
+                </Heading>
+                <Accordion.ItemIndicator />
+              </Accordion.ItemTrigger>
+              <Accordion.ItemContent>
+                <Accordion.ItemBody pt="0">
+                  <Table.ScrollArea>
+                    <Table.Root>
+                      <Table.Header>
+                        <Table.Row>
+                          {isAdmin && (
+                            <Table.ColumnHeader>
+                              {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
+                              Edit
+                            </Table.ColumnHeader>
                           )}
-                          <Table.Cell>
-                            {scramble.is_extra
-                              ? `Extra ${scramble.scramble_num}`
-                              : scramble.scramble_num}
-                          </Table.Cell>
-                          <Table.Cell>{scramble.scramble}</Table.Cell>
+                          <Table.ColumnHeader>
+                            {t("competitions.scrambles_table.group")}
+                          </Table.ColumnHeader>
+                          <Table.ColumnHeader>#</Table.ColumnHeader>
+                          <Table.ColumnHeader>
+                            {t("competitions.scrambles_table.scramble")}
+                          </Table.ColumnHeader>
                         </Table.Row>
-                      )),
-                  )}
-                </Table.Body>
-              </Table.Root>
-            </Table.ScrollArea>
-          </Fragment>
-        );
-      })}
+                      </Table.Header>
+
+                      <Table.Body>
+                        {Object.entries(scramblesByGroup).map(
+                          ([groupId, groupScrambles]) =>
+                            groupScrambles.map((scramble, index) => (
+                              <Table.Row key={scramble.id}>
+                                {isAdmin && (
+                                  <Table.Cell>
+                                    {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
+                                    EDIT
+                                  </Table.Cell>
+                                )}
+
+                                {/* Only show group_id in the first row of the group */}
+                                {index === 0 && (
+                                  <Table.Cell
+                                    rowSpan={groupScrambles.length}
+                                    verticalAlign="top"
+                                  >
+                                    {groupId}
+                                  </Table.Cell>
+                                )}
+                                <Table.Cell>
+                                  {scramble.is_extra
+                                    ? t("competitions.scrambles_table.extra", {
+                                        number: scramble.scramble_num,
+                                      })
+                                    : scramble.scramble_num}
+                                </Table.Cell>
+                                <Table.Cell>{scramble.scramble}</Table.Cell>
+                              </Table.Row>
+                            )),
+                        )}
+                      </Table.Body>
+                    </Table.Root>
+                  </Table.ScrollArea>
+                </Accordion.ItemBody>
+              </Accordion.ItemContent>
+            </Accordion.Item>
+          );
+        })}
+      </Accordion.Root>
     </VStack>
   );
 }

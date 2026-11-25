@@ -258,6 +258,23 @@ en:
     user:
       wca_id: "WCA ID"
       representing: "Representing"
+      #context: alternative text of a user's profile picture, read out by screen readers
+      profile_picture: "Profile picture"
+    #context: column headers of tables that list rankings. They are short forms of "Position", "World Ranking", "Continental Ranking" and "National Ranking"
+    ranking_abbreviations:
+      position: "Pos"
+      world: "WR"
+      continental: "CR"
+      national: "NR"
+    #context: label of an icon button that shows an explanation, read out by screen readers
+    more_information: "More information"
+    #context: dialog that asks the user to confirm an action
+    confirm_dialog:
+      title: "Confirm action"
+      message: "Are you sure? This action cannot be undone."
+      #context: the user has to type the exact text of %{input} before they can confirm
+      type_to_confirm_html: "Type <code>%{input}</code> to confirm"
+      input_mismatch: "Input does not match. Please try again."
     all_regions: "All regions"
     errors:
       invalid: "invalid"
@@ -289,11 +306,15 @@ en:
       name: "Name"
       callback_url: "Callback Url"
       owner: "Owner"
+      confidential: "Confidential?"
       application_id: "Application ID"
       actions: "Actions"
       secret: "Secret"
       scopes: "Scopes"
       callback_urls: "Callback Urls"
+      confidentiality:
+        'yes': "Yes"
+        'no': "No"
   helpers:
     submit:
       competition_medium:
@@ -555,6 +576,13 @@ en:
       title: "An error occurred when rendering the page"
       description: "If this error persists, report it to WST with the details listed below"
       details: "Error details"
+      session_outdated: "Your session is out of date. Please sign out and sign in again."
+      load_error:
+        podiums: "Error fetching podiums"
+        results: "Error fetching results"
+        schedule: "Error fetching competition schedule"
+        person: "Error fetching person"
+        competitions: "Something went wrong while fetching your competitions"
     #These are locales used in lib/ (ignored by configuration)
     #context: Error message when submitting a profile picture
     messages:
@@ -673,6 +701,7 @@ en:
       applications:
         help:
           https_info: 'HTTPS is required unless the host is "localhost"'
+          confidential: 'Application will be used where the client secret can be kept confidential. Native mobile apps and Single Page Apps are considered non-confidential.'
           scopes_html: 'Separate scopes with spaces. Leave blank to use the default scope(s). See <a href="https://github.com/thewca/worldcubeassociation.org/blob/main/config/initializers/doorkeeper.rb#L4-L10" target="_blank">here</a> for a list of supported scopes.'
       #context: and asking the user "The application will be able to"
       scopes:
@@ -771,6 +800,16 @@ en:
       privacy: "Privacy"
       disclaimer: "Disclaimer"
       find_us: "Find us"
+      switch_to_dark_mode: "Switch to Dark Mode"
+      switch_to_light_mode: "Switch to Light Mode"
+      #context: label of the button that opens and closes the navigation menu on small screens
+      toggle_navigation: "Toggle navigation"
+  #context: Dialog that is shown to first-time visitors of the redesigned website
+  beta_disclaimer:
+    title: "WCA Website Redesign Beta Disclaimer"
+    #context: the link in <a> leads to the feedback form
+    description_html: "You are viewing the English-only beta version of the redesigned WCA Website. This is intended to give the community a sneak peek at the website, for feedback and discussion. <br /> You should expect to find glitches and issues when browsing the website - when you do, please report them via <a>the feedback form</a>."
+    accept: "I understand, let me in!"
   page:
     translators:
       title: "Translators"
@@ -1425,6 +1464,7 @@ en:
         empty_file: "The file is empty."
         unsupported_file_format: "Unsupported file format. Please upload a JSON or CSV file."
     add:
+      add_on_the_spot: "Add on-the-spot registration"
       title: "Add registration for %{comp}"
       info: "This will create an approved registration. Use this form to add walk-ins during the competition."
       add: "Add registration"
@@ -1487,6 +1527,8 @@ en:
         one: "One spot left"
         other: "%{count} spots left"
       no_spots_left: "Competition full"
+      administering: "You are administering this competition"
+      back_to_public_page: "Go back to the public page"
     live:
       title: "Live Results"
       combined_title: "Combined Dual Rounds"
@@ -1518,6 +1560,10 @@ en:
         title: "Podiums"
         undetermined: "To Be Determined"
         none: "There are no podiums yet!"
+      #context: controls of the full screen view that cycles through the results
+      projector:
+        play: "Play"
+        pause: "Pause"
       admin:
         open: "Open"
         clear: "Clear"
@@ -1532,6 +1578,18 @@ en:
         admin_view: "Admin View"
         results_view: "Results View"
         double_check: "Double Check"
+        double_check_description: "Here you can iterate over results ordered by entry time (newest first). When doing double-check you can place a scorecard next to the form to quickly compare attempt results. For optimal experience make sure to always put entered/updated scorecard at the top of the pile."
+        #context: placeholder of a search field for competitors
+        type_to_search: "Type to search"
+        #context: shown in place of the cutoff for rounds that don't have one
+        no_cutoff: "None"
+        exit_batch_mode_confirm: "Are you sure you want to exit Batch Mode? All unsubmitted results will be lost."
+        scoretakers:
+          title: "Scoretakers"
+          manage: "Manage scoretakers"
+          add: "Add as scoretaker"
+          remove: "Remove"
+          no_registrations: "No registrations found."
         submit_results: "Submit Results"
         add_to_batch: "Add to Batch"
         remove_from_batch: "Remove from Batch"
@@ -1557,6 +1615,7 @@ en:
             success: "Successfully quit %{count} competitors"
             failure: "Failed to bulk quit competitors"
             menu: "Bulk Quit"
+            select_all: "Select all"
             id: "ID"
             name: "Name"
           quit_menu: "Quit"
@@ -1567,6 +1626,8 @@ en:
           in_batch: "Cannot quit a competitor whose results are part of an unsubmitted batch"
           scoresheet_warning: "Make sure to only quit a competitor when you have their empty scoresheet physically in hand. You can not add a competitor back to a closed round."
         add_competitor:
+          title: "Add Competitor"
+          all_added: "All competitors are already part of the round"
           single_round: "Add Competitor to Round"
           multiple_rounds:
             one: "Add Competitor to both Rounds in the Dual Round."
@@ -1576,6 +1637,13 @@ en:
       results:
         competitor: "Competitor"
         mean: "Mean"
+        attempts: "Attempts"
+        all_results: "All results"
+        #context: toggle that shows the results of both rounds of a Dual Round in one table
+        show_combined: "Show combined results"
+        forecast_view: "Forecast view"
+        #context: heading of the table with results that are still being saved
+        processing: "Processing"
       errors:
         round_closed: "The Round is not open yet"
     #context: on the "My competitions" page
@@ -1595,6 +1663,8 @@ en:
         #context: the "short" version of cutoff, which appear below the format (eg: Bo2/Ao5)
         cutoff: "Cutoff: %{short_cutoff}"
         download_html: "Download all the competition's details as PDF %{here}."
+        download_pdf: "Download the schedule PDF here"
+        download: "Download"
       date: "Date"
       add_to_calendar: "Add to calendar"
       #context: This is shown as a header above the column that shows competition names
@@ -1622,6 +1692,8 @@ en:
       organizer_plural:
         one: "Organizer"
         other: "Organizers"
+      view_more_members: "View %{count} more team members"
+      see_more: "+ %{count} more"
       organization_team: "Organization team"
       #context: Pluralization of the "Delegate" label for a competition form
       delegate:
@@ -1629,6 +1701,7 @@ en:
         other: "WCA Delegates"
       contact: "Contact"
       information: "Information"
+      refund_policy: "Refund policy"
       events: "Events"
       main_event: "Main event"
       registration_requirements: "Registration requirements"
@@ -1777,14 +1850,18 @@ en:
         name_desc: "Name: Z-A"
       show_registration_status: "Show registration status icon"
       use_admin_view: "Use admin view"
+      #context: date range and city beneath a competition's name on narrow screens
+      date_and_city: "%{date} – %{city}"
       #context: titles for the competitions list
       titles:
         in_progress: "Competitions in progress"
+        #context: in_progress is still used in legacy, so we keep them separated for now
+        in_progress_count: "Competitions in progress (%{count})"
         #context: when selecting a specific year ('year' is a number)
-        past: "Past competitions from %{year}"
-        past_all: "Past competitions from all years"
+        past: "Past competitions from %{year} (%{count})"
+        past_all: "Past competitions from all years (%{count})"
         recent: "Recent competitions (last %{count} days)"
-        upcoming: "Upcoming competitions"
+        upcoming: "Upcoming competitions (%{count})"
         ongoing_and_upcoming: "Ongoing and upcoming competitions"
         custom: "Competitions in the selected period of time"
         by_announcement: "Competitions sorted by announcement date, newest on top"
@@ -1814,14 +1891,13 @@ en:
         open: "Open"
         not_open: "Not yet Open"
         closed: "Closed"
-      currently_displaying:
-        one: "Currently Displaying: %{count} competition"
-        other: "Currently Displaying: %{count} competitions"
+        all: "All"
       #context: actions in the drawer that opens when clicking a competition in the list
       register_now: "Register Now"
       view_competition: "View Competition"
       no_more_comps: "No more competitions."
       no_comp_found: "No competitions found."
+      why_compete_title: "Why compete?"
       #context: introduction shown to logged-out visitors on the competitions page
       why_compete_description_html: >-
         <p>Competitions are not just about finding out who is the fastest - they're social events! Anyone who can solve a cube is welcome to come and set a new personal record for themselves. Making friends is easy because everyone works together to make the competition run.</p>
@@ -2053,6 +2129,9 @@ en:
               "false": "Competitors MUST be qualified to register for an event"
     #context: new registration system
     registration_v2:
+      preview:
+        notice: "This is a preview. We recommend registering via the regular panel."
+        link: "Go to the current registration page"
       auto_accept:
         bulk_auto_accept: "Auto-Approve Competitors"
         cant_bulk_auto_accept: "An error occurred while trying to bulk auto accept - contact WST for assistance if needed"
@@ -2069,6 +2148,8 @@ en:
         is_cancelled: "Your registration has been cancelled and you will not be competing, but you can sign up again."
         is_rejected: "Your registration has been rejected by the organizers. Please contact the organizing team if you believe this was a mistake."
         is_waitlisted: "Don't book your travel, but don't give up hope either. The competition is full, but you have been placed on a waiting list, and you will receive an email if enough spots open up for you to be able to attend."
+        additional: "Please ensure that you have followed any additional instructions above regarding payment or other registration requirements."
+        email: "You will receive an email when your registration status is updated."
       list:
         empty: "None"
         spots_remaining_plural:
@@ -2152,10 +2233,11 @@ en:
             title: "Approval"
             description: "By organization team"
           payment:
-            title: "Payment information"
+            title: "Payment Information"
             description: "Enter billing information"
           competing:
             title: "Register"
+            summary_title: "Registration"
             description: "Choose your events"
           requirements:
             title: "Requirements"
@@ -2387,6 +2469,7 @@ en:
       venue_selection_all: "You are viewing the schedule for all %{venueCount} venues at once."
       timezone_message: "The time zone for this venue is %{timezone}."
       timezone_setting: "You are viewing this schedule in the following time zone:"
+      no_timezone_selected: "Nothing selected"
       multiple_timezones_available: "Note that some venues are in different time zones -- please be careful!"
       select_a_timezone: "Select a time zone"
       select_a_venue_to_view: "To view the schedule, select a venue above."
@@ -2396,6 +2479,12 @@ en:
       schedule_for_date: "Schedule for %{day_name} (%{full_date})"
       schedule_for_full_date: "Schedule for %{date}"
       schedule_change_warning: "Schedules are subject to adjustments, especially once registration totals are known. Registered competitors will be notified by email of any major changes."
+    #context: results-relative tabs
+    results:
+      query_search: "Search by name or WCA ID"
+      country_search: "Filter by country"
+      no_results: "No results found"
+      all_countries: "All countries"
     #context: entry of the left navigation menu
     nav:
       menu:
@@ -2421,6 +2510,12 @@ en:
         register: "Register"
         competitors: "Competitors"
         scrambles: "Scrambles"
+        competitor_results: "Competitor results"
+      general: "General"
+      more: "More"
+      admin: "Admin"
+      results: "Results"
+      events: "Events"
     h2h:
       set_number: "Set %{number}"
       stage_of: "Stage of %{number}"
@@ -2443,12 +2538,15 @@ en:
     scrambles_table:
       group: "Group"
       scramble: "Scramble"
+      #context: label of an extra scramble, e.g. "Extra 1"
+      extra: "Extra %{number}"
     #context: Edit fields for Competition Series
     competition_series_fields:
       add_series: "Add to Series"
       remove_series: "Remove from Series"
   #context: Competition's tabs management
   competition_tabs:
+    not_found: "Tab does not exist"
     headers:
       tabs: "Tabs"
       name: "Name"
@@ -2584,6 +2682,25 @@ en:
     #context: Person profile page
     show:
       previously: "Previously"
+      not_found: "Person does not exist"
+      #context: levels of records a person has broken, shown next to the number of records
+      record_levels:
+        world: "World"
+        continental: "Continental"
+        national: "National"
+      achievements:
+        title: "Achievements"
+        explanation_title: "Profile achievements explained"
+        explanation: "Competitors can unlock 'Achievements' that get displayed on their profile. These cover mainly results based achievements, but not exclusively."
+        badges_intro: "The badges that can be earned or displayed (right now) are:"
+        career: "Career"
+        career_length: "Career length"
+        #context: unit that is shown after the number of years
+        years:
+          one: "Year"
+          other: "Years"
+        medals: "Medals"
+        medals_won: "Medals won"
       completed_solves: "Completed Solves"
       personal_records: "Current Personal Records"
       odd_rank_reason: >-
@@ -2606,6 +2723,7 @@ en:
         bronze: "Bronze"
       competition: "Competition"
       results: "Results"
+      round: "Round"
       records: "Records"
       competitions_map: "Map"
       world_records: "History of World Records"
@@ -2614,6 +2732,14 @@ en:
   posts:
     confirm_delete_post: "Are you sure you want to delete this post? This action is not reversible."
     announcement_info_html: "Announced by %{author_name} on %{date_time}"
+    #context: placeholder of the search field on the announcements list
+    search: "Search announcements"
+    no_announcements: "There are no announcements yet."
+    no_search_results: "No announcements match your search."
+    read_more: "Read more"
+    share: "Share"
+    previous_page: "Previous page"
+    next_page: "Next page"
     errors:
       unstick_at_future: "must be in the future"
   #context: Contact forms
@@ -2838,6 +2964,10 @@ en:
   score_tools:
     title: "Software tools for WCA competitions"
     wca_icon_text: "Developed and maintained by the WST"
+    #context: link to the guide of a tool
+    guide: "Guide"
+    #context: link to the source code of a tool
+    sources: "Sources"
     intro:
       desc: "This page is a non exhaustive list of tools which are known to be used to help with the organization of WCA competitions."
       disclaimer: "Not all tools on that page are maintained by the WST: it's definitely fine! We don't have the manpower to manage all the WCA-related software out there :)"
@@ -3013,6 +3143,65 @@ en:
       language: 'Language'
     translating: 'Translating the Regulations'
     paragraph3_html: 'If you are interested in adding/updating a translation, please view <a href="https://github.com/thewca/wca-regulations-translations#translation-instructions">the instructions on the GitHub repository for translations</a>.'
+  #context: Viewer for the text of the regulations
+  regulations_viewer:
+    search: "Search the Regulations…"
+    no_matches: "No matching Regulations."
+  #context: Older versions of the regulations
+  regulations_history:
+    title: "WCA Regulations"
+    older_versions: "Older versions of the Regulations"
+    maintainers_html: 'Until 2011, the Regulations were maintained by Ron van Bruchem and the WCA Board. Since then, the <a href="mailto:wrc@worldcubeassociation.org">WCA Regulations Committee</a> is in charge of them.'
+    guidelines_merge: "Previously, from the January 1st, 2013 release until the January 1st, 2025 release, the WCA Regulations were split into the WCA Regulations and the WCA Guidelines. The former contents of both documents were combined into the WCA Regulations for the July 17th, 2025 release."
+    #context: shown after the version, links to the list of changes of that version
+    changes_html: '(<a href="%{changes_url}">Changes</a>)'
+    #context: same as above, for versions that also have a summary of the changes
+    changes_with_summary_html: '(<a href="%{changes_url}">Changes</a>, <a href="%{summary_url}">Summarized changes</a>)'
+    current_updates_html: 'Current updates to the Regulations are available <a href="https://github.com/thewca/wca-regulations/">on GitHub</a>'
+  #context: Page about the official scramble program
+  regulations_scrambles:
+    title: "WCA Scrambles"
+    current_program_html: "The current official scramble program is <i>%{version}</i>. It generates high-quality scramble sequences for all the events of a competition at once."
+    download: "Download the official scramble program:"
+    last_change: "Last official change: January 1st, 2026"
+    delegates:
+      title: "Important Notes for Delegates"
+      current_version_html: 'Official competitions must always use a current version of the official scramble program (see <a href="/regulations#4b">Regulation 4b</a>).'
+      no_public_server: "Delegates should download TNoodle to run it on a computer. They should not use TNoodle running on a public server (for security reasons)."
+      save_scrambles_html: 'Delegates must save all scramble sequences generated for an official competition, and send them with the results (see the <a href="https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf">WCA Competition Requirements Policy</a>).'
+    secrecy:
+      title: "Scramble Secrecy"
+      encrypt_html: "<b>Always</b> encrypt your scrambles in TNoodle with an unguessable password. The password must have nothing to do with the competition or personal data (name, birthdate) of any of the Delegates."
+      digital_display_html: "If you are displaying scrambles on a digital device, only share <code>[Competition Name] - Computer Display PDFs.zip</code>."
+      delegates_only: "Make sure that only Delegates have access to any other files."
+      guest_account: "If you are using a Delegate's computer, use the operating system to create a guest user account and share only the passcode-protected computer display PDFs with it."
+      passcode_timing_html: "Give passcodes to scramblers when the corresponding groups begin but <b>not any earlier</b>. (In particular, do not give the passcodes for all the scramble sets in a round to scramblers at the beginning of that round.)"
+      passcode_delegation: "Don't put someone else in charge of the passcodes unless absolutely necessary, and only give them the minimum amount of passcodes needed."
+      accountability_html: 'Additional precautions are outlined in the <a href="https://documents.worldcubeassociation.org/documents/policies/external/Scramble%20Accountability.pdf">Scramble Accountability Policy</a>.'
+    instructions:
+      title: "Detailed Instructions for TNoodle"
+      java_html: 'TNoodle requires <a href="https://www.java.com/en/">Java</a> to be installed on your computer.'
+      run_html: "Run the <code>%{jarfile}</code> file on your computer."
+      open_page_html: 'It will open the page <a href="http://localhost:2014/scramble">http://localhost:2014/scramble</a> in your browser.'
+      enter_details: "Enter the details for your competition (competition name, number of rounds for each event, details for each round)."
+      password: "If you would like to password protect the file, enter a password."
+      wait: 'Wait for the loading bar to finish and click the "Scramble!" button that appears.'
+      zip_html: "A <code>.zip</code> file will download in your browser."
+    notes:
+      title: "Notes"
+      four_by_four_html: "4x4x4 scramble sequences <strong>may take a few minutes</strong> to initialize and generate. If you are generating 4x4x4 scramble sequences, be patient while the loading bar may appear to be stuck."
+      resources_html: "TNoodle creates a <code>tnoodle_resources</code> folder with a few MB of files (mostly cached tables) in the same folder it is run."
+      resources_keep: "Keep this folder if you want to generate more 4x4x4 scramble sequences more quickly in the future, but feel free to delete it if you need to reclaim disk space."
+      filtering_html: 'TNoodle performs scramble filtering according to <a href="https://www.worldcubeassociation.org/regulations/#4b3">Regulation 4b3</a>.'
+    about:
+      title: "About TNoodle"
+      description_html: 'TNoodle uses code developed or adapted by Jeremy Fleischman, Ryan Zheng, Clément Gallet, Shuang Chen, Bruce Norskog, and Lucas Garron. View the <a href="https://github.com/thewca/tnoodle">TNoodle project on GitHub</a> to view the source, report an issue, or contribute to its development.'
+    history:
+      title: "History of Official Releases"
+      description: "Old versions must not be used. These are provided in case you want to check the behaviour of an older version."
+  #context: Privacy page
+  privacy:
+    title: "WCA Privacy Statement"
   #context: Media pages
   media:
     common:

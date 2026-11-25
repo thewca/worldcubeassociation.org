@@ -1,7 +1,7 @@
 import { HStack, Heading, Tabs, Text, VStack } from "@chakra-ui/react";
 import { Metadata } from "next";
 import { getT } from "@/lib/i18n/get18n";
-import { serverClient } from "@/lib/wca/wcaAPI";
+import { getLiveCompetitions } from "@/lib/wca/live/getLiveCompetitions";
 import OpenapiError from "@/components/ui/openapiError";
 import LiveCompetitionsTable from "./LiveCompetitionsTable";
 import LiveCompetitionSearch from "./LiveCompetitionSearch";
@@ -21,7 +21,7 @@ export default async function LiveCompetitionsPage() {
     data: liveCompetitions,
     error,
     response,
-  } = await serverClient.GET("/v1/competitions/live");
+  } = await getLiveCompetitions();
 
   if (error) return <OpenapiError response={response} t={t} />;
 
