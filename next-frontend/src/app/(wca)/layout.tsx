@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import React, { Suspense } from "react";
+import Script from "next/script";
 import WCAQueryClientProvider from "@/providers/WCAQueryClientProvider";
 import { Provider as UiProvider } from "@/components/ui/provider";
 import { ClientOnly } from "@chakra-ui/react";
@@ -16,6 +17,7 @@ import { EmotionRegistry } from "@/components/ui/emotion-registry";
 import { Toaster } from "@/components/ui/toaster";
 import LocaleProvider from "@/lib/i18n/LocaleProvider";
 import { getT } from "@/lib/i18n/get18n";
+import { isLiveSite } from "@/lib/wca/isLiveSite";
 
 export const metadata: Metadata = {
   title: {
@@ -52,6 +54,9 @@ export default async function RootLayout({
   return (
     <html suppressHydrationWarning>
       <body className={appFont.className}>
+        {isLiveSite() && (
+          <Script src="https://e049388b9e9e.us-west-2.sdk.awswaf.com/e049388b9e9e/53e2df08ab2b/challenge.js" />
+        )}
         <ThemeProvider
           attribute="class"
           storage="hybrid"
@@ -63,15 +68,17 @@ export default async function RootLayout({
           <WCAQueryClientProvider>
             <EmotionRegistry>
               <UiProvider>
-                {!process.env.LIVE_RESULT_BETA && (
-                  <Suspense>
-                    <WithLocale>
+                {/* The flag is only set at runtime, so the Suspense boundary has to stay outside of
+                    the check. Otherwise the tree doesn't match the shell prerendered at build time. */}
+                <Suspense>
+                  <WithLocale>
+                    {!process.env.LIVE_RESULT_BETA && (
                       <ClientOnly>
                         <BetaDisclaimer />
                       </ClientOnly>
-                    </WithLocale>
-                  </Suspense>
-                )}
+                    )}
+                  </WithLocale>
+                </Suspense>
                 <Suspense fallback={<NavbarSkeleton />}>
                   <WithLocale>
                     <Navbar />

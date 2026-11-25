@@ -608,6 +608,11 @@ const customConfig = defineConfig({
           fontWeight: "medium",
         },
       },
+      bestResult: {
+        value: {
+          fontWeight: "extrabold",
+        },
+      },
       annotation: {
         value: {
           fontSize: "0.6875rem",
@@ -673,6 +678,33 @@ const customConfig = defineConfig({
           variant: {
             outline: {
               bg: "bg",
+            },
+          },
+        },
+      },
+      h2hSolve: {
+        base: {
+          rounded: "md",
+          px: "2",
+          py: "0.5",
+          textAlign: "center",
+        },
+        variants: {
+          outcome: {
+            win: {
+              bg: "bg.success",
+              color: "fg.success",
+              textStyle: "bodyEmphasis",
+            },
+            loss: {
+              bg: "bg.error",
+              color: "fg.error",
+              textStyle: "body",
+            },
+            tie: {
+              bg: "bg.emphasized",
+              color: "fg.muted",
+              textStyle: "bodyEmphasis",
             },
           },
         },
@@ -861,6 +893,13 @@ const customConfig = defineConfig({
                 minWidth: "6",
                 justifyContent: "end",
                 color: "fg",
+              },
+            },
+          },
+          textAutoContrast: {
+            true: {
+              itemValue: {
+                color: { _light: "colorPalette.contrast", _dark: "fg.muted" },
               },
             },
           },

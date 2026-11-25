@@ -11,7 +11,7 @@ const CUSTOM_TAB_SLUG = /^#(\d+)-/;
 function targetForHash(
   hash: string,
   competitionId: string,
-  tabs: components["schemas"]["CompetitionInfo"]["tabs"],
+  tabs: components["schemas"]["V1CompetitionInfo"]["tabs"],
 ) {
   if (hash === "#competition-events") {
     return route({
@@ -50,7 +50,7 @@ export default function LegacyHashRedirect({
   tabs,
 }: {
   competitionId: string;
-  tabs: components["schemas"]["CompetitionInfo"]["tabs"];
+  tabs: components["schemas"]["V1CompetitionInfo"]["tabs"];
 }) {
   const router = useRouter();
 

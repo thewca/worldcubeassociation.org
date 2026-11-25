@@ -125,7 +125,7 @@ export default function MultiSearchInput({
       const newSelectedValue = map[value] ? itemToOption(map[value].item) : null;
 
       // Redirect user to actual page if needed, and do not change the state.
-      if (goToItemUrlOnClick && newSelectedValue?.item?.url !== null) {
+      if (goToItemUrlOnClick && newSelectedValue?.item?.url) {
         window.location.href = newSelectedValue.item.url;
       }
 

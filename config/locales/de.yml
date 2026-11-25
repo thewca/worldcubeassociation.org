@@ -880,6 +880,8 @@ de:
         wic: WIC-Übersicht
         weat: WEAT-Übersicht
         wqac: WQAC-Übersicht
+      switch_to_dark_mode: Zum Darkmode wechseln
+      switch_to_light_mode: Zum Lightmode wechseln
   homepage:
     learn_more: Erfahre mehr
     title: Willkommen bei der World Cube Association
@@ -2699,6 +2701,7 @@ de:
             menu: Mehrere Teilnehmende zurückziehen
             id: ID
             name: Name
+            select_all: Alle auswählen
           quit_menu: Zurückziehen
           no_next: Es gibt keinen nächsten Teilnehmenden, der nachrücken kann.
           cancel: Abbrechen
@@ -3138,6 +3141,9 @@ de:
     announcement_info_html: 'Angekündigt von %{author_name} am %{date_time}'
     errors:
       unstick_at_future: muss in der Zukunft liegen
+    search: Ankündigungen durchsuchen
+    no_announcements: Es gibt noch keine Ankündigungen.
+    no_search_results: Keine Ankündigungen entsprechen deiner Suche.
   contacts:
     dob:
       title: Formular zur Änderung des Geburtsdatums

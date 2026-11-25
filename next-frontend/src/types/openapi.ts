@@ -165,6 +165,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/competitions/{competitionId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get the details of a competition
+         * @description Public for announced competitions. Unannounced competitions are only returned to users who can manage them, and an OAuth token additionally needs the `manage_competitions` scope; everyone else gets the same 404 as for a competition that does not exist.
+         */
+        get: operations["v1CompetitionInfo"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/competitions/{competitionId}/results": {
         parameters: {
             query?: never;
@@ -593,6 +613,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v1/persons/{wca_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get information for a person
+         * @description The person's profile: their public details, personal records, medal and record counts, and championship podiums. Public: no authentication required.
+         */
+        get: operations["v1PersonInfo"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v1/persons/{wca_id}/results": {
         parameters: {
             query?: never;
@@ -602,7 +642,7 @@ export interface paths {
         };
         /**
          * Get results for a person
-         * @description Every result the person has ever earned, optionally narrowed to one event. Public: no authentication required.
+         * @description The person's results, optionally narrowed to one event. Paginated by competition, newest first, so a page holds every result of `per_page` competitions. Public: no authentication required.
          */
         get: operations["v1PersonResults"];
         put?: never;
@@ -1249,11 +1289,6 @@ export interface components {
             base_entry_fee_lowest_denomination: number;
             /** @example USD */
             currency_code: string;
-            /**
-             * @description How many of the currency's lowest denomination make up one unit
-             * @example 100
-             */
-            currency_subunit_to_unit: number;
             competitor_limit: number | null;
             championship_types: string[];
             /** Format: date-time */
@@ -1297,7 +1332,6 @@ export interface components {
                 payment_status?: string;
                 paid_amount_iso: number;
                 currency_code: string;
-                currency_subunit_to_unit: number;
                 /** Format: datetime */
                 updated_at?: string;
             };
@@ -1374,6 +1408,7 @@ export interface components {
             parameters: {
                 stripePublishableKey: string;
                 connectedAccountId: string;
+                donationsEnabled: boolean;
             };
         } & {
             /**
@@ -1410,6 +1445,194 @@ export interface components {
             missing_profile_fields: ("name" | "gender" | "dob" | "country_iso2")[];
             /** @description How many competitors are currently on the waiting list */
             waiting_list_count: number;
+        };
+        V1CompetitionVenue: {
+            /** @example 1 */
+            wcif_id: number;
+            /** @example Seattle Convention Center */
+            name: string;
+            /** @example US */
+            country_iso2: string;
+            /** @example America/Los_Angeles */
+            timezone_id: string;
+            /** @example 47.611387 */
+            latitude_degrees: number;
+            /** @example -122.332554 */
+            longitude_degrees: number;
+        };
+        V1OrganizationTeamMember: {
+            /** @example 267 */
+            id: number;
+            /** @example Tim Reynolds */
+            name: string;
+            /**
+             * @description Null for users without a WCA ID.
+             * @example https://www.worldcubeassociation.org/persons/2005REYN01
+             */
+            url: string | null;
+            avatar: components["schemas"]["UserAvatar"];
+            /**
+             * @description Every role this person holds at the competition. A lead delegate also has their delegate role. `lead_organizer` is not assigned yet. Whether a delegate is a `trainee_delegate`, `junior_delegate` or `delegate` is taken from their role on the competition's start date. This data is only accurate from April 2024 onwards.
+             * @example [
+             *       "organizer",
+             *       "delegate",
+             *       "lead_delegate"
+             *     ]
+             */
+            roles: ("organizer" | "lead_organizer" | "delegate" | "lead_delegate" | "junior_delegate" | "trainee_delegate")[];
+        };
+        /** @description The general information about a competition, as shown on its page. Most fields can be null while an unannounced competition is still being set up. */
+        V1CompetitionInfo: {
+            /** @example WC2003 */
+            id: string;
+            /** @example WCA World Championship 2003 */
+            name: string;
+            /** @example Worlds 2003 */
+            short_name: string;
+            /**
+             * @description Where the competition is in its lifecycle:
+             *     - `unconfirmed`: still being set up by its organizers
+             *     - `confirmed`: submitted to the WCAT, waiting to be announced
+             *     - `announced`: public, and not over yet
+             *     - `results_pending`: over, but its results are not posted yet
+             *     - `results_posted`: its results are posted
+             *     - `hidden`: announced, but taken down by the WCAT until an issue is resolved
+             *     - `cancelled`: cancelled
+             * @enum {string}
+             */
+            status: "unconfirmed" | "confirmed" | "announced" | "results_pending" | "results_posted" | "hidden" | "cancelled";
+            /** @example First WCA World Championship */
+            information: string | null;
+            /** @example https://cubingusa.org/worlds */
+            website: string | null;
+            /**
+             * @description Markdown with how to reach the organizers. If not set, the competition page links to the WCA contact form for this competition instead.
+             * @example [Organization team](mailto:worlds@example.com)
+             */
+            contact: string | null;
+            /**
+             * Format: date
+             * @example 2025-07-03
+             */
+            start_date: string | null;
+            /**
+             * Format: date
+             * @example 2025-07-06
+             */
+            end_date: string | null;
+            /** @enum {string} */
+            scoretaking_software: "external" | "wca_live" | "internal";
+            /** @example 123 */
+            number_of_bookmarks: number;
+            /**
+             * @description The announced competitions of the series this competition belongs to, in start date order, including itself once it is announced. Empty if it is not part of a series.
+             * @example [
+             *       "WC2003",
+             *       "WC2003Side"
+             *     ]
+             */
+            competition_series_ids: string[];
+            /**
+             * @description The different championship_types this competition holds. A competition can hold several (e.g. a continental and a national championship). Values can be: `world`, a continent ID, a country ISO2 code, or a multi-country group such as `greater_china`. Empty if not a championship.
+             * @example [
+             *       "world"
+             *     ]
+             */
+            championship_types: string[];
+            tabs: {
+                id: number;
+                name: string;
+            }[];
+            events: {
+                /**
+                 * @example [
+                 *       "333"
+                 *     ]
+                 */
+                event_ids: string[];
+                /** @example 333 */
+                main_event_id: string | null;
+            };
+            venues: components["schemas"]["V1CompetitionVenue"][];
+            location: {
+                /** @example Toronto */
+                name: string;
+                /** @example 770 Don Mills Rd, North York, ON M3C IT3, Canada */
+                address: string | null;
+                /** @example The big convention center */
+                details: string | null;
+                /** @example Seattle, Washington */
+                city: string;
+                /** @example US */
+                country_iso2: string;
+                /** @example 47.611387 */
+                latitude_degrees: number | null;
+                /** @example -122.332554 */
+                longitude_degrees: number | null;
+            };
+            registration_info: {
+                /**
+                 * Format: date-time
+                 * @example 2025-01-03T14:00:00.000Z
+                 */
+                opens_at: string | null;
+                /**
+                 * Format: date-time
+                 * @example 2025-01-10T14:00:00.000Z
+                 */
+                closes_at: string | null;
+                /**
+                 * @description Null if the competition has no competitor limit.
+                 * @example 2000
+                 */
+                competitor_limit: number | null;
+                /** @example 42 */
+                spots_left: number | null;
+                /** @example 7 */
+                waiting_list_count: number;
+                on_the_spot_registration: boolean | null;
+                extra_requirements: string | null;
+                /** @example https://example.com/register */
+                external_registration_page: string | null;
+                /** Format: date-time */
+                event_change_deadline: string | null;
+                /** Format: date-time */
+                waiting_list_deadline: string | null;
+                /** @enum {string} */
+                competitor_can_cancel: "not_accepted" | "always" | "unpaid";
+                fees: {
+                    /** @example USD */
+                    currency_code: string;
+                    /** @example 12000 */
+                    base_entry_lowest_denomination: number | null;
+                    /** @example 1000 */
+                    guests_entry_lowest_denomination: number | null;
+                    /** @example 15000 */
+                    on_the_spot_entry_lowest_denomination: number | null;
+                };
+                refund_policy: {
+                    /** @example 50 */
+                    percent: number | null;
+                    /** Format: date-time */
+                    limit_date: string | null;
+                };
+            };
+            /** @description The delegates and organizers of the competition, each listed once, ordered by name. */
+            organization_team: components["schemas"]["V1OrganizationTeamMember"][];
+        };
+        General404: {
+            error: string;
+            data: {
+                model: string;
+                id: string;
+            };
+        };
+        Competition404: components["schemas"]["General404"] & {
+            data?: {
+                /** @enum {string} */
+                model: "Competition";
+                id: string;
+            };
         };
         /**
          * @description What decides a competitor's final position. `round` ranks them within the round by their time. `linked_round` ranks them across every round of a Dual Round on their better result, which is what `global_pos` reports. `head_to_head` positions come from match outcomes and not from comparing times, so they may contradict the times shown.
@@ -1471,20 +1694,6 @@ export interface components {
             /** @description Every round of the Dual Round this round belongs to, this one included. Absent unless `ranking_mode` is `linked_round`. */
             linked_round_wcif_ids?: string[];
             results: components["schemas"]["V1RoundResult"][];
-        };
-        General404: {
-            error: string;
-            data: {
-                model: string;
-                id: string;
-            };
-        };
-        Competition404: components["schemas"]["General404"] & {
-            data?: {
-                /** @enum {string} */
-                model: "Competition";
-                id: string;
-            };
         };
         /** @description One event's podium, ordered by `global_pos`. Grouped by event rather than by round because a Dual Round podium spans both of its rounds, keeping only each competitor's better result — every round of a link shares an event and a format, so those sit here. */
         V1CompetitionPodium: {
@@ -1700,6 +1909,7 @@ export interface components {
             registrantId: number;
             name: string;
             wcaUserId: number;
+            wcaId: string;
             countryIso2: string;
             gender: string;
             /** Format: date */
@@ -1722,6 +1932,40 @@ export interface components {
         LivePerson: components["schemas"]["WcifPerson"] & {
             results: components["schemas"]["ByPersonLiveResult"][];
         };
+        /** @description A team, committee or council that the person is currently a part of (including the WCA Board). */
+        V1TeamMembership: {
+            /** @example wst */
+            friendly_id: string;
+            /**
+             * @description Null for the board, which has no ranks among its members.
+             * @example senior_member
+             * @enum {string|null}
+             */
+            status: "leader" | "senior_member" | "member" | null;
+        };
+        /** @description The person's best result in an event and where it places them in the rankings. */
+        V1Rank: {
+            /** @example 452 */
+            best: number;
+            /** @example 12 */
+            world_rank: number;
+            /** @example 3 */
+            continent_rank: number;
+            /** @example 1 */
+            country_rank: number;
+        };
+        Medals: {
+            gold: number;
+            silver: number;
+            bronze: number;
+            total: number;
+        };
+        Records: {
+            national: number;
+            continental: number;
+            world: number;
+            total: number;
+        };
         V1Result: components["schemas"]["V1RoundResult"] & {
             /** @example HangzhouOpen2024 */
             competition_id: string;
@@ -1743,6 +1987,80 @@ export interface components {
             format_id: string;
             ranking_mode: components["schemas"]["RankingMode"];
         };
+        /** @description The person's podium finishes at championships, by championship level. Positions are recomputed among the competitors eligible for that championship, so they can differ from the position in the round. A level the person never podiumed at is an empty array. */
+        V1ChampionshipPodiums: {
+            world: components["schemas"]["V1Result"][];
+            continental: components["schemas"]["V1Result"][];
+            national: components["schemas"]["V1Result"][];
+            greater_china: components["schemas"]["V1Result"][];
+        };
+        /** @description General information about a person, along with a summary of their results. */
+        V1PersonInfo: {
+            /** @example 2005REYN01 */
+            wca_id: string;
+            /** @example Tim Reynolds */
+            name: string;
+            /** @example m */
+            gender: string;
+            /** @example US */
+            country_iso2: string;
+            /**
+             * @description Null for a person who has no WCA account.
+             * @example 1
+             */
+            user_id: number | null;
+            /**
+             * @description Null for a person who is not a delegate, or who has no WCA account at all.
+             * @example delegate
+             */
+            delegate_status: string | null;
+            teams: components["schemas"]["V1TeamMembership"][];
+            /**
+             * Format: uri
+             * @example https://www.worldcubeassociation.org/persons/2005REYN01
+             */
+            url: string;
+            avatar: components["schemas"]["UserAvatar"];
+            /** @example 42 */
+            competition_count: number;
+            /**
+             * @description Every event the person has a result in, including events they never had a successful solve in, ordered by event rank.
+             * @example [
+             *       "333",
+             *       "222",
+             *       "444"
+             *     ]
+             */
+            event_ids_with_results: string[];
+            /** @description The person's ranks in official events, keyed by event id. An event the person has no single for is absent. */
+            ranks_by_event: {
+                [key: string]: {
+                    single: components["schemas"]["V1Rank"];
+                    average?: components["schemas"]["V1Rank"];
+                };
+            };
+            medals: components["schemas"]["Medals"];
+            records: components["schemas"]["Records"];
+            /** @example 1337 */
+            completed_solves_count: number;
+            championship_podium_results: components["schemas"]["V1ChampionshipPodiums"];
+            /** @description The names and regions the person competed under before their current ones, most recent first. */
+            previous_persons: {
+                /** @example Tim Reynolds */
+                name: string;
+                /** @example CA */
+                country_iso2: string;
+            }[];
+        };
+        V1PersonResult: components["schemas"]["V1Result"] & {
+            /** @description The head-to-head matches this competitor competed in during this round, including details about the opponent, ordered by match number. Empty for a round that is not head-to-head. For the whole bracket, use the competition's head-to-head endpoint. */
+            participated_matches: components["schemas"]["H2hMatch"][];
+            /** @description Whether this single tied or beat every earlier single of the person in this event, judged against their whole history rather than just the requested page. */
+            is_personal_best_single: boolean;
+            /** @description Whether this average tied or beat every earlier average of the person in this event, judged against their whole history rather than just the requested page. */
+            is_personal_best_average: boolean;
+        };
+        V1PersonResults: components["schemas"]["V1PersonResult"][];
         V1Results: components["schemas"]["V1Result"][];
         GeocodedLocation: {
             /** @example Berlin, Germany */
@@ -1832,11 +2150,6 @@ export interface components {
             base_entry_fee_lowest_denomination: number;
             /** @example USD */
             currency_code: string;
-            /**
-             * @description How many of the currency's lowest denomination make up one unit
-             * @example 100
-             */
-            currency_subunit_to_unit: number;
             /**
              * Format: date
              * @example 2025-07-03
@@ -2278,18 +2591,6 @@ export interface components {
             continent_rank: number;
             country_rank: number;
         };
-        Medals: {
-            gold: number;
-            silver: number;
-            bronze: number;
-            total: number;
-        };
-        Records: {
-            national: number;
-            continental: number;
-            world: number;
-            total: number;
-        };
         SingleAndAverageRank: {
             average: components["schemas"]["Rank"];
             single: components["schemas"]["Rank"];
@@ -2421,8 +2722,14 @@ export interface components {
             can_access_cms: {
                 scope: components["schemas"]["CompetitionPermissions"];
             };
+            can_see_admin_competitions: {
+                scope: components["schemas"]["CompetitionPermissions"];
+            };
             can_request_to_edit_others_profile: {
                 scope: string[] | "*";
+            };
+            can_edit_users: {
+                scope: components["schemas"]["CompetitionPermissions"];
             };
         };
         RegulationsContent: {
@@ -2789,6 +3096,29 @@ export interface operations {
                 };
             };
             "4XX": components["responses"]["RegistrationError"];
+        };
+    };
+    v1CompetitionInfo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                competitionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["V1CompetitionInfo"];
+                };
+            };
+            404: components["responses"]["CompetitionNotFound"];
         };
     };
     v1CompetitionResults: {
@@ -3365,10 +3695,43 @@ export interface operations {
             };
         };
     };
+    v1PersonInfo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                wca_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["V1PersonInfo"];
+                };
+            };
+            /** @description No person with this WCA ID */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     v1PersonResults: {
         parameters: {
             query?: {
                 event_id?: string;
+                /** @description Page number to retrieve */
+                page?: number;
+                /** @description Number of competitions per page */
+                per_page?: number;
             };
             header?: never;
             path: {
@@ -3384,7 +3747,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["V1Results"];
+                    "application/json": components["schemas"]["V1PersonResults"];
                 };
             };
             /** @description No person with this WCA ID */

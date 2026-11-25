@@ -1,4 +1,4 @@
-import { Heading, Link as ChakraLink, Text, VStack } from "@chakra-ui/react";
+import { Link as ChakraLink, Text, VStack } from "@chakra-ui/react";
 import Link from "next/link";
 import { route } from "nextjs-routes";
 import { getCompetitionInfo } from "@/lib/wca/competitions/getCompetitionInfo";
@@ -22,19 +22,17 @@ export default async function CompetitionOverview({
   if (error) return <OpenapiError t={t} response={response} />;
 
   if (!competitionInfo) {
-    return <p>Competition does not exist</p>;
+    return <p>{t("competitions.registration_v2.errors.-1000")}</p>;
   }
 
   return (
     <VStack align="center">
-      <Heading>{competitionInfo.name}</Heading>
       <PermissionCheck
         requiredPermission="canAdministerCompetition"
         item={competitionId}
       >
-        <Text>You are administering this competition</Text>
+        <Text>{t("competitions.messages.administering")}</Text>
         <Text>
-          Go back to the public page{" "}
           <ChakraLink asChild variant="underline" colorPalette="teal">
             <Link
               href={route({
@@ -42,7 +40,7 @@ export default async function CompetitionOverview({
                 query: { competitionId: competitionId },
               })}
             >
-              here
+              {t("competitions.messages.back_to_public_page")}
             </Link>
           </ChakraLink>
         </Text>

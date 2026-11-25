@@ -71,6 +71,9 @@ jobs:
           key: ${{ steps.image.outputs.os }}-playwright-${{ hashFiles('**/node_modules/playwright*') }}
       - name: Install Playwright Browsers # as per https://playwright.dev/docs/ci#github-actions
         run: bin/yarn playwright install --with-deps
+      - name: Generate frontend translations
+        run: yarn build:translations
+        working-directory: next-frontend
       - name: Run Playwright tests
         run: bin/yarn playwright test
       - uses: actions/upload-artifact@v7

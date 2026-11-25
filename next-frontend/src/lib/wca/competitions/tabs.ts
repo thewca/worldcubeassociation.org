@@ -40,7 +40,7 @@ export type CompetitionNavTab =
   TabWithLink | TabWithExternalLink | TabWithChildren;
 
 const eventsAndScheduleTabs = (
-  competitionInfo: components["schemas"]["CompetitionInfo"],
+  competitionInfo: components["schemas"]["V1CompetitionInfo"],
 ): TabWithLink[] => {
   return [
     {
@@ -67,7 +67,7 @@ const eventsAndScheduleTabs = (
 };
 
 export const beforeCompetitionTabs = (
-  competitionInfo: components["schemas"]["CompetitionInfo"],
+  competitionInfo: components["schemas"]["V1CompetitionInfo"],
 ): TabWithLink[] => {
   return [
     {
@@ -105,7 +105,7 @@ export const beforeCompetitionTabs = (
 };
 
 export const liveTab = (
-  competitionInfo: components["schemas"]["CompetitionInfo"],
+  competitionInfo: components["schemas"]["V1CompetitionInfo"],
 ): TabWithLink | TabWithExternalLink => {
   const base = {
     i18nKey: "competitions.live.title",
@@ -144,7 +144,7 @@ export const liveTab = (
 };
 
 export const duringCompetitionTabs = (
-  competitionInfo: components["schemas"]["CompetitionInfo"],
+  competitionInfo: components["schemas"]["V1CompetitionInfo"],
   rounds: components["schemas"]["LiveRoundAdmin"][],
 ): CompetitionNavTab[] => {
   const roundsByEventId = _.groupBy(
@@ -229,7 +229,7 @@ export const duringCompetitionTabs = (
   ];
 };
 export const afterCompetitionTabs = (
-  competitionInfo: components["schemas"]["CompetitionInfo"],
+  competitionInfo: components["schemas"]["V1CompetitionInfo"],
   isAwaitingResults: boolean,
 ): CompetitionNavTab[] => {
   const infoTab: TabWithLink = {
@@ -300,7 +300,7 @@ export const afterCompetitionTabs = (
 // Mirrors the permission-gated links of the legacy `competitions/_nav.html.erb`, approximated
 //   from `/users/me/permissions`. The Rails pages enforce the exact permissions themselves.
 export const adminTabs = (
-  competitionInfo: components["schemas"]["CompetitionInfo"],
+  competitionInfo: components["schemas"]["V1CompetitionInfo"],
   permissions: PermissionFunctions,
 ): TabWithChildren[] => {
   const competitionId = competitionInfo.id;
@@ -312,11 +312,16 @@ export const adminTabs = (
   const isResultsAdminOrDelegate =
     permissions.canEditDelegateReport(competitionId);
 
+  const isAnnounced =
+    competitionInfo.status !== "unconfirmed" &&
+    competitionInfo.status !== "confirmed";
+  const resultsPosted = competitionInfo.status === "results_posted";
+
   const canUploadResults =
     isResultsAdminOrDelegate &&
-    Boolean(competitionInfo.announced_at) &&
+    isAnnounced &&
     hasPassed(competitionInfo.start_date) &&
-    (canAdminResults || !competitionInfo.results_posted_at);
+    (canAdminResults || !resultsPosted);
 
   const railsLink = (
     i18nKey: string,
@@ -335,7 +340,7 @@ export const adminTabs = (
     canManage &&
       railsLink("competitions.nav.menu.event_view", "/events/edit", "333Icon"),
     canManage &&
-      (canAdminCompetitions || !competitionInfo.results_posted_at) &&
+      (canAdminCompetitions || !resultsPosted) &&
       railsLink(
         "competitions.nav.menu.schedule_view",
         "/schedule/edit",
@@ -350,7 +355,7 @@ export const adminTabs = (
     canAdminCompetitions &&
       railsLink("competitions.nav.menu.admin_view", "/edit/admin", "Lock"),
     canManage &&
-      (competitionInfo.use_wca_registration
+      (!competitionInfo.registration_info.external_registration_page
         ? railsLink(
             "competitions.nav.menu.registration",
             "/edit/registrations",

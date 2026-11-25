@@ -20,6 +20,8 @@ import {
   Portal,
   Text,
 } from "@chakra-ui/react";
+import { Trans } from "react-i18next";
+import { useT } from "@/lib/i18n/useI18n";
 
 interface ConfirmOptions {
   content?: ReactNode;
@@ -28,8 +30,10 @@ interface ConfirmOptions {
   requireInput?: string | null;
 }
 
-const DEFAULT_OPTIONS: Required<ConfirmOptions> = {
-  content: <Text>Are you sure? This action cannot be undone.</Text>,
+type ResolvedConfirmOptions = Required<Omit<ConfirmOptions, "content">> &
+  Pick<ConfirmOptions, "content">;
+
+const DEFAULT_OPTIONS: ResolvedConfirmOptions = {
   confirmButton: "Yes",
   cancelButton: "No",
   requireInput: null,
@@ -104,8 +108,10 @@ export function ConfirmDialog({
 }
 
 export default function ConfirmProvider({ children }: { children: ReactNode }) {
+  const { t } = useT();
+
   const [options, setOptions] =
-    useState<Required<ConfirmOptions>>(DEFAULT_OPTIONS);
+    useState<ResolvedConfirmOptions>(DEFAULT_OPTIONS);
   const [resolveReject, setResolveReject] = useState<
     [voidFunction, voidFunction] | []
   >([]);
@@ -166,7 +172,7 @@ export default function ConfirmProvider({ children }: { children: ReactNode }) {
       </ConfirmationContext.Provider>
       <ConfirmDialog
         open={isOpen}
-        title="Confirm Action"
+        title={t("common.confirm_dialog.title")}
         lazyMount
         onCancel={handleCancel}
         onConfirm={handleConfirm}
@@ -174,11 +180,16 @@ export default function ConfirmProvider({ children }: { children: ReactNode }) {
         confirmButton={options.confirmButton}
         confirmDisabled={!!options.requireInput && !inputValue}
       >
-        {options.content}
+        {options.content ?? <Text>{t("common.confirm_dialog.message")}</Text>}
         {options.requireInput && (
           <Field.Root invalid={inputError} mt={3}>
             <Text mb={1}>
-              Type <code>{options.requireInput}</code> to confirm
+              <Trans
+                t={t}
+                i18nKey="common.confirm_dialog.type_to_confirm_html"
+                values={{ input: options.requireInput }}
+                components={{ code: <code /> }}
+              />
             </Text>
             <Input
               placeholder={options.requireInput}
@@ -189,7 +200,7 @@ export default function ConfirmProvider({ children }: { children: ReactNode }) {
               autoFocus
             />
             <Field.ErrorText>
-              Input does not match. Please try again.
+              {t("common.confirm_dialog.input_mismatch")}
             </Field.ErrorText>
           </Field.Root>
         )}

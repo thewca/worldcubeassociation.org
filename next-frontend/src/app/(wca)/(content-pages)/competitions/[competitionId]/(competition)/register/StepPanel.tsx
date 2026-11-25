@@ -36,7 +36,7 @@ import {
 } from "@/lib/wca/registrations/registrationForm";
 import { LuCheck, LuHourglass, LuSend } from "react-icons/lu";
 
-type CompetitionInfo = components["schemas"]["CompetitionInfo"];
+type CompetitionInfo = components["schemas"]["V1CompetitionInfo"];
 type StepConfig = components["schemas"]["RegistrationConfig"];
 type Registration = components["schemas"]["RegistrationDataV2"];
 
@@ -242,7 +242,7 @@ export default function StepPanel({
           <RegistrationStatus
             registration={registration}
             hasAdditionalRequirements={Boolean(
-              competitionInfo.extra_registration_requirements,
+              competitionInfo.registration_info.extra_requirements,
             )}
           />
         )}

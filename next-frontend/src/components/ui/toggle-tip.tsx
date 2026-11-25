@@ -1,6 +1,9 @@
+"use client";
+
 import { Popover as ChakraPopover, IconButton, Portal } from "@chakra-ui/react";
 import * as React from "react";
 import { HiOutlineInformationCircle } from "react-icons/hi";
+import { useT } from "@/lib/i18n/useI18n";
 
 export interface ToggleTipProps extends ChakraPopover.RootProps {
   showArrow?: boolean;
@@ -55,11 +58,13 @@ export const InfoTip = React.forwardRef<
   Partial<ToggleTipProps>
 >(function InfoTip(props, ref) {
   const { children, ...rest } = props;
+  const { t } = useT();
+
   return (
     <ToggleTip content={children} {...rest} ref={ref}>
       <IconButton
         variant="ghost"
-        aria-label="info"
+        aria-label={t("common.more_information")}
         size="2xs"
         colorPalette="gray"
       >

@@ -26,8 +26,12 @@ export default function CompetitorTable({
       <Table.Root width="100%">
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeader>Name</Table.ColumnHeader>
-            <Table.ColumnHeader>Representing</Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("results.table_elements.name")}
+            </Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("common.user.representing")}
+            </Table.ColumnHeader>
             {eventIds.map((eventId) => (
               <Table.ColumnHeader
                 key={eventId}
@@ -38,7 +42,9 @@ export default function CompetitorTable({
                 <LabelledEventIcon eventId={eventId} />
               </Table.ColumnHeader>
             ))}
-            <Table.ColumnHeader>Total</Table.ColumnHeader>
+            <Table.ColumnHeader>
+              {t("registrations.list.total")}
+            </Table.ColumnHeader>
           </Table.Row>
         </Table.Header>
 

@@ -1,6 +1,6 @@
 import { revalidateTag } from "next/cache";
 import type { CollectionAfterChangeHook } from "payload";
-import { collectionCacheTag } from "@/lib/payload/collections";
+import { collectionCacheTag } from "@/lib/payload/cache";
 
 type RevalidateCollectionProps = Pick<
   Parameters<CollectionAfterChangeHook>[0],

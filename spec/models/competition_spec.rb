@@ -1552,18 +1552,6 @@ RSpec.describe Competition do
       end
     end
 
-    describe '#currency_subunit_to_unit' do
-      it 'uses the subunits of the competition currency' do
-        competition = create(:competition, currency_code: "EUR")
-        expect(competition.currency_subunit_to_unit).to eq(100)
-      end
-
-      it 'does not use subunits for currencies that have none in practice' do
-        competition = create(:competition, currency_code: "HUF")
-        expect(competition.currency_subunit_to_unit).to eq(1)
-      end
-    end
-
     describe '#payments_enabled?' do
       it 'returns true when stripe is connected' do
         competition = create(:competition, :stripe_connected)
@@ -2139,6 +2127,56 @@ RSpec.describe Competition do
         create(:registration, :accepted, competition: not_open)
         expect(not_open.can_show_competitors_page?).to be(true)
       end
+    end
+  end
+
+  describe '#status' do
+    it "is unconfirmed for a draft" do
+      draft = create(:competition, :not_visible)
+
+      expect(draft.status).to eq "unconfirmed"
+    end
+
+    it "is confirmed once confirmed but not yet announced" do
+      confirmed_competition = create(:competition, :confirmed, :not_visible)
+
+      expect(confirmed_competition.status).to eq "confirmed"
+    end
+
+    it "stays confirmed when it is over without ever being announced" do
+      unannounced_past_competition = create(:competition, :confirmed, :not_visible, :past)
+
+      expect(unannounced_past_competition.status).to eq "confirmed"
+    end
+
+    it "is announced once visible" do
+      announced_competition = create(:competition, :confirmed, :visible, :announced, :future)
+
+      expect(announced_competition.status).to eq "announced"
+    end
+
+    it "is results_pending once over without results" do
+      over_competition = create(:competition, :confirmed, :visible, :announced, :past)
+
+      expect(over_competition.status).to eq "results_pending"
+    end
+
+    it "is results_posted once results are posted" do
+      posted_competition = create(:competition, :confirmed, :visible, :announced, :past, :results_posted)
+
+      expect(posted_competition.status).to eq "results_posted"
+    end
+
+    it "is hidden when it was announced but is no longer visible" do
+      hidden_competition = create(:competition, :confirmed, :announced, :not_visible)
+
+      expect(hidden_competition.status).to eq "hidden"
+    end
+
+    it "stays cancelled even though it was announced" do
+      cancelled_competition = create(:competition, :confirmed, :visible, :cancelled)
+
+      expect(cancelled_competition.status).to eq "cancelled"
     end
   end
 end

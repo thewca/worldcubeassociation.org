@@ -30,7 +30,7 @@ import TabTarget from "@/components/ui/tabTarget";
 import { route } from "nextjs-routes";
 import { Tooltip } from "@/components/ui/tooltip";
 
-function activityCodeFromPath(path: string) {
+export function activityCodeFromPath(path: string) {
   // Matches the eventId out of the path
   return path.match(/^([a-z0-9_]+)(?:-|$)/)?.[1] ?? null;
 }
@@ -41,7 +41,7 @@ export default function TabMenu({
   backHref,
   customTabs = [],
 }: {
-  competitionInfo: components["schemas"]["CompetitionInfo"];
+  competitionInfo: components["schemas"]["V1CompetitionInfo"];
   tabs: CompetitionNavTab[];
   backHref?: RouteLiteral;
   customTabs?: string[];
