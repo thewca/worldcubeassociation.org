@@ -109,7 +109,7 @@ RSpec.describe 'API Registrations' do
       get registration_config_api_v1_competition_path(competition)
 
       payment_step = response.parsed_body.find { it['key'] == 'payment' }
-      expect(payment_step['parameters']['enable_donations']).to be true
+      expect(payment_step['parameters']['donationsEnabled']).to be true
     end
 
     it 'says in the payment step that donations are disabled' do
@@ -119,7 +119,7 @@ RSpec.describe 'API Registrations' do
       get registration_config_api_v1_competition_path(competition)
 
       payment_step = response.parsed_body.find { it['key'] == 'payment' }
-      expect(payment_step['parameters']['enable_donations']).to be false
+      expect(payment_step['parameters']['donationsEnabled']).to be false
     end
 
     it 'requires a signed in user' do

@@ -132,11 +132,13 @@ function ShortlistItem<T extends DataCompetition>({
           <DataList.ItemValue>
             {hasPassed(comp.registration_close)
               ? t("competitions.registration_v2.errors.-4008")
-              : comp.spots_left === 0
-                ? t("competitions.messages.no_spots_left")
-                : t("competitions.messages.spots_left", {
-                    count: comp.spots_left,
-                  })}
+              : comp.spots_left == null
+                ? t("competitions.competition_info.no_competitor_limit")
+                : comp.spots_left <= 0
+                  ? t("competitions.messages.no_spots_left")
+                  : t("competitions.messages.spots_left", {
+                      count: comp.spots_left,
+                    })}
           </DataList.ItemValue>
         </DataList.Item>
       );

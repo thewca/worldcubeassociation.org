@@ -186,6 +186,7 @@ export async function RegistrationCard({
   const registrationNotYetOpen = hasNotPassed(registrationInfo.opens_at);
   const registrationClosed = hasPassed(registrationInfo.closes_at);
   const spotsLeft = registrationInfo.spots_left;
+  const hasNoCompetitorLimit = spotsLeft === null || competitorLimit === null;
   const showWaitingList =
     spotsLeft !== null &&
     spotsLeft <= 0 &&
@@ -219,16 +220,14 @@ export async function RegistrationCard({
           <Stat.Root variant="competition">
             <Stat.Label>
               <SpotsLeftIcon />
-              {spotsLeft === null ||
-              competitorLimit === null ||
-              registrationNotYetOpen
+              {hasNoCompetitorLimit || registrationNotYetOpen
                 ? t("competitions.competition_info.competitor_limit")
                 : registrationClosed
                   ? t("competitions.nav.menu.competitors")
                   : t("competitions.my_competitions_table.registrations")}
             </Stat.Label>
             <Stat.ValueText>
-              {spotsLeft === null || competitorLimit === null ? (
+              {hasNoCompetitorLimit ? (
                 t("competitions.competition_info.no_competitor_limit")
               ) : registrationNotYetOpen ? (
                 <FormatNumber value={competitorLimit} />

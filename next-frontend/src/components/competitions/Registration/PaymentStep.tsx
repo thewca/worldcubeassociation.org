@@ -59,7 +59,7 @@ function DonationFields({
 
   return (
     <>
-      {parameters.enable_donations && (
+      {parameters.donationsEnabled && (
         <Stack gap="2">
           <Checkbox.Root
             width="full"
