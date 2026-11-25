@@ -2,14 +2,12 @@
 
 import type { components } from "@/types/openapi";
 import { TFunction } from "i18next";
-import { Checkbox, CheckboxGroup, Heading, VStack } from "@chakra-ui/react";
+import { Heading, RadioGroup, Stack, VStack } from "@chakra-ui/react";
 import _ from "lodash";
 import { ByCompetitionTable } from "@/components/results/ResultsTable";
 import events from "@/lib/wca/data/events";
 import continents from "@/lib/wca/data/continents";
 import { Fragment, useState } from "react";
-
-const RECORD_TYPES = ["world", "continental", "national"] as const;
 
 export default function RecordsTable({
   recordResults,
@@ -18,73 +16,58 @@ export default function RecordsTable({
   recordResults: components["schemas"]["V1Results"];
   t: TFunction;
 }) {
-  const recordsByType = _.groupBy(
+  const recordsByTag = _.groupBy(
     recordResults,
     (r) => r.regional_single_record || r.regional_average_record,
   );
 
-  const heldRecordTypes = RECORD_TYPES.filter((recordType) => {
-    if (recordType === "world") return "WR" in recordsByType;
-    if (recordType === "national") return "NR" in recordsByType;
-    return continents.real.some(
-      ({ recordName }) => recordName in recordsByType,
-    );
-  });
+  const heldRecordTypes = [
+    {
+      id: "world",
+      label: t("persons.show.world_records"),
+      results: recordsByTag["WR"] ?? [],
+    },
+    {
+      id: "continental",
+      label: t("persons.show.continental_records"),
+      results: continents.real.flatMap(
+        ({ recordName }) => recordsByTag[recordName] ?? [],
+      ),
+    },
+    {
+      id: "national",
+      label: t("persons.show.national_records"),
+      results: recordsByTag["NR"] ?? [],
+    },
+  ].filter(({ results }) => results.length > 0);
 
-  const [shownRecordTypes, setShownRecordTypes] =
-    useState<string[]>(heldRecordTypes);
+  const [shownTypeId, setShownTypeId] = useState(heldRecordTypes[0]?.id);
+
+  const shownRecordType = heldRecordTypes.find(({ id }) => id === shownTypeId);
+
+  if (!shownRecordType) return null;
 
   return (
-    <VStack align="left">
-      {heldRecordTypes.length > 1 && (
-        <CheckboxGroup
-          value={shownRecordTypes}
-          onValueChange={setShownRecordTypes}
-          flexDirection="row"
-          flexWrap="wrap"
-          gap="4"
+    <VStack align="start">
+      {heldRecordTypes.length > 1 ? (
+        <RadioGroup.Root
+          value={shownTypeId}
+          onValueChange={({ value }) => value && setShownTypeId(value)}
         >
-          {heldRecordTypes.map((recordType) => (
-            <Checkbox.Root key={recordType} value={recordType}>
-              <Checkbox.HiddenInput />
-              <Checkbox.Control />
-              <Checkbox.Label>
-                {t(
-                  // i18n-tasks-use t("persons.show.record_types.world")
-                  // i18n-tasks-use t("persons.show.record_types.continental")
-                  // i18n-tasks-use t("persons.show.record_types.national")
-                  `persons.show.record_types.${recordType}`,
-                )}
-              </Checkbox.Label>
-            </Checkbox.Root>
-          ))}
-        </CheckboxGroup>
+          <Stack direction={{ base: "column", md: "row" }} gap="4">
+            {heldRecordTypes.map(({ id, label }) => (
+              <RadioGroup.Item key={id} value={id}>
+                <RadioGroup.ItemHiddenInput />
+                <RadioGroup.ItemIndicator />
+                <RadioGroup.ItemText>{label}</RadioGroup.ItemText>
+              </RadioGroup.Item>
+            ))}
+          </Stack>
+        </RadioGroup.Root>
+      ) : (
+        <Heading textStyle="h2">{shownRecordType.label}</Heading>
       )}
-      {shownRecordTypes.includes("world") && "WR" in recordsByType && (
-        <>
-          <Heading textStyle="h2">{t("persons.show.world_records")}</Heading>
-          <RecordsByEvent recordResults={recordsByType["WR"]} t={t} />
-        </>
-      )}
-      {shownRecordTypes.includes("continental") &&
-        continents.real.map(({ recordName: region }) => {
-          return (
-            region in recordsByType && (
-              <Fragment key={region}>
-                <Heading textStyle="h2">
-                  {t("persons.show.continental_records")}
-                </Heading>
-                <RecordsByEvent recordResults={recordsByType[region]} t={t} />
-              </Fragment>
-            )
-          );
-        })}
-      {shownRecordTypes.includes("national") && "NR" in recordsByType && (
-        <>
-          <Heading textStyle="h2">{t("persons.show.national_records")}</Heading>
-          <RecordsByEvent recordResults={recordsByType["NR"]} t={t} />
-        </>
-      )}
+      <RecordsByEvent recordResults={shownRecordType.results} t={t} />
     </VStack>
   );
 }

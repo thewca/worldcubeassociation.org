@@ -390,9 +390,8 @@ export function ByCompetitionTable({
                   <Table.Cell>
                     {index === 0 && (
                       <HStack gap="1">
-                        {competitorResult.competition_is_championship && (
-                          <NationalChampionshipIcon />
-                        )}
+                        {competitorResult.competition_championship_types
+                          .length > 0 && <NationalChampionshipIcon />}
                         <Link asChild>
                           <NextLink
                             href={route({
