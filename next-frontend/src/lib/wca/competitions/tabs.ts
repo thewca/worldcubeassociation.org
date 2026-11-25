@@ -234,7 +234,7 @@ export const duringCompetitionTabs = (
 export const afterCompetitionTabs = (
   competitionInfo: components["schemas"]["V1CompetitionInfo"],
   isAwaitingResults: boolean,
-): CompetitionNavTab[] => {
+): (TabWithLink | TabWithExternalLink)[] => {
   const infoTab: TabWithLink = {
     type: "tab-link",
     i18nKey: "competitions.nav.menu.info",

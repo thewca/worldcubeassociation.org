@@ -25,6 +25,7 @@ import {
 import IconDisplay from "../IconDisplay";
 import {
   CompetitionNavTab,
+  isTabDisabled,
   TabWithChildren,
   TabWithExternalLink,
   TabWithLink,
@@ -214,19 +215,20 @@ function LinkItem({ tab, selected, t, isAdminRoute }: ItemProps) {
   if (tab.type === "tab-with-children") return null;
   const href = getHref(tab, isAdminRoute);
   const isExternal = tab.type === "tab-with-external-link";
+  const isDisabled = isTabDisabled(tab);
   return (
     <ChakraLink
       unstyled
-      href={tab.disabled ? undefined : href}
-      aria-disabled={tab.disabled || undefined}
-      data-disabled={tab.disabled ? "" : undefined}
-      tabIndex={tab.disabled ? -1 : undefined}
+      href={isDisabled ? undefined : href}
+      aria-disabled={isDisabled || undefined}
+      data-disabled={isDisabled ? "" : undefined}
+      tabIndex={isDisabled ? -1 : undefined}
       target={isExternal ? "_blank" : undefined}
       rel={isExternal ? "noopener noreferrer" : undefined}
       css={itemStyle}
       data-selected={selected ? "" : undefined}
       aria-current={selected ? "page" : undefined}
-      onClick={tab.disabled ? (e) => e.preventDefault() : undefined}
+      onClick={isDisabled ? (e) => e.preventDefault() : undefined}
       _disabled={{ opacity: 0.5, cursor: "not-allowed", pointerEvents: "none" }}
     >
       <ItemLabel
@@ -292,7 +294,7 @@ function GroupItem({
                   key={tab.menuKey}
                   value={tab.menuKey}
                   asChild={!isLink}
-                  disabled={tab.disabled}
+                  disabled={isTabDisabled(tab)}
                   bg={isActive ? "colorPalette.subtle" : undefined}
                   color={isActive ? "colorPalette.fg" : undefined}
                   fontWeight={isActive ? "bold" : undefined}
@@ -376,18 +378,19 @@ function SingleItem({
 }) {
   const href = getHref(tab, isAdminRoute);
   const isExternal = tab.type === "tab-with-external-link";
+  const isDisabled = isTabDisabled(tab);
   return (
     <ChakraLink
       unstyled
       w="full"
       minW={0}
-      href={tab.disabled ? undefined : href}
+      href={isDisabled ? undefined : href}
       rel={isExternal ? "noopener noreferrer" : undefined}
-      aria-disabled={tab.disabled || undefined}
-      data-disabled={tab.disabled ? "" : undefined}
-      tabIndex={tab.disabled ? -1 : undefined}
+      aria-disabled={isDisabled || undefined}
+      data-disabled={isDisabled ? "" : undefined}
+      tabIndex={isDisabled ? -1 : undefined}
       target={isExternal ? "_blank" : undefined}
-      onClick={tab.disabled ? (e) => e.preventDefault() : undefined}
+      onClick={isDisabled ? (e) => e.preventDefault() : undefined}
       _disabled={{ opacity: 0.5, cursor: "not-allowed", pointerEvents: "none" }}
       aria-current={isActive ? "page" : undefined}
       outline="none"
@@ -453,7 +456,7 @@ function ItemWithChildren({
                 <Menu.Item
                   key={tab.menuKey}
                   value={tab.menuKey}
-                  disabled={tab.disabled}
+                  disabled={isTabDisabled(tab)}
                   bg={isActive ? "colorPalette.subtle" : undefined}
                   color={isActive ? "colorPalette.fg" : undefined}
                   fontWeight={isActive ? "bold" : undefined}
