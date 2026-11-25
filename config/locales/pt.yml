@@ -2255,10 +2255,13 @@ pt:
       use_admin_view: Usar vista de administração
       titles:
         in_progress: Competições em andamento
-        past: 'Competições passadas de %{year} (%{count})'
-        past_all: Competições passadas de todos os anos (%{count})
+        past: 'Competições passadas de %{year}'
+        past_count: 'Competições passadas de %{year} (%{count})'
+        past_all: Competições passadas de todos os anos
+        past_all_count: Competições passadas de todos os anos (%{count})
         recent: 'Competições recentes (últimos %{count} dias)'
-        upcoming: Competições futuras (%{count})
+        upcoming: Competições futuras
+        upcoming_count: Competições futuras (%{count})
         ongoing_and_upcoming: Competições a decorrer e futuras
         custom: Competições no período de tempo selecionado
         by_announcement: 'Competições ordenadas por data de anúncio, mais recente

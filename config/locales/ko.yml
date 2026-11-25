@@ -1794,10 +1794,13 @@ ko:
       use_admin_view: 관리자 보기 사용
       titles:
         in_progress: 진행 중인 대회
-        past: '%{year}년에 개최된 대회 (%{count})'
-        past_all: 지난 모든 대회 (%{count})
+        past: '%{year}년에 개최된 대회'
+        past_count: '%{year}년에 개최된 대회 (%{count})'
+        past_all: 지난 모든 대회
+        past_all_count: 지난 모든 대회 (%{count})
         recent: '최근 대회 (최근 %{count}일)'
-        upcoming: 예정된 대회 (%{count})
+        upcoming: 예정된 대회
+        upcoming_count: 예정된 대회 (%{count})
         ongoing_and_upcoming: 진행 중이거나 예정된 대회
         custom: 선택된 기간의 대회
         by_announcement: '발표일 순으로 정렬된 대회, 최근에 발표된 대회가 맨 위에 위치합니다'

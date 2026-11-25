@@ -1855,13 +1855,17 @@ en:
       #context: titles for the competitions list
       titles:
         in_progress: "Competitions in progress"
-        #context: in_progress is still used in legacy, so we keep them separated for now
+        #context: the titles without a count are still used in legacy, so we keep them separated for now
         in_progress_count: "Competitions in progress (%{count})"
         #context: when selecting a specific year ('year' is a number)
-        past: "Past competitions from %{year} (%{count})"
-        past_all: "Past competitions from all years (%{count})"
+        past: "Past competitions from %{year}"
+        #context: when selecting a specific year ('year' is a number)
+        past_count: "Past competitions from %{year} (%{count})"
+        past_all: "Past competitions from all years"
+        past_all_count: "Past competitions from all years (%{count})"
         recent: "Recent competitions (last %{count} days)"
-        upcoming: "Upcoming competitions (%{count})"
+        upcoming: "Upcoming competitions"
+        upcoming_count: "Upcoming competitions (%{count})"
         ongoing_and_upcoming: "Ongoing and upcoming competitions"
         custom: "Competitions in the selected period of time"
         by_announcement: "Competitions sorted by announcement date, newest on top"
