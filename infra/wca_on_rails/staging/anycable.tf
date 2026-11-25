@@ -92,6 +92,7 @@ resource "aws_ecs_service" "anycable" {
   scheduling_strategy                = "REPLICA"
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 50
+  availability_zone_rebalancing      = "DISABLED"
   health_check_grace_period_seconds  = 0
 
   capacity_provider_strategy {
@@ -107,13 +108,8 @@ resource "aws_ecs_service" "anycable" {
   }
 
   ordered_placement_strategy {
-    type  = "spread"
-    field = "attribute:ecs.availability-zone"
-  }
-
-  ordered_placement_strategy {
-    type  = "spread"
-    field = "instanceId"
+    type  = "binpack"
+    field = "memory"
   }
 
   network_configuration {

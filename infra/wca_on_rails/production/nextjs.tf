@@ -319,6 +319,11 @@ resource "aws_ecs_service" "nextjs" {
   enable_execute_command = true
 
   ordered_placement_strategy {
+    type  = "spread"
+    field = "instanceId"
+  }
+
+  ordered_placement_strategy {
     type  = "binpack"
     field = "memory"
   }
