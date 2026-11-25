@@ -1,5 +1,5 @@
 import { getSession } from "@/auth";
-import { Alert, Box, Card, Icon, Link, VStack } from "@chakra-ui/react";
+import { Alert, Box, Card, VStack } from "@chakra-ui/react";
 import { cache } from "react";
 import { serverClientWithToken } from "@/lib/wca/wcaAPI";
 import RegistrationPanel from "@/app/(wca)/(content-pages)/competitions/[competitionId]/(competition)/register/RegistrationPanel";
@@ -8,7 +8,6 @@ import { RegistrationCard } from "@/components/competitions/Cards";
 import { ChakraMarkdown } from "@/components/Markdown";
 import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
-import { LuExternalLink } from "react-icons/lu";
 
 const fetchConfig = cache(async (authToken: string, competitionId: string) => {
   const client = serverClientWithToken(authToken);
