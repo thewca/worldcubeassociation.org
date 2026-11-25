@@ -2453,6 +2453,7 @@ en:
       end: "End"
       activity: "Activity"
       no_activities: "No activities for the selected rooms/events."
+      no_schedule: "This competition has no schedule."
       all_venues: "All Venues"
       room_or_stage: "Room or Stage"
       more_details: "Show Round Details"
