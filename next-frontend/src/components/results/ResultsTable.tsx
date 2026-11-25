@@ -12,7 +12,10 @@ import {
   WithRecordTag,
 } from "@/components/results/TableCells";
 import { maxAttemptCount, resultAttempts } from "@/lib/wca/results/attempts";
-import { CompetitionResultRow } from "@/lib/wca/results/competitionResults";
+import {
+  ByCompetitionResultsRow,
+  ByPersonResultsRow,
+} from "@/lib/wca/results/competitionResults";
 import WcaFlag from "@/components/WcaFlag";
 import { TFunction } from "i18next";
 import CountryMap from "@/components/CountryMap";
@@ -20,6 +23,8 @@ import _ from "lodash";
 import roundTypes from "@/lib/wca/data/roundTypes";
 import formats from "@/lib/wca/data/formats";
 import { DateTime } from "luxon";
+import { HeadToHeadRoundRows } from "./H2HRoundRows";
+import { attemptColumnCount } from "@/lib/wca/competitions/h2hMatches";
 
 // The solve columns push the row past the width of a phone, so the column that says
 // whose row it is stays pinned to the left edge while the rest scrolls under it.
@@ -205,7 +210,7 @@ export function ByPersonTable({
   solveTextAlign = "left",
   showNationalityColumn = false,
 }: {
-  results: CompetitionResultRow[];
+  results: ByPersonResultsRow[];
   t: TFunction;
   isAdmin?: boolean;
   solveTextAlign?: CssProperties["textAlign"];
@@ -336,16 +341,10 @@ export function ByCompetitionTable({
   results,
   t,
 }: {
-  results: (components["schemas"]["V1Result"] &
-    Partial<
-      Pick<
-        components["schemas"]["V1PersonResult"],
-        "is_personal_best_single" | "is_personal_best_average"
-      >
-    >)[];
+  results: ByCompetitionResultsRow[];
   t: TFunction;
 }) {
-  const attemptCount = maxAttemptCount(results);
+  const attemptCount = attemptColumnCount(results);
 
   const anyAverages = results.some((res) => res.average !== 0);
 
@@ -402,6 +401,21 @@ export function ByCompetitionTable({
               const { definedAttempts, bestResultIndex, worstResultIndex } =
                 resultAttempts(competitorResult);
 
+              const isH2H = competitorResult.ranking_mode === "head_to_head";
+
+              if (isH2H) {
+                return (
+                  <HeadToHeadRoundRows
+                    key={competitorResult.id}
+                    result={competitorResult}
+                    isFirstOfCompetition={index === 0}
+                    attemptCount={attemptCount}
+                    anyAverages={anyAverages}
+                    isSinglePersonalBest={isSinglePB}
+                  />
+                );
+              }
+
               return (
                 <Table.Row key={competitorResult.id}>
                   <Table.Cell>
@@ -433,7 +447,7 @@ export function ByCompetitionTable({
                     color={
                       singleTag ? personalBestColor(singleRecord) : undefined
                     }
-                    fontWeight="extrabold"
+                    textStyle="bestResult"
                   >
                     <WithRecordTag recordTag={singleTag}>
                       {formatAttemptResult(competitorResult.best, eventId)}
@@ -442,7 +456,7 @@ export function ByCompetitionTable({
                   {anyAverages && (
                     <Table.Cell
                       color={avgTag ? personalBestColor(avgRecord) : undefined}
-                      fontWeight="extrabold"
+                      textStyle="bestResult"
                     >
                       <WithRecordTag recordTag={avgTag}>
                         {formatAttemptResult(competitorResult.average, eventId)}

@@ -30,7 +30,7 @@ import type { components } from "@/types/openapi";
 
 type StepConfig = components["schemas"]["RegistrationConfig"];
 type StepKey = StepConfig["key"];
-type CompetitionInfo = components["schemas"]["CompetitionInfo"];
+type CompetitionInfo = components["schemas"]["V1CompetitionInfo"];
 type Registration = components["schemas"]["RegistrationDataV2"];
 
 // Registrations a competitor can still withdraw from - the others are already over, one way or
@@ -156,10 +156,11 @@ export default function RegistrationSummary({
   const status = registration.competing.registration_status;
 
   const mayCancelWithoutAsking =
-    competitionInfo.competitor_can_cancel === "always" ||
-    (competitionInfo.competitor_can_cancel === "not_accepted" &&
+    competitionInfo.registration_info.competitor_can_cancel === "always" ||
+    (competitionInfo.registration_info.competitor_can_cancel ===
+      "not_accepted" &&
       status !== "accepted") ||
-    (competitionInfo.competitor_can_cancel === "unpaid" &&
+    (competitionInfo.registration_info.competitor_can_cancel === "unpaid" &&
       !registration.payment?.has_paid);
 
   const requestCancellation = () =>

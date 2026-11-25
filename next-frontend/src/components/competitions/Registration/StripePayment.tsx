@@ -23,7 +23,7 @@ import { usePaymentAmount } from "@/providers/PaymentAmountProvider";
 import { useColorMode } from "@/components/ui/color-mode";
 import type { components } from "@/types/openapi";
 
-type CompetitionInfo = components["schemas"]["CompetitionInfo"];
+type CompetitionInfo = components["schemas"]["V1CompetitionInfo"];
 type PaymentStepParameters =
   components["schemas"]["PaymentStepConfig"]["parameters"];
 
@@ -157,7 +157,8 @@ export default function StripePayment({
       options={{
         mode: "payment",
         amount: apiAmounts.stripe,
-        currency: competitionInfo.currency_code.toLowerCase(),
+        currency:
+          competitionInfo.registration_info.fees.currency_code.toLowerCase(),
         appearance: { theme: colorMode === "dark" ? "night" : "stripe" },
       }}
     >

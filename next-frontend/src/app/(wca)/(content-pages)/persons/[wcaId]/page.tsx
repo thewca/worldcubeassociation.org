@@ -109,8 +109,6 @@ export default async function PersonOverview({
   const hasMedals = medalCount > 0;
   const hasChampionshipPodiums = championshipPodiumCount !== 0;
 
-  const { t } = await getT();
-
   return (
     <VStack align="center">
       {/* Profile Section */}
@@ -138,7 +136,7 @@ export default async function PersonOverview({
         </GridItem>
         {/* Records and Medals */}
         <GridItem colSpan={{ base: 1, lg: 17 }}>
-          <PersonalRecordsTable records={personDetails.ranks_by_event} t={t} />
+          <PersonalRecordsTable records={personDetails.ranks_by_event} />
           <SimpleGrid gap={8} columns={{ base: 1, md: 6 }} padding={0} pt={8}>
             {hasMedals && (
               <GridItem colSpan={{ base: 1, md: hasRecords ? 3 : 6 }}>

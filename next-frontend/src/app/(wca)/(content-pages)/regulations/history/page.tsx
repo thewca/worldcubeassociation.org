@@ -1,4 +1,4 @@
-import { Heading, Link, List, Text, VStack } from "@chakra-ui/react";
+import { Heading, HStack, Link, List, Text, VStack } from "@chakra-ui/react";
 import { findCached } from "@/lib/payload/collections";
 import { getT } from "@/lib/i18n/get18n";
 import { Metadata } from "next";
@@ -49,25 +49,27 @@ export default async function RegulationsHistory() {
       <List.Root indented>
         {regulationsHistoryItems.map((item) => (
           <List.Item key={item.id}>
-            <Link href={item.url}>{item.version}</Link>{" "}
-            {item.changesUrl && (
-              <Text>
-                {item.summarizedChangesUrl ? (
-                  <TransWithLinks
-                    i18nKey="regulations_history.changes_with_summary_html"
-                    values={{
-                      changes_url: item.changesUrl,
-                      summary_url: item.summarizedChangesUrl,
-                    }}
-                  />
-                ) : (
-                  <TransWithLinks
-                    i18nKey="regulations_history.changes_html"
-                    values={{ changes_url: item.changesUrl }}
-                  />
-                )}
-              </Text>
-            )}
+            <HStack>
+              <Link href={item.url}>{item.version}</Link>{" "}
+              {item.changesUrl && (
+                <Text>
+                  {item.summarizedChangesUrl ? (
+                    <TransWithLinks
+                      i18nKey="regulations_history.changes_with_summary_html"
+                      values={{
+                        changes_url: item.changesUrl,
+                        summary_url: item.summarizedChangesUrl,
+                      }}
+                    />
+                  ) : (
+                    <TransWithLinks
+                      i18nKey="regulations_history.changes_html"
+                      values={{ changes_url: item.changesUrl }}
+                    />
+                  )}
+                </Text>
+              )}
+            </HStack>
           </List.Item>
         ))}
       </List.Root>

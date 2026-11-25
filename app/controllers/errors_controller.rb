@@ -12,11 +12,11 @@ class ErrorsController < ApplicationController
 
     if @exception.instance_of?(ActiveRecord::RecordNotFound) && @exception.model == "Competition"
       @id = params['id']
-      render 'competition_not_found', status: :not_found
+      render 'competition_not_found', formats: [:html], status: :not_found
     elsif @exception.instance_of?(ActionController::InvalidAuthenticityToken)
-      render 'session_expired', status: :unprocessable_content
+      render 'session_expired', formats: [:html], status: :unprocessable_content
     else
-      render error_page(@status_code), status: @status_code
+      render error_page(@status_code), formats: [:html], status: @status_code
     end
   end
 

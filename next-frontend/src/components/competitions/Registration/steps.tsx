@@ -22,7 +22,7 @@ import type {
 import type { components } from "@/types/openapi";
 
 type StepConfig = components["schemas"]["RegistrationConfig"];
-type CompetitionInfo = components["schemas"]["CompetitionInfo"];
+type CompetitionInfo = components["schemas"]["V1CompetitionInfo"];
 type Registration = components["schemas"]["RegistrationDataV2"];
 
 /** What a step asks of the competitor. Moving on from it is up to whoever renders it. */

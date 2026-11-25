@@ -11,7 +11,6 @@ import { getT } from "@/lib/i18n/get18n";
 
 interface RecordsProps {
   records: components["schemas"]["V1PersonInfo"]["ranks_by_event"];
-  t: TFunction;
 }
 
 const PersonalRecordsTable: React.FC<RecordsProps> = async ({ records }) => {

@@ -24,7 +24,7 @@ import { qualificationToString } from "@/lib/wca/wcif/rounds";
 import type { components } from "@/types/openapi";
 import type { RegistrationForm } from "@/lib/wca/registrations/registrationForm";
 
-type CompetitionInfo = components["schemas"]["CompetitionInfo"];
+type CompetitionInfo = components["schemas"]["V1CompetitionInfo"];
 type CompetingStepParameters =
   components["schemas"]["CompetingStepConfig"]["parameters"];
 type Registration = components["schemas"]["RegistrationDataV2"];
@@ -65,7 +65,7 @@ export default function CompetingStep({
       t("competitions.registration_v2.register.event_limit", {
         max_events: parameters.events_per_registration_limit,
       }),
-    competitionInfo["part_of_competition_series?"] &&
+    competitionInfo.competition_series_ids.length > 0 &&
       t("competitions.competition_info.part_of_a_series"),
   ].filter((warning) => typeof warning === "string");
 

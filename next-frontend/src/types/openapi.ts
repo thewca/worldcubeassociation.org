@@ -1408,6 +1408,7 @@ export interface components {
             parameters: {
                 stripePublishableKey: string;
                 connectedAccountId: string;
+                donationsEnabled: boolean;
             };
         } & {
             /**

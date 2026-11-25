@@ -27,6 +27,16 @@ export default async function TabSchedule({
     return <Text>{t("competitions.registration_v2.errors.-1000")}</Text>;
   }
 
+  const hasActivities = wcifSchedule.venues
+    .flatMap((venue) => venue.rooms)
+    .some((room) => room.activities.length > 0);
+
+  if (!hasActivities) {
+    const { t } = await getT();
+
+    return <Text>{t("competitions.schedule.no_schedule")}</Text>;
+  }
+
   const { data: wcifEvents, error: eventsError } =
     await getEvents(competitionId);
 

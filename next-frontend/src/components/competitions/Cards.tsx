@@ -67,7 +67,7 @@ function formatDateRange(start: Date, end: Date): string {
 export async function VenueDetailsCard({
   competitionInfo,
 }: {
-  competitionInfo: components["schemas"]["CompetitionInfo"];
+  competitionInfo: components["schemas"]["V1CompetitionInfo"];
 }) {
   const { t } = await getT();
 
@@ -87,7 +87,7 @@ export async function VenueDetailsCard({
               {t("competitions.competition_info.venue")}
             </Stat.Label>
             <ChakraMarkdown paragraphAs={Stat.ValueText}>
-              {competitionInfo.venue}
+              {competitionInfo.location.name}
             </ChakraMarkdown>
           </Stat.Root>
 
@@ -96,17 +96,17 @@ export async function VenueDetailsCard({
               <MapIcon />
               {t("competitions.competition_info.address")}
             </Stat.Label>
-            <Stat.ValueText>{competitionInfo.venue_address}</Stat.ValueText>
+            <Stat.ValueText>{competitionInfo.location.address}</Stat.ValueText>
           </Stat.Root>
 
-          {competitionInfo.venue_details && (
+          {competitionInfo.location.details && (
             <Stat.Root variant="competition" flexBasis="3xs" flexGrow="1">
               <Stat.Label>
                 <DetailsIcon />
                 {t("competitions.competition_info.details")}
               </Stat.Label>
               <ChakraMarkdown paragraphAs={Stat.ValueText}>
-                {competitionInfo.venue_details}
+                {competitionInfo.location.details}
               </ChakraMarkdown>
             </Stat.Root>
           )}
@@ -119,7 +119,7 @@ export async function VenueDetailsCard({
 export async function AdditionalInformationCard({
   competitionInfo,
 }: {
-  competitionInfo: components["schemas"]["CompetitionInfo"];
+  competitionInfo: components["schemas"]["V1CompetitionInfo"];
 }) {
   const { t } = await getT();
 
@@ -146,7 +146,7 @@ export async function AdditionalInformationCard({
 export async function RefundPolicyCard({
   competitionInfo,
 }: {
-  competitionInfo: components["schemas"]["CompetitionInfo"];
+  competitionInfo: components["schemas"]["V1CompetitionInfo"];
 }) {
   const { t } = await getT();
 
@@ -158,8 +158,12 @@ export async function RefundPolicyCard({
         </Card.Title>
         <Card.Description>
           <RefundPolicyText
-            refundPolicyPercent={competitionInfo.refund_policy_percent}
-            refundPolicyLimitDate={competitionInfo.refund_policy_limit_date}
+            refundPolicyPercent={
+              competitionInfo.registration_info.refund_policy.percent
+            }
+            refundPolicyLimitDate={
+              competitionInfo.registration_info.refund_policy.limit_date
+            }
           />
         </Card.Description>
       </Card.Body>
@@ -171,18 +175,21 @@ export async function RegistrationCard({
   competitionInfo,
   columns = 2,
 }: {
-  competitionInfo: components["schemas"]["CompetitionInfo"];
+  competitionInfo: components["schemas"]["V1CompetitionInfo"];
   columns?: number;
 }) {
   const { t } = await getT();
 
-  const registrationNotYetOpen = hasNotPassed(
-    competitionInfo.registration_open,
-  );
-  const registrationClosed = hasPassed(competitionInfo.registration_close);
-  const spotsLeft = competitionInfo.spots_left;
+  const registrationInfo = competitionInfo.registration_info;
+  const competitorLimit = registrationInfo.competitor_limit;
+
+  const registrationNotYetOpen = hasNotPassed(registrationInfo.opens_at);
+  const registrationClosed = hasPassed(registrationInfo.closes_at);
+  const spotsLeft = registrationInfo.spots_left;
+  const hasNoCompetitorLimit = spotsLeft === null || competitorLimit === null;
   const showWaitingList =
-    competitionInfo["registration_full?"] &&
+    spotsLeft !== null &&
+    spotsLeft <= 0 &&
     !registrationNotYetOpen &&
     !registrationClosed;
 
@@ -203,9 +210,9 @@ export async function RegistrationCard({
             <Stat.ValueText>
               <CurrencyValue
                 lowestDenomination={
-                  competitionInfo.base_entry_fee_lowest_denomination
+                  registrationInfo.fees.base_entry_lowest_denomination
                 }
-                currencyCode={competitionInfo.currency_code}
+                currencyCode={registrationInfo.fees.currency_code}
               />
             </Stat.ValueText>
           </Stat.Root>
@@ -213,29 +220,27 @@ export async function RegistrationCard({
           <Stat.Root variant="competition">
             <Stat.Label>
               <SpotsLeftIcon />
-              {spotsLeft == null || registrationNotYetOpen
+              {hasNoCompetitorLimit || registrationNotYetOpen
                 ? t("competitions.competition_info.competitor_limit")
                 : registrationClosed
                   ? t("competitions.nav.menu.competitors")
                   : t("competitions.my_competitions_table.registrations")}
             </Stat.Label>
             <Stat.ValueText>
-              {spotsLeft == null ? (
+              {hasNoCompetitorLimit ? (
                 t("competitions.competition_info.no_competitor_limit")
               ) : registrationNotYetOpen ? (
-                <FormatNumber value={competitionInfo.competitor_limit} />
+                <FormatNumber value={competitorLimit} />
               ) : (
                 <>
                   <FormatNumber
-                    value={
-                      competitionInfo.competitor_limit - Math.max(spotsLeft, 0)
-                    }
+                    value={competitorLimit - Math.max(spotsLeft, 0)}
                   />
                   {!registrationClosed && (
                     <>
                       {/* Escape character for "/" */}
                       <span>&#47;</span>
-                      <FormatNumber value={competitionInfo.competitor_limit} />
+                      <FormatNumber value={competitorLimit} />
                     </>
                   )}
                 </>
@@ -251,12 +256,12 @@ export async function RegistrationCard({
               )}
             </Stat.Label>
             <Stat.ValueText>
-              {competitionInfo.guests_entry_fee_lowest_denomination ? (
+              {registrationInfo.fees.guests_entry_lowest_denomination ? (
                 <CurrencyValue
                   lowestDenomination={
-                    competitionInfo.guests_entry_fee_lowest_denomination
+                    registrationInfo.fees.guests_entry_lowest_denomination
                   }
-                  currencyCode={competitionInfo.currency_code}
+                  currencyCode={registrationInfo.fees.currency_code}
                 />
               ) : (
                 t("competitions.competition_info.guests_free.free")
@@ -271,7 +276,7 @@ export async function RegistrationCard({
                 {t("competitions.competition_info.waiting_list_size")}
               </Stat.Label>
               <Stat.ValueText>
-                <FormatNumber value={competitionInfo.waiting_list_count} />
+                <FormatNumber value={registrationInfo.waiting_list_count} />
               </Stat.ValueText>
             </Stat.Root>
           ) : (
@@ -283,7 +288,7 @@ export async function RegistrationCard({
                 )}
               </Stat.Label>
               <Stat.ValueText>
-                {competitionInfo.on_the_spot_registration
+                {registrationInfo.on_the_spot_registration
                   ? t("simple_form.yes")
                   : t("simple_form.no")}
               </Stat.ValueText>
@@ -298,7 +303,9 @@ export async function RegistrationCard({
               )}
             </Stat.Label>
             <Stat.ValueText>
-              <LocalDateTime isoDateTime={competitionInfo.registration_open} />
+              {registrationInfo.opens_at && (
+                <LocalDateTime isoDateTime={registrationInfo.opens_at} />
+              )}
             </Stat.ValueText>
           </Stat.Root>
 
@@ -310,7 +317,9 @@ export async function RegistrationCard({
               )}
             </Stat.Label>
             <Stat.ValueText>
-              <LocalDateTime isoDateTime={competitionInfo.registration_close} />
+              {registrationInfo.closes_at && (
+                <LocalDateTime isoDateTime={registrationInfo.closes_at} />
+              )}
             </Stat.ValueText>
           </Stat.Root>
         </SimpleGrid>
@@ -323,8 +332,7 @@ export async function EventCard({
   competitionInfo,
   t,
 }: {
-  competitionInfo: components["schemas"]["CompetitionInfo"];
-  t: TFunction;
+  competitionInfo: components["schemas"]["V1CompetitionInfo"];
 }) {
   const { t } = await getT();
 
@@ -335,13 +343,14 @@ export async function EventCard({
           {t("competitions.competition_info.events")}
         </Card.Title>
         <Wrap gap="4">
-          {competitionInfo.event_ids.map((event_id) => (
+          {competitionInfo.events.event_ids.map((event_id) => (
             <LabelledEventIcon
               key={event_id}
               eventId={event_id}
               boxSize="8"
               color={
-                event_id === competitionInfo.main_event_id && event_id !== "333"
+                event_id === competitionInfo.events.main_event_id &&
+                event_id !== "333"
                   ? "green.solid"
                   : "currentColor"
               }
@@ -359,7 +368,7 @@ export function InfoCard({
   bookmark,
   t,
 }: {
-  competitionInfo: components["schemas"]["CompetitionInfo"];
+  competitionInfo: components["schemas"]["V1CompetitionInfo"];
   bookmark?: components["schemas"]["CompetitionBookmark"];
   t: TFunction;
 }) {
@@ -385,10 +394,12 @@ export function InfoCard({
               {t("competitions.competition_info.date")}
             </Stat.Label>
             <Stat.ValueText>
-              {formatDateRange(
-                new Date(competitionInfo.start_date),
-                new Date(competitionInfo.end_date),
-              )}
+              {competitionInfo.start_date &&
+                competitionInfo.end_date &&
+                formatDateRange(
+                  new Date(competitionInfo.start_date),
+                  new Date(competitionInfo.end_date),
+                )}
             </Stat.ValueText>
           </Stat.Root>
 
@@ -400,9 +411,9 @@ export function InfoCard({
             {/* City and country overflowed a narrow card on one line; wrapping drops the
                 country onto its own row exactly when it no longer fits. */}
             <Stat.ValueText flexWrap="wrap">
-              <Text>{competitionInfo.city}, </Text>
+              <Text>{competitionInfo.location.city}, </Text>
               <CountryMap
-                code={competitionInfo.country_iso2}
+                code={competitionInfo.location.country_iso2}
                 t={t}
                 fontWeight="bold"
               />
@@ -415,7 +426,13 @@ export function InfoCard({
               {t("competitions.competition_info.competitor_limit")}
             </Stat.Label>
             <Stat.ValueText>
-              <FormatNumber value={competitionInfo.competitor_limit} />
+              {competitionInfo.registration_info.competitor_limit === null ? (
+                t("competitions.competition_info.no_competitor_limit")
+              ) : (
+                <FormatNumber
+                  value={competitionInfo.registration_info.competitor_limit}
+                />
+              )}
             </Stat.ValueText>
           </Stat.Root>
 

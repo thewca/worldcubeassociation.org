@@ -112,6 +112,7 @@ variable "shared" {
     }),
     lb: object({
       id: string
+      arn_suffix: string
     })
     https_listener: object({
       arn: string

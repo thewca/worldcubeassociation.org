@@ -102,6 +102,26 @@ RSpec.describe 'API Registrations' do
       expect(response.parsed_body).to be_present
     end
 
+    it 'says in the payment step that donations are enabled' do
+      competition = create(:competition, :registration_open, :stripe_connected, :accepts_donations)
+
+      api_sign_in_as(create(:user))
+      get registration_config_api_v1_competition_path(competition)
+
+      payment_step = response.parsed_body.find { it['key'] == 'payment' }
+      expect(payment_step['parameters']['donationsEnabled']).to be true
+    end
+
+    it 'says in the payment step that donations are disabled' do
+      competition = create(:competition, :registration_open, :stripe_connected, enable_donations: false)
+
+      api_sign_in_as(create(:user))
+      get registration_config_api_v1_competition_path(competition)
+
+      payment_step = response.parsed_body.find { it['key'] == 'payment' }
+      expect(payment_step['parameters']['donationsEnabled']).to be false
+    end
+
     it 'requires a signed in user' do
       get registration_config_api_v1_competition_path(competition)
 

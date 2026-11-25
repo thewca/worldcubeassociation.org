@@ -22,23 +22,26 @@ import currencies from "@/lib/wca/data/currencies";
 import type { components } from "@/types/openapi";
 import { DateTime } from "luxon";
 
-type CompetitionInfo = components["schemas"]["CompetitionInfo"];
+type CompetitionInfo = components["schemas"]["V1CompetitionInfo"];
 type Registration = components["schemas"]["RegistrationDataV2"];
 type PaymentStepParameters =
   components["schemas"]["PaymentStepConfig"]["parameters"];
 
 function DonationFields({
   competitionInfo,
+  parameters,
 }: {
   competitionInfo: CompetitionInfo;
+  parameters: PaymentStepParameters;
 }) {
   const { t } = useT();
 
   const { donationIso, setDonationIso } = usePaymentAmount();
 
-  const [isDonating, setIsDonating] = useState(false);
+  const { fees } = competitionInfo.registration_info;
+  const currency = currencies.byIsoCode[fees.currency_code];
 
-  const currency = currencies.byIsoCode[competitionInfo.currency_code];
+  const [isDonating, setIsDonating] = useState(false);
 
   // Unticking has to take the donation with it, otherwise the competitor keeps paying an amount
   //   they can no longer see.
@@ -56,7 +59,7 @@ function DonationFields({
 
   return (
     <>
-      {competitionInfo.enable_donations && (
+      {parameters.donationsEnabled && (
         <Stack gap="2">
           <Checkbox.Root
             width="full"
@@ -77,7 +80,7 @@ function DonationFields({
             <Field.Root>
               <Field.Label>
                 {t("registrations.payment_form.labels.donation")} (
-                {competitionInfo.currency_code})
+                {fees.currency_code})
               </Field.Label>
               <NumberInput.Root
                 min={0}
@@ -93,7 +96,7 @@ function DonationFields({
         </Stack>
       )}
 
-      {donationIso > competitionInfo.base_entry_fee_lowest_denomination && (
+      {donationIso > (fees.base_entry_lowest_denomination ?? 0) && (
         <Alert.Root status="warning">
           <Alert.Indicator />
           <Alert.Title>
@@ -108,8 +111,10 @@ function DonationFields({
 /** The donation the competitor may add, and what they pay with it, whichever provider takes it. */
 function PaymentAmountDetails({
   competitionInfo,
+  parameters,
 }: {
   competitionInfo: CompetitionInfo;
+  parameters: PaymentStepParameters;
 }) {
   const { t } = useT();
 
@@ -117,7 +122,10 @@ function PaymentAmountDetails({
 
   return (
     <>
-      <DonationFields competitionInfo={competitionInfo} />
+      <DonationFields
+        competitionInfo={competitionInfo}
+        parameters={parameters}
+      />
 
       {/* The amount carries its currency's full name, so on a phone it is too long to sit beside
           the label and drops onto its own line instead of breaking mid-word. */}
@@ -170,7 +178,8 @@ export function PaymentStatus({
             : t("registrations.entry_fees_partially_paid", {
                 paid,
                 total: formatAmount(
-                  competitionInfo.base_entry_fee_lowest_denomination,
+                  competitionInfo.registration_info.fees
+                    .base_entry_lowest_denomination ?? 0,
                 ),
               })}
         </Alert.Description>
@@ -193,7 +202,9 @@ export default function PaymentStep({
   const { t } = useT();
   const lng = useLocale();
 
-  const isRegistrationClosed = hasPassed(competitionInfo.registration_close);
+  const isRegistrationClosed = hasPassed(
+    competitionInfo.registration_info.closes_at,
+  );
 
   const payment = registration?.payment;
 
@@ -250,7 +261,10 @@ export default function PaymentStep({
                 registrationId={registration.id}
                 parameters={parameters}
               >
-                <PaymentAmountDetails competitionInfo={competitionInfo} />
+                <PaymentAmountDetails
+                  competitionInfo={competitionInfo}
+                  parameters={parameters}
+                />
               </StripePayment>
             </PaymentAmountProvider>
           </>

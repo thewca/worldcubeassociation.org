@@ -270,6 +270,7 @@ export interface UtilityValues {
     | "tableSection"
     | "body"
     | "bodyEmphasis"
+    | "bestResult"
     | "annotation"
     | "quote"
     | "hyperlink"

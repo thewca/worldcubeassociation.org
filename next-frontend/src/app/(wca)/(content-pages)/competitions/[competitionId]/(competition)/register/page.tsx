@@ -124,7 +124,7 @@ export default async function RegisterPage({
       <Box width="full" asChild>
         <RegistrationCard competitionInfo={competitionInfo} columns={3} />
       </Box>
-      {competitionInfo.extra_registration_requirements && (
+      {competitionInfo.registration_info.extra_requirements && (
         <Card.Root width="full">
           <Card.Body>
             <ChakraMarkdown
@@ -132,7 +132,7 @@ export default async function RegisterPage({
               paragraphAs={Card.Description}
               listProps={{ textStyle: "body" }}
             >
-              {competitionInfo.extra_registration_requirements}
+              {competitionInfo.registration_info.extra_requirements}
             </ChakraMarkdown>
           </Card.Body>
         </Card.Root>

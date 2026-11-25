@@ -1897,7 +1897,10 @@ en:
       view_competition: "View Competition"
       no_more_comps: "No more competitions."
       no_comp_found: "No competitions found."
+      #context: heading of the introductory banner for logged-out visitors
       why_compete_title: "Why compete?"
+      #context: screen reader description of the photo in the Why Compete banner
+      why_compete_image_alt: "A competitor solving a puzzle at a WCA competition"
       #context: introduction shown to logged-out visitors on the competitions page
       why_compete_description_html: >-
         <p>Competitions are not just about finding out who is the fastest - they're social events! Anyone who can solve a cube is welcome to come and set a new personal record for themselves. Making friends is easy because everyone works together to make the competition run.</p>
@@ -2450,6 +2453,7 @@ en:
       end: "End"
       activity: "Activity"
       no_activities: "No activities for the selected rooms/events."
+      no_schedule: "This competition has no schedule."
       all_venues: "All Venues"
       room_or_stage: "Room or Stage"
       more_details: "Show Round Details"
@@ -2517,7 +2521,13 @@ en:
       results: "Results"
       events: "Events"
     h2h:
+      match_number: "Match %{number}"
       set_number: "Set %{number}"
+      #context: score of a head-to-head match or set, with W/L short for won/lost
+      score:
+        win: "W %{own}–%{opponent}"
+        loss: "L %{own}–%{opponent}"
+        tie: "= %{own}–%{opponent}"
       stage_of: "Stage of %{number}"
       quarterfinal_stage: "Quarterfinal Stage"
       semifinal_stage: "Semifinal Stage"
@@ -2729,6 +2739,10 @@ en:
       world_records: "History of World Records"
       continental_records: "History of Continental Records"
       national_records: "History of National Records"
+      #context: number of head-to-head matches and the result, with W/L short for won/lost
+      h2h_summary:
+        one: "%{count} Match · %{wins}W %{losses}L"
+        other: "%{count} Matches · %{wins}W %{losses}L"
   posts:
     confirm_delete_post: "Are you sure you want to delete this post? This action is not reversible."
     announcement_info_html: "Announced by %{author_name} on %{date_time}"

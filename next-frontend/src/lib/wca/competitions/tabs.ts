@@ -30,7 +30,7 @@ export interface TabWithLink extends TabBase {
 export type CompetitionNavTab = TabWithChildren | TabWithLink;
 
 const eventsAndScheduleTabs = (
-  competitionInfo: components["schemas"]["CompetitionInfo"],
+  competitionInfo: components["schemas"]["V1CompetitionInfo"],
 ): TabWithLink[] => {
   return [
     {
@@ -55,7 +55,7 @@ const eventsAndScheduleTabs = (
 };
 
 export const beforeCompetitionTabs = (
-  competitionInfo: components["schemas"]["CompetitionInfo"],
+  competitionInfo: components["schemas"]["V1CompetitionInfo"],
 ): TabWithLink[] => {
   return [
     {
@@ -90,7 +90,7 @@ export const beforeCompetitionTabs = (
 };
 
 export const liveTab = (
-  competitionInfo: components["schemas"]["CompetitionInfo"],
+  competitionInfo: components["schemas"]["V1CompetitionInfo"],
 ): TabWithLink => {
   const base = {
     i18nKey: "competitions.live.title",
@@ -130,7 +130,7 @@ export const liveTab = (
 };
 
 export const duringCompetitionTabs = (
-  competitionInfo: components["schemas"]["CompetitionInfo"],
+  competitionInfo: components["schemas"]["V1CompetitionInfo"],
   rounds: components["schemas"]["LiveRoundAdmin"][],
 ): CompetitionNavTab[] => {
   const roundsByEventId = _.groupBy(
@@ -210,7 +210,7 @@ export const duringCompetitionTabs = (
   ];
 };
 export const afterCompetitionTabs = (
-  competitionInfo: components["schemas"]["CompetitionInfo"],
+  competitionInfo: components["schemas"]["V1CompetitionInfo"],
   isAwaitingResults: boolean,
 ): TabWithLink[] => {
   const infoTab: TabWithLink = {

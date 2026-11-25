@@ -18,12 +18,12 @@ export default function FilteredResults({
   roundsByEvent,
   h2hRoundsById,
 }: {
-  competitionInfo: components["schemas"]["CompetitionInfo"];
+  competitionInfo: components["schemas"]["V1CompetitionInfo"];
   roundsByEvent: Record<string, components["schemas"]["V1CompetitionRound"][]>;
   h2hRoundsById: Record<string, components["schemas"]["H2hRound"]>;
 }) {
   const [activeEventId, setActiveEventId] = useState<string>(
-    competitionInfo.event_ids[0],
+    competitionInfo.events.event_ids[0],
   );
 
   const { t } = useT();
@@ -47,7 +47,7 @@ export default function FilteredResults({
         title=""
         selectedEvent={activeEventId}
         onEventClick={setActiveEventId}
-        eventList={competitionInfo.event_ids}
+        eventList={competitionInfo.events.event_ids}
       />
 
       <Box ref={topSentinelRef} position="absolute" />
