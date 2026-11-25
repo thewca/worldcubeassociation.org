@@ -26,6 +26,10 @@ export default async function ExecutiveCard({
     );
   }
 
+  const isBoardMember = person.teams.some(
+    (team) => team.friendly_id === "board",
+  );
+
   return (
     <Card.Root
       size="sm"
@@ -45,10 +49,18 @@ export default async function ExecutiveCard({
             <WcaFlag code={person.country_iso2} size="2xl" />
             <Text textStyle="h2">{person.name}</Text>
           </HStack>
-          <RoleBadge
-            teamRole={executive.role}
-            colorPalette={executive.colorPalette}
-          />
+          <HStack wrap="wrap">
+            <RoleBadge
+              teamRole={executive.role}
+              colorPalette={executive.colorPalette}
+            />
+            {isBoardMember && (
+              <RoleBadge
+                teamRole={t("page.executives.board")}
+                colorPalette="black"
+              />
+            )}
+          </HStack>
         </Card.Title>
         <DataList.Root variant="bold" textAutoContrast>
           <DataList.Item>
