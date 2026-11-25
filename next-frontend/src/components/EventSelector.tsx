@@ -56,10 +56,11 @@ export function SingleEventSelector({
     <RadioCard.Root
       disabled={disabled}
       size={eventButtonsCompact ? "sm" : undefined}
-      orientation="vertical"
+      orientation="horizontal"
       align="center"
       value={selectedEvent}
       onClick={selectEvent}
+      w="full"
     >
       {title && <RadioCard.Label>{title}</RadioCard.Label>}
       <Grid
@@ -69,6 +70,7 @@ export function SingleEventSelector({
           base: "repeat(auto-fill, {sizes.8})",
           lg: `repeat(auto-fill, {sizes.${lgSize}})`,
         }}
+        w="full"
       >
         {eventList.map((eventId) => {
           return (
