@@ -52,6 +52,7 @@ export default async function OfficersAndBoard() {
       <SimpleGrid columns={{ base: 1, md: 3 }} gap="16px">
         {officers.map((officer) => (
           <UserBadge
+            t={t}
             key={officer.id}
             profilePicture={officer.user.avatar}
             name={officer.user.name}
@@ -73,6 +74,7 @@ export default async function OfficersAndBoard() {
       <SimpleGrid columns={{ base: 1, md: 3 }} gap="16px">
         {boardRoles.map((board) => (
           <UserBadge
+            t={t}
             key={board.id}
             profilePicture={board.user.avatar}
             name={board.user.name}

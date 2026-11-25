@@ -2,7 +2,6 @@ import {
   Heading,
   HStack,
   IconButton,
-  SimpleGrid,
   Tabs,
   Text,
   VStack,
@@ -10,7 +9,7 @@ import {
 import { getT } from "@/lib/i18n/get18n";
 import { Prose } from "@/components/ui/prose";
 import { components } from "@/types/openapi";
-import UserBadge from "@/components/UserBadge";
+import MemberGrid from "@/app/(wca)/(content-pages)/teams-committees/memberGrid";
 import {
   getTeamCommitteeMembers,
   getTeamsCommittees,
@@ -18,6 +17,8 @@ import {
 import OpenapiError from "@/components/ui/openapiError";
 import getPermissions from "@/lib/wca/permissions.server";
 import { Metadata } from "next";
+import { Suspense } from "react";
+import Loading from "@/components/ui/loading";
 import EmailCopyButton from "@/components/EmailCopyButton";
 import ResponsiveTabsList from "@/components/ui/responsiveTabsList";
 import { route } from "nextjs-routes";
@@ -36,11 +37,21 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function TeamsCommitteesPage({
-  searchParams,
-}: {
+type TeamsCommitteesPageProps = {
   searchParams: Promise<{ team?: string }>;
-}) {
+};
+
+export default function TeamsCommitteesPage({
+  searchParams,
+}: TeamsCommitteesPageProps) {
+  return (
+    <Suspense fallback={<Loading />}>
+      <TeamsCommittees searchParams={searchParams} />
+    </Suspense>
+  );
+}
+
+async function TeamsCommittees({ searchParams }: TeamsCommitteesPageProps) {
   const { t } = await getT();
   const { team } = await searchParams;
 
@@ -185,23 +196,11 @@ async function MemberTable({
   if (error) return <OpenapiError response={response} t={t} />;
 
   return (
-    <SimpleGrid columns={{ md: 1, sm: 1, lg: 2 }} gap="4">
-      {roles.map((role) => (
-        <UserBadge
-          key={role.id}
-          profilePicture={role.user.avatar}
-          name={role.user.name}
-          wcaId={role.user.wca_id}
-          roles={[
-            {
-              teamRole: t(
-                `enums.user_roles.status.${role.group.group_type}.${role.metadata.status}`,
-              ),
-              staffColor: "red",
-            },
-          ]}
-        />
-      ))}
-    </SimpleGrid>
+    <MemberGrid
+      key={id}
+      groupId={id}
+      isActive={isActive}
+      initialRoles={roles}
+    />
   );
 }

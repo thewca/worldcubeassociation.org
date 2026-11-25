@@ -49,6 +49,11 @@ get:
       schema:
         type: string
       description: Sort by a specific field (e.g., "start_date", "-created_at")
+    - name: page
+      in: query
+      schema:
+        type: integer
+      description: Page number to retrieve
     - name: per_page
       in: query
       schema:
