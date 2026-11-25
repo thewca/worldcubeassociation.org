@@ -4421,6 +4421,8 @@ export interface operations {
                 isLead?: boolean;
                 /** @description Sort by a specific field (e.g., "start_date", "-created_at") */
                 sort?: string;
+                /** @description Page number to retrieve */
+                page?: number;
                 /** @description Number of results per page */
                 per_page?: number;
             };
