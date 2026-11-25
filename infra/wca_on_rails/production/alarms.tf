@@ -26,6 +26,57 @@ resource "aws_cloudwatch_metric_alarm" "elb_5xx" {
   }
 }
 
+resource "aws_cloudwatch_metric_alarm" "rails_5xx" {
+  alarm_name          = "Rails 5XX Errors in Production"
+  alarm_description   = "> 50 5XX responses from the Rails service in 5 minutes"
+  evaluation_periods  = 1
+  threshold           = 50
+  comparison_operator = "GreaterThanThreshold"
+  # The load balancer only reports this metric when there are errors
+  treat_missing_data = "notBreaching"
+  alarm_actions      = [data.aws_sns_topic.alarms.arn]
+
+  metric_query {
+    id          = "total"
+    expression  = "FILL(blue, 0) + FILL(green, 0)"
+    label       = "Rails 5XX responses"
+    return_data = true
+  }
+
+  # Deployments alternate between the two target groups
+  metric_query {
+    id = "blue"
+
+    metric {
+      namespace   = "AWS/ApplicationELB"
+      metric_name = "HTTPCode_Target_5XX_Count"
+      stat        = "Sum"
+      period      = 300
+
+      dimensions = {
+        LoadBalancer = var.shared.lb.arn_suffix
+        TargetGroup  = var.shared.rails-production[0].arn_suffix
+      }
+    }
+  }
+
+  metric_query {
+    id = "green"
+
+    metric {
+      namespace   = "AWS/ApplicationELB"
+      metric_name = "HTTPCode_Target_5XX_Count"
+      stat        = "Sum"
+      period      = 300
+
+      dimensions = {
+        LoadBalancer = var.shared.lb.arn_suffix
+        TargetGroup  = var.shared.rails-production[1].arn_suffix
+      }
+    }
+  }
+}
+
 resource "aws_cloudwatch_metric_alarm" "request_count" {
   alarm_name          = "Prod requests warning"
   alarm_description   = "> 35 000 requests in 5 minutes"
