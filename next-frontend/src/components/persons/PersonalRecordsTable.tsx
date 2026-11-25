@@ -58,11 +58,9 @@ function RankCell({
   region: string;
   textAlign?: Table.CellProps["textAlign"];
 }) {
-  const hasRank = rank !== undefined && rank !== 0;
-
   return (
     <Table.Cell textAlign={textAlign}>
-      {hasRank && (
+      {!!rank && (
         <Link
           asChild
           color={getColor(rank)}
