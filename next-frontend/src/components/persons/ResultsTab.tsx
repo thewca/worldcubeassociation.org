@@ -81,7 +81,11 @@ const Results: React.FC<{ wcaId: string; eventId: string }> = ({
   });
 
   if (isLoading) {
-    return <Loading />;
+    return (
+      <Box width="full">
+        <Loading />
+      </Box>
+    );
   }
 
   if (!resultsQuery) {
