@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { orderBy, sortBy } from "lodash";
+import { orderBy } from "lodash";
 import { Button, Icon, Link, Stack, Table, Text } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useT } from "@/lib/i18n/useI18n";
@@ -41,13 +41,11 @@ export default function CompetitionsTab({ wcaId }: CompetitionsTabProps) {
     return <Text>{t("errors.next_frontend.title")}</Text>;
   }
 
-  const numberedCompetitions = sortBy(competitions, [
-    "start_date",
-    "end_date",
-    "id",
-  ]).map((competition, index) => ({ competition, number: index + 1 }));
-
-  const orderedCompetitions = orderBy(numberedCompetitions, "number", order);
+  const orderedCompetitions = orderBy(
+    competitions,
+    ["start_date", "end_date", "id"],
+    [order, order, order],
+  );
 
   const toggleOrder = () =>
     setOrder((current) => (current === "asc" ? "desc" : "asc"));
@@ -88,9 +86,12 @@ export default function CompetitionsTab({ wcaId }: CompetitionsTabProps) {
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {orderedCompetitions.map(({ competition: c, number }) => {
+            {orderedCompetitions.map((c, index) => {
               const countryName = countries.byIso2[c.country_iso2]?.name;
-
+              const number =
+                order === "asc"
+                  ? index + 1
+                  : orderedCompetitions.length - index;
               return (
                 <Table.Row key={c.id}>
                   <Table.Cell>{number}</Table.Cell>
