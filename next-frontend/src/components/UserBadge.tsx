@@ -14,9 +14,10 @@ import Link from "next/link";
 import { route } from "nextjs-routes";
 import { components } from "@/types/openapi";
 import EmailCopyButton from "@/components/EmailCopyButton";
-import { getT } from "@/lib/i18n/get18n";
+import { TFunction } from "i18next";
 
 interface UserBadgeData {
+  t: TFunction;
   name: string;
   profilePicture?: components["schemas"]["UserAvatar"];
   roles?: { teamRole: string; teamText?: string; staffColor: StaffColor }[];
@@ -25,7 +26,8 @@ interface UserBadgeData {
   email?: string;
 }
 
-const UserBadge: React.FC<UserBadgeData> = async ({
+const UserBadge: React.FC<UserBadgeData> = ({
+  t,
   name,
   profilePicture,
   roles,
@@ -33,8 +35,6 @@ const UserBadge: React.FC<UserBadgeData> = async ({
   action,
   email,
 }) => {
-  const { t } = await getT();
-
   return (
     <LinkBox asChild>
       <Card.Root

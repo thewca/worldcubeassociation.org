@@ -33,6 +33,7 @@ export default async function TranslatorsPage() {
           <SimpleGrid columns={{ base: 1, md: 3 }} gap="16px">
             {translators.map((translator) => (
               <UserBadge
+                t={t}
                 key={translator.id}
                 profilePicture={translator.user.avatar}
                 name={translator.user.name}
