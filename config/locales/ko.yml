@@ -213,6 +213,7 @@ ko:
     user:
       wca_id: WCA ID
       representing: 대표 지역
+      profile_picture: 프로필 사진
     all_regions: 모든 지역
     errors:
       invalid: 유효하지 않음
@@ -229,6 +230,17 @@ ko:
       unit_moves: 회전
     back_to_top: 맨 위로
     back: 뒤로
+    ranking_abbreviations:
+      position: 순위
+      world: 세계 순위
+      continental: 대륙 순위
+      national: 국가 순위
+    more_information: 자세히 보기
+    confirm_dialog:
+      title: 작업 확인
+      message: 정말 진행하시겠습니까? 이 작업은 되돌릴 수 없습니다.
+      type_to_confirm_html: 확인하려면 <code>%{input}</code>을(를) 입력하세요
+      input_mismatch: 입력한 내용이 일치하지 않습니다. 다시 시도해 주세요.
   oauth:
     applications:
       your_apps: 나의 OAuth 앱
@@ -523,6 +535,13 @@ ko:
       title: 페이지를 렌더링하는 동안 오류가 발생했습니다.
       description: 이 오류가 계속 발생하면 아래에 나열된 세부 정보를 포함하여 WST에 보고해 주세요.
       details: 오류 세부 정보
+      session_outdated: 세션이 만료되었습니다. 로그아웃한 다음 다시 로그인해 주세요.
+      load_error:
+        podiums: 입상자 정보를 가져오는 중 오류가 발생했습니다.
+        results: 결과를 가져오는 중 오류가 발생했습니다.
+        schedule: 대회 일정을 가져오는 중 오류가 발생했습니다.
+        person: 선수 정보를 가져오는 중 오류가 발생했습니다.
+        competitions: 대회 정보를 가져오는 중 문제가 발생했습니다.
     messages:
       wrong_size: '잘못된 크기입니다(%{file_size}이어야 함)'
       size_too_small: '너무 작습니다(최소 %{file_size} 이상이어야 함)'
@@ -748,6 +767,7 @@ ko:
         wqac: WQAC 패널
       switch_to_dark_mode: 다크 모드로 전환
       switch_to_light_mode: 라이트 모드로 전환
+      toggle_navigation: 탐색 메뉴 전환
   page:
     translators:
       title: 번역가
@@ -771,17 +791,17 @@ ko:
         wat: WCA 아카이브 팀
         wct: WCA 커뮤니케이션 팀
         wcat: WCA 대회 발표 팀
-        wic: WCA 청렴성 위원회
-        weat: WCA 행정 지원 팀
-        wfc: WCA 재무 위원회
+        wic: WCA 청렴위원회
+        weat: WCA 임원 보좌팀
+        wfc: WCA 재무위원회
         wmt: WCA 마케팅 팀
         wmct: WCA 주요 챔피언십 팀
-        wqac: WCA 품질 보증 위원회
-        wrc: WCA 규정 위원회
+        wqac: WCA 품질보증위원회
+        wrc: WCA 규정위원회
         wrt: WCA 결과 팀
         wst: WCA 소프트웨어 팀
         wsot: WCA 스포츠 조직 팀
-        wapc: WCA 항소 위원회
+        wapc: WCA 항소위원회
       groups_description:
         wat: >-
           WCA 아카이브 팀(WAT)은 WCA의 역사 아카이브의 개발과 유지 관리를 담당합니다. 이들은 주요 스피드큐빙 종목과 주목할
@@ -795,29 +815,29 @@ ko:
           준수하도록 합니다. 이 팀은 또한 WCA 대회 요건 정책과 같은 문서에서 적절한 대회 제출 프로토콜을 유지할 책임이 있습니다.
           WCAT는 개별 대회의 조직 및 감독에 대해 책임을 지지 않습니다.
         wic: >-
-          WCA 청렴성 위원회(WIC)는 WCA 대회 기간 중 또는 공식 온라인 WCA 플랫폼에서 발생한 사건에 대해 독립적인 조사를
-          수행합니다. 이때 사건은 WCA의 가치관, 행동강령, 윤리강령 및/또는 규정을 위반한 혐의가 있는 사건입니다.
-        weat: WCA 행정지원팀(WEAT)은 WCA 이사회의 행정 업무를 수행합니다.
+          WCA 청렴위원회(WIC)는 WCA 대회 기간 중 또는 공식 온라인 WCA 플랫폼에서 발생한 사건에 대해 독립적인 조사를 수행합니다.
+          이때 사건은 WCA의 가치관, 행동강령, 윤리강령 및/또는 규정을 위반한 혐의가 있는 사건입니다.
+        weat: WCA 임원 보좌팀(WEAT)은 WCA 이사회의 행정 업무를 수행합니다.
         wfc: >-
-          WCA 재무 위원회(WFC)는 예산 편성, 보고, 분석, 장부 작성, 세금 신고 등 WCA의 전반적인 재정을 관리합니다. 또한
-          여행 기금, 장비 기금, 지역 단체 지원 등 지역 커뮤니티의 발전 단계에 따라 지원하는 다양한 기금 프로그램과 함께 WCA의
-          가장 큰 수입원인 WCA 회비 시스템을 관리합니다.
+          WCA 재무위원회(WFC)는 예산 편성, 보고, 분석, 장부 작성, 세금 신고 등 WCA의 전반적인 재정을 관리합니다. 또한 여행
+          기금, 장비 기금, 지역 단체 지원 등 지역 커뮤니티의 발전 단계에 따라 지원하는 다양한 기금 프로그램과 함께 WCA의 가장 큰
+          수입원인 WCA 회비 시스템을 관리합니다.
         wmt: 'WCA 마케팅 팀(WMT)은 WCA 브랜드를 관리하고, 후원을 모색하며, WCA 상품을 홍보합니다.'
         wmct: >-
           WCA 주요 챔피언십 팀(WMCT)은 지침 및 전략 계획 개발, 개최 도시 선정 관리, 주최 팀 지원, 일관된 챔피언십 경험
           보장 등을 통해 WCA 대륙 및 세계 챔피언십의 조정과 발전을 감독합니다.
         wqac: >-
-          WCA 품질 보증 위원회(WQAC)는 WCA 내에서 지속적인 품질 개선을 도모하며, 프로세스, WCA 자원봉사자, 지역 단체,
-          대회 주최자, 대회 자원봉사자의 일관된 높은 품질을 보장하기 위한 품질 표준을 전 세계에 적용합니다.
+          WCA 품질보증위원회(WQAC)는 WCA 내에서 지속적인 품질 개선을 도모하며, 프로세스, WCA 자원봉사자, 지역 단체, 대회
+          주최자, 대회 자원봉사자의 일관된 높은 품질을 보장하기 위한 품질 표준을 전 세계에 적용합니다.
         wrc: >-
-          WCA 규정 위원회(WRC)는 WCA 규정의 적용, 개선 및 개발과 관련된 모든 문제를 처리합니다. 대회에서 발생하는 모든 종류의
+          WCA 규정위원회(WRC)는 WCA 규정의 적용, 개선 및 개발과 관련된 모든 문제를 처리합니다. 대회에서 발생하는 모든 종류의
           절차적 문제에 대해 WCA 파견위원을 지원하고 해결되지 않은 사건과 밝혀지지 않은 사건에 대해 판정을 내립니다.
         wrt: WCA 결과 팀(WRT)은 대회 결과와 선수 데이터 등 WCA 데이터베이스의 모든 데이터를 관리합니다.
         wst: 'WCA 소프트웨어 팀(WST)은 WCA의 소프트웨어(웹사이트, 스크램블러, 통합 문서, 관리 도구)를 관리합니다.'
         wsot: WCA 스포츠 조직 팀(WSOT)은 WCA가 국제 스포츠 조직으로 인정받는 것을 감독하고 지원합니다.
         wapc: >-
-          WCA 항소 위원회(WAC)는 다른 WCA 자원봉사자가 내린 결정에 대한 항소를 검토하고 의결합니다. WAC는 독립적이고
-          공정한 검토 절차를 통해 결정이 공정하고 합리적이며 WCA 정책 및 규정에 부합하는지 확인합니다.
+          WCA 항소위원회(WAC)는 다른 WCA 자원봉사자가 내린 결정에 대한 항소를 검토하고 의결합니다. WAC는 독립적이고 공정한 검토
+          절차를 통해 결정이 공정하고 합리적이며 WCA 정책 및 규정에 부합하는지 확인합니다.
       empty: 팀이나 위원회를 찾을 수 없습니다. 나중에 다시 확인해 주세요.
     contacts:
       title: WCA 문의 양식
@@ -1411,6 +1431,7 @@ ko:
       competition_over: 대회가 종료된 후에는 현장 참가 신청을 추가할 수 없습니다.
       errors:
         already_registered: 이미 참가 신청을 한 사람입니다.
+      add_on_the_spot: 현장 참가 신청 추가
   competitions:
     messages:
       not_visible: 이 대회는 대중에게 공개되지 않았습니다.
@@ -1477,6 +1498,8 @@ ko:
         other: '%{count}자리 남음'
       no_spots_left: 정원 마감
       provisional_live_results: '그동안 예비 결과를 여기에서 확인할 수 있습니다:'
+      administering: 이 대회를 관리하고 있습니다
+      back_to_public_page: 공개 페이지로 돌아가기
     live:
       title: 실시간 결과
       manage_rounds: 라운드 관리
@@ -1559,10 +1582,29 @@ ko:
             이 선수는 해당 대회에 참가 신청되어 있지 않으며, 이 대회는 참가 종목 변경을 더 이상 허용하지 않습니다. 선수를 추가하는
             것은 가능하지만, 의도된 변경인지 반드시 확인해 주세요.
           round_closed: 이미 종료된 라운드에는 선수를 추가할 수 없습니다
+          title: 선수 추가
+          all_added: 모든 선수가 이미 해당 라운드에 포함되어 있습니다
         first_timer: 첫 참가자
+        double_check_description: 여기에서 입력 시간순(최신순)으로 정렬된 결과를 차례로 확인할 수 있습니다. 
+          재확인할 때는 기록지를 양식 옆에 놓고 시도 결과를 빠르게 비교할 수 있습니다. 가장 원활하게 작업하려면 입력 또는 수정한 
+          기록지를 항상 더미의 맨 위에 놓아 주세요.
+        type_to_search: 검색어 입력
+        no_cutoff: 없음
+        exit_batch_mode_confirm: 일괄 처리 모드를 종료하시겠습니까? 제출하지 않은 모든 결과가 사라집니다.
+        scoretakers:
+          title: 기록 입력자
+          manage: 기록 입력자 관리
+          add: 기록 입력자로 추가
+          remove: 삭제
+          no_registrations: 참가 신청이 없습니다.
       results:
         competitor: 선수
         mean: 평균
+        attempts: 시도
+        all_results: 모든 결과
+        show_combined: 통합 결과 표시
+        forecast_view: 예측 보기
+        processing: 처리 중
       errors:
         round_closed: 라운드가 아직 개시되지 않았습니다
       combined_title: 통합 듀얼 라운드
@@ -1572,6 +1614,9 @@ ko:
         past_month: 지난 한 달
         no_upcoming: 예정된 대회 중 실시간 결과가 제공되는 대회가 없습니다.
         search: 대회 검색
+      projector:
+        play: 재생
+        pause: 일시 정지
     my_competitions:
       title: 나의 대회
       disclaimer: >-
@@ -1711,6 +1756,7 @@ ko:
       view_more_members: 팀원 %{count}명 더 보기
       see_more: + %{count}명 더 보기
       waiting_list_size: 대기자 명단 규모
+      refund_policy: 환불 정책
     index:
       title: 대회
       all_events: 모두 선택
@@ -1809,6 +1855,7 @@ ko:
       why_compete_description_html: |-
         <p>대회는 누가 가장 빠른지 알아보는 자리만은 아닙니다. 사람들과 어울리는 자리이기도 합니다! 큐브를 맞출 수 있는 사람이라면 누구나 대회에 참가해 개인 최고 기록을 세울 수 있습니다. 모두가 대회가 원활히 진행되도록 함께 힘을 보태기 때문에 친구를 사귀기도 쉽습니다.</p>
         <p>아래 도구를 사용해 가까운 대회를 찾고 큐빙을 시작해 보세요!</p>
+      why_compete_title: 왜 대회에 참가하나요?
     my_competitions_table:
       edit: 수정
       registrations: 참가 신청
@@ -2270,6 +2317,9 @@ ko:
         '-7003': 보류 중인 참가 신청이나 대기 명단의 첫 번째 순위만 자동으로 수락할 수 있습니다
         '-7004': 대회가 자동 마감 임계치에 도달했습니다
         '-7005': 참가 신청이 열리지 않았을 때는 자동 승인을 할 수 없습니다
+      preview:
+        notice: 미리 보기입니다. 일반 참가 신청 페이지를 통해 신청하는 것을 권장합니다.
+        link: 현재 참가 신청 페이지로 이동
     errors:
       must_use_wca_registration: 자동 승인 기능은 WCA 웹사이트를 통해 참가 신청을 하는 경우에만 사용할 수 
         있습니다
@@ -2462,6 +2512,7 @@ ko:
       schedule_change_warning: >-
         일정은 조정될 수 있으며, 특히 참가자 수가 확정된 후 변경될 가능성이 있습니다. 주요 변경 사항이 발생하면 참가 신청한
         선수들에게 이메일로 안내됩니다.
+      no_timezone_selected: 선택된 항목 없음
     nav:
       menu:
         results: 결과
@@ -2509,6 +2560,7 @@ ko:
     scrambles_table:
       group: 그룹
       scramble: 스크램블
+      extra: 엑스트라 %{number}
     competition_series_fields:
       add_series: 시리즈에 추가
       remove_series: 시리즈에서 제거
@@ -2544,6 +2596,7 @@ ko:
       tabs_introduction_text: 여기에서는 대회 정보 페이지에 표시되는 탭을 추가하고 수정할 수 있습니다.
     edit:
       edit_tab_title: '%{tab_name} 탭 수정'
+    not_found: 탭이 존재하지 않습니다
   results:
     rankings:
       title: 순위
@@ -2699,6 +2752,24 @@ ko:
       world_records: 역대 세계 신기록
       continental_records: 역대 대륙 신기록
       national_records: 역대 국가 신기록
+      not_found: 인물이 존재하지 않습니다
+      record_levels:
+        world: 세계
+        continental: 대륙
+        national: 국가
+      achievements:
+        title: 업적
+        explanation_title: 프로필 업적 안내
+        explanation: 선수는 프로필에 표시되는 '업적'을 획득할 수 있습니다. 이는 주로 결과에 기반한 업적이지만, 전부 그런 
+          것은 아닙니다.
+        badges_intro: '현재 획득하거나 표시할 수 있는 배지는 다음과 같습니다:'
+        career: 경력
+        career_length: 경력 기간
+        years:
+          other: 년
+        medals: 메달
+        medals_won: 획득한 메달
+      round: 라운드
   posts:
     confirm_delete_post: 이 게시물을 삭제할까요? 이 작업은 되돌릴 수 없습니다.
     announcement_info_html: '%{date_time}에 %{author_name}에 의해 공지됨'
@@ -2707,6 +2778,10 @@ ko:
     search: 공지 검색
     no_announcements: 아직 공지사항이 없습니다.
     no_search_results: 검색 결과에 해당하는 공지사항이 없습니다.
+    read_more: 더 읽기
+    share: 공유
+    previous_page: 이전 페이지
+    next_page: 다음 페이지
   contacts:
     dob:
       title: 생년월일 변경 신청 양식
@@ -2848,7 +2923,7 @@ ko:
     mission_statement: 'WCA의 목적은 전 세계 스피드큐빙 커뮤니티를 성장시키고, 모두가 즐겁고 공정하게 경쟁할 수 있는 환경을
       조성하는 것입니다.'
     mission_footer: WCA 목적 선언문
-    who_we_are_title: 우리는 누구인가
+    who_we_are_title: WCA란
     who_we_are_content_html: >-
       <p>세계 큐브 협회는 여러 조각을 돌려 맞추는 기계식 퍼즐인 “트위스티 퍼즐”에 대한 대회를 관할합니다. 가장 널리 알려진 퍼즐은 헝가리의
       루빅(Rubik) 교수가 발명한 루빅스 큐브(Rubik's Cube)입니다. 이 퍼즐 중 일부는 WCA 공식 종목입니다.</p> <p>WCA는
@@ -2857,7 +2932,7 @@ ko:
       지원을 받으면 전 세계에서 더 많은 대회를 개최하고 대회 운영의 전문성을 높일 수 있습니다.</p>
     spirit: 'WCA의 가치는 공동체, 공정성, 즐거움, 탁월함, 자원봉사입니다.'
     spirit_footer: WCA 가치
-    our_goals_title: 우리의 목표
+    our_goals_title: WCA의 목표
     our_goals_content_html: >-
       <p>세계 큐브 협회는 '트위스티 퍼즐' 대회의 접근성을 높여 전 세계 청소년들에게 커뮤니티 멤버십과 리더십 기회를 제공하고자 합니다.
       WCA는 대회와 커뮤니티에서의 경험이 참여하는 청소년들에게 성장 기회를 만들어내고, 새로운 집단에 퍼즐 행사를 소개함으로써 전체 커뮤니티가
@@ -3041,6 +3116,8 @@ ko:
       groups:
         title: Competition groups
         description: 진행 중인 대회들의 참가자 그룹 보기
+    guide: 안내
+    sources: 소스 코드
   logo:
     title: WCA 로고
     intro: >-
@@ -3128,13 +3205,13 @@ ko:
       cancel: 취소
       confirm: 확인
       change_status: 상태 변경
-      destroy_title: 사고 기록 삭제
-      confirm_publish: 이 사고 기록을 공개하려고 합니다. 계속할까요?
-      confirm_unpublish: 이 사고 기록의 공개를 취소하려고 합니다. 계속할까요?
-      confirm_destroy: 이 사고를 삭제할까요?
-      publish_error: 이 사고를 공개할 수 없습니다.
-      unpublish_error: 이 사고의 공개를 취소할 수 없습니다.
-      destroy_error: 이 사고를 삭제할 수 없습니다.
+      destroy_title: 사건 기록 삭제
+      confirm_publish: 이 사건 기록을 공개하려고 합니다. 계속할까요?
+      confirm_unpublish: 이 사건 기록의 공개를 취소하려고 합니다. 계속할까요?
+      confirm_destroy: 이 사건을 삭제할까요?
+      publish_error: 이 사건을 공개할 수 없습니다.
+      unpublish_error: 이 사건의 공개를 취소할 수 없습니다.
+      destroy_error: 이 사건을 삭제할 수 없습니다.
   about_regulations:
     title: 규정에 대하여
     panel1:
@@ -3143,8 +3220,8 @@ ko:
         모든 WCA 대회는 <a href="/regulations/">WCA 규정</a>을 따라야 합니다. 선수는 첫 대회에 참가하기
         전에 규정을 숙지하는 것이 중요합니다.
       content2_html: >-
-        WCA 규정 위원회에서 해결한 대회 중 발생한 사건에 대한 중요한 결정은 <a href="/incidents">사건
-        기록</a>에서 확인할 수 있습니다.
+        WCA 규정위원회에서 해결한 대회 중 발생한 사건에 대한 중요한 결정은 <a href="/incidents">사건 기록</a>에서 확인할
+        수 있습니다.
     panel2:
       title: 번역본
       content1_html: >-
@@ -3447,7 +3524,7 @@ ko:
     events:
       not_333_main_event_warning: >-
         이 대회의 선택된 주 종목은 %{main_event_id}입니다. 이는 대회 전에 WCAT에서 승인되었지만, WRT는 대회 이후에 WCA
-        대회 요구 사항 정책에 따른 적절한 주 종목 지침이 충족되었는지 확인할 책임이 있습니다. 대회 중에 %{main_event_id}을(를)
+        대회 요건 정책에 따른 적절한 주 종목 지침이 충족되었는지 확인할 책임이 있습니다. 대회 중에 %{main_event_id}을(를)
         주 종목으로 간주하기 위해 취한 한 가지 조치를 알려 주세요(유효한 예: 대회에서 우승한 것으로 선언, 최대 라운드 수, 최대 상금
         금액).
       no_main_event_warning: 이 대회에는 선택된 주 종목이 없습니다. 이것이 맞다는 것을 WRT에 알려주세요.
@@ -3551,3 +3628,90 @@ ko:
       "yes": 예
       "no": 아니요
       submit: 신청서 제출
+  beta_disclaimer:
+    title: WCA 웹사이트 개편 베타 안내
+    description_html: 개편된 WCA 웹사이트의 영어 전용 베타 버전을 보고 계십니다. 이 버전은 웹사이트를 미리 살펴보고 
+      의견을 나눌 수 있도록 커뮤니티에 공개되었습니다. <br /> 웹사이트를 둘러보는 동안 오류나 문제가 발견될 수 있습니다. 그런 경우
+      <a>피드백 양식</a>을 통해 알려 주세요.
+    accept: 알겠습니다. 접속할게요!
+  regulations_viewer:
+    search: 규정 검색…
+    no_matches: 일치하는 규정이 없습니다.
+  regulations_history:
+    title: WCA 규정
+    older_versions: 이전 버전의 규정
+    maintainers_html: 2011년까지 규정은 Ron van Bruchem과 WCA 이사회가 관리했습니다. 그 이후로는 <a 
+      href="mailto:wrc@worldcubeassociation.org">WCA 규정위원회</a>가 규정을 담당하고 있습니다.
+    guidelines_merge: 이전에는 2013년 1월 1일 공개본부터 2025년 1월 1일 공개본까지 WCA 규정이 WCA 규정과 
+      WCA 지침으로 나뉘어 있었습니다. 두 문서의 기존 내용은 2025년 7월 17일 공개본에서 WCA 규정으로 통합되었습니다.
+    changes_html: (<a href="%{changes_url}">변경 사항</a>)
+    changes_with_summary_html: (<a href="%{changes_url}">변경 사항</a>, <a 
+      href="%{summary_url}">변경 사항 요약</a>)
+    current_updates_html: 규정의 최신 업데이트는 <a 
+      href="https://github.com/thewca/wca-regulations/">GitHub</a>에서 확인할 수 있습니다
+  regulations_scrambles:
+    title: WCA 스크램블
+    current_program_html: 현재 공식 스크램블 프로그램은 <i>%{version}</i>입니다. 이 프로그램은 대회의 모든 
+      종목에 대한 고품질 스크램블 시퀀스를 한 번에 생성합니다.
+    download: '공식 스크램블 프로그램 다운로드:'
+    last_change: '마지막 공식 변경: 2026년 1월 1일'
+    delegates:
+      title: 파견위원을 위한 중요 안내
+      current_version_html: 공식 대회에서는 항상 현재 버전의 공식 스크램블 프로그램을 사용해야 합니다(<a 
+        href="/regulations#4b">규정 4b</a> 참고).
+      no_public_server: 파견위원은 TNoodle을 다운로드하여 컴퓨터에서 실행해야 합니다. 보안상의 이유로 공개 서버에서 
+        실행 중인 TNoodle을 사용해서는 안 됩니다.
+      save_scrambles_html: 파견위원은 공식 대회를 위해 생성한 모든 스크램블 시퀀스를 저장하고, 결과와 함께 제출해야 
+        합니다(<a 
+        href="https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf">WCA
+        대회 요건 정책</a> 참고).
+    secrecy:
+      title: 스크램블 보안
+      encrypt_html: TNoodle에서 스크램블을 <b>항상</b> 추측하기 어려운 비밀번호로 암호화하세요. 비밀번호는 대회와 
+        관련이 있거나 파견위원의 개인정보(이름, 생년월일)를 포함해서는 안 됩니다.
+      digital_display_html: 디지털 기기에 스크램블을 표시하는 경우 <code>[Competition Name] - 
+        Computer Display PDFs.zip</code>만 공유하세요.
+      delegates_only: 다른 파일에는 파견위원만 접근할 수 있도록 하세요.
+      guest_account: 파견위원의 컴퓨터를 사용하는 경우 운영 체제에서 게스트 사용자 계정을 만들고, 비밀번호로 보호된 컴퓨터 
+        표시용 PDF만 해당 계정과 공유하세요.
+      passcode_timing_html: 해당 조가 시작할 때 스크램블러에게 비밀번호를 알려주되, <b>그보다 일찍 알려주지 
+        마세요</b>. (특히 라운드가 시작될 때 그 라운드의 모든 스크램블 세트에 대한 비밀번호를 스크램블러에게 알려주지 마세요.)
+      passcode_delegation: 절대적으로 필요한 경우가 아니라면 다른 사람에게 비밀번호 관리를 맡기지 말고, 맡기는 경우에도 
+        필요한 최소한의 비밀번호만 알려주세요.
+      accountability_html: 추가 예방 조치는 <a 
+        href="https://documents.worldcubeassociation.org/documents/policies/external/Scramble%20Accountability.pdf">스크램블
+        관리 정책</a>에 설명되어 있습니다.
+    instructions:
+      title: TNoodle 상세 사용 안내
+      java_html: 컴퓨터에 <a href="https://www.java.com/en/">Java</a>를 설치해야 TNoodle을
+        사용할 수 있습니다.
+      run_html: 컴퓨터에서 <code>%{jarfile}</code> 파일을 실행하세요.
+      open_page_html: 브라우저에서 <a 
+        href="http://localhost:2014/scramble">http://localhost:2014/scramble</a>
+        페이지가 열립니다.
+      enter_details: 대회 정보(대회 이름, 각 종목의 라운드 수, 각 라운드의 세부 정보)를 입력하세요.
+      password: 파일에 암호를 설정하려면 암호를 입력하세요.
+      wait: 로딩 막대가 끝까지 차기를 기다린 다음 나타나는 "스크램블!" 버튼을 클릭하세요.
+      zip_html: 브라우저에서 <code>.zip</code> 파일이 다운로드됩니다.
+    notes:
+      title: 참고
+      four_by_four_html: 4x4x4 스크램블 시퀀스는 초기화 및 생성에 <strong>몇 분이 걸릴 수 
+        있습니다</strong>. 4x4x4 스크램블 시퀀스를 생성하는 경우 로딩 막대가 멈춘 것처럼 보여도 기다려 주세요.
+      resources_html: TNoodle은 실행되는 폴더에 몇 MB 크기의 파일(대부분 캐시된 테이블)이 들어 있는 
+        <code>tnoodle_resources</code> 폴더를 만듭니다.
+      resources_keep: 나중에 4x4x4 스크램블 시퀀스를 더 빠르게 생성하려면 이 폴더를 보관하세요. 디스크 공간을 확보해야 
+        하는 경우에는 삭제해도 됩니다.
+      filtering_html: TNoodle은 <a 
+        href="https://www.worldcubeassociation.org/regulations/#4b3">규정 4b3</a>에
+        따라 스크램블 필터링을 수행합니다.
+    about:
+      title: TNoodle 소개
+      description_html: TNoodle은 Jeremy Fleischman, Ryan Zheng, Clément Gallet, 
+        Shuang Chen, Bruce Norskog, Lucas Garron이 개발하거나 수정한 코드를 사용합니다. <a 
+        href="https://github.com/thewca/tnoodle">GitHub의 TNoodle 프로젝트</a>에서 소스 
+        코드를 확인하고, 문제를 보고하거나 개발에 기여할 수 있습니다.
+    history:
+      title: 공식 릴리스 기록
+      description: 이전 버전을 사용해서는 안 됩니다. 이전 버전의 동작을 확인하려는 목적으로만 제공됩니다.
+  privacy:
+    title: WCA 개인정보 보호 정책
