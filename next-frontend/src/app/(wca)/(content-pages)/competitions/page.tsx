@@ -827,6 +827,21 @@ function AdvancedFilters({
     { value: "past", label: t("competitions.index.past") },
   ];
 
+  const changeTimeOrder = (value: string | null) => {
+    if (!value) return;
+    dispatchFilter({
+      type: "set_time_order",
+      timeOrder: value,
+    });
+    // If past or recent are selected, we want to sort order by start date descending by default, so that the most recent competitions are shown first.
+    if (value === "past" || value === "recent") {
+      dispatchFilter({
+        type: "set_sort_order",
+        sort: "-start_date",
+      });
+    }
+  };
+
   return (
     <Stack
       direction={{ base: "column", lg: "row" }}
@@ -840,9 +855,7 @@ function AdvancedFilters({
         <SegmentGroup.Root
           hideBelow="md"
           value={filterState.timeOrder}
-          onValueChange={(e) =>
-            dispatchFilter({ type: "set_time_order", timeOrder: e.value! })
-          }
+          onValueChange={(e) => changeTimeOrder(e.value)}
         >
           <SegmentGroup.Indicator />
           <SegmentGroup.Items items={timeOrderItems} />
@@ -850,12 +863,7 @@ function AdvancedFilters({
         <NativeSelect.Root hideFrom="md">
           <NativeSelect.Field
             value={filterState.timeOrder}
-            onChange={(e) =>
-              dispatchFilter({
-                type: "set_time_order",
-                timeOrder: e.target.value,
-              })
-            }
+            onChange={(e) => changeTimeOrder(e.target.value)}
           >
             {timeOrderItems.map(({ value, label }) => (
               <option key={value} value={value}>
