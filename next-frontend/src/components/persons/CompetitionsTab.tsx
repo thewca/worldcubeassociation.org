@@ -137,7 +137,7 @@ function OrderSelect({ value, onChange }: OrderSelectProps) {
         }
       }}
       variant="outline"
-      width="fit-content"
+      width={{ base: "100%", md: "fit-content" }}
       minWidth="xs"
     >
       <Select.HiddenSelect />
