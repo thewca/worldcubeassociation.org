@@ -101,12 +101,10 @@ RSpec.describe LinkedRound do
         # These are rounds with the same format, cutoff and time limit, so basically they could be linked.
         #   However, there are only two rounds overall, so the "first two rounds" stipulated by 9v1
         #   also accidentally implies that the second round is the final, which in turn violates 9v2.
-        r1 = create(:round, event_id: "333", competition: competition, linked_round: linked_round, total_number_of_rounds: 2, number: 1)
-        r2 = build(:round, event_id: "333", competition: competition, total_number_of_rounds: 2, number: 2)
+        create(:round, event_id: "333", competition: competition, linked_round: linked_round, total_number_of_rounds: 2, number: 1)
+        final_round = build(:round, event_id: "333", competition: competition, linked_round: linked_round, total_number_of_rounds: 2, number: 2)
 
-        linked_round.rounds = [r1, r2]
-
-        expect(linked_round).to be_invalid_with_errors(final_round_of_championship?: ["cannot include the final round of any championship"])
+        expect(final_round).to be_invalid_with_errors(linked_round: ["cannot include the final round of any championship"])
       end
     end
   end

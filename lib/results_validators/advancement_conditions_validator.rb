@@ -32,6 +32,7 @@ module ResultsValidators
     def competition_associations(check_real_results: false)
       {
         rounds: [:competition_event, :participation_source, { linked_round: [:rounds] }],
+        championships: [],
       }
     end
 
@@ -46,8 +47,9 @@ module ResultsValidators
       validator_data.each do |competition_data|
         competition = competition_data.competition
         comp_start_date = competition.start_date
-        # Looked up once per competition, because asking each linked round would query the championships every time
-        is_championship = competition.any_championship?
+        # Uses the preloaded championships, because `any_championship?` (and with it
+        #   `Round#final_round_of_championship?`) always fires a fresh query
+        is_championship = competition.championships.any?
 
         results_by_event_id = competition_data.results.group_by(&:event_id)
         results_by_event_id.each do |event_id, results_for_event|

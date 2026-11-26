@@ -2366,6 +2366,8 @@ en:
       proceed: "Proceed"
       qualification: "Qualification"
       advancement_condition: "Advancement Condition"
+      #context: shown in the Manage events tab of a championship when an event has only two rounds
+      dual_round_championship_final_html: "This competition is a championship, so round %{round_number} (the final) cannot be part of a Dual Round as per <a href=\"%{regulation_url}\" target=\"_blank\" rel=\"noreferrer\">Regulation 9v2</a>. Add another round after it if you want to use a Dual Round."
     #context: competition's schedule tab
     schedule:
       #context: when selecting the kind of schedule to display

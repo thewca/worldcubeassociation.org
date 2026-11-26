@@ -408,9 +408,16 @@ RSpec.describe SanityCheck do
         create(:round, competition: competition, event_id: "333", linked_round: linked_round, total_number_of_rounds: total_number_of_rounds, number: 2)
       end
 
+      # Round validations reject linking a championship final, so this data can only exist
+      #   when championship status is granted after the rounds were linked
+      def grant_championship_after_linking(competition)
+        create_dual_round(competition, total_number_of_rounds: 2)
+        competition.championships.create!(championship_type: "world")
+      end
+
       it "finds a championship whose final is part of a Dual Round" do
-        championship = create(:competition, :announced, :world_championship, event_ids: ["333"])
-        create_dual_round(championship, total_number_of_rounds: 2)
+        championship = create(:competition, :announced, event_ids: ["333"])
+        grant_championship_after_linking(championship)
 
         expect(sanity_check.run_query.pluck("competition_id")).to contain_exactly(championship.id)
       end
@@ -423,8 +430,8 @@ RSpec.describe SanityCheck do
       end
 
       it "ignores a championship that is not announced yet" do
-        championship = create(:competition, :world_championship, event_ids: ["333"])
-        create_dual_round(championship, total_number_of_rounds: 2)
+        championship = create(:competition, event_ids: ["333"])
+        grant_championship_after_linking(championship)
 
         expect(sanity_check.run_query.to_a).to be_empty
       end

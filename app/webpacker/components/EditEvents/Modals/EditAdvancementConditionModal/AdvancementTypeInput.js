@@ -2,13 +2,22 @@ import React from 'react';
 import { Form, Label } from 'semantic-ui-react';
 import { useStore } from '../../../../lib/providers/StoreProvider';
 
-const advancementTypeOptions = (roundNumber, scoretakingSoftware, includesChampionshipFinal) => [
+const advancementTypeOptions = (
+  roundNumber,
+  scoretakingSoftware,
+  dualRoundWouldIncludeChampionshipFinal,
+) => [
   { key: 0, value: 0, text: 'To be Announced' },
   {
     key: -1, value: -1, text: '────────', disabled: true,
   },
   {
-    key: -2, value: 'dual', text: 'Dual Round', disabled: roundNumber !== 1 || scoretakingSoftware === 'wca_live' || includesChampionshipFinal,
+    key: -2,
+    value: 'dual',
+    text: 'Dual Round',
+    disabled: roundNumber !== 1
+      || scoretakingSoftware === 'wca_live'
+      || dualRoundWouldIncludeChampionshipFinal,
   },
   { key: 1, value: 'ranking', text: 'Ranking' },
   { key: 2, value: 'percent', text: 'Percent' },
@@ -16,12 +25,16 @@ const advancementTypeOptions = (roundNumber, scoretakingSoftware, includesChampi
 ];
 
 export function AdvancementTypeInput({
-  advancementType, onChange, roundNumber, scoretakingSoftware, includesChampionshipFinal,
+  advancementType,
+  onChange,
+  roundNumber,
+  scoretakingSoftware,
+  dualRoundWouldIncludeChampionshipFinal,
 }) {
   const options = advancementTypeOptions(
     roundNumber,
     scoretakingSoftware,
-    includesChampionshipFinal,
+    dualRoundWouldIncludeChampionshipFinal,
   );
 
   return (
@@ -36,7 +49,7 @@ export function AdvancementTypeInput({
 }
 
 export default function AdvancementTypeField({
-  advancementType, onChange, roundNumber, includesChampionshipFinal,
+  advancementType, onChange, roundNumber, dualRoundWouldIncludeChampionshipFinal,
 }) {
   const { scoretakingSoftware } = useStore();
 
@@ -51,7 +64,7 @@ export default function AdvancementTypeField({
         onChange={onChange}
         roundNumber={roundNumber}
         scoretakingSoftware={scoretakingSoftware}
-        includesChampionshipFinal={includesChampionshipFinal}
+        dualRoundWouldIncludeChampionshipFinal={dualRoundWouldIncludeChampionshipFinal}
       />
     </Form.Field>
   );

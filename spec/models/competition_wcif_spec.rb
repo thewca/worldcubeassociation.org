@@ -1211,6 +1211,23 @@ RSpec.describe "Competition WCIF" do
         expect(round333_2.reload.linked_round).to be_nil
       end
 
+      it "refuses to remove the round after a Dual Round when that makes the Dual Round include the final" do
+        competition.championships.create!(championship_type: "world")
+        round333_2.update!(cutoff: sixty_second_2_attempt_cutoff)
+        round333_3 = create(:round, competition_event: event_333, number: 3, total_number_of_rounds: 3)
+        linked_round = create(:linked_round)
+        round333_1.update!(linked_round: linked_round, total_number_of_rounds: 3)
+        round333_2.update!(linked_round: linked_round, total_number_of_rounds: 3, participation_source: round333_1.participation_source, participation_condition: nil)
+
+        wcif_333_event = wcif["events"].find { |e| e["id"] == "333" }
+        wcif_333_event["rounds"] = wcif_333_event["rounds"].take(2)
+
+        expect { competition.set_wcif!(wcif, delegate) }
+          .to raise_error(ActiveRecord::RecordInvalid, /cannot include the final round of any championship/)
+
+        expect(round333_3.reload).to be_present
+      end
+
       it "unlinks rounds that had previously been linked" do
         # Synchronize cutoff to allow linking further down
         round333_2.update!(cutoff: sixty_second_2_attempt_cutoff)

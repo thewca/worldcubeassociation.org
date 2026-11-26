@@ -12,6 +12,7 @@ import AdvancementTypeField from './AdvancementTypeInput';
 import MbldPointsField from '../../../EditResult/WCALive/AttemptResultField/MbldPointsField';
 import { v2RulesetToV1Condition } from '../../utils';
 import { regulationsUrl } from '../../../../lib/requests/routes.js.erb';
+import I18nHTMLTranslate from '../../../I18nHTMLTranslate';
 
 const MIN_ADVANCE_PERCENT = 1;
 const MAX_ADVANCE_PERCENT = 75;
@@ -138,8 +139,8 @@ export default function EditAdvancementConditionModal({
 
   // Choosing "Dual Round" here links this round with the next one
   //   (see `advanceReqToExplanationText`)
-  const linksFinalRound = roundNumber + 1 === wcifEvent.rounds.length;
-  const includesChampionshipFinal = isChampionship && linksFinalRound;
+  const isNextRoundFinal = roundNumber + 1 === wcifEvent.rounds.length;
+  const dualRoundWouldIncludeChampionshipFinal = isChampionship && isNextRoundFinal;
 
   const advancementCondition = v2RulesetToV1Condition(wcifRound, wcifEvent, roundNumber);
 
@@ -179,18 +180,14 @@ export default function EditAdvancementConditionModal({
         advancementType={type}
         onChange={setType}
         roundNumber={roundNumber}
-        includesChampionshipFinal={includesChampionshipFinal}
+        dualRoundWouldIncludeChampionshipFinal={dualRoundWouldIncludeChampionshipFinal}
       />
-      {includesChampionshipFinal && (
+      {dualRoundWouldIncludeChampionshipFinal && (
         <Message warning={type === 'dual'} visible>
-          This competition is a championship, so round
-          {' '}
-          {roundNumber + 1}
-          {' '}
-          (the final) cannot be part of a Dual Round as per
-          {' '}
-          <a href={`${regulationsUrl}#9v2`} target="_blank" rel="noreferrer">Regulation 9v2</a>
-          . Add another round after it if you want to use a Dual Round.
+          <I18nHTMLTranslate
+            i18nKey="competitions.events.dual_round_championship_final_html"
+            options={{ round_number: roundNumber + 1, regulation_url: `${regulationsUrl}#9v2` }}
+          />
         </Message>
       )}
       <p>

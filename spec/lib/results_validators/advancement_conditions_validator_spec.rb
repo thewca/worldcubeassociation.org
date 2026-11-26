@@ -237,9 +237,9 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
     context "Dual Rounds at a championship (9v2)" do
       let(:linked_round) { create(:linked_round) }
 
-      def import_dual_round_results(*rounds)
+      def import_dual_round_results(competition, *rounds)
         results = rounds.flat_map do |round|
-          build_list(:result, 20, competition: competition3, event_id: "333", round_type_id: round.round_type_id, round: round)
+          build_list(:result, 20, competition: competition, event_id: "333", round_type_id: round.round_type_id, round: round)
         end
         Result.import(results, validate: false)
       end
@@ -247,7 +247,7 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
       it "warns when the Dual Round includes the final" do
         round_333_1 = create(:round, competition: competition3, event_id: "333", linked_round: linked_round, total_number_of_rounds: 2, number: 1)
         round_333_2 = create(:round, competition: competition3, event_id: "333", linked_round: linked_round, total_number_of_rounds: 2, number: 2)
-        import_dual_round_results(round_333_1, round_333_2)
+        import_dual_round_results(competition3, round_333_1, round_333_2)
 
         # Championship status granted after the rounds were linked, which the WCIF save cannot catch
         competition3.championships.create!(championship_type: "world")
@@ -259,14 +259,13 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
       end
 
       it "does not warn when the final is a separate round" do
-        round_333_1 = create(:round, competition: competition3, event_id: "333", linked_round: linked_round, total_number_of_rounds: 3, number: 1)
-        round_333_2 = create(:round, competition: competition3, event_id: "333", linked_round: linked_round, total_number_of_rounds: 3, number: 2)
-        round_333_3 = create(:round, competition: competition3, event_id: "333", total_number_of_rounds: 3, number: 3)
-        import_dual_round_results(round_333_1, round_333_2, round_333_3)
+        championship = create(:competition, :past, :world_championship, event_ids: ["333"])
+        round_333_1 = create(:round, competition: championship, event_id: "333", linked_round: linked_round, total_number_of_rounds: 3, number: 1)
+        round_333_2 = create(:round, competition: championship, event_id: "333", linked_round: linked_round, total_number_of_rounds: 3, number: 2)
+        round_333_3 = create(:round, competition: championship, event_id: "333", total_number_of_rounds: 3, number: 3)
+        import_dual_round_results(championship, round_333_1, round_333_2, round_333_3)
 
-        competition3.championships.create!(championship_type: "world")
-
-        acv = ACV.new.validate(competition_ids: [competition3.id], model: Result)
+        acv = ACV.new.validate(competition_ids: [championship.id], model: Result)
         expect(acv.warnings).to be_empty
       end
     end
