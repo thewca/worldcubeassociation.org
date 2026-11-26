@@ -22,9 +22,9 @@
 </p>
 <% end %>
 
-<% if @regional_delegates.present? %>
+<% if @regional_delegate_emails.present? %>
 <p>
-  Regional <%= "Delegate".pluralize(@regional_delegates.count) %>: please follow up with the <%= "Delegate".pluralize(@competition.delegates.count) %> of this competition to make sure the report is submitted on time.
+  Regional <%= "Delegate".pluralize(@regional_delegate_emails.count) %>: please follow up with the <%= "Delegate".pluralize(@competition.delegates.count) %> of this competition to make sure the report is submitted on time.
 </p>
 <% end %>
 

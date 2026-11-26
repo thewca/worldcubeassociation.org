@@ -181,27 +181,27 @@ RSpec.describe CompetitionsMailer do
 
   describe "submit_report_reminder" do
     let(:subregion) { GroupsMetadataDelegateRegions.find_by!(friendly_id: 'asia-east').user_group }
-    let!(:senior_delegate) { create(:senior_delegate_role, group: subregion.parent_group) }
-    let!(:regional_delegate) { create(:regional_delegate_role, group: subregion) }
-    let(:delegate) { create(:delegate_role, group: subregion) }
-    let(:trainee_delegate) { create(:trainee_delegate_role, group: subregion) }
-    let(:competition) { create(:competition, name: "Peculiar Comp 2016", delegates: [delegate.user, trainee_delegate.user], starts: 7.days.ago, ends: 6.days.ago) }
+    let!(:senior_delegate_role) { create(:senior_delegate_role, group: subregion.parent_group) }
+    let!(:regional_delegate_role) { create(:regional_delegate_role, group: subregion) }
+    let(:delegate_role) { create(:delegate_role, group: subregion) }
+    let(:trainee_delegate_role) { create(:trainee_delegate_role, group: subregion) }
+    let(:competition) { create(:competition, name: "Peculiar Comp 2016", delegates: [delegate_role.user, trainee_delegate_role.user], starts: 7.days.ago, ends: 6.days.ago) }
     let(:mail) { CompetitionsMailer.submit_report_reminder(competition) }
 
     it "renders the headers" do
       expect(mail.subject).to eq "Friendly reminder to submit Peculiar Comp 2016 Delegate Report"
       expect(mail.to).to match_array competition.delegates.pluck(:email)
       expect(mail.from).to eq ["assistants@worldcubeassociation.org"]
-      expect(mail.cc).to eq [regional_delegate.user.email]
-      expect(mail.reply_to).to contain_exactly(senior_delegate.user.email, regional_delegate.user.email)
+      expect(mail.cc).to eq [regional_delegate_role.user.email]
+      expect(mail.reply_to).to contain_exactly(senior_delegate_role.user.email, regional_delegate_role.user.email)
     end
 
     context "when the Delegates' region is not a subregion" do
-      let(:delegate) { create(:delegate_role) }
-      let(:trainee_delegate) { create(:trainee_delegate_role) }
+      let(:delegate_role) { create(:delegate_role) }
+      let(:trainee_delegate_role) { create(:trainee_delegate_role) }
 
       it "CCs the Senior Delegate leading the region" do
-        expect(mail.cc).to eq [delegate.group.senior_delegate.email]
+        expect(mail.cc).to eq [delegate_role.group.senior_delegate.email]
       end
     end
 
