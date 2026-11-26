@@ -4,7 +4,7 @@ import { CSVLink } from 'react-csv';
 import DelegatesTable from './DelegatesTable';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import { apiV0Urls } from '../../lib/requests/routes.js.erb';
-import { groupTypes } from '../../lib/wca-data.js.erb';
+import { delegateRegionsStatus, groupTypes } from '../../lib/wca-data.js.erb';
 import Loading from '../Requests/Loading';
 import Errored from '../Requests/Errored';
 import I18n from '../../lib/i18n';
@@ -17,6 +17,7 @@ const otherDelegatesHeaders = [
   { label: 'Status', key: 'status' },
   { label: 'Location', key: 'metadata.location' },
   { label: 'Senior Region', key: 'metadata.senior_region' },
+  { label: 'Regional Delegate', key: 'regional_delegate' },
   { label: 'Junior Promotion Date', key: 'metadata.junior_delegate_promotion_date' },
   { label: 'First Delegated', key: 'metadata.first_delegated' },
   { label: 'Last Delegated', key: 'metadata.last_delegated' },
@@ -49,11 +50,17 @@ export default function DelegatesOfAllRegion() {
     1000, // Increasing per page limit to 1000 because there are that many delegates that has to be
     // shown in the same page.
   ));
+  const regionalDelegateNameByGroupId = useMemo(() => new Map(
+    seniorAndRegionalDelegates
+      ?.filter((lead) => lead.metadata.status === delegateRegionsStatus.regional_delegate)
+      .map((lead) => [lead.group.id, lead.user.name]),
+  ), [seniorAndRegionalDelegates]);
   const otherDelegatesWithExtraData = useMemo(() => otherDelegates?.map((delegate) => ({
     ...delegate,
     status: I18n.t(`enums.user_roles.status.delegate_regions.${delegate.metadata.status}`),
+    regional_delegate: regionalDelegateNameByGroupId.get(delegate.group.id),
     date_since_last_delegated: dateSince(delegate.metadata.last_delegated),
-  })), [otherDelegates]);
+  })), [otherDelegates, regionalDelegateNameByGroupId]);
 
   if (seniorAndRegionalDelegatesLoading || otherDelegatesLoading) return <Loading />;
   if (seniorAndRegionalDelegatesError || otherDelegatesError) return <Errored />;
