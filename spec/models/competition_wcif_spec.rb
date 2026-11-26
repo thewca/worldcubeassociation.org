@@ -1220,7 +1220,7 @@ RSpec.describe "Competition WCIF" do
         round333_2.update!(linked_round: linked_round, total_number_of_rounds: 3, participation_source: round333_1.participation_source, participation_condition: nil)
 
         wcif_333_event = wcif["events"].find { |e| e["id"] == "333" }
-        wcif_333_event["rounds"] = wcif_333_event["rounds"].take(2)
+        wcif_333_event["rounds"] = wcif_333_event["rounds"].reject { it["id"] == round333_3.wcif_id }
 
         expect { competition.set_wcif!(wcif, delegate) }
           .to raise_error(ActiveRecord::RecordInvalid, /cannot include the final round of any championship/)
