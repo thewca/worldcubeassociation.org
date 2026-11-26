@@ -2,12 +2,12 @@
 
 require 'rails_helper'
 
-RSpec.describe MarkdownImage do
+RSpec.describe AttachedImage do
   let(:user) { create(:user) }
 
   def new_image(fixture, content_type)
-    MarkdownImage.new(uploaded_by: user).tap do |markdown_image|
-      markdown_image.image.attach(io: File.open("spec/support/#{fixture}"), filename: fixture, content_type: content_type)
+    AttachedImage.new(uploaded_by: user).tap do |attached_image|
+      attached_image.image.attach(io: File.open("spec/support/#{fixture}"), filename: fixture, content_type: content_type)
     end
   end
 
@@ -26,6 +26,6 @@ RSpec.describe MarkdownImage do
   end
 
   it "rejects a record with no file at all" do
-    expect(MarkdownImage.new(uploaded_by: user)).not_to be_valid
+    expect(AttachedImage.new(uploaded_by: user)).not_to be_valid
   end
 end

@@ -282,6 +282,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_13_120806) do
     t.index ["schedule_activity_id"], name: "index_assignments_on_schedule_activity_id"
   end
 
+  create_table "attached_images", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "attachable_id"
+    t.string "attachable_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "uploaded_by_id"
+    t.index ["attachable_type", "attachable_id"], name: "index_attached_images_on_attachable"
+    t.index ["uploaded_by_id"], name: "index_attached_images_on_uploaded_by_id"
+  end
+
   create_table "bookmarked_competitions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id", null: false
     t.integer "user_id", null: false
@@ -861,13 +871,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_13_120806) do
     t.text "payment_instructions", null: false
     t.string "payment_reference_label", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "markdown_images", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "uploaded_by_id"
-    t.index ["uploaded_by_id"], name: "index_markdown_images_on_uploaded_by_id"
   end
 
   create_table "matched_scramble_sets", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1705,6 +1708,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_13_120806) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "attached_images", "users", column: "uploaded_by_id"
   add_foreign_key "concise_average_results", "results", on_update: :cascade, on_delete: :cascade
   add_foreign_key "concise_single_results", "results", on_update: :cascade, on_delete: :cascade
   add_foreign_key "external_scramble_sets", "competitions"
@@ -1726,7 +1730,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_13_120806) do
   add_foreign_key "live_results", "rounds", on_delete: :cascade
   add_foreign_key "live_results", "users", column: "locked_by_id"
   add_foreign_key "live_results", "users", column: "quit_by_id"
-  add_foreign_key "markdown_images", "users", column: "uploaded_by_id"
   add_foreign_key "matched_scramble_sets", "external_scramble_sets"
   add_foreign_key "matched_scramble_sets", "rounds"
   add_foreign_key "matched_scrambles", "external_scrambles"
