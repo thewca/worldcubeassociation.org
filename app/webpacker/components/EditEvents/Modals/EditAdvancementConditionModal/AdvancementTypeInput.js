@@ -2,13 +2,13 @@ import React from 'react';
 import { Form, Label } from 'semantic-ui-react';
 import { useStore } from '../../../../lib/providers/StoreProvider';
 
-const advancementTypeOptions = (roundNumber, scoretakingSoftware) => [
+const advancementTypeOptions = (roundNumber, scoretakingSoftware, includesChampionshipFinal) => [
   { key: 0, value: 0, text: 'To be Announced' },
   {
     key: -1, value: -1, text: '────────', disabled: true,
   },
   {
-    key: -2, value: 'dual', text: 'Dual Round', disabled: roundNumber !== 1 || scoretakingSoftware === 'wca_live',
+    key: -2, value: 'dual', text: 'Dual Round', disabled: roundNumber !== 1 || scoretakingSoftware === 'wca_live' || includesChampionshipFinal,
   },
   { key: 1, value: 'ranking', text: 'Ranking' },
   { key: 2, value: 'percent', text: 'Percent' },
@@ -16,9 +16,13 @@ const advancementTypeOptions = (roundNumber, scoretakingSoftware) => [
 ];
 
 export function AdvancementTypeInput({
-  advancementType, onChange, roundNumber, scoretakingSoftware,
+  advancementType, onChange, roundNumber, scoretakingSoftware, includesChampionshipFinal,
 }) {
-  const options = advancementTypeOptions(roundNumber, scoretakingSoftware);
+  const options = advancementTypeOptions(
+    roundNumber,
+    scoretakingSoftware,
+    includesChampionshipFinal,
+  );
 
   return (
     <Form.Select
@@ -32,7 +36,7 @@ export function AdvancementTypeInput({
 }
 
 export default function AdvancementTypeField({
-  advancementType, onChange, roundNumber,
+  advancementType, onChange, roundNumber, includesChampionshipFinal,
 }) {
   const { scoretakingSoftware } = useStore();
 
@@ -47,6 +51,7 @@ export default function AdvancementTypeField({
         onChange={onChange}
         roundNumber={roundNumber}
         scoretakingSoftware={scoretakingSoftware}
+        includesChampionshipFinal={includesChampionshipFinal}
       />
     </Form.Field>
   );

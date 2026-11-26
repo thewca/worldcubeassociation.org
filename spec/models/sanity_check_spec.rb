@@ -398,6 +398,44 @@ RSpec.describe SanityCheck do
         expect(result_ids).to contain_exactly("666-r2")
       end
     end
+
+    context "Dual Round includes championship final" do
+      let(:sanity_check) { SanityCheck.find(75) }
+
+      def create_dual_round(competition, total_number_of_rounds:)
+        linked_round = create(:linked_round)
+        create(:round, competition: competition, event_id: "333", linked_round: linked_round, total_number_of_rounds: total_number_of_rounds, number: 1)
+        create(:round, competition: competition, event_id: "333", linked_round: linked_round, total_number_of_rounds: total_number_of_rounds, number: 2)
+      end
+
+      it "finds a championship whose final is part of a Dual Round" do
+        championship = create(:competition, :announced, :world_championship, event_ids: ["333"])
+        create_dual_round(championship, total_number_of_rounds: 2)
+
+        expect(sanity_check.run_query.pluck("competition_id")).to contain_exactly(championship.id)
+      end
+
+      it "ignores a championship whose final is a separate round" do
+        championship = create(:competition, :announced, :world_championship, event_ids: ["333"])
+        create_dual_round(championship, total_number_of_rounds: 3)
+
+        expect(sanity_check.run_query.to_a).to be_empty
+      end
+
+      it "ignores a championship that is not announced yet" do
+        championship = create(:competition, :world_championship, event_ids: ["333"])
+        create_dual_round(championship, total_number_of_rounds: 2)
+
+        expect(sanity_check.run_query.to_a).to be_empty
+      end
+
+      it "ignores a competition that is not a championship" do
+        competition = create(:competition, :announced, event_ids: ["333"])
+        create_dual_round(competition, total_number_of_rounds: 2)
+
+        expect(sanity_check.run_query.to_a).to be_empty
+      end
+    end
   end
 
   context "Person Data Irregularities" do

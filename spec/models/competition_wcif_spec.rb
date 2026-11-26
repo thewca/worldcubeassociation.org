@@ -1192,6 +1192,25 @@ RSpec.describe "Competition WCIF" do
         expect(round333_1.linked_round).to eq(round333_2.linked_round)
       end
 
+      it "refuses to link the final round of a championship" do
+        competition.championships.create!(championship_type: "world")
+
+        wcif_333_event = wcif["events"].find { |e| e["id"] == "333" }
+
+        # 333 has two rounds, so linking them puts the final into the Dual Round (Regulation 9v2)
+        wcif_333_event["rounds"][0]["linkedRounds"] = %w[333-r1 333-r2]
+        wcif_333_event["rounds"][1]["linkedRounds"] = %w[333-r1 333-r2]
+        wcif_333_event["rounds"][1]["participationRuleset"] = wcif_333_event["rounds"][0]["participationRuleset"]
+
+        # Going through `set_wcif!` (like the API does) so that the failed save is rolled back
+        expect { competition.set_wcif!(wcif, delegate) }
+          .to raise_error(ActiveRecord::RecordInvalid, /cannot include the final round of any championship/)
+
+        expect(LinkedRound.count).to be 0
+        expect(round333_1.reload.linked_round).to be_nil
+        expect(round333_2.reload.linked_round).to be_nil
+      end
+
       it "unlinks rounds that had previously been linked" do
         # Synchronize cutoff to allow linking further down
         round333_2.update!(cutoff: sixty_second_2_attempt_cutoff)

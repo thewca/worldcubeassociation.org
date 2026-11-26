@@ -12,6 +12,7 @@
     canUpdateEvents: current_user.can_update_events?(@competition),
     canUpdateQualifications: current_user.can_update_qualifications?(@competition),
     scoretakingSoftware: @competition.scoretaking_software,
+    isChampionship: @competition.any_championship?,
     wcifEvents: @competition.events_wcif(version: '2.1.1')
   }, id: "events-edit-area") %>
 <% end %>

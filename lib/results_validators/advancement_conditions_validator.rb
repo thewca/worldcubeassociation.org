@@ -15,6 +15,7 @@ module ResultsValidators
     NOT_ENOUGH_QUALIFIED_WARNING = :not_enough_qualified_warning
     COMPETED_NOT_QUALIFIED_ERROR = :competed_not_qualified_error
     ROUND_NOT_FOUND_ERROR = :round_not_found_error
+    REGULATION_9V2_WARNING = :regulation_9v2_warning
 
     # These are the old "(combined) qualification" and "b-final" rounds.
     # They are not taken into account in advancement conditions.
@@ -45,6 +46,8 @@ module ResultsValidators
       validator_data.each do |competition_data|
         competition = competition_data.competition
         comp_start_date = competition.start_date
+        # Looked up once per competition, because asking each linked round would query the championships every time
+        is_championship = competition.any_championship?
 
         results_by_event_id = competition_data.results.group_by(&:event_id)
         results_by_event_id.each do |event_id, results_for_event|
@@ -81,6 +84,14 @@ module ResultsValidators
               @errors << ValidationError.new(REGULATION_9M1_ERROR,
                                              :rounds, competition.id,
                                              round_id: round.human_id)
+            end
+
+            # https://www.worldcubeassociation.org/regulations/#9v2: Dual Rounds must not include the final round of a championship.
+            #   Reported once per Dual Round, on its final round.
+            if is_championship && round.final_round? && round.linked_round?
+              @warnings << ValidationWarning.new(REGULATION_9V2_WARNING,
+                                                 :rounds, competition.id,
+                                                 round_id: round.human_id)
             end
 
             # Initial rounds do not have any notion of "advancing" into them

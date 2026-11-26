@@ -256,6 +256,10 @@ class CompetitionEvent < ApplicationRecord
       rounds: new_rounds,
       **CompetitionEvent.wcif_qualification_attributes(wcif, version: version),
     )
+    # A link is validated when its first round is saved, before the later rounds have joined it.
+    #   Rails does not re-validate an associated record that is unchanged, so rules about the link
+    #   as a whole (like 9v2 on the final round) can only be checked once every round is in place.
+    LinkedRound.where(id: new_rounds.filter_map(&:linked_round_id)).find_each(&:validate!)
     WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
     self
   end
