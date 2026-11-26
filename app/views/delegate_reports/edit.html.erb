@@ -16,7 +16,7 @@
     <%= @competition.any_venues? ? f.hidden_field(:schedule_url) : f.input(:schedule_url) %>
 
     <% @delegate_report.md_sections.each do |section| %>
-      <%= f.input section, input_html: { class: "markdown-editor markdown-editor-image-upload" } %>
+      <%= f.input section, input_html: { class: "markdown-editor markdown-editor-image-upload", data: { max_length: DelegateReport::MAX_SECTION_LENGTH } } %>
 
       <% if section == :venue && @delegate_report.requires_setup_images? %>
         <% @delegate_report.setup_images.each do |image| %>
