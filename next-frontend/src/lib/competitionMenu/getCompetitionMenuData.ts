@@ -6,6 +6,7 @@ import {
   liveTab,
 } from "../wca/competitions/tabs";
 import { hasPassed, hasPassedEndOfDay } from "../wca/dates";
+import { areResultsPosted } from "../wca/competitions/statusUtils";
 
 const LIVE_RESULT_BETA = !!process.env.LIVE_RESULT_BETA;
 
@@ -18,7 +19,7 @@ export function competitionStatus(
   const isOngoing = !hasEnded && hasPassed(competitionInfo.start_date);
 
   const isAwaitingResults =
-    hasEnded && competitionInfo.status !== "results_posted";
+    hasEnded && !areResultsPosted(competitionInfo.status);
 
   return { hasEnded, isOngoing, isAwaitingResults };
 }

@@ -837,6 +837,9 @@ class User < ApplicationRecord
       can_view_delegate_report: {
         scope: can_view_delegate_matters? ? "*" : delegated_competition_ids,
       },
+      can_view_unposted_delegate_report: {
+        scope: can_view_all_unposted_delegate_reports? ? "*" : delegated_competition_ids,
+      },
       can_edit_delegate_report: {
         scope: can_admin_results? ? "*" : delegated_competition_ids,
       },
@@ -1069,6 +1072,11 @@ class User < ApplicationRecord
     else
       can_edit_delegate_report?(delegate_report) || wic_team? || appeals_committee?
     end
+  end
+
+  # Mirrors the unposted branch of `can_view_delegate_report?`, minus the competition's own Delegates.
+  def can_view_all_unposted_delegate_reports?
+    can_admin_results? || wic_team? || appeals_committee?
   end
 
   def can_edit_delegate_report?(delegate_report)

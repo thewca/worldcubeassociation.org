@@ -1494,13 +1494,18 @@ export interface components {
              *     - `unconfirmed`: still being set up by its organizers
              *     - `confirmed`: submitted to the WCAT, waiting to be announced
              *     - `announced`: public, and not over yet
-             *     - `results_pending`: over, but its results are not posted yet
-             *     - `results_posted`: its results are posted
+             *     - `results_pending`: over, but neither its results nor its delegate report are posted yet
+             *     - `report_posted`: its delegate report is posted, but its results are not
+             *     - `results_posted`: its results are posted, but its delegate report is not
+             *     - `fully_posted`: both its results and its delegate report are posted
              *     - `hidden`: announced, but taken down by the WCAT until an issue is resolved
              *     - `cancelled`: cancelled
+             *
+             *     Results and the delegate report are posted independently of each other, so check for both
+             *     `results_posted` and `fully_posted` to know whether results are up.
              * @enum {string}
              */
-            status: "unconfirmed" | "confirmed" | "announced" | "results_pending" | "results_posted" | "hidden" | "cancelled";
+            status: "unconfirmed" | "confirmed" | "announced" | "results_pending" | "report_posted" | "results_posted" | "fully_posted" | "hidden" | "cancelled";
             /** @example First WCA World Championship */
             information: string | null;
             /** @example https://cubingusa.org/worlds */
@@ -2681,6 +2686,10 @@ export interface components {
                 scope: components["schemas"]["CompetitionPermissions"];
             };
             can_view_delegate_report: {
+                scope: components["schemas"]["CompetitionPermissions"];
+            };
+            /** @description Before a delegate report is posted, only these users can view it. Once posted, `can_view_delegate_report` applies instead. */
+            can_view_unposted_delegate_report: {
                 scope: components["schemas"]["CompetitionPermissions"];
             };
             can_edit_delegate_report: {

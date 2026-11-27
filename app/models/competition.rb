@@ -2324,6 +2324,7 @@ class Competition < ApplicationRecord
     :tabs,
     :championships,
     :competition_venues,
+    :delegate_report,
     { delegates: [*V1_INFO_TEAM_MEMBER_INCLUDES, { roles: %i[metadata group] }], organizers: V1_INFO_TEAM_MEMBER_INCLUDES },
   ].freeze
 
@@ -2332,8 +2333,12 @@ class Competition < ApplicationRecord
       "cancelled"
     elsif announced? && !show_at_all?
       "hidden"
+    elsif results_posted? && report_posted?
+      "fully_posted"
     elsif results_posted?
       "results_posted"
+    elsif report_posted?
+      "report_posted"
     elsif announced? && probably_over?
       "results_pending"
     elsif announced?

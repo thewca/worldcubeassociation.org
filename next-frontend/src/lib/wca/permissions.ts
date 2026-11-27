@@ -8,6 +8,7 @@ export interface PermissionFunctions {
   canOrganizeCompetitions: (competition: string) => boolean;
   canEditDelegateReport: (competition: string) => boolean;
   canViewDelegateReport: (competition: string) => boolean;
+  canViewUnpostedDelegateReport: (competition: string) => boolean;
   canCreateGroup: (group: string) => boolean;
   canEditGroup: (group: string) => boolean;
   canReadGroupCurrent: (group: string) => boolean;
@@ -96,6 +97,14 @@ export const hydrateUserPermissions = (
       allOrSpecificScope(
         competition,
         rawPermissions.can_view_delegate_report.scope,
+      ),
+    ),
+  canViewUnpostedDelegateReport: (competition) =>
+    Boolean(
+      rawPermissions &&
+      allOrSpecificScope(
+        competition,
+        rawPermissions.can_view_unposted_delegate_report.scope,
       ),
     ),
   canCreateGroup: (group) =>

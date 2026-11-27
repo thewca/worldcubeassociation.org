@@ -13,6 +13,24 @@ export const isInProgress = (competition: CompetitionDates) =>
   !hasPassedEndOfDay(competition.end_date) &&
   !competition.results_posted_at;
 
+type CompetitionStatus = components["schemas"]["V1CompetitionInfo"]["status"];
+
+// Results and the delegate report are posted independently, so `status` encodes both of them.
+const RESULTS_POSTED_STATUSES: CompetitionStatus[] = [
+  "results_posted",
+  "fully_posted",
+];
+const REPORT_POSTED_STATUSES: CompetitionStatus[] = [
+  "report_posted",
+  "fully_posted",
+];
+
+export const areResultsPosted = (status: CompetitionStatus) =>
+  RESULTS_POSTED_STATUSES.includes(status);
+
+export const isReportPosted = (status: CompetitionStatus) =>
+  REPORT_POSTED_STATUSES.includes(status);
+
 export type RegistrationStatus = "open" | "notOpen" | "closed" | "all";
 
 type RegistrationDates = Pick<

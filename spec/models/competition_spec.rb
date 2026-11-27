@@ -2161,10 +2161,22 @@ RSpec.describe Competition do
       expect(over_competition.status).to eq "results_pending"
     end
 
-    it "is results_posted once results are posted" do
+    it "is results_posted once results are posted but the report is not" do
       posted_competition = create(:competition, :confirmed, :visible, :announced, :past, :results_posted)
 
       expect(posted_competition.status).to eq "results_posted"
+    end
+
+    it "is report_posted once the report is posted but the results are not" do
+      report_posted_competition = create(:competition, :confirmed, :visible, :announced, :past, :with_delegate_report)
+
+      expect(report_posted_competition.status).to eq "report_posted"
+    end
+
+    it "is fully_posted once both the results and the report are posted" do
+      fully_posted_competition = create(:competition, :confirmed, :visible, :announced, :past, :results_posted, :with_delegate_report)
+
+      expect(fully_posted_competition.status).to eq "fully_posted"
     end
 
     it "is hidden when it was announced but is no longer visible" do

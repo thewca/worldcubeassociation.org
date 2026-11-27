@@ -189,6 +189,56 @@ RSpec.describe Api::V0::UsersController do
       expect(json["can_administer_competitions"]["scope"]).to eq [competition.id]
     end
 
+    it 'correctly returns delegates to be able to view unposted reports only for competitions they delegated' do
+      sign_in delegate_user
+      get :permissions
+      expect(response).to have_http_status :ok
+      json = response.parsed_body
+      expect(json["can_view_unposted_delegate_report"]["scope"]).to eq [competition.id]
+    end
+
+    it 'correctly returns delegates to not be able to view unposted reports for competitions they did not delegate' do
+      other_delegate_user = create(:delegate_role, group_id: senior_delegate_role.group.id).user
+      other_competition = create(:competition, :confirmed, :future, delegates: [other_delegate_user])
+      sign_in other_delegate_user
+      get :permissions
+      expect(response).to have_http_status :ok
+      json = response.parsed_body
+      expect(json["can_view_unposted_delegate_report"]["scope"]).to eq [other_competition.id]
+    end
+
+    it 'correctly returns organizers to not be able to view unposted reports' do
+      sign_in organizer_user
+      get :permissions
+      expect(response).to have_http_status :ok
+      json = response.parsed_body
+      expect(json["can_view_unposted_delegate_report"]["scope"]).to eq []
+    end
+
+    it 'correctly returns wrt to be able to view all unposted reports' do
+      sign_in create :user, :wrt_member
+      get :permissions
+      expect(response).to have_http_status :ok
+      json = response.parsed_body
+      expect(json["can_view_unposted_delegate_report"]["scope"]).to eq "*"
+    end
+
+    it 'correctly returns wic to be able to view all unposted reports' do
+      sign_in create :user, :wic_member
+      get :permissions
+      expect(response).to have_http_status :ok
+      json = response.parsed_body
+      expect(json["can_view_unposted_delegate_report"]["scope"]).to eq "*"
+    end
+
+    it 'correctly returns wapc to be able to view all unposted reports' do
+      sign_in create :user, :wapc_member
+      get :permissions
+      expect(response).to have_http_status :ok
+      json = response.parsed_body
+      expect(json["can_view_unposted_delegate_report"]["scope"]).to eq "*"
+    end
+
     it 'correctly returns normal users to be able to edit only themselves' do
       sign_in normal_user
       get :permissions
