@@ -1494,18 +1494,13 @@ export interface components {
              *     - `unconfirmed`: still being set up by its organizers
              *     - `confirmed`: submitted to the WCAT, waiting to be announced
              *     - `announced`: public, and not over yet
-             *     - `results_pending`: over, but neither its results nor its delegate report are posted yet
-             *     - `report_posted`: its delegate report is posted, but its results are not
-             *     - `results_posted`: its results are posted, but its delegate report is not
-             *     - `fully_posted`: both its results and its delegate report are posted
+             *     - `results_pending`: over, but its results are not posted yet
+             *     - `results_posted`: its results are posted
              *     - `hidden`: announced, but taken down by the WCAT until an issue is resolved
              *     - `cancelled`: cancelled
-             *
-             *     Results and the delegate report are posted independently of each other, so check for both
-             *     `results_posted` and `fully_posted` to know whether results are up.
              * @enum {string}
              */
-            status: "unconfirmed" | "confirmed" | "announced" | "results_pending" | "report_posted" | "results_posted" | "fully_posted" | "hidden" | "cancelled";
+            status: "unconfirmed" | "confirmed" | "announced" | "results_pending" | "results_posted" | "hidden" | "cancelled";
             /** @example First WCA World Championship */
             information: string | null;
             /** @example https://cubingusa.org/worlds */
@@ -1525,6 +1520,12 @@ export interface components {
              * @example 2025-07-06
              */
             end_date: string | null;
+            /**
+             * Format: date-time
+             * @description When the delegate report was posted, or null while it is unposted. Posting the report is independent of posting results, so this is not part of `status`.
+             * @example 2025-07-10T14:00:00.000Z
+             */
+            report_posted_at: string | null;
             /** @enum {string} */
             scoretaking_software: "external" | "wca_live" | "internal";
             /** @example 123 */

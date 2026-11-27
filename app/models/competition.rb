@@ -2333,12 +2333,8 @@ class Competition < ApplicationRecord
       "cancelled"
     elsif announced? && !show_at_all?
       "hidden"
-    elsif results_posted? && report_posted?
-      "fully_posted"
     elsif results_posted?
       "results_posted"
-    elsif report_posted?
-      "report_posted"
     elsif announced? && probably_over?
       "results_pending"
     elsif announced?
@@ -2361,6 +2357,7 @@ class Competition < ApplicationRecord
       "contact" => contact.presence,
       "start_date" => start_date,
       "end_date" => end_date,
+      "report_posted_at" => report_posted_at,
       "scoretaking_software" => scoretaking_software,
       "number_of_bookmarks" => number_of_bookmarks,
       "competition_series_ids" => part_of_competition_series? ? series_competitions.visible.ids : [],

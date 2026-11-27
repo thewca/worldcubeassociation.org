@@ -8,10 +8,6 @@ import { EventId } from "@/lib/wca/data/events";
 import { hasPassed } from "@/lib/wca/dates";
 import type { PermissionFunctions } from "@/lib/wca/permissions";
 import { railsHref } from "@/components/RailsLink";
-import {
-  areResultsPosted,
-  isReportPosted,
-} from "@/lib/wca/competitions/statusUtils";
 
 interface TabBase {
   i18nKey: string;
@@ -322,11 +318,8 @@ export const adminTabs = (
   const isAnnounced =
     competitionInfo.status !== "unconfirmed" &&
     competitionInfo.status !== "confirmed";
-  const resultsPosted = areResultsPosted(competitionInfo.status);
-  // Mirrors `User#can_view_delegate_report?`: a posted report is open to more people than an unposted one.
-  const canViewDelegateReport = isReportPosted(competitionInfo.status)
-    ? permissions.canViewDelegateReport(competitionId)
-    : permissions.canViewUnpostedDelegateReport(competitionId);
+  const resultsPosted = competitionInfo.status === "results_posted";
+  const isReportPosted = competitionInfo.report_posted_at !== null;
 
   const canUploadResults =
     isResultsAdminOrDelegate &&
@@ -415,7 +408,7 @@ export const adminTabs = (
         "/admin/check-existing-results",
         "List Checks",
       ),
-    canViewDelegateReport &&
+    permissions.canViewDelegateReport(competitionId, isReportPosted) &&
       railsLink(
         "competitions.nav.menu.delegate_report",
         "/report",
