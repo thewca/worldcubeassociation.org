@@ -1,0 +1,38 @@
+name: Playwright version sync
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'package.json'
+      - 'Gemfile.lock'
+      - 'docker-compose.yml'
+      - '.github/workflows/playwright-versions.yml'
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Compare Playwright versions
+        run: |
+          npm_version=$(jq -r '.devDependencies["@playwright/test"]' package.json)
+          docker_version=$(grep -oP 'mcr\.microsoft\.com/playwright:v\K[0-9.]+' docker-compose.yml)
+          gem_version=$(grep -oP '^    playwright-ruby-client \(\K[0-9.]+' Gemfile.lock)
+          ruby_compatible=$(curl -sf "https://raw.githubusercontent.com/YusukeIwaki/playwright-ruby-client/${gem_version}/lib/playwright/version.rb" \
+            | grep -oP "COMPATIBLE_PLAYWRIGHT_VERSION = '\K[0-9.]+")
+
+          echo "@playwright/test: $npm_version"
+          echo "docker-compose image: $docker_version"
+          echo "playwright-ruby-client $gem_version supports: $ruby_compatible"
+
+          status=0
+          if [ "$npm_version" != "$docker_version" ]; then
+            echo "::error file=docker-compose.yml::Playwright image v$docker_version does not match @playwright/test $npm_version"
+            status=1
+          fi
+          if [ "${npm_version%.*}" != "${ruby_compatible%.*}" ]; then
+            echo "::error file=package.json::@playwright/test $npm_version is not compatible with playwright-ruby-client $gem_version (needs ${ruby_compatible%.*}.x)"
+            status=1
+          fi
+          exit $status

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import {
   Box,
   Button,
@@ -12,7 +12,6 @@ import {
   Icon,
 } from "@chakra-ui/react";
 import Link from "next/link";
-import { io } from "next/cache";
 import { getSession } from "@/auth";
 import { RefreshRouteOnSave } from "@/components/RefreshRouteOnSave";
 import {
@@ -23,7 +22,7 @@ import { LuChevronDown, LuExternalLink, LuMenu } from "react-icons/lu";
 import LanguageSelector from "@/components/ui/languageSelector";
 import IconDisplay from "@/components/IconDisplay";
 import type { IconName } from "@/types/payload";
-import AvatarMenu from "@/components/ui/avatarMenu";
+import AvatarMenu, { AvatarMenuSkeleton } from "@/components/ui/avatarMenu";
 import getPermissions from "@/lib/wca/permissions.server";
 import WCALogo from "@/components/WCALogo";
 import WcaSearch from "@/components/SearchBar/WcaSearch";
@@ -112,22 +111,32 @@ function LinkWrapper<T extends string>({
 
 const LIVE_RESULT_BETA = !!process.env.LIVE_RESULT_BETA;
 
-export default async function Navbar() {
-  // `io()` marks the boundary the build-time prerender stops at, so the Payload reads below
-  // never run while building, where MongoDB is unreachable. It has to stay out here rather
-  // than inside `getCachedGlobal`: within a `"use cache"` scope `io()` resolves immediately.
-  await io();
-
+async function SessionAvatarMenu() {
   const { lng } = await getT();
 
-  const [navbar, socialLinksGlobal, avatarMenu] = await Promise.all([
-    getCachedGlobal("nav", lng),
-    getCachedGlobal("social-links", lng),
+  const [session, permissions, avatarMenu] = await Promise.all([
+    getSession(),
+    getPermissions().then((p) => p?.permissions),
     getCachedGlobal("avatar-menu", lng),
   ]);
 
-  const session = await getSession();
-  const permissions = (await getPermissions())?.permissions;
+  return (
+    <AvatarMenu
+      session={session}
+      cmsEntries={avatarMenu.entries}
+      permissions={permissions}
+    />
+  );
+}
+
+export default async function Navbar() {
+  const { t, lng } = await getT();
+
+  const [navbar, socialLinksGlobal] = await Promise.all([
+    getCachedGlobal("nav", lng),
+    getCachedGlobal("social-links", lng),
+  ]);
+
   const socialLinks = socialLinksGlobal.links ?? [];
 
   // Prevent people part of the Live Results Beta to escape onto the payload pages
@@ -301,7 +310,10 @@ export default async function Navbar() {
           </Box>
           <HStack>
             {showEmptyMessage && (
-              <Text hideBelow="md">Oh no, there are no navbar items!</Text>
+              <Text hideBelow="md">
+                {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
+                Oh no, there are no navbar items!
+              </Text>
             )}
             <Box hideBelow="md">
               <ColorModeButton />
@@ -310,15 +322,16 @@ export default async function Navbar() {
               <LanguageSelector />
             </Box>
             <Box hideBelow="md">
-              <AvatarMenu
-                session={session}
-                cmsEntries={avatarMenu.entries}
-                permissions={permissions}
-              />
+              <Suspense fallback={<AvatarMenuSkeleton />}>
+                <SessionAvatarMenu />
+              </Suspense>
             </Box>
             <Box hideFrom="xl">
               <Collapsible.Trigger asChild>
-                <IconButton variant="ghost" aria-label="Toggle navigation">
+                <IconButton
+                  variant="ghost"
+                  aria-label={t("layouts.navigation.toggle_navigation")}
+                >
                   <Icon size="lg" asChild>
                     <LuMenu />
                   </Icon>
@@ -332,7 +345,10 @@ export default async function Navbar() {
           <Collapsible.Content>
             <VStack align="stretch" px={3.5} pt={1} pb={1.5} gap={1}>
               {showEmptyMessage && (
-                <Text>Oh no, there are no navbar items!</Text>
+                <Text>
+                  {/* eslint-disable-line no-restricted-syntax -- Backoffice-only text */}
+                  Oh no, there are no navbar items!
+                </Text>
               )}
               {navbarEntries.map((navbarEntry) => (
                 <React.Fragment key={navbarEntry.id}>
@@ -488,11 +504,9 @@ export default async function Navbar() {
               <VStack align="stretch" hideFrom="md" gap={1}>
                 <ColorModeMobileNavButton />
                 <LanguageSelector />
-                <AvatarMenu
-                  session={session}
-                  cmsEntries={avatarMenu.entries}
-                  permissions={permissions}
-                />
+                <Suspense fallback={<AvatarMenuSkeleton />}>
+                  <SessionAvatarMenu />
+                </Suspense>
               </VStack>
             </VStack>
           </Collapsible.Content>

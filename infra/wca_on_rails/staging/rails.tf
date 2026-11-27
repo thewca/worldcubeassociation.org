@@ -402,13 +402,8 @@ resource "aws_ecs_service" "rails" {
   enable_execute_command = true
 
   ordered_placement_strategy {
-    type  = "spread"
-    field = "attribute:ecs.availability-zone"
-  }
-
-  ordered_placement_strategy {
-    type  = "spread"
-    field = "instanceId"
+    type  = "binpack"
+    field = "memory"
   }
 
   load_balancer {
@@ -457,13 +452,8 @@ resource "aws_ecs_service" "api" {
   enable_execute_command = true
 
   ordered_placement_strategy {
-    type  = "spread"
-    field = "attribute:ecs.availability-zone"
-  }
-
-  ordered_placement_strategy {
-    type  = "spread"
-    field = "instanceId"
+    type  = "binpack"
+    field = "memory"
   }
 
   load_balancer {

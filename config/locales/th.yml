@@ -219,6 +219,7 @@ th:
     user:
       wca_id: WCA ID
       representing: Representing
+      profile_picture: รูปโปรไฟล์
     all_regions: ทุกภูมิภาค
     errors:
       invalid: ผิด
@@ -235,6 +236,17 @@ th:
       unit_seconds: วินาที
       unit_moves: ครั้ง
     back: ย้อนกลับ
+    ranking_abbreviations:
+      world: WR
+      position: อันดับ
+      continental: CR
+      national: NR
+    more_information: ข้อมูลเพิ่มเติม
+    confirm_dialog:
+      title: ยืนยันการดำเนินการ
+      message: คุณแน่ใจหรือไม่? การดำเนินการนี้ไม่สามารถยกเลิกได้
+      type_to_confirm_html: พิมพ์ <code>%{input}</code> เพื่อยืนยัน
+      input_mismatch: ข้อความไม่ตรงกัน โปรดลองใหม่อีกครั้ง
   oauth:
     applications:
       your_apps: แอปพลิเคชันของคุณที่มีการใช้งาน OAuth
@@ -570,6 +582,14 @@ th:
         หากปัญหานี้ยังคงเกิดขึ้น โปรดแจ้งให้ WST
         ทราบพร้อมรายละเอียดตามที่ระบุไว้ด้านล่าง
       details: รายละเอียดข้อผิดพลาด
+      session_outdated: เซสชันของคุณหมดอายุแล้ว 
+        โปรดออกจากระบบและลงชื่อเข้าใช้ใหม่อีกครั้ง
+      load_error:
+        podiums: เกิดข้อผิดพลาดในการดึงข้อมูลโพเดียม
+        results: เกิดข้อผิดพลาดในการดึงผลการแข่งขัน
+        schedule: เกิดข้อผิดพลาดในการดึงข้อมูลตารางการแข่งขัน
+        person: เกิดข้อผิดพลาดในการดึงข้อมูลบุคคล
+        competitions: เกิดข้อผิดพลาดขณะดึงข้อมูลการแข่งขันของคุณ
     messages:
       wrong_size: 'ขนาดไม่ถูกต้อง (ควรจะเป็น %{file_size})'
       size_too_small: 'ขนาดเล็กเกินไป (ควรมีขนาดมากกว่า %{file_size})'
@@ -821,6 +841,7 @@ th:
         leader: สำหรับผู้นำ
       switch_to_dark_mode: เปลี่ยนเป็นโหมดมืด
       switch_to_light_mode: เปลี่ยนเป็นโหมดสว่าง
+      toggle_navigation: เปิด/ปิด เมนูนำทาง
   page:
     translators:
       title: ผู้แปลภาษา
@@ -833,8 +854,8 @@ th:
         ประธานเป็นประธานในการประชุมคณะกรรมการทั้งหมด,
         เลขานุการดูแลเอกสารขององค์กร และเหรัญญิกจัดการเรื่องทางการเงินของ WCA
       board_description: >-
-        WCA Board มีหน้าที่รับผิดชอบในการเป็นผู้นำองค์กรโดยรวม
-        และปฏิบัติหน้าที่ใดๆ ที่ทีมและคณะกรรมการไม่ได้ปฏิบัติตาม
+        คณะกรรมการ WCA มีหน้าที่รับผิดชอบในการนำองค์กรโดยรวม รวมถึงปฏิบัติหน้าที่ต่าง
+        ๆ ที่ไม่ได้อยู่ในความรับผิดชอบของทีมหรือคณะทำงานอื่น ๆ
     teams_committees_councils:
       title: ทีมงานและคณะกรรมการของ WCA
       description: >-
@@ -1057,6 +1078,7 @@ th:
       joined_executives: เข้าร่วมทีมผู้บริหาร
       more_information: ข้อมูลเพิ่มเติม
       close: ปิด
+      board: คณะกรรมการ
   homepage:
     learn_more: เรียนรู้เพิ่มเติม
     title: ยินดีต้อนรับเข้าสู่สมาคมลูกบาศก์โลก
@@ -1663,6 +1685,7 @@ th:
         คุณไม่สามารถเพิ่มการสมัครการแข่งขันที่การแข่งขันได้หลังการแข่งขันสิ้นสุดลงได้
       errors:
         already_registered: ผู้สมัครรายนี้มีได้ทำการสมัครไปแล้ว
+      add_on_the_spot: เพิ่มการสมัครการแข่งขันที่การแข่งขัน
   competitions:
     messages:
       not_visible: การแข่งขันนี้ไม่ปรากฏแก่สาธารณะ
@@ -1758,6 +1781,8 @@ th:
         other: เหลืออีก %{count} คน
       no_spots_left: ผู้สมัครเต็มแล้ว
       provisional_live_results: 'ในระหว่างนี้ คุณสามารถดูผลเบื้องต้นได้ที่นี่:'
+      administering: คุณเป็นผู้ดำเนินการจัดการแข่งขันนี้
+      back_to_public_page: กลับไปยังหน้าสาธารณะ
     live:
       title: ผลการแข่งขัน
       manage_rounds: จัดการรอบการแข่งขัน
@@ -1867,9 +1892,33 @@ th:
             การเพิ่มผู้เข้าแข่งขันรายนี้ยังคงทำได้
             แต่โปรดตรวจสอบให้แน่ใจว่าเป็นสิ่งที่ตั้งใจไว้
           round_closed: คุณไม่สามารถเพิ่มผู้เข้าแข่งขันลงในรอบที่ปิดไปแล้วได้
+          title: เพิ่มผู้เข้าแข่งขัน
+          all_added: ผู้เข้าแข่งขันทุกคนเป็นส่วนหนึ่งของรอบนี้อยู่แล้ว
+        double_check_description: 
+          คุณสามารถไล่ดูผลการแข่งขันที่เรียงลำดับตามเวลาที่บันทึกข้อมูล 
+          (โดยให้รายการล่าสุดแสดงขึ้นมาก่อน) ในระหว่างการตรวจสอบซ้ำ คุณสามารถวาง
+          scorecard 
+          ไว้ข้างแบบฟอร์มเพื่อเปรียบเทียบผลการแข่งขันที่บันทึกไว้ได้อย่างรวดเร็ว
+          เพื่อให้การทำงานมีประสิทธิภาพสูงสุด ควรจัดวาง scorecard 
+          ที่เพิ่งบันทึกหรืออัปเดตใหม่ไว้บนสุดของกองเสมอ
+        type_to_search: พิมพ์เพื่อค้นหา
+        no_cutoff: ไม่มี
+        exit_batch_mode_confirm: คุณแน่ใจหรือไม่ว่าต้องการออกจาก Batch Mode? 
+          ผลลัพธ์ทั้งหมดยังไม่ได้ถูกส่งจะหายไป
+        scoretakers:
+          title: ผู้บันทึกผลการแข่งขัน
+          manage: จัดการผู้บันทึกผลการแข่งขัน
+          add: เพิ่มเป็นผู้บันทึกผลการแข่งขัน
+          remove: ลบ
+          no_registrations: ไม่พบการสมัครแข่งขัน
       results:
         competitor: ผู้เข้าแข่งขัน
         mean: Mean
+        all_results: ผลการแข่งขันทั้งหมด
+        show_combined: แสดงผลการแข่งขันแบบรวม
+        forecast_view: มุมมองการคาดการณ์
+        processing: กำลังประมวลผล
+        attempts: ครั้งที่
       errors:
         round_closed: รอบการแข่งขันยังไม่ได้เปิด
       overview:
@@ -1879,6 +1928,9 @@ th:
         upcoming: การแข่งขันในเร็ว ๆ นี้
         in_progress: การแข่งขันในขณะนี้
       combined_title: Combined Dual Rounds
+      projector:
+        pause: หยุดชั่วคราว
+        play: เล่น
     my_competitions:
       title: การแข่งขันของฉัน
       disclaimer: >-
@@ -2039,6 +2091,7 @@ th:
       waiting_list_size: จำนวนรายชื่อใน Waiting list
       view_more_members: ดูสมาชิกในทีมเพิ่มเติมอีก %{count} คน
       see_more: + %{count} รายการเพิ่มเติม
+      refund_policy: นโยบายการคืนเงิน
     index:
       title: การแข่งขัน
       all_competitions: การแข่งขันทั้งหมด
@@ -2088,13 +2141,17 @@ th:
       titles:
         in_progress: การแข่งขันที่กำลังดำเนินอยู่
         past: 'การแข่งขันในอดีตตั้งแต่ปี %{year}'
+        past_count: 'การแข่งขันในอดีตตั้งแต่ปี %{year} (%{count})'
         past_all: การแข่งขันในอดีตทุกปี
+        past_all_count: การแข่งขันในอดีตทุกปี (%{count})
         recent: 'การแข่งขันเร็ว ๆ นี้ (ย้อนหลัง %{count} วัน)'
         upcoming: การแข่งขันที่จะเกิดขึ้น
+        upcoming_count: การแข่งขันที่จะเกิดขึ้น (%{count})
         ongoing_and_upcoming: การแข่งขันที่กำลังเกิดขึ้นและที่กำลังจะเกิดขึ้น
         custom: การแข่งขันในช่วงเวลาที่เลือก
         by_announcement: การแข่งขันเรียงตามการประกาศ 
           การแข่งขันที่ใหม่กว่าอยู่ด้านบน
+        in_progress_count: การแข่งขันที่กำลังดำเนินอยู่ (%{count})
       tooltips:
         hourglass:
           ended: 'สิ้นสุดไปแล้ว %{days} วัน'
@@ -2116,6 +2173,7 @@ th:
         open: เปิด
         not_open: ยังไม่เปิด
         closed: ปิด
+        all: ทั้งหมด
       register_now: สมัครการแข่งขันตอนนี้
       view_competition: ดูการแข่งขัน
       no_more_comps: ไม่มีการแข่งขัน
@@ -2144,6 +2202,8 @@ th:
         name_asc: 'ชื่อ: A-Z'
         name_desc: 'ชื่อ: Z-A'
       date_and_city: '%{date} – %{city}'
+      why_compete_title: ทำไมต้องแข่งขัน?
+      why_compete_image_alt: ผู้เข้าแข่งขันกำลังแก้ puzzle ในการแข่งขันของ WCA
     my_competitions_table:
       edit: แก้ไข
       registrations: การสมัคร
@@ -2738,6 +2798,9 @@ th:
         '-7004': การแข่งขันได้ถึงเกณฑ์ auto_accept_disable_threshold แล้ว
         '-7005': >-
           ไม่สามารถยอมรับการสมัครการแข่งขันอัตโนมัติได้ในขณะที่ยังไม่เปิดรับสมัครการแข่งขัน
+      preview:
+        notice: นี่เป็นเพียงตัวอย่างเท่านั้น เราขอแนะนำให้สมัครผ่านช่องทางปกติ
+        link: ไปที่หน้าสมัครการแข่งขันปัจจุบัน
     errors:
       must_use_wca_registration: >-
         ระบบยอมรับการสมัครอัตโนมัติสามารถใช้ได้เฉพาะกรณีที่คุณใช้เว็บไซต์ WCA
@@ -2976,6 +3039,8 @@ th:
         ตารางการแข่งขันอาจมีการปรับเปลี่ยน
         โดยเฉพาะอย่างยิ่งเมื่อทราบจำนวนผู้สมัครทั้งหมดแล้วแล้ว
         ผู้เข้าแข่งขันที่สมัครการแข่งขันไว้จะได้รับแจ้งทางอีเมลเกี่ยวกับการเปลี่ยนแปลงที่สำคัญ
+      no_schedule: การแข่งขันนี้ไม่มีตารางการแข่งขัน
+      no_timezone_selected: ไม่ได้เลือกสิ่งใดไว้
     nav:
       menu:
         results: ผลการแข่งขัน
@@ -3001,6 +3066,8 @@ th:
         competitors: ผู้เข้าแข่งขัน
         scrambles: โจทย์
         competitor_results: ผลการแข่งขันของผู้เข้าแข่งขัน
+        upload_and_check_results: อัปโหลดและตรวจสอบผลการแข่งขัน
+        check_existing_results: ตรวจสอบผลการแข่งขันที่มีอยู่
       general: ทั่วไป
       more: เพิ่มเติม
       admin: แอดมิน
@@ -3027,6 +3094,7 @@ th:
     scrambles_table:
       group: กลุ่ม
       scramble: โจทย์
+      extra: Extra %{number}
     competition_series_fields:
       add_series: เพิ่มลงในซีรีส์
       remove_series: ลบออกจากซีรีส์
@@ -3037,6 +3105,16 @@ th:
       semifinal_stage: รองชนะเลิศ
       final_stage: ชิงชนะเลิศ
       third_place: ชิงอันดับสาม
+      match_number: ตรงกับ %{number} ผลลัพธ์
+      score:
+        win: W %{own}–%{opponent}
+        loss: L %{own}–%{opponent}
+        tie: = %{own}–%{opponent}
+    results:
+      query_search: ค้นหาด้วยชื่อหรือ WCA ID
+      country_search: กรองตามประเทศ
+      no_results: ไม่พบผลการค้นหา
+      all_countries: ทุกประเทศ
   competition_tabs:
     headers:
       tabs: แท็บ
@@ -3058,6 +3136,7 @@ th:
         คุณสามารถเพิ่มและแก้ไขแท็บซึ่งจะแสดงในหน้าการแข่งขัน
     edit:
       edit_tab_title: 'แก้ไขแท็บ %{tab_name}'
+    not_found: ไม่มีแท็บดังกล่าว
   results:
     rankings:
       title: การจัดอันดับ
@@ -3211,12 +3290,12 @@ th:
       odd_rank_reason: >-
         อันดับที่หายไปหรืออันดับภูมิภาคที่แย่กว่าทวีปนั้นเกิดจากการเปลี่ยนแปลงของภูมิภาค
         ผลลัพธ์จากภูมิภาคก่อนหน้าจะไม่นำมาพิจารณาในการจัดอันดับภูมิภาคปัจจุบัน
-      championship_podiums: ผู้ชนะการแข่งขันชิงแชมป์
+      championship_podiums: จำนวนครั้งที่ได้รางวัลชิงแชมป์ระดับภูมิภาค
       championship_podium_levels:
-        world: ผู้ชนะการแข่งขันชิงแชมป์โลก
-        continental: ผู้ชนะการแข่งขันชิงแชมป์ทวีป
-        national: ผู้ชนะการแข่งขันชิงแชมป์ชาติ
-        greater_china: ผู้ชนะการแข่งขันชิงแชมป์จีนแผ่นดินใหญ่
+        world: ประวัติการได้รางวัลชิงแชมป์โลก
+        continental: ประวัติการได้รางวัลชิงแชมป์ทวีป
+        national: ประวัติการได้รางวัลชิงแชมป์ประเทศ
+        greater_china: ประวัติการได้รางวัลชิงแชมป์จีนแผ่นดินใหญ่
       place: อันดับ
       dual: Dual
       medal_collection: เหรียญรางวัลสะสม
@@ -3232,15 +3311,41 @@ th:
       world_records: ประวัติสถิติโลก
       continental_records: ประวัติสถิติทวีป
       national_records: ประวัติสถิติประเทศ
+      not_found: บุคคลนี้ไม่มีอยู่จริง
+      record_levels:
+        world: อันดับโลก
+        continental: อันดับทวีป
+        national: อันดับประเทศ
+      achievements:
+        title: ความสำเร็จ
+        explanation_title: คำอธิบายความสำเร็จในโปรไฟล์
+        explanation: ผู้เข้าแข่งขันสามารถปลดล็อก 'ความสำเร็จ' 
+          ซึ่งจะปรากฏให้เห็นบนโปรไฟล์ของตน 
+          โดยความสำเร็จเหล่านี้ส่วนใหญ่จะอ้างอิงจากผลการแข่งขัน 
+          แต่ก็อาจรวมถึงความสำเร็จในด้านอื่น ๆ ด้วยเช่นกัน
+        badges_intro: 'ตราสัญลักษณ์ที่สามารถรับหรือแสดงได้ (ในขณะนี้) ได้แก่:'
+        career: แข่งขันมาแล้ว
+        career_length: ระยะเวลาในเส้นทางการแข่งขัน
+        years:
+          other: ปี
+        medals: เหรียญรางวัล
+        medals_won: เหรียญรางวัลที่ได้รับ
+      round: รอบ
+      h2h_summary:
+        other: '%{count} คู่ · %{wins}W %{losses}L'
   posts:
-    confirm_delete_post: คุณแน่ใจที่จะลบโพสต์นี้? 
-      การกระทำนี้ไม่สามารถย้อนกลับได้
+    confirm_delete_post: คุณแน่ใจที่จะลบโพสต์นี้หรือไม่? 
+      หากลบแล้วจะไม่สามารถย้อนกลับได้
     announcement_info_html: 'ประกาศโดย %{author_name} เมื่อ %{date_time}'
     errors:
       unstick_at_future: ต้องอยู่ในอนาคต
     no_search_results: ไม่มีการประกาศที่ตรงตามคำค้นหา
     search: ค้นหาประกาศ
     no_announcements: ขณะนี้ยังไม่มีข้อความประกาศ
+    read_more: อ่านเพิ่มเติม
+    share: Share
+    previous_page: หน้าก่อนหน้า
+    next_page: หน้าถัดไป
   contacts:
     dob:
       title: ฟอร์มการขอเปลี่ยนวันเกิด
@@ -3678,6 +3783,8 @@ th:
       groups:
         title: Competition groups
         description: ดูกลุ่มการแข่งขันของการแข่งขันที่กำลังแข่งขันอยู่
+    guide: คู่มือการใช้งาน
+    sources: Sources
   logo:
     title: WCA Logo
     intro: >-
@@ -4336,3 +4443,118 @@ th:
       submit: ส่งใบสมัคร
       present: ปัจจุบัน
       board_member: สมาชิกบอร์ด
+  beta_disclaimer:
+    title: ข้อสงวนสิทธิ์สำหรับเว็บไซต์ WCA ฉบับปรับปรุงใหม่ (รุ่นเบต้า)
+    description_html: คุณกำลังเข้าชมเว็บไซต์ WCA 
+      โฉมใหม่ในเวอร์ชันเบต้าซึ่งมีเนื้อหาเป็นภาษาอังกฤษเท่านั้น 
+      ทั้งนี้จัดทำขึ้นเพื่อให้ชุมชนได้ทดลองใช้งานก่อนเปิดตัวจริง 
+      เพื่อรับฟังความคิดเห็นและแลกเปลี่ยนมุมมองต่าง ๆ <br /> ในระหว่างการใช้งาน 
+      คุณอาจพบข้อผิดพลาดหรือปัญหาทางเทคนิคเกิดขึ้นได้ หากพบปัญหาดังกล่าว 
+      โปรดแจ้งให้เราทราบผ่านทาง <a>แบบฟอร์มแสดงความคิดเห็น</a>
+    accept: เข้าใจแล้ว ให้ฉันเข้าไป!
+  regulations_viewer:
+    search: ค้นหากติกา…
+    no_matches: ไม่มีกติกาที่สอดคล้องกัน
+  regulations_history:
+    title: WCA Regulations
+    older_versions: กติกาฉบับก่อนหน้า
+    maintainers_html: กฎกติกาต่าง ๆ อยู่ภายใต้การดูแลของ Ron van Bruchem 
+      และคณะกรรมการ WCA จนกระทั่งถึงปี ค.ศ. 2011 หลังจากนั้นเป็นต้นมา 
+      หน้าที่ดังกล่าวได้ตกเป็นความรับผิดชอบของ <a 
+      href="mailto:wrc@worldcubeassociation.org">WCA Regulations Committee</a>
+    guidelines_merge: ก่อนหน้านี้ นับตั้งแต่ฉบับวันที่ 1 มกราคม 2013 
+      จนถึงฉบับวันที่ 1 มกราคม 2025 กติกาของ WCA ได้ถูกแบ่งออกเป็น WCA 
+      Regulations และ WCA Guidelines 
+      โดยเนื้อหาจากเอกสารทั้งสองฉบับดังกล่าวได้ถูกนำมารวมเข้าด้วยกันเป็น WCA 
+      Regulations ในฉบับวันที่ 17 กรกฎาคม 2025
+    changes_html: (<a href="%{changes_url}">ประวัติการแก้ไข</a>)
+    changes_with_summary_html: (<a href="%{changes_url}">ประวัติการแก้ไข</a>, <a
+      href="%{summary_url}">สรุปการแก้ไข</a>)
+    current_updates_html: สามารถดูการอัปเดตกติกาฉบับปัจจุบันได้ที่ <a 
+      href="https://github.com/thewca/wca-regulations/">GitHub</a>
+  regulations_scrambles:
+    title: WCA Scrambles
+    current_program_html: โปรแกรมสร้างชุ scramble ฉบับทางการในปัจจุบันคือ 
+      <i>%{version}</i> ซึ่งสามารถสร้าง scramble 
+      คุณภาพสูงสำหรับการแข่งขันทุกประเภทได้ในคราวเดียว
+    download: 'ดาวน์โหลดโปรแกรม Scramble อย่างเป็นทางการ:'
+    last_change: 'การเปลี่ยนแปลงอย่างเป็นทางการครั้งล่าสุด: 1 มกราคม 2026'
+    delegates:
+      title: ข้อควรทราบสำหรับ Delegates
+      current_version_html: ในการแข่งขันอย่างเป็นทางการ จะต้องใช้โปรแกรม 
+        scramble เวอร์ชันล่าสุดอยู่เสมอ (ดู <a href="/regulations#4b">กฎข้อ 
+        4b</a>)
+      no_public_server: Delegates ควรดาวน์โหลดโปรแกรม TNoodle 
+        มาใช้งานบนคอมพิวเตอร์ของตนเอง ทั้งนี้ ไม่ควรใช้งาน TNoodle 
+        ผ่านเซิร์ฟเวอร์สาธารณะ (ด้วยเหตุผลด้านความปลอดภัย)
+      save_scrambles_html: Delegates จะต้องจัดเก็บชุด scramble 
+        ทั้งหมดที่สร้างขึ้นสำหรับการแข่งขันอย่างเป็นทางการไว้ และส่งชุด scramble
+        ดังกล่าวไปพร้อมกับผลการแข่งขัน (โปรดดู <a 
+        href="https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf">WCA
+        Competition Requirements Policy</a>)
+    secrecy:
+      title: การรักษาความลับของ Scramble
+      encrypt_html: จงเข้ารหัสชุด scrambles ในโปรแกรม TNoodle 
+        โดยใช้รหัสผ่านที่คาดเดาไม่ได้<b>อยู่เสมอ</b> 
+        รหัสผ่านดังกล่าวจะต้องไม่มีความเกี่ยวข้องใด ๆ กับการแข่งขัน, 
+        หรือข้อมูลส่วนบุคคล (เช่น ชื่อ หรือวันเกิด) ของ Delegates คนใดก็ตาม
+      digital_display_html: หากคุณแสดงชุด scrambles บนอุปกรณ์ดิจิทัล 
+        ให้แชร์เฉพาะไฟล์ <code>[Competition Name] - Computer Display 
+        PDFs.zip</code> เท่านั้น
+      delegates_only: ตรวจสอบให้แน่ใจว่ามีเพียง Delegates 
+        เท่านั้นที่สามารถเข้าถึงไฟล์อื่น ๆ ได้
+      guest_account: หากคุณกำลังใช้คอมพิวเตอร์ของ Delegate 
+        ให้สร้างบัญชีผู้ใช้แบบ Guest ผ่านระบบปฏิบัติการ แล้วแชร์เฉพาะไฟล์ PDF 
+        ที่แสดงผลบนหน้าจอคอมพิวเตอร์และมีการป้องกันด้วยรหัสผ่านให้กับบัญชีดังกล่าวเท่านั้น
+      passcode_timing_html: ให้รหัสผ่านแก่ scramblers 
+        เมื่อกลุ่มที่เกี่ยวข้องเริ่มดำเนินการเท่านั้น 
+        <b>ห้ามให้ก่อนหน้านั้นเด็ดขาด</b> (โดยเฉพาะอย่างยิ่ง 
+        ห้ามให้รหัสผ่านสำหรับชุด scramble ทั้งหมดในรอบนั้นแก่ scramblers 
+        ตั้งแต่เริ่มต้นรอบดังกล่าว)
+      passcode_delegation: 
+        อย่ามอบหมายให้ผู้อื่นเป็นผู้ดูแลรหัสผ่านหากไม่จำเป็นจริง ๆ 
+        และควรให้สิทธิ์เข้าถึงเฉพาะรหัสผ่านเท่าที่จำเป็นต้องใช้เท่านั้น
+      accountability_html: ข้อควรระวังเพิ่มเติมระบุไว้ใน <a 
+        href="https://documents.worldcubeassociation.org/documents/policies/external/Scramble%20Accountability.pdf">Scramble
+        Accountability Policy</a>
+    instructions:
+      title: คำแนะนำโดยละเอียดสำหรับ TNoodle
+      java_html: TNoodle จำเป็นต้องมีการติดตั้ง <a 
+        href="https://www.java.com/en/">Java</a> ไว้บนคอมพิวเตอร์ของคุณ
+      run_html: เรียกใช้ไฟล์ <code>%{jarfile}</code> บนคอมพิวเตอร์ของคุณ
+      open_page_html: มันจะเปิดหน้า <a 
+        href="http://localhost:2014/scramble">http://localhost:2014/scramble</a>
+        ขึ้นมาในเบราว์เซอร์ของคุณ
+      enter_details: กรอกรายละเอียดสำหรับการแข่งขันของคุณ (ชื่อการแข่งขัน, 
+        จำนวนรอบในแต่ละประเภท, และรายละเอียดของแต่ละรอบ)
+      password: หากคุณต้องการตั้งรหัสผ่านเพื่อป้องกันไฟล์ ให้ป้อนรหัสผ่านลงไป
+      wait: รอให้แถบโหลดข้อมูลทำงานเสร็จสิ้น จากนั้นคลิกปุ่ม "Scramble!" 
+        ที่ปรากฏขึ้นมา
+      zip_html: ไฟล์ <code>.zip</code> จะถูกดาวน์โหลดลงในเบราว์เซอร์ของคุณ
+    notes:
+      title: หมายเหตุ
+      four_by_four_html: การสร้างชุด scramble sequences สำหรับ 4x4x4 
+        <strong>อาจใช้เวลาสักครู่</strong> ในขั้นตอนการเริ่มต้นและประมวลผล 
+        หากคุณกำลังสร้างชุด scramble sequence สำหรับ 4x4x4 โปรดรอสักครู่ 
+        แม้ว่าแถบแสดงสถานะการโหลดอาจดูเหมือนค้างอยู่ก็ตาม
+      resources_html: TNoodle จะสร้างโฟลเดอร์ชื่อ <code>tnoodle_resources</code>
+        ซึ่งบรรจุไฟล์ขนาดไม่กี่เมกะไบต์ (ส่วนใหญ่เป็นตารางที่ถูกแคชไว้) 
+        ไว้ในโฟลเดอร์เดียวกับที่โปรแกรมถูกเรียกใช้งาน
+      resources_keep: เก็บโฟลเดอร์นี้ไว้หากคุณต้องการสร้างชุด scramble sequences
+        สำหรับ 4x4x4 เพิ่มเติมในอนาคตได้อย่างรวดเร็วยิ่งขึ้น 
+        แต่หากต้องการคืนพื้นที่บนดิสก์ คุณสามารถลบโฟลเดอร์นี้ทิ้งได้เลย
+      filtering_html: TNoodle ดำเนินการคัดกรองชุด scramble ตาม <a 
+        href="https://www.worldcubeassociation.org/regulations/#4b3">กติกาข้อ 
+        4b3</a>
+    about:
+      title: เกี่ยวกับ TNoodle
+      description_html: TNoodle ใช้โค้ดที่พัฒนาหรือดัดแปลงโดย Jeremy Fleischman,
+        Ryan Zheng, Clément Gallet, Shuang Chen, Bruce Norskog และ Lucas Garron 
+        คุณสามารถดูซอร์สโค้ด แจ้งปัญหา หรือมีส่วนร่วมในการพัฒนาโปรเจกต์ TNoodle 
+        ได้ที่ <a href="https://github.com/thewca/tnoodle">GitHub</a>
+    history:
+      title: ประวัติอย่างเป็นทางการ
+      description: ห้ามใช้งานเวอร์ชันเก่า 
+        โดยเวอร์ชันเหล่านี้มีไว้เพื่อให้คุณสามารถตรวจสอบการทำงานของเวอร์ชันเก่าได้เท่านั้น
+  privacy:
+    title: WCA Privacy Statement

@@ -1,5 +1,5 @@
 import { getSession } from "@/auth";
-import { Alert, Box, Card, Icon, Link, VStack } from "@chakra-ui/react";
+import { Alert, Box, Card, VStack } from "@chakra-ui/react";
 import { cache } from "react";
 import { serverClientWithToken } from "@/lib/wca/wcaAPI";
 import RegistrationPanel from "@/app/(wca)/(content-pages)/competitions/[competitionId]/(competition)/register/RegistrationPanel";
@@ -8,7 +8,6 @@ import { RegistrationCard } from "@/components/competitions/Cards";
 import { ChakraMarkdown } from "@/components/Markdown";
 import OpenapiError from "@/components/ui/openapiError";
 import { getT } from "@/lib/i18n/get18n";
-import { LuExternalLink } from "react-icons/lu";
 
 const fetchConfig = cache(async (authToken: string, competitionId: string) => {
   const client = serverClientWithToken(authToken);
@@ -59,7 +58,7 @@ export default async function RegisterPage({
     return (
       <Alert.Root>
         <Alert.Indicator />
-        <Alert.Content>You need to log in first</Alert.Content>
+        <Alert.Content>{t("api.login_message")}</Alert.Content>
       </Alert.Root>
     );
   }
@@ -71,7 +70,7 @@ export default async function RegisterPage({
       <Alert.Root status="warning">
         <Alert.Indicator />
         <Alert.Content>
-          Your session is out of date. Please sign out and sign in again.
+          {t("errors.next_frontend.session_outdated")}
         </Alert.Content>
       </Alert.Root>
     );
@@ -124,7 +123,7 @@ export default async function RegisterPage({
       <Box width="full" asChild>
         <RegistrationCard competitionInfo={competitionInfo} columns={3} />
       </Box>
-      {competitionInfo.extra_registration_requirements && (
+      {competitionInfo.registration_info.extra_requirements && (
         <Card.Root width="full">
           <Card.Body>
             <ChakraMarkdown
@@ -132,28 +131,11 @@ export default async function RegisterPage({
               paragraphAs={Card.Description}
               listProps={{ textStyle: "body" }}
             >
-              {competitionInfo.extra_registration_requirements}
+              {competitionInfo.registration_info.extra_requirements}
             </ChakraMarkdown>
           </Card.Body>
         </Card.Root>
       )}
-      <Alert.Root status="warning">
-        <Alert.Indicator />
-        <Alert.Content flexDirection="row">
-          This is a preview. We recommend registering via the regular panel{" "}
-          <Link
-            href={`https://www.worldcubeassociation.org/competitions/${competitionInfo.id}/register`}
-            variant="underline"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            on the current registration page
-            <Icon>
-              <LuExternalLink />
-            </Icon>
-          </Link>
-        </Alert.Content>
-      </Alert.Root>
       <Card.Root width="full">
         <Card.Body>
           <RegistrationPanel

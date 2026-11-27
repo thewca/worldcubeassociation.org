@@ -7,14 +7,17 @@ import { components } from "@/types/openapi";
 import events from "@/lib/wca/data/events";
 import { formatAttemptResult } from "@/lib/wca/wcif/attempts";
 import EventIcon from "@/components/EventIcon";
+import { getT } from "@/lib/i18n/get18n";
 
 interface RecordsProps {
-  records: components["schemas"]["PersonInfo"]["personal_records"];
+  records: components["schemas"]["V1PersonInfo"]["ranks_by_event"];
 }
 
-const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
-  const getColor = (pr: number) => {
-    if (pr === 0) return undefined;
+const PersonalRecordsTable: React.FC<RecordsProps> = async ({ records }) => {
+  const { t } = await getT();
+
+  const getColor = (pr?: number) => {
+    if (!pr) return undefined;
     if (pr === 1) return "recordMarkers.personal";
     if (pr < 11) return "recordMarkers.national";
     return undefined;
@@ -24,7 +27,9 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
     <Card.Root overflow="hidden" width="full">
       <Card.Header>
         <HStack justify="space-between">
-          <Card.Title textStyle="s4">Current Personal Records</Card.Title>
+          <Card.Title textStyle="s4">
+            {t("persons.show.personal_records")}
+          </Card.Title>
           <IconButton variant="ghost">
             <LuShare2 /> {/* TODO SLATE - implement share functionality */}
           </IconButton>
@@ -38,38 +43,54 @@ const PersonalRecordsTable: React.FC<RecordsProps> = ({ records }) => {
                 <Table.ColumnHeader paddingStart={4}>
                   <HStack>
                     <SpeedcubingHistoryIcon fontSize="md" />
-                    <Text fontWeight="medium">Event</Text>
+                    <Text fontWeight="medium">
+                      {t("results.table_elements.event")}
+                    </Text>
                   </HStack>
                 </Table.ColumnHeader>
                 <Tooltip content="National Ranking" showArrow openDelay={100}>
-                  <Table.ColumnHeader textAlign="end">NR</Table.ColumnHeader>
+                  <Table.ColumnHeader textAlign="end">
+                    {t("common.ranking_abbreviations.national")}
+                  </Table.ColumnHeader>
                 </Tooltip>
                 <Tooltip
                   content="Continental Ranking"
                   showArrow
                   openDelay={100}
                 >
-                  <Table.ColumnHeader textAlign="end">CR</Table.ColumnHeader>
+                  <Table.ColumnHeader textAlign="end">
+                    {t("common.ranking_abbreviations.continental")}
+                  </Table.ColumnHeader>
                 </Tooltip>
                 <Tooltip content="World Ranking" showArrow openDelay={100}>
-                  <Table.ColumnHeader textAlign="end">WR</Table.ColumnHeader>
+                  <Table.ColumnHeader textAlign="end">
+                    {t("common.ranking_abbreviations.world")}
+                  </Table.ColumnHeader>
                 </Tooltip>
-                <Table.ColumnHeader textAlign="end">Single</Table.ColumnHeader>
+                <Table.ColumnHeader textAlign="end">
+                  {t("common.single")}
+                </Table.ColumnHeader>
                 <Table.ColumnHeader paddingStart={3}>
-                  Average
+                  {t("common.average")}
                 </Table.ColumnHeader>
                 <Tooltip content="World Ranking" showArrow openDelay={100}>
-                  <Table.ColumnHeader>WR</Table.ColumnHeader>
+                  <Table.ColumnHeader>
+                    {t("common.ranking_abbreviations.world")}
+                  </Table.ColumnHeader>
                 </Tooltip>
                 <Tooltip
                   content="Continental Ranking"
                   showArrow
                   openDelay={100}
                 >
-                  <Table.ColumnHeader>CR</Table.ColumnHeader>
+                  <Table.ColumnHeader>
+                    {t("common.ranking_abbreviations.continental")}
+                  </Table.ColumnHeader>
                 </Tooltip>
                 <Tooltip content="National Ranking" showArrow openDelay={100}>
-                  <Table.ColumnHeader>NR</Table.ColumnHeader>
+                  <Table.ColumnHeader>
+                    {t("common.ranking_abbreviations.national")}
+                  </Table.ColumnHeader>
                 </Tooltip>
               </Table.Row>
             </Table.Header>

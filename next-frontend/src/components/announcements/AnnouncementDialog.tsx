@@ -11,18 +11,18 @@ import {
 } from "@chakra-ui/react";
 import { LuCheck, LuShare2 } from "react-icons/lu";
 import AnnouncementMarkdown from "@/components/announcements/AnnouncementMarkdown";
-import {
-  announcementByline,
-  announcementRoute,
-} from "@/components/announcements/announcement";
+import { announcementRoute } from "@/components/announcements/announcement";
+import AnnouncementByline from "@/components/announcements/AnnouncementByline";
 import { Announcement, ColorPaletteSelect } from "@/types/payload";
-import { useLocale } from "@/lib/i18n/LocaleProvider";
+import { useT } from "@/lib/i18n/useI18n";
 
 /// The announcement's own page is no longer linked from anywhere, so this is
 /// how a reader hands the announcement to someone else. It only renders inside
 /// the dialog body, which `lazyMount` keeps off the server, so reading
 /// `window` here is safe.
 function ShareButton({ announcement }: { announcement: Announcement }) {
+  const { t } = useT();
+
   const shareUrl = new URL(
     announcementRoute(announcement),
     window.location.origin,
@@ -35,7 +35,9 @@ function ShareButton({ announcement }: { announcement: Announcement }) {
           <Clipboard.Indicator copied={<LuCheck />}>
             <LuShare2 />
           </Clipboard.Indicator>
-          <Clipboard.Indicator copied="Link copied">Share</Clipboard.Indicator>
+          <Clipboard.Indicator copied={t("notifications.copied_to_clipboard")}>
+            {t("posts.share")}
+          </Clipboard.Indicator>
         </Button>
       </Clipboard.Trigger>
     </Clipboard.Root>
@@ -56,13 +58,13 @@ export default function AnnouncementDialog({
   announcement: Announcement;
   colorPalette: ColorPaletteSelect;
 }) {
-  const lng = useLocale();
+  const { t } = useT();
 
   return (
     <Dialog.Root size="xl" scrollBehavior="inside" lazyMount>
       <Dialog.Trigger asChild>
         <Button variant="onSolid" size="sm" alignSelf="flex-start">
-          Read More
+          {t("posts.read_more")}
         </Button>
       </Dialog.Trigger>
       <Portal>
@@ -76,7 +78,9 @@ export default function AnnouncementDialog({
             <Dialog.Header>
               <Stack gap={1}>
                 <Dialog.Title textStyle="h2">{announcement.title}</Dialog.Title>
-                <Text>{announcementByline(announcement, lng)}</Text>
+                <Text>
+                  <AnnouncementByline announcement={announcement} />
+                </Text>
               </Stack>
             </Dialog.Header>
             <Dialog.Body>
@@ -87,7 +91,7 @@ export default function AnnouncementDialog({
             <Dialog.Footer>
               <ShareButton announcement={announcement} />
               <Dialog.ActionTrigger asChild>
-                <Button variant="onSolid">Close</Button>
+                <Button variant="onSolid">{t("page.executives.close")}</Button>
               </Dialog.ActionTrigger>
             </Dialog.Footer>
             <Dialog.CloseTrigger asChild>

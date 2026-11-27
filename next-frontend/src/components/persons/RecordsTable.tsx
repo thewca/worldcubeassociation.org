@@ -14,9 +14,21 @@ export default function RecordsTable({
   recordResults: components["schemas"]["V1Results"];
   t: TFunction;
 }) {
-  const recordsByType = _.groupBy(
-    recordResults,
-    (r) => r.regional_single_record || r.regional_average_record,
+  // A result can hold two records (e.g. single WR + average NR),
+  // so it must be able to appear under more than one record type.
+  const recordsByType = _.mapValues(
+    _.groupBy(
+      recordResults.flatMap((result) =>
+        _.uniq(
+          _.compact([
+            result.regional_single_record,
+            result.regional_average_record,
+          ]),
+        ).map((tag) => ({ tag, result })),
+      ),
+      "tag",
+    ),
+    (entries) => entries.map(({ result }) => result),
   );
 
   return (

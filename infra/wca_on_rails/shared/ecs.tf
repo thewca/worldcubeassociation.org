@@ -129,7 +129,7 @@ resource "aws_launch_template" "m6i" {
 resource "aws_autoscaling_group" "t3_group" {
   name_prefix               = "${var.name_prefix}-t3-"
   min_size                  = 1
-  max_size                  = 10
+  max_size                  = 14
   desired_capacity          = 1
   vpc_zone_identifier       = [aws_default_subnet.default_az2.id]
   health_check_grace_period = var.rails_startup_time
@@ -231,7 +231,7 @@ resource "aws_ecs_capacity_provider" "t3_provider" {
       maximum_scaling_step_size = 4
       minimum_scaling_step_size = 1
       status                    = "ENABLED"
-      target_capacity           = 100
+      target_capacity           = 90
     }
   }
 }

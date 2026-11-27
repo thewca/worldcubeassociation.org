@@ -81,7 +81,7 @@ export default function Content({
   children,
   tabs,
 }: {
-  competition: components["schemas"]["CompetitionInfo"];
+  competition: components["schemas"]["V1CompetitionInfo"];
   children: React.ReactNode;
   tabs: CompetitionNavTab[];
 }) {

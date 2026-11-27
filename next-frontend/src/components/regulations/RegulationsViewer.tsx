@@ -12,6 +12,7 @@ import {
 import { LuSearch } from "react-icons/lu";
 import useIsScrolled from "@/lib/hooks/useIsScrolled";
 import BackToTopButton from "../BackToTopButton";
+import { useT } from "@/lib/i18n/useI18n";
 
 const MIN_QUERY_LENGTH = 2;
 const MAX_RESULTS = 50;
@@ -87,6 +88,8 @@ export default function RegulationsViewer({
   contentHtml: string;
 }) {
   const [query, setQuery] = useState("");
+  const { t } = useT();
+
   const { isScrolledDown, topSentinelRef } = useIsScrolled();
 
   const items = useMemo(() => extractSearchItems(contentHtml), [contentHtml]);
@@ -154,7 +157,7 @@ export default function RegulationsViewer({
           collection={collection}
           openOnClick={false}
           selectionBehavior="clear"
-          placeholder="Search the regulations…"
+          placeholder={t("regulations_viewer.search")}
           onInputValueChange={(details) => setQuery(details.inputValue)}
           onValueChange={(details) => {
             const id = details.value[0];
@@ -171,7 +174,9 @@ export default function RegulationsViewer({
             <Combobox.Positioner>
               <Combobox.Content maxH="20rem" overflowY="auto">
                 {hasQuery && (
-                  <Combobox.Empty>No matching regulations.</Combobox.Empty>
+                  <Combobox.Empty>
+                    {t("regulations_viewer.no_matches")}
+                  </Combobox.Empty>
                 )}
                 {collection.items.map((item) => (
                   <Combobox.Item item={item} key={item.id}>

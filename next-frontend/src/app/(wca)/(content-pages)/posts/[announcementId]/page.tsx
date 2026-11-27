@@ -1,30 +1,28 @@
 import { VStack } from "@chakra-ui/react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getPayload } from "payload";
-import config from "@payload-config";
+import { findCached } from "@/lib/payload/collections";
 import { getT } from "@/lib/i18n/get18n";
-import { connection } from "next/server";
 import { AnnouncementFullCard } from "@/components/announcements/AnnouncementCard";
-import { randomAnnouncementColorPalette } from "@/components/announcements/announcement";
+import { announcementColorPaletteFromId } from "@/components/announcements/announcement";
 import { Announcement } from "@/types/payload";
 
 const findAnnouncement = async (
   announcementId: string,
 ): Promise<Announcement | null> => {
-  await connection();
-
   const { lng } = await getT();
-  const payload = await getPayload({ config });
 
   // `findByID` throws on unknown IDs, and MongoDB additionally throws on IDs
   // that aren't valid ObjectIDs, so query instead of catching two error types.
-  const { docs } = await payload.find({
-    collection: "announcements",
-    locale: lng,
-    where: { id: { equals: announcementId } },
-    limit: 1,
-  });
+  const { docs } = await findCached(
+    "announcements",
+    {
+      locale: lng,
+      where: { id: { equals: announcementId } },
+      limit: 1,
+    },
+    "minutes",
+  );
 
   return docs[0] ?? null;
 };
@@ -56,7 +54,7 @@ export default async function AnnouncementPage({
     <VStack align="stretch" py={8}>
       <AnnouncementFullCard
         announcement={announcement}
-        colorPalette={randomAnnouncementColorPalette()}
+        colorPalette={announcementColorPaletteFromId(announcement)}
       />
     </VStack>
   );

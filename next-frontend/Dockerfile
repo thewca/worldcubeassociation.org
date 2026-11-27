@@ -5,6 +5,9 @@ FROM node:26-alpine AS base
 RUN npm install -g corepack
 RUN corepack enable
 
+# Vault is its own stage so that its version sits in a `FROM` line, the only line of a Dockerfile that Dependabot reads.
+FROM hashicorp/vault:1.19.5 AS vault
+
 FROM base AS deps
 
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
@@ -13,13 +16,6 @@ RUN apk add --no-cache libc6-compat
 # NewRelic v12 does not bundle Alpine-compatible binaries anymore. So they have to be built from scratch.
 #   See https://github.com/newrelic/node-native-metrics?tab=readme-ov-file#musl-libc-systems for details.
 RUN apk add g++ make py3-pip
-
-RUN apk add --update --virtual .deps --no-cache unzip && \
-    wget https://releases.hashicorp.com/vault/1.19.5/vault_1.19.5_linux_amd64.zip && \
-    unzip vault_1.19.5_linux_amd64.zip -d /tmp && \
-    mv /tmp/vault /usr/local/bin/vault && \
-    rm -f vault_1.19.5_linux_amd64.zip && \
-    apk del .deps
 
 WORKDIR /app
 
@@ -56,7 +52,16 @@ ENV NEXT_ASSET_PREFIX=$NEXT_ASSET_PREFIX
 # Create the types and build
 RUN LOCALE_DIR="./src/lib/i18n/locales" yarn run build:translations
 RUN yarn types:openapi
-RUN NODE_ENV=production yarn run build
+ # Pages are prerendered against the throwaway MongoDB started by .github/actions/build-js-image,
+#   so these credentials only ever exist inside the CI runner.
+RUN NODE_ENV=production \
+    DATABASE_URI="mongodb://localhost:27017/payload" \
+    DATABASE_USER=root \
+    DATABASE_PASSWORD=root \
+    PAYLOAD_SECRET=build-only \
+    AUTH_SECRET=build-only \
+    MEDIA_BUCKET_CDN="https://assets-nextjs.worldcubeassociation.org" \
+    yarn run build
 
 # Export-only stage. Building with `--target assets --output type=local` writes the
 # client bundle to the local filesystem for the S3 sync. It shares the `builder` stage
@@ -84,7 +89,7 @@ COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=deps /app/global-bundle.pem /app/global-bundle.pem
-COPY --from=deps /usr/local/bin/vault /usr/local/bin/vault
+COPY --from=vault /bin/vault /usr/local/bin/vault
 COPY --from=builder /app/docker-entrypoint.sh /app/docker-entrypoint.sh
 
 # jq = Reading JSON data transmitted from Vault to extract secrets

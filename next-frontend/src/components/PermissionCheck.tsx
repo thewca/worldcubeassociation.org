@@ -2,6 +2,7 @@ import React from "react";
 
 import { getPermissions } from "@/lib/wca/permissions.server";
 import { PermissionFunctions } from "@/lib/wca/permissions";
+import { getT } from "@/lib/i18n/get18n";
 
 export default async function PermissionCheck({
   children,
@@ -18,5 +19,7 @@ export default async function PermissionCheck({
     return children;
   }
 
-  return <p>You are not authorized to view this page.</p>;
+  const { t } = await getT();
+
+  return <p>{t("errors.messages.no_permission")}</p>;
 }

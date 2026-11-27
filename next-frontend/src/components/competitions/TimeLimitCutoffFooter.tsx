@@ -4,6 +4,7 @@ import { getT } from "@/lib/i18n/get18n";
 import { Trans } from "react-i18next/TransWithoutContext";
 
 import type { components } from "@/types/openapi";
+import TransWithLinks from "../TransWithLinks";
 
 type WcifEvent = components["schemas"]["WcifEvent"];
 type QualificationDatesToEvents = Record<string, string[]>;
@@ -58,20 +59,20 @@ const QualificationDateEventsList: React.FC<
 
 interface TimeLimitCutoffFooterProps {
   events: WcifEvent[];
-  forceQualifications?: boolean;
 }
 
 export const TimeLimitCutoffFooter: React.FC<
   TimeLimitCutoffFooterProps
-> = async ({ events, forceQualifications = false }) => {
+> = async ({ events }) => {
   const { t } = await getT();
 
   const showCutoff = events.some((event) =>
     event.rounds.some((round) => Boolean(round.cutoff)),
   );
 
-  const showQualifications =
-    forceQualifications || events.some((event) => Boolean(event.qualification));
+  const showQualifications = events.some((event) =>
+    Boolean(event.qualification),
+  );
 
   const showCumulativeOneRound = events.some((event) =>
     event.rounds.some(
@@ -100,42 +101,62 @@ export const TimeLimitCutoffFooter: React.FC<
     <Stack>
       <Heading>{t("competitions.events.time_limit")}</Heading>
       <Text>
-        {t("competitions.events.time_limit_information.time_limit_html")}
+        <TransWithLinks
+          i18nKey="competitions.events.time_limit_information.time_limit_html"
+          values={{
+            regulation_link: `<a href='/regulations#A1a4' target='_blank'>${t("competitions.events.time_limit_information.regulation_link_text", { number: "A1a4" })}</a>`,
+          }}
+        />
       </Text>
       {showCumulativeOneRound && (
         <Text>
-          {t(
-            "competitions.events.time_limit_information.cumulative_one_round_html",
-            {
+          <TransWithLinks
+            i18nKey="competitions.events.time_limit_information.cumulative_one_round_html"
+            values={{
+              regulation_link: `<a href='/regulations#A1a2' target='_blank'>${t("competitions.events.time_limit_information.regulation_link_text", { number: "A1a2" })}</a>`,
               cumulative_time_limit: t(
                 "competitions.events.time_limit_information.cumulative_time_limit",
               ),
-            },
-          )}
+            }}
+          />
         </Text>
       )}
       {showCumulativeAcrossRounds && (
         <Text>
-          {t(
-            "competitions.events.time_limit_information.cumulative_across_rounds_html",
-            {
+          <TransWithLinks
+            i18nKey="competitions.events.time_limit_information.cumulative_across_rounds_html"
+            values={{
+              regulation_link: `<a href='/regulations#A1a2' target='_blank'>${t("competitions.events.time_limit_information.regulation_link_text", { number: "A1a2" })}</a>`,
               cumulative_time_limit: t(
                 "competitions.events.time_limit_information.cumulative_time_limit",
               ),
-            },
-          )}
+            }}
+          />
         </Text>
       )}
       {showCutoff && (
         <>
           <Heading>{t("competitions.events.cutoff")}</Heading>
           <Text>
-            {t("competitions.events.time_limit_information.cutoff_html")}
+            <TransWithLinks
+              i18nKey="competitions.events.time_limit_information.cutoff_html"
+              values={{
+                regulation_link: `<a href='/regulations#9g' target='_blank'>${t("competitions.events.time_limit_information.regulation_link_text", { number: "9g" })}</a>`,
+              }}
+            />
           </Text>
         </>
       )}
       <Heading>{t("competitions.events.format")}</Heading>
-      <Text>{t("competitions.events.time_limit_information.format_html")}</Text>
+      <Text>
+        <TransWithLinks
+          i18nKey="competitions.events.time_limit_information.format_html"
+          values={{
+            link_to_9f: `<a href='/regulations#9f' target='_blank'>${t("competitions.events.time_limit_information.regulation_link_text", { number: "9f" })}</a>`,
+            link_to_9b: `<a href='/regulations#9b' target='_blank'>${t("competitions.events.time_limit_information.regulation_link_text", { number: "9b" })}</a>`,
+          }}
+        />
+      </Text>
       {showQualifications && (
         <>
           <Heading>{t("competitions.events.qualification")}</Heading>

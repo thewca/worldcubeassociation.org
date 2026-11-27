@@ -122,16 +122,13 @@ export default function AttemptsForm({ header }: AttemptsFormProps) {
       } else {
         confirm({
           content: (
-            <Text>
-              Are you sure you want to exit Batch Mode? All unsubmitted results
-              will be lost.
-            </Text>
+            <Text>{t("competitions.live.admin.exit_batch_mode_confirm")}</Text>
           ),
           confirmButton: "Confirm",
         }).then(() => setBatchMode(false));
       }
     },
-    [confirm, setBatchMode],
+    [confirm, setBatchMode, t],
   );
 
   const hasMetCutoff = meetsCutoff(attempts, cutoff);
@@ -169,7 +166,7 @@ export default function AttemptsForm({ header }: AttemptsFormProps) {
               {(api) => (
                 <Combobox.Input
                   ref={inputRef}
-                  placeholder="Type to search"
+                  placeholder={t("competitions.live.admin.type_to_search")}
                   onKeyDown={(e) => {
                     // Backspace at the end of the field clears the whole name,
                     // so double-checking can move on to the next competitor.
@@ -198,7 +195,9 @@ export default function AttemptsForm({ header }: AttemptsFormProps) {
           <Portal>
             <Combobox.Positioner>
               <Combobox.Content>
-                <Combobox.Empty>No items found</Combobox.Empty>
+                <Combobox.Empty>
+                  {t("search_results.index.not_found.generic")}
+                </Combobox.Empty>
                 {collection.items.map((item) => (
                   <Combobox.Item item={item} key={item.id}>
                     {toCompetitorString(item)}
@@ -221,7 +220,7 @@ export default function AttemptsForm({ header }: AttemptsFormProps) {
                 value={attempts[index]}
                 onChange={(value) => handleAttemptChange(index, value)}
                 resultType="single"
-                placeholder={`Attempt ${index + 1}`}
+                placeholder={t("attempts.attempt_name", { number: index + 1 })}
                 disabled={!hasMetCutoff && index >= cutoff!.numberOfAttempts}
               />
             ))}

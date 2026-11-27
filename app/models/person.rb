@@ -296,7 +296,7 @@ class Person < ApplicationRecord
         ranks.transform_values { it.serializable_hash(PersonalBest::V1_SERIALIZE_OPTIONS) }
       end,
       "championship_podium_results" => championship_podiums.transform_values do |podium|
-        podium.as_json(Result::V1_SERIALIZE_OPTIONS)
+        podium.as_json(Result::V1_STANDALONE_SERIALIZE_OPTIONS)
       end,
     )
   end
@@ -331,7 +331,7 @@ class Person < ApplicationRecord
   V1_SERIALIZE_OPTIONS = {
     skip_legacy_user_fields: true,
     only: %w[wca_id name gender],
-    methods: %w[url country_iso2 delegate_status teams competition_count event_ids_with_results medals records completed_solves_count],
+    methods: %w[url country_iso2 user_id delegate_status teams competition_count event_ids_with_results medals records completed_solves_count],
     include: {
       avatar: UserAvatar::V1_SERIALIZE_OPTIONS,
       previous_persons: { skip_legacy_user_fields: true, only: %w[name], methods: %w[country_iso2] },

@@ -111,7 +111,9 @@ export default function LiveUpdatingResultsTable({
             <Switch.Control>
               <Switch.Thumb />
             </Switch.Control>
-            <Switch.Label>Show combined Results</Switch.Label>
+            <Switch.Label>
+              {t("competitions.live.results.show_combined")}
+            </Switch.Label>
           </Switch.Root>
         )}
         {!isAdminView &&
@@ -127,10 +129,15 @@ export default function LiveUpdatingResultsTable({
                   <Switch.Thumb />
                 </Switch.Control>
                 <Switch.Label>
-                  <Box hideFrom="md" aria-label="Forecast view">
+                  <Box
+                    hideFrom="md"
+                    aria-label={t("competitions.live.results.forecast_view")}
+                  >
                     <LuChartLine />
                   </Box>
-                  <Box hideBelow="md">Forecast view</Box>
+                  <Box hideBelow="md">
+                    {t("competitions.live.results.forecast_view")}
+                  </Box>
                 </Switch.Label>
               </Switch.Root>
             </Tooltip>

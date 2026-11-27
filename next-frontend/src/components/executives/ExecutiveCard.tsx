@@ -16,9 +16,9 @@ export default async function ExecutiveCard({
   showsImages: boolean;
 }) {
   const { t } = await getT();
-  const { data: personDetails } = await getPersonInfo(executive.wcaId);
+  const { data: person } = await getPersonInfo(executive.wcaId);
 
-  if (!personDetails) {
+  if (!person) {
     return (
       <Text>
         {t("page.executives.person_not_found", { wca_id: executive.wcaId })}
@@ -26,7 +26,9 @@ export default async function ExecutiveCard({
     );
   }
 
-  const { person } = personDetails;
+  const isBoardMember = person.teams.some(
+    (team) => team.friendly_id === "board",
+  );
 
   return (
     <Card.Root
@@ -47,12 +49,20 @@ export default async function ExecutiveCard({
             <WcaFlag code={person.country_iso2} size="2xl" />
             <Text textStyle="h2">{person.name}</Text>
           </HStack>
-          <RoleBadge
-            teamRole={executive.role}
-            colorPalette={executive.colorPalette}
-          />
+          <HStack wrap="wrap">
+            <RoleBadge
+              teamRole={executive.role}
+              colorPalette={executive.colorPalette}
+            />
+            {isBoardMember && (
+              <RoleBadge
+                teamRole={t("page.executives.board")}
+                colorPalette="black"
+              />
+            )}
+          </HStack>
         </Card.Title>
-        <DataList.Root variant="bold">
+        <DataList.Root variant="bold" textAutoContrast>
           <DataList.Item>
             <DataList.ItemLabel>
               {t("page.executives.joined_wca")}

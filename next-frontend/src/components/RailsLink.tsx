@@ -5,6 +5,10 @@ interface RailsLinkProps extends LinkProps {
   href: string;
 }
 
+// Rails sits at the root of the public API host, and a root-relative `href` resolves against that.
+export const railsHref = (href: string) =>
+  new URL(href, process.env.NEXT_PUBLIC_WCA_FRONTEND_API_URL).href;
+
 /**
  * A link to a page that is still served by the Rails monolith. It renders a
  * plain anchor so the browser does a full page load — routing it through
@@ -13,11 +17,5 @@ interface RailsLinkProps extends LinkProps {
  * TODO: swap for `next/link` per call site as each target page is migrated.
  */
 export default function RailsLink({ href, ...props }: RailsLinkProps) {
-  // Rails sits at the root of the public API host, and a root-relative `href` resolves against that.
-  return (
-    <Link
-      {...props}
-      href={new URL(href, process.env.NEXT_PUBLIC_WCA_FRONTEND_API_URL).href}
-    />
-  );
+  return <Link {...props} href={railsHref(href)} />;
 }

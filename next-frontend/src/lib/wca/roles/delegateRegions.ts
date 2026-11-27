@@ -1,8 +1,9 @@
 import { cache } from "react";
 import { serverClient } from "@/lib/wca/wcaAPI";
-
-// The biggest region has a few hundred Delegates, so one page always holds all of them.
-const DELEGATES_PER_PAGE = 1000;
+import {
+  delegatesInGroupQuery,
+  delegatesInSubgroupsQuery,
+} from "@/lib/wca/roles/userRolesQuery";
 
 export const getDelegateRegions = cache(async () => {
   return await serverClient.GET("/v0/user_groups", {
@@ -15,28 +16,14 @@ export const getDelegateRegions = cache(async () => {
   });
 });
 
-export const getDelegatesInGroup = cache(async (groupId: number) => {
+export const getDelegatesInGroup = async (groupId: number) => {
   return await serverClient.GET("/v0/user_roles", {
-    params: {
-      query: {
-        groupId,
-        isActive: true,
-        sort: "location,name",
-        per_page: DELEGATES_PER_PAGE,
-      },
-    },
+    params: { query: delegatesInGroupQuery(groupId) },
   });
-});
+};
 
-export const getDelegatesInSubgroups = cache(async (groupId: number) => {
+export const getDelegatesInSubgroups = async (groupId: number) => {
   return await serverClient.GET("/v0/user_roles", {
-    params: {
-      query: {
-        parentGroupId: groupId,
-        isActive: true,
-        sort: "location,name",
-        per_page: DELEGATES_PER_PAGE,
-      },
-    },
+    params: { query: delegatesInSubgroupsQuery(groupId) },
   });
-});
+};

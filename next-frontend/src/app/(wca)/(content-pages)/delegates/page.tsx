@@ -1,10 +1,4 @@
-import {
-  Heading,
-  IconButton,
-  SimpleGrid,
-  Tabs,
-  VStack,
-} from "@chakra-ui/react";
+import { Heading, SimpleGrid, Tabs, VStack } from "@chakra-ui/react";
 import { getT } from "@/lib/i18n/get18n";
 import {
   getDelegateRegions,
@@ -15,13 +9,14 @@ import { Prose } from "@/components/ui/prose";
 import { components } from "@/types/openapi";
 import UserBadge from "@/components/UserBadge";
 import { Trans } from "react-i18next/TransWithoutContext";
-import _ from "lodash";
 import { route } from "nextjs-routes";
-import { LuPencil } from "react-icons/lu";
 import getPermissions from "@/lib/wca/permissions.server";
+import {
+  RegionDelegates,
+  SubregionDelegates,
+} from "@/app/(wca)/(content-pages)/delegates/delegateLists";
 import AdminModeToggle from "@/app/(wca)/(content-pages)/delegates/adminModeToggle";
 import OpenapiError from "@/components/ui/openapiError";
-import RailsLink from "@/components/RailsLink";
 import ResponsiveTabsList from "@/components/ui/responsiveTabsList";
 import { Metadata } from "next";
 import { Suspense } from "react";
@@ -149,18 +144,13 @@ async function DelegateTab({
   if (subregionError)
     return <OpenapiError response={subregionResponse} t={t} />;
 
-  const regionDelegates = listedDelegates(regionRoles, isAdminMode);
-  const delegatesBySubregion = _.groupBy(
-    listedDelegates(subregionRoles, isAdminMode),
-    "group.name",
-  );
-
   return (
     <VStack align="left" gap="8">
       <VStack align="left" gap="4">
         <Heading textStyle="h2">{name}</Heading>
         <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
           <UserBadge
+            t={t}
             key={lead_user!.id}
             profilePicture={lead_user!.avatar}
             name={lead_user!.name}
@@ -176,85 +166,19 @@ async function DelegateTab({
             ]}
           />
         </SimpleGrid>
-        {regionDelegates.length > 0 && (
-          <DelegateGrid delegates={regionDelegates} isAdminMode={isAdminMode} />
-        )}
-      </VStack>
-      {_.map(delegatesBySubregion, (delegates, subregion) => (
-        <VStack align="left" key={subregion}>
-          <Heading size="xl">{subregion}</Heading>
-          <DelegateGrid delegates={delegates} isAdminMode={isAdminMode} />
-        </VStack>
-      ))}
-    </VStack>
-  );
-}
-
-function listedDelegates(
-  roles: components["schemas"]["UserRole"][],
-  isAdminMode: boolean,
-) {
-  const regionalDelegateUserIds = new Set(
-    roles
-      .filter((role) => role.metadata.status === "regional_delegate")
-      .map((role) => role.user.id),
-  );
-
-  return roles.filter(
-    (role) =>
-      // Senior Delegates are shown as region leads at the top of the list
-      role.metadata.status !== "senior_delegate" &&
-      (isAdminMode || role.metadata.status !== "trainee_delegate") &&
-      // Avoid showing regional delegates twice in the same category
-      (!regionalDelegateUserIds.has(role.user.id) ||
-        role.metadata.status !== "delegate"),
-  );
-}
-
-async function DelegateGrid({
-  delegates,
-  isAdminMode,
-}: {
-  delegates: components["schemas"]["UserRole"][];
-  isAdminMode: boolean;
-}) {
-  const { t } = await getT();
-
-  return (
-    <SimpleGrid columns={{ base: 1, md: 2 }} gap={4}>
-      {delegates.map((role) => (
-        <UserBadge
-          key={role.id}
-          profilePicture={role.user.avatar}
-          name={role.user.name}
-          wcaId={role.user.wca_id}
-          email={role.user.email}
-          roles={[
-            {
-              teamRole: t(
-                `enums.user_roles.status.${role.group.group_type}.${role.metadata.status}`,
-              ),
-              teamText: role.metadata.location,
-              staffColor: "yellow",
-            },
-          ]}
-
-          action={
-            isAdminMode && (
-              <IconButton
-                asChild
-                variant="ghost"
-                size="sm"
-                aria-label={`Edit ${role.user.name}`}
-              >
-                <RailsLink href={`/users/${role.user.id}/edit`}>
-                  <LuPencil />
-                </RailsLink>
-              </IconButton>
-            )
-          }
+        <RegionDelegates
+          key={id}
+          groupId={id}
+          initialRoles={regionRoles}
+          isAdminMode={isAdminMode}
         />
-      ))}
-    </SimpleGrid>
+      </VStack>
+      <SubregionDelegates
+        key={id}
+        groupId={id}
+        initialRoles={subregionRoles}
+        isAdminMode={isAdminMode}
+      />
+    </VStack>
   );
 }

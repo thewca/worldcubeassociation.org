@@ -1,4 +1,5 @@
-import { liveTab } from "@/lib/wca/competitions/tabs";
+import { adminTabs, isTabDisabled, liveTab } from "@/lib/wca/competitions/tabs";
+import { getPermissions } from "@/lib/wca/permissions.server";
 import TabMenu from "@/components/competitions/TabMenu";
 import { getT } from "@/lib/i18n/get18n";
 import OpenapiError from "@/components/ui/openapiError";
@@ -17,9 +18,17 @@ export default async function CompetitionMenu({
   const { competitionId } = await params;
   const { t } = await getT();
 
-  const menu = await getCompetitionMenuData(competitionId);
+  const [menu, permissions] = await Promise.all([
+    getCompetitionMenuData(competitionId),
+    getPermissions(),
+  ]);
 
   if (!menu.ok) return <OpenapiError t={t} response={menu.response} />;
+
+  const tabs = [
+    ...menu.tabs,
+    ...(permissions ? adminTabs(menu.competitionInfo, permissions) : []),
+  ];
 
   const customTabs = menu.competitionInfo.tabs.map((tab) => tab.name);
 
@@ -27,11 +36,11 @@ export default async function CompetitionMenu({
     <>
       <TabMenu
         competitionInfo={menu.competitionInfo}
-        tabs={menu.tabs}
+        tabs={tabs}
         customTabs={customTabs}
       />
       <MobileTabMenu
-        tabs={menu.tabs}
+        tabs={tabs}
         customTabs={customTabs}
         competitionId={competitionId}
       />
@@ -56,14 +65,16 @@ export async function AwaitingResultsAlert({
   const { t } = await getT();
   const competitionLiveTab = liveTab(menu.competitionInfo);
   const liveResultsHref =
-    competitionLiveTab.externalHref ?? competitionLiveTab.href;
+    competitionLiveTab.type === "tab-with-external-link"
+      ? competitionLiveTab.externalHref
+      : competitionLiveTab.href;
 
   return (
     <Alert.Root status="info" marginBottom="4">
       <Alert.Indicator />
       <Alert.Content>
         <Alert.Title>{t("competitions.messages.upload_results")}</Alert.Title>
-        {!competitionLiveTab.disabled && (
+        {!isTabDisabled(competitionLiveTab) && (
           <Alert.Description>
             {t("competitions.messages.provisional_live_results")}{" "}
             <Link href={liveResultsHref}>{t("competitions.live.title")}</Link>

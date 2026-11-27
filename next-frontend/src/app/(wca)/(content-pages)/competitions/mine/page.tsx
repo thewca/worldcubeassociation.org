@@ -31,7 +31,7 @@ export default async function MyCompetitions() {
   const { t } = await getT();
 
   if (!session) {
-    return <p>Please Log in</p>;
+    return <p>{t("api.login_message")}</p>;
   }
 
   const client = serverClientWithToken(session.accessToken);
@@ -39,7 +39,7 @@ export default async function MyCompetitions() {
   const myCompetitionsRequest = await client.GET("/v0/competitions/mine");
 
   if (myCompetitionsRequest.error) {
-    return <p>Something went wrong while fetching your competitions</p>;
+    return <p>{t("errors.next_frontend.load_error.competitions")}</p>;
   }
 
   const myCompetitions = myCompetitionsRequest.data;

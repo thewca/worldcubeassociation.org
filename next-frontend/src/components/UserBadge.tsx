@@ -14,8 +14,10 @@ import Link from "next/link";
 import { route } from "nextjs-routes";
 import { components } from "@/types/openapi";
 import EmailCopyButton from "@/components/EmailCopyButton";
+import { TFunction } from "i18next";
 
 interface UserBadgeData {
+  t: TFunction;
   name: string;
   profilePicture?: components["schemas"]["UserAvatar"];
   roles?: { teamRole: string; teamText?: string; staffColor: StaffColor }[];
@@ -25,6 +27,7 @@ interface UserBadgeData {
 }
 
 const UserBadge: React.FC<UserBadgeData> = ({
+  t,
   name,
   profilePicture,
   roles,
@@ -51,7 +54,7 @@ const UserBadge: React.FC<UserBadgeData> = ({
                 ? "/missing_avatar_thumb.png"
                 : (profilePicture.thumb_url ?? profilePicture.url)
             }
-            alt="Profile Picture"
+            alt={t("common.user.profile_picture")}
             objectFit="cover"
             // The badge needs a fixed-width column, so a non-square photo has to
             //   be cropped; anchor the crop at the top so heads survive it.

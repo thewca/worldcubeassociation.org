@@ -178,8 +178,21 @@ eu:
       ranking: '%{ranking} hoberenak batezbestekoan'
       any_result: Edozein batezbesteko
     deadline:
-      description: Sailkatze-epemuga
+      description: Sailkatzeko epearen bukaera data
       by_date: '%{date} data arte'
+    preview: Sailkatzearen aurrebista
+    earliest_date:
+      description: Sailkatzeko epearen hasiera data
+      from_date: '%{date}-etan edo beranduago'
+      window_too_short: Epeko hasiera data eta bukaera dataren artean %{days} 
+        egun egon behar dira gutxienez.
+      explanation:
+        '1': Sailkatze epearen hasiera ezartzea hautazkoa da. Hutsik utziz gero,
+          epearen bukaera aurretik lortutako edozein emaitzak balio du.
+        '2': Sailkatze epearen hasiera ezartzen bada, bakarrik hortik aurrera 
+          lortutako emaitzek balioko dute sailkatzeko.
+        '3': Epeko hasiera data bukaera data baino %{days} egun lehenago izan 
+          behar da gutxienez.
   activity:
     registration: Tokian bertako erregistroa
     checkin: Erregistoa
@@ -207,6 +220,7 @@ eu:
     user:
       wca_id: WCA IDa
       representing: Ordezkatzen
+      profile_picture: Perfileko irudia
     all_regions: Eskualde guztiak
     errors:
       invalid: baliogabea
@@ -224,6 +238,12 @@ eu:
       unit_seconds: segundo
       unit_moves: mugimendu
     back: Itzuli
+    more_information: Informazio gehiago
+    confirm_dialog:
+      title: Berretsi ekintza
+      message: Ziur zaude? Ekintza hau ezin da desegin.
+      type_to_confirm_html: Idatzi <code>%{input}</code> baieztatzeko
+      input_mismatch: Idatzitakoa ez da berdina. Saiatu berriro mesedez.
   oauth:
     applications:
       your_apps: Zure OAuth Aplikazioak
@@ -236,6 +256,10 @@ eu:
       secret: Sekretua
       scopes: Irismenak
       callback_urls: Callback Urlak
+      confidential: Konfidentziala?
+      confidentiality:
+        'yes': Bai
+        'no': Ez
   helpers:
     submit:
       competition_medium:
@@ -578,6 +602,14 @@ eu:
         Akatsak irauten badu emaiozu WSTri honen berri azpian zerrendatutako
         xehetasunekin
       details: Akatsaren xehetasunak
+      session_outdated: Zure saioa iraungi da. Itxi saioa eta ireki berriro, 
+        mesedez.
+      load_error:
+        podiums: Arazo bat egon da podiumak ekartzerakoan
+        results: Arazo bat egon da emaitzak ekartzerakoan
+        schedule: Arazo bat egon da lehiaketako ordutegia ekartzerakoan
+        person: Arazo bat egon da pertsona ekartzerakoan
+        competitions: Arazo bat egon da zure lehiaketak ekartzerakoan
     messages:
       wrong_size: 'ez da tamaina zuzenekoa (%{file_size} izan behar luke)'
       size_too_small: 'oso txikia da (gutxienez %{file_size} izan behar luke)'
@@ -697,6 +729,8 @@ eu:
         use_classic: Saioa hasteko orri zaharrera itzuli
       destroy_other:
         success: Beste gailueatik saioa arrakastaz amaitu da.
+      destroy:
+        success: Saioa itxi egin dizute.
     shared:
       links:
         sign_in: Saioa hasi
@@ -749,6 +783,9 @@ eu:
             ezazu <a
             href="https://github.com/thewca/worldcubeassociation.org/blob/main/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">hau</a> onartutako eremu zerrenda ikusteko.
+          confidential: Aplikazioa bezeroaren sekretua ezkutuan gorde daitekeen 
+            lekuan erabiliko da. Mobileko berezko aplikazioak eta orri bakarreko
+            aplikazioak ez dira konfidentzialtzat hartzen.
       scopes:
         public: >-
           Sar itzazu zure datu publikoak (izena, WCA IDa, generoa,
@@ -835,6 +872,23 @@ eu:
       privacy: Pribatutasuna
       disclaimer: Erantzunkizun deskargua
       find_us: Aurki gaitzazu
+      panels:
+        admin: Administadore panela
+        volunteer: Boluntario panela
+        delegate: Ordezkari panela
+        wapc: WACren panela
+        wfc: WFCren panela
+        wrt: WRTren panela
+        wst: WSTren panela
+        board: Batzordearen panela
+        leader: Buruaren panela
+        senior_delegate: Senior ordezkari panela
+        wic: WICren panela
+        weat: WEATren panela
+        wqac: WQACren panela
+      switch_to_dark_mode: Aldatu modu ilunera
+      switch_to_light_mode: Aldatu modu argira
+      toggle_navigation: Aldatu nabigazioa
   page:
     translators:
       title: Itzultzaileak
@@ -952,6 +1006,8 @@ eu:
           berrikuskera prozesu inpartzial eta independiente bat eskaintzen du,
           erabakiak bidezkoak, arrazoizkoak direla bermatzeko, WCAko politikak
           eta erregulazioak jarraituz.
+      empty: Ez da talde ez komiterik aurkitu. Saiatu berriro beranduago, 
+        mesedez.
     contacts:
       title: WCA Kontaktu Formulategia
       faq_note_html: >-
@@ -1078,6 +1134,14 @@ eu:
       success_message_with_ticket_link_html: >-
         Eskaera bidalita. Zurekin harremanetan jarriko gara aurki. Eskaera honen
         egoera ikusteko, bisita ezazu <a href="%{link}">esteka hau</a> mesedez.
+    executives:
+      title: Exekutiboak
+      joined_wca: WCAra batu zen
+      joined_executives: Exekutibo taldera batu zen
+      board: Batzordea
+      more_information: Informazio gehiago
+      close: Itxi
+      person_not_found: Ez da %{wca_id} WCA IDa duen pertsonarik aurkitu
   homepage:
     learn_more: Gehiago ezagutu
     title: Ongi etorri World Cube Associationera
@@ -1768,6 +1832,7 @@ eu:
         amaitu ondoren.
       errors:
         already_registered: Pertsona honek dagoeneko izena emana du.
+      add_on_the_spot: Unean bertako erregistroa
   competitions:
     messages:
       not_visible: Lehiaketa hau ez dago publikoki ikusgai.
@@ -1876,6 +1941,8 @@ eu:
       no_spots_left: Lehiaketa beteta
       provisional_live_results: 'Bitartean, behin-behineko emaitzak hemen kontsulta
         ditzakezu:'
+      administering: Lehiaketa hau kudeatzen ari zara
+      back_to_public_page: Orri publikora itzuli
     live:
       title: Zuzenezko emaitzak
       manage_rounds: Txandak kudeatu
@@ -1992,6 +2059,17 @@ eu:
         mean: Batez-bestekoa
       errors:
         round_closed: Txanda ez dago zabalik oraindik
+      combined_title: Txanda bikoitz konbinatuak
+      overview:
+        upcoming: Datozenak
+        in_progress: Oraintxe bertan
+        past_month: Joan den hilabetea
+        no_upcoming: Ez dago zuzenezko emaitzak dauzkan lehiaketarik hemendik 
+          gutxian.
+        search: Lehiaketak bilatu
+      projector:
+        play: Aurkeztu
+        pause: Gelditu
     my_competitions:
       title: Nire lehiaketak
       disclaimer: >-
@@ -4576,3 +4654,11 @@ eu:
       "yes": Bai
       "no": Ez
       submit: Eskaera bidali
+  beta_disclaimer:
+    title: WCAko webgunearen birdiseinatze betaren oharpena
+    description_html: WCAko webgunearen ingelesezko bertsio beta birdiseinatua 
+      ikusten ari zara. Hau komunitateari webgune berriaren aurrerapen bat 
+      emateko da, feedback eta eztabaidarako. <br /> Segurenik, akats eta 
+      arazoak aurkituko dituzu webgunean nabigatzean. Aurkitzekotan, emaguzu 
+      horren berri <a>feedback inprimakiaren bidez</a>.
+    accept: Ulertzen dut, utzi ikusten!
