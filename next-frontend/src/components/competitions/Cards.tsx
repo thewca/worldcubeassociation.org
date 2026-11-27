@@ -348,8 +348,7 @@ export async function EventCard({
               eventId={event_id}
               boxSize="8"
               color={
-                event_id === competitionInfo.events.main_event_id &&
-                event_id !== "333"
+                event_id === competitionInfo.events.main_event_id
                   ? "green.solid"
                   : "currentColor"
               }
