@@ -1522,7 +1522,7 @@ export interface components {
             end_date: string | null;
             /**
              * Format: date-time
-             * @description When the delegate report was posted, or null while it is unposted. Posting the report is independent of posting results, so this is not part of `status`.
+             * @description When the delegate report was posted, or null while it is unposted.
              * @example 2025-07-10T14:00:00.000Z
              */
             report_posted_at: string | null;
@@ -2689,7 +2689,6 @@ export interface components {
             can_view_delegate_report: {
                 scope: components["schemas"]["CompetitionPermissions"];
             };
-            /** @description Before a delegate report is posted, only these users can view it. Once posted, `can_view_delegate_report` applies instead. */
             can_view_unposted_delegate_report: {
                 scope: components["schemas"]["CompetitionPermissions"];
             };
