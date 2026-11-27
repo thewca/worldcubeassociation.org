@@ -55,7 +55,7 @@ function ShortlistItem<T extends DataCompetition>({
                   eventId={event_id}
                   boxSize="6"
                   color={
-                    event_id === comp.main_event_id && event_id !== "333"
+                    event_id === comp.main_event_id
                       ? "green.solid"
                       : "currentColor"
                   }
