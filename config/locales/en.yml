@@ -812,7 +812,7 @@ en:
     accept: "I understand, let me in!"
   translation_disclaimer:
     title: "Translation Disclaimer"
-    description: "Translations are provided by volunteers from within the speedcubing community. This means that sometimes translations will be incomplete. If you would like to help with translating for your language, please contact your local delegate."
+    description_html: "Translations are provided by <a href='/translators'>volunteers from within the speedcubing community</a>. This means that sometimes translations will be incomplete. If you would like to help with translating for your language, please contact your <a href='/delegates'>local delegate</a>."
     accept: "I understand"
   page:
     translators:
