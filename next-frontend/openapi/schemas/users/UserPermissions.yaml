@@ -73,7 +73,6 @@ properties:
         $ref: "./CompetitionPermissions.yaml"
   can_view_unposted_delegate_report:
     type: object
-    description: Before a delegate report is posted, only these users can view it. Once posted, `can_view_delegate_report` applies instead.
     required:
       - scope
     properties:

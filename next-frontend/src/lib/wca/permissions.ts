@@ -93,7 +93,6 @@ export const hydrateUserPermissions = (
         rawPermissions.can_edit_delegate_report.scope,
       ),
     ),
-  // Mirrors `User#can_view_delegate_report?`: a posted report is open to more people than an unposted one.
   canViewDelegateReport: (competition, isReportPosted) =>
     Boolean(
       rawPermissions &&
