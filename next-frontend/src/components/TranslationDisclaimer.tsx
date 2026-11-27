@@ -34,7 +34,10 @@ export default async function TranslationDisclaimer() {
         title={t("translation_disclaimer.title")}
         acceptLabel={t("translation_disclaimer.accept")}
       >
-        <TransWithLinks i18nKey="translation_disclaimer.description_html" />
+        <TransWithLinks
+          i18nKey="translation_disclaimer.description_html"
+          linkProps={{ textStyle: "s2" }}
+        />
       </DisclaimerDialog>
     </ClientOnly>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { Code, Link } from "@chakra-ui/react";
+import { Code, Link, LinkProps } from "@chakra-ui/react";
 import { Trans } from "react-i18next";
 import { useT } from "@/lib/i18n/useI18n";
 
@@ -12,9 +12,11 @@ import { useT } from "@/lib/i18n/useI18n";
 export default function TransWithLinks({
   i18nKey,
   values,
+  linkProps,
 }: {
   i18nKey: string;
   values?: Record<string, string>;
+  linkProps?: LinkProps;
 }) {
   const { t } = useT();
 
@@ -23,7 +25,10 @@ export default function TransWithLinks({
       t={t}
       i18nKey={i18nKey}
       values={values}
-      components={{ a: <Link display="inline" />, code: <Code /> }}
+      components={{
+        a: <Link display="inline" {...linkProps} />,
+        code: <Code />,
+      }}
     />
   );
 }
