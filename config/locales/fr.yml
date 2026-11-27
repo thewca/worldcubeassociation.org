@@ -181,8 +181,23 @@ fr:
       ranking: 'Top %{ranking} classé par moyenne'
       any_result: N'importe quelle moyenne
     deadline:
-      description: Date limite de qualification
+      description: Date limite de la période de qualification
       by_date: 'jusqu''au %{date}'
+    preview: Aperçu de la qualification
+    earliest_date:
+      description: Date de début de la période de qualification
+      from_date: le %{date} ou après
+      window_too_short: La date de début de la période doit être au moins 
+        %{days} jours avant la date limite de la période.
+      explanation:
+        '1': La date de début de la période de qualification est facultative. Si
+          elle est laissée vide, tout résultat obtenu avant la date limite est 
+          pris en compte.
+        '2': Si une date de début de la période est saisie, seuls les résultats 
+          obtenus à cette date ou après sont pris en compte pour la 
+          qualification.
+        '3': La date de début de la période doit être au moins %{days} jours 
+          avant la date limite de la période.
   activity:
     registration: Inscription sur place
     checkin: Enregistrement
@@ -210,6 +225,7 @@ fr:
     user:
       wca_id: ID WCA
       representing: Représentant
+      profile_picture: Photo de profil
     all_regions: Toutes les régions
     errors:
       invalid: invalide
@@ -228,6 +244,17 @@ fr:
       unit_moves: mouvements
     back_to_top: Retour en haut de la page
     back: Retour
+    ranking_abbreviations:
+      position: Pos
+      world: WR
+      continental: CR
+      national: NR
+    more_information: Plus d'informations
+    confirm_dialog:
+      title: Confirmer l'action
+      message: Êtes-vous sûr·e ? Cette action est irréversible.
+      type_to_confirm_html: Saisissez <code>%{input}</code> pour confirmer
+      input_mismatch: La saisie ne correspond pas. Veuillez réessayer.
   oauth:
     applications:
       your_apps: Vos applications OAuth
@@ -240,6 +267,10 @@ fr:
       secret: Secret
       scopes: Portées
       callback_urls: URL des callbacks
+      confidential: Confidentielle ?
+      confidentiality:
+        'yes': Oui
+        'no': Non
   helpers:
     submit:
       competition_medium:
@@ -594,6 +625,15 @@ fr:
         Si cette erreur persiste, signalez-la à WST en fournissant les informations
         détaillées ci-dessous
       details: Détails de l'erreur
+      session_outdated: Votre session n'est plus à jour. Veuillez vous 
+        déconnecter puis vous reconnecter.
+      load_error:
+        podiums: Erreur lors du chargement des podiums
+        results: Erreur lors du chargement des résultats
+        schedule: Erreur lors du chargement du planning de la compétition
+        person: Erreur lors du chargement de la personne
+        competitions: Une erreur s'est produite lors du chargement de vos 
+          compétitions
     messages:
       wrong_size: 'n''est pas de la bonne taille (il devrait faire %{file_size})'
       size_too_small: 'est trop petit (il devrait faire au moins %{file_size})'
@@ -781,6 +821,10 @@ fr:
             scope(s) par défaut. Voir <a
             href="https://github.com/thewca/worldcubeassociation.org/blob/main/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">ici</a> pour une liste des scopes supportés.
+          confidential: L'application sera utilisée dans un contexte où le 
+            secret client peut rester confidentiel. Les applications mobiles 
+            natives et les applications monopages (Single Page Apps) sont 
+            considérées comme non confidentielles.
       scopes:
         public: >-
           Accéder à vos données publiques (nom, ID WCA, genre, nationalité et
@@ -886,6 +930,9 @@ fr:
         wic: Panneau WIC
         weat: Panneau WEAT
         wqac: Panneau WQAC
+      switch_to_dark_mode: Passer en mode sombre
+      switch_to_light_mode: Passer en mode clair
+      toggle_navigation: Afficher/masquer la navigation
   page:
     translators:
       title: Traducteur·rice·s
@@ -1158,6 +1205,7 @@ fr:
       more_information: Plus d'informations
       close: Fermer
       person_not_found: Aucune personne trouvée avec l'ID WCA %{wca_id}
+      board: Conseil d'administration
   homepage:
     learn_more: En savoir plus
     title: Bienvenue à la World Cube Association
@@ -1896,6 +1944,7 @@ fr:
         de la compétition.
       errors:
         already_registered: Cette personne a déjà une inscription.
+      add_on_the_spot: Ajouter une inscription sur place
   competitions:
     messages:
       not_visible: Cette compétition n'est pas visible pour le public.
@@ -2011,6 +2060,8 @@ fr:
       no_spots_left: Compétition pleine
       provisional_live_results: 'En attendant, vous pouvez consulter les résultats
         provisoires ici :'
+      administering: Vous administrez cette compétition
+      back_to_public_page: Retourner à la page publique
     live:
       title: Résultats en direct
       manage_rounds: Gérer les tours
@@ -2098,6 +2149,7 @@ fr:
             menu: Suppression groupée
             id: ID
             name: Nom
+            select_all: Tout sélectionner
           quit_menu: Supprimer
           no_next: Aucun autre compétiteur ne se qualifie.
           cancel: Annuler
@@ -2130,9 +2182,32 @@ fr:
             ce que vous souhaitez faire.
           round_closed: Vous ne pouvez pas ajouter un compétiteur à un tour déjà
             terminé
+          title: Ajouter un compétiteur
+          all_added: Tous les compétiteurs font déjà partie du tour
+        double_check_description: Ici, vous pouvez parcourir les résultats par 
+          ordre de saisie (les plus récents en premier). Lors de la double 
+          vérification, vous pouvez placer une feuille de score à côté du 
+          formulaire pour comparer rapidement les résultats des essais. Pour une
+          utilisation optimale, veillez à toujours placer la feuille de score 
+          saisie ou mise à jour en haut de la pile.
+        type_to_search: Tapez pour rechercher
+        no_cutoff: Aucun
+        exit_batch_mode_confirm: Êtes-vous sûr·e de vouloir quitter le mode par 
+          lots ? Tous les résultats non soumis seront perdus.
+        scoretakers:
+          title: Saisisseur de résultats
+          manage: Gérer les saisisseurs de résultats
+          add: Ajouter en tant que saisisseur de résultats
+          remove: Retirer
+          no_registrations: Aucune inscription trouvée.
       results:
         competitor: Compétiteur
         mean: Moyenne
+        attempts: Essais
+        all_results: Tous les résultats
+        show_combined: Afficher les résultats combinés
+        forecast_view: Vue prévisionnelle
+        processing: En cours de traitement
       errors:
         round_closed: Le tour n'est pas encore ouvert
       combined_title: Doubles confrontations combinées
@@ -2143,6 +2218,9 @@ fr:
         no_upcoming: Il n'y a aucune compétition à venir avec des résultats en 
           direct.
         search: Rechercher des compétitions
+      projector:
+        play: Lecture
+        pause: Pause
     my_competitions:
       title: Mes Compétitions
       disclaimer: >-
@@ -2162,6 +2240,8 @@ fr:
         abbr_description: '%{short_name} : %{long_name}'
         cutoff: 'Cutoff : %{short_cutoff}'
         download_html: 'Télécharger les détails de la compétition au format PDF %{here}.'
+        download_pdf: Télécharger le PDF du planning ici
+        download: Télécharger
       date: Date
       add_to_calendar: Ajouter au planning
       name: Nom
@@ -2328,6 +2408,9 @@ fr:
       is_bookmarked: Vous avez ajouté cette compétition aux favoris
       number_of_bookmarks: Nombre de personne ayant cette compétition en favoris
       waiting_list_size: Nombre de personnes sur la liste d'attente
+      view_more_members: Voir %{count} membres de l'équipe supplémentaires
+      see_more: + %{count} de plus
+      refund_policy: Politique de remboursement
     index:
       title: Compétitions
       all_competitions: Toutes les compétitions
@@ -2385,6 +2468,10 @@ fr:
         by_announcement: >-
           Compétitions triées par date d'annonce, en commençant par la plus
           récente
+        in_progress_count: Compétitions en cours (%{count})
+        past_count: Compétitions passées de %{year} (%{count})
+        past_all_count: Compétitions passées de toutes les années (%{count})
+        upcoming_count: Compétitions à venir (%{count})
       tooltips:
         hourglass:
           ended: 'Terminée il y a %{days}'
@@ -2408,6 +2495,7 @@ fr:
         open: Ouvert
         not_open: Non ouvert
         closed: Fermé
+        all: Toutes
       register_now: Inscrivez-vous dès maintenant
       view_competition: Voir la compétition
       no_more_comps: Plus aucune compétition.
@@ -2430,6 +2518,10 @@ fr:
         announced_at_desc: "Date d'annonce : décroissante"
         name_asc: 'Nom : A-Z'
         name_desc: 'Nom : Z-A'
+      date_and_city: '%{date} – %{city}'
+      why_compete_title: Pourquoi participer à une compétition ?
+      why_compete_image_alt: Un compétiteur résolvant un casse-tête lors d'une 
+        compétition WCA
     my_competitions_table:
       edit: Éditer
       registrations: Inscriptions
@@ -2895,6 +2987,11 @@ fr:
           compétition est complète, mais vous avez été mis sur une liste
           d’attente et vous recevrez un e-mail si suffisamment de places sont
           disponibles pour que vous puissiez y assister.
+        additional: Veuillez vous assurer que vous avez suivi toutes les 
+          instructions supplémentaires ci-dessus concernant le paiement ou les 
+          autres conditions d'inscription.
+        email: Vous recevrez un e-mail lorsque l'état de votre inscription sera 
+          mis à jour.
       list:
         empty: Aucun
         spots_remaining_plural:
@@ -3031,11 +3128,12 @@ fr:
             title: Approbation
             description: Par l'équipe organisatrice
           payment:
-            title: Information sur le paiement
+            title: Informations sur le paiement
             description: Saisissez les informations de facturation
           competing:
             title: S'inscrire
             description: Sélectionnez vos épreuves
+            summary_title: Inscription
           requirements:
             title: Pré-requis
             description: Accepter les conditions d'inscription
@@ -3144,6 +3242,10 @@ fr:
         '-7005': >-
           Impossible de procéder à une acceptation automatique lorsque les
           inscriptions ne sont pas ouvertes
+      preview:
+        notice: Ceci est un aperçu. Nous vous recommandons de vous inscrire via 
+          le panneau habituel.
+        link: Aller à la page d'inscription actuelle
     errors:
       must_use_wca_registration: >-
         L'acceptation automatique ne peut être utilisée que si vous utilisez le site
@@ -3257,7 +3359,7 @@ fr:
         Vous ne pouvez introduire que des dates limites futures, mais
         %{new_timestamp} n'est pas dans le futur.
       fto_requires_internal_scoretaking: doit être défini sur Résultats en 
-        direct internes lorsque l'Octaminx (FTO) est présent.
+        direct intégrés lorsque l'Octaminx (FTO) est présent.
     new:
       create_competition: Créer une compétition
       note_clone: >-
@@ -3428,6 +3530,8 @@ fr:
         Les plannings sont sujets à des ajustements, surtout une fois que le
         nombre d'inscriptions est connu. Les compétiteurs inscrits seront avisés
         par e-mail de tout changement majeur.
+      no_schedule: Cette compétition n'a pas de planning.
+      no_timezone_selected: Aucune sélection
     nav:
       menu:
         results: Résultats
@@ -3452,6 +3556,14 @@ fr:
         register: S'inscrire
         competitors: Compétiteurs
         scrambles: Mélanges
+        upload_and_check_results: Mettre en ligne et vérifier les résultats
+        check_existing_results: Vérifier les résultats existants
+        competitor_results: Résultats des compétiteurs
+      general: Général
+      more: Plus
+      admin: Admin
+      results: Résultats
+      events: Épreuves
     results_table:
       wca_profile: Profil WCA
       event: Épreuve
@@ -3473,6 +3585,7 @@ fr:
     scrambles_table:
       group: Groupe
       scramble: Mélange
+      extra: Extra %{number}
     competition_series_fields:
       add_series: Ajouter à une Série
       remove_series: Retirer de la Série
@@ -3483,6 +3596,16 @@ fr:
       semifinal_stage: Demi-finale
       final_stage: Finale
       third_place: Troisième place
+      match_number: Match %{number}
+      score:
+        win: V %{own}–%{opponent}
+        loss: D %{own}–%{opponent}
+        tie: = %{own}–%{opponent}
+    results:
+      query_search: Rechercher par nom ou ID WCA
+      country_search: Filtrer par pays
+      no_results: Aucun résultat trouvé
+      all_countries: Tous les pays
   competition_tabs:
     headers:
       tabs: Onglets
@@ -3506,6 +3629,7 @@ fr:
         page de la compétition.
     edit:
       edit_tab_title: 'Éditer l''onglet %{tab_name}'
+    not_found: Cet onglet n'existe pas
   results:
     rankings:
       title: Classements
@@ -3701,6 +3825,32 @@ fr:
       world_records: Historique des Records du Monde
       continental_records: Historique des Records Continentaux
       national_records: Historique des Records Nationaux
+      not_found: Cette personne n'existe pas
+      record_levels:
+        world: Mondial
+        continental: Continental
+        national: National
+      achievements:
+        title: Accomplissements
+        explanation_title: Explication des accomplissements du profil
+        explanation: Les compétiteurs peuvent débloquer des « Accomplissements »
+          qui sont affichés sur leur profil. Ceux-ci concernent principalement 
+          des accomplissements basés sur les résultats, mais pas exclusivement.
+        badges_intro: 'Les badges qui peuvent être obtenus ou affichés (actuellement)
+          sont :'
+        career: Carrière
+        career_length: Durée de carrière
+        years:
+          one: Année
+          many: Années
+          other: Années
+        medals: Médailles
+        medals_won: Médailles remportées
+      round: Tour
+      h2h_summary:
+        one: '%{count} match · %{wins}V %{losses}D'
+        many: '%{count} de matchs · %{wins}V %{losses}D'
+        other: '%{count} matchs · %{wins}V %{losses}D'
   posts:
     confirm_delete_post: >-
       Êtes-vous sûr·e de vouloir supprimer ce post ? Cette action n'est pas
@@ -3708,6 +3858,13 @@ fr:
     announcement_info_html: 'Annoncé par %{author_name} le %{date_time}'
     errors:
       unstick_at_future: doit être dans le futur
+    search: Rechercher des annonces
+    no_announcements: Il n'y a pas encore d'annonces.
+    no_search_results: Aucune annonce ne correspond à votre recherche.
+    read_more: Lire la suite
+    share: Partager
+    previous_page: Page précédente
+    next_page: Page suivante
   contacts:
     dob:
       title: Formulaire pour demander une correction de date de naissance
@@ -4212,6 +4369,8 @@ fr:
         title: Competition groups
         description: Visualiser les groupes de compétition de toute compétition 
           en cours
+    guide: Guide
+    sources: Sources
   logo:
     title: Logo de la WCA
     intro: "Le logo de la WCA a été conçu par Justin Eastman, dans un concours de
@@ -4945,3 +5104,128 @@ fr:
       region_and_references: Région et références
       region: Dans quelle région de délégué vivez-vous actuellement ?
       region_placeholder: Sélectionnez votre région
+  beta_disclaimer:
+    title: Avertissement concernant la version bêta du nouveau site de la WCA
+    description_html: Vous consultez la version bêta, disponible uniquement en 
+      anglais, du nouveau site de la WCA. Elle a pour but de donner un aperçu du
+      site à la communauté, afin de recueillir ses retours et d'en discuter. <br
+      /> Attendez-vous à rencontrer des bugs et des problèmes en naviguant sur 
+      le site. Si c'est le cas, merci de les signaler via <a>le formulaire de 
+      retour</a>.
+    accept: J'ai compris, laissez-moi entrer !
+  regulations_viewer:
+    search: Rechercher dans le Règlement…
+    no_matches: Aucune règle correspondante.
+  regulations_history:
+    title: Règlement de la WCA
+    older_versions: Anciennes versions du Règlement
+    maintainers_html: Jusqu'en 2011, le Règlement était maintenu par Ron van 
+      Bruchem et le Conseil d'administration de la WCA. Depuis, c'est le <a 
+      href="mailto:wrc@worldcubeassociation.org">Comité réglementaire de la 
+      WCA</a> qui en est responsable.
+    guidelines_merge: "Auparavant, de la version du 1er janvier 2013 jusqu'à celle
+      du 1er janvier 2025, le Règlement de la WCA était divisé en deux documents :
+      le Règlement de la WCA et les Directives de la WCA. Le contenu de ces deux documents
+      a été regroupé dans le Règlement de la WCA pour la version du 17 juillet 2025."
+    changes_html: (<a href="%{changes_url}">Modifications</a>)
+    changes_with_summary_html: (<a href="%{changes_url}">Modifications</a>, <a 
+      href="%{summary_url}">Résumé des modifications</a>)
+    current_updates_html: Les mises à jour actuelles du Règlement sont 
+      disponibles <a href="https://github.com/thewca/wca-regulations/">sur 
+      GitHub</a>
+  regulations_scrambles:
+    title: Mélanges WCA
+    current_program_html: Le générateur de mélanges officiel actuel est 
+      <i>%{version}</i>. Il génère des séquences de mélange de haute qualité 
+      pour toutes les épreuves d'une compétition en une seule fois.
+    download: 'Télécharger le générateur de mélanges officiel :'
+    last_change: 'Dernière modification officielle : 1er janvier 2026'
+    delegates:
+      title: Remarques importantes pour les Délégués
+      current_version_html: Les compétitions officielles doivent toujours 
+        utiliser une version à jour du programme officiel de mélange (voir la <a
+        href="/regulations#4b">Règle 4b</a>).
+      no_public_server: Les Délégués doivent télécharger TNoodle pour l'exécuter
+        sur un ordinateur. Ils ne doivent pas utiliser TNoodle exécuté sur un 
+        serveur public (pour des raisons de sécurité).
+      save_scrambles_html: Les Délégués doivent sauvegarder toutes les séquences
+        de mélange générées pour une compétition officielle et les envoyer avec 
+        les résultats (voir la <a 
+        href="https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf">WCA
+        Competition Requirements Policy</a>).
+    secrecy:
+      title: Confidentialité des mélanges
+      encrypt_html: Chiffrez <b>toujours</b> vos mélanges dans TNoodle avec un 
+        mot de passe impossible à deviner. Le mot de passe ne doit avoir aucun 
+        rapport avec la compétition ni avec les données personnelles (nom, date 
+        de naissance) d'aucun des Délégués.
+      digital_display_html: Si vous affichez les mélanges sur un appareil 
+        numérique, partagez uniquement <code>[Nom de la compétition] - Computer 
+        Display PDFs.zip</code>.
+      delegates_only: Assurez-vous que seuls les Délégués ont accès à tous les 
+        autres fichiers.
+      guest_account: Si vous utilisez l'ordinateur d'un Délégué, utilisez le 
+        système d'exploitation pour créer un compte utilisateur invité et 
+        partagez avec celui-ci uniquement les PDF d'affichage sur ordinateur 
+        protégés par code d'accès.
+      passcode_timing_html: Donnez les codes d'accès aux mélangeurs au début des
+        groupes correspondants, mais <b>pas avant</b>. (En particulier, ne 
+        donnez pas aux mélangeurs les codes d'accès de tous les ensembles de 
+        mélanges d'un tour au début de ce tour.)
+      passcode_delegation: Ne confiez pas la gestion des codes d'accès à 
+        quelqu'un d'autre, sauf en cas d'absolue nécessité, et ne lui donnez que
+        le nombre minimum de codes d'accès nécessaires.
+      accountability_html: Des précautions supplémentaires sont décrites dans la
+        <a 
+        href="https://documents.worldcubeassociation.org/documents/policies/external/Scramble%20Accountability.pdf">Scramble
+        Accountability Policy</a>.
+    instructions:
+      title: Instructions détaillées pour TNoodle
+      java_html: TNoodle nécessite que <a 
+        href="https://www.java.com/en/">Java</a> soit installé sur votre 
+        ordinateur.
+      run_html: Exécutez le fichier <code>%{jarfile}</code> sur votre 
+        ordinateur.
+      open_page_html: La page <a 
+        href="http://localhost:2014/scramble">http://localhost:2014/scramble</a>
+        s'ouvrira dans votre navigateur.
+      enter_details: Saisissez les détails de votre compétition (nom de la 
+        compétition, nombre de tours pour chaque épreuve, détails de chaque 
+        tour).
+      password: Si vous souhaitez protéger le fichier par un mot de passe, 
+        saisissez un mot de passe.
+      wait: Attendez la fin de la barre de chargement et cliquez sur le bouton «
+        Scramble! » qui apparaît.
+      zip_html: Un fichier <code>.zip</code> sera téléchargé dans votre 
+        navigateur.
+    notes:
+      title: Remarques
+      four_by_four_html: L'initialisation et la génération des séquences de 
+        mélange 4x4x4 <strong>peuvent prendre quelques minutes</strong>. Si vous
+        générez des séquences de mélange 4x4x4, soyez patient, même si la barre 
+        de chargement semble bloquée.
+      resources_html: TNoodle crée un dossier <code>tnoodle_resources</code> 
+        contenant quelques Mo de fichiers (principalement des tables en cache) 
+        dans le dossier depuis lequel il est exécuté.
+      resources_keep: Conservez ce dossier si vous souhaitez générer plus 
+        rapidement d'autres séquences de mélange 4x4x4 à l'avenir, mais 
+        n'hésitez pas à le supprimer si vous avez besoin de libérer de l'espace 
+        disque.
+      filtering_html: TNoodle filtre les mélanges conformément à l'<a 
+        href="https://www.worldcubeassociation.org/regulations/#4b3">Article 
+        4b3</a>.
+    about:
+      title: À propos de TNoodle
+      description_html: TNoodle utilise du code développé ou adapté par Jeremy 
+        Fleischman, Ryan Zheng, Clément Gallet, Shuang Chen, Bruce Norskog et 
+        Lucas Garron. Consultez le <a 
+        href="https://github.com/thewca/tnoodle">projet TNoodle sur GitHub</a> 
+        pour voir le code source, signaler un problème ou contribuer à son 
+        développement.
+    history:
+      title: Historique des versions officielles
+      description: Les anciennes versions ne doivent pas être utilisées. Elles 
+        sont fournies au cas où vous souhaiteriez vérifier le comportement d'une
+        version antérieure.
+  privacy:
+    title: Déclaration de confidentialité de la WCA
