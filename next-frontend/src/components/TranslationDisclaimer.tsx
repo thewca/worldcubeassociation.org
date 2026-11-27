@@ -1,6 +1,7 @@
 import { ClientOnly } from "@chakra-ui/react";
 import { cookies } from "next/headers";
 import DisclaimerDialog from "@/components/DisclaimerDialog";
+import TransWithLinks from "@/components/TransWithLinks";
 import { getT } from "@/lib/i18n/get18n";
 import { fallbackLng, storageKey } from "@/lib/i18n/settings";
 import { getCachedGlobal } from "@/lib/payload/globals";
@@ -33,7 +34,7 @@ export default async function TranslationDisclaimer() {
         title={t("translation_disclaimer.title")}
         acceptLabel={t("translation_disclaimer.accept")}
       >
-        {t("translation_disclaimer.description")}
+        <TransWithLinks i18nKey="translation_disclaimer.description_html" />
       </DisclaimerDialog>
     </ClientOnly>
   );
