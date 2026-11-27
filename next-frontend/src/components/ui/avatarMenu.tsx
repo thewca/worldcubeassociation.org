@@ -44,8 +44,10 @@ function EntryLink({
   entry: FlatMenuEntry;
 } & React.ComponentPropsWithoutRef<"a">) {
   if (entry.kind === "rails") {
+    // The surrounding menu item / nav button owns the styling, so the `link`
+    //   recipe must not apply here, or Rails entries look different from the rest.
     return (
-      <RailsLink {...rest} href={entry.href} fontWeight="inherit">
+      <RailsLink {...rest} href={entry.href} unstyled>
         {entry.label}
       </RailsLink>
     );
@@ -209,7 +211,7 @@ function AvatarMenu({
             <MobileNavButton>
               <HStack gap={2}>
                 {avatarNode}
-                <Text>{session.user?.name}</Text>
+                {session.user?.name}
               </HStack>
               <Collapsible.Indicator ms="auto">
                 <LuChevronDown />
