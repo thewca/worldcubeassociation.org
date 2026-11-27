@@ -69,6 +69,25 @@ const eventsAndScheduleTabs = (
   ];
 };
 
+const competitorsTabs = (
+  competitionInfo: components["schemas"]["V1CompetitionInfo"],
+): TabWithLink[] => {
+  if (!competitionInfo.can_show_competitors_page) return [];
+
+  return [
+    {
+      type: "tab-link",
+      i18nKey: "competitions.nav.menu.competitors",
+      href: route({
+        pathname: "/competitions/[competitionId]/competitors",
+        query: { competitionId: competitionInfo.id },
+      }),
+      menuKey: "competitors",
+      icon: "Competitors",
+    },
+  ];
+};
+
 export const beforeCompetitionTabs = (
   competitionInfo: components["schemas"]["V1CompetitionInfo"],
 ): TabWithLink[] => {
@@ -93,16 +112,7 @@ export const beforeCompetitionTabs = (
       menuKey: "register",
       icon: "Register",
     },
-    {
-      type: "tab-link",
-      i18nKey: "competitions.nav.menu.competitors",
-      href: route({
-        pathname: "/competitions/[competitionId]/competitors",
-        query: { competitionId: competitionInfo.id },
-      }),
-      menuKey: "competitors",
-      icon: "Competitors",
-    },
+    ...competitorsTabs(competitionInfo),
     ...eventsAndScheduleTabs(competitionInfo),
   ];
 };
@@ -181,16 +191,7 @@ export const duringCompetitionTabs = (
       menuKey: "podiums",
       icon: "Records",
     },
-    {
-      type: "tab-link",
-      i18nKey: "competitions.nav.menu.competitors",
-      href: route({
-        pathname: "/competitions/[competitionId]/competitors",
-        query: { competitionId: competitionInfo.id },
-      }),
-      menuKey: "competitors",
-      icon: "Competitors",
-    },
+    ...competitorsTabs(competitionInfo),
     ..._.map(roundsByEventId, (rounds, eventId: EventId): TabWithChildren => ({
       type: "tab-with-children",
       i18nKey: `events.${eventId}`,

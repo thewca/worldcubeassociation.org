@@ -1543,6 +1543,8 @@ export interface components {
                 id: number;
                 name: string;
             }[];
+            /** @description Whether the list of competitors is public yet. To account for multiple registration periods, this is true once when registration is open, or if there is any non-delegate/ non-organizer registration which has been accepted. */
+            can_show_competitors_page: boolean;
             events: {
                 /**
                  * @example [
