@@ -138,7 +138,8 @@ const competitionReportUrl = (id: string) =>
 export function CompetitionTag({ id, name, comments }: CompetitionTagProps) {
   const { t } = useT();
   const { data: permissions } = usePermissionsQuery();
-  const canViewDelegateMatters = permissions?.canViewDelegateReport(id);
+  // The posted-report scope is exactly `User#can_view_delegate_matters?`, which is what this link is gated on.
+  const canViewDelegateMatters = permissions?.canViewDelegateReport(id, true);
 
   const links = (
     <>

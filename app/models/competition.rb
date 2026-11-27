@@ -2324,6 +2324,7 @@ class Competition < ApplicationRecord
     :tabs,
     :championships,
     :competition_venues,
+    :delegate_report,
     { delegates: [*V1_INFO_TEAM_MEMBER_INCLUDES, { roles: %i[metadata group] }], organizers: V1_INFO_TEAM_MEMBER_INCLUDES },
   ].freeze
 
@@ -2356,6 +2357,7 @@ class Competition < ApplicationRecord
       "contact" => contact.presence,
       "start_date" => start_date,
       "end_date" => end_date,
+      "report_posted_at" => report_posted_at,
       "scoretaking_software" => scoretaking_software,
       "number_of_bookmarks" => number_of_bookmarks,
       "competition_series_ids" => part_of_competition_series? ? series_competitions.visible.ids : [],

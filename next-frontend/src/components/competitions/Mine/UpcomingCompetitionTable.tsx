@@ -151,7 +151,7 @@ export default function UpcomingCompetitionTable({
   const { canViewDelegateReport, canAdministerCompetition } = permissions;
 
   const canViewAnyReport = competitions.some((c) =>
-    canViewDelegateReport(c.id),
+    canViewDelegateReport(c.id, c["report_posted?"]),
   );
   const canAdminAVisibleComp = competitions.some((c) =>
     canAdministerCompetition(c.id),

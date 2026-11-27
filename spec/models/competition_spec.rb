@@ -2179,4 +2179,19 @@ RSpec.describe Competition do
       expect(cancelled_competition.status).to eq "cancelled"
     end
   end
+
+  describe '#to_v1_info_json' do
+    it "has no report_posted_at while the report is unposted" do
+      competition = create(:competition, :confirmed, :visible, :announced, :past)
+
+      expect(competition.to_v1_info_json["report_posted_at"]).to be_nil
+    end
+
+    it "has report_posted_at once the report is posted, independently of results" do
+      competition = create(:competition, :confirmed, :visible, :announced, :past, :with_delegate_report)
+
+      expect(competition.to_v1_info_json["report_posted_at"]).to eq competition.delegate_report.posted_at
+      expect(competition.status).to eq "results_pending"
+    end
+  end
 end

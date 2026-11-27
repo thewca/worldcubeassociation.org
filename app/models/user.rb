@@ -837,6 +837,9 @@ class User < ApplicationRecord
       can_view_delegate_report: {
         scope: can_view_delegate_matters? ? "*" : delegated_competition_ids,
       },
+      can_view_unposted_delegate_report: {
+        scope: can_view_all_unposted_delegate_reports? ? "*" : delegated_competition_ids,
+      },
       can_edit_delegate_report: {
         scope: can_admin_results? ? "*" : delegated_competition_ids,
       },
@@ -1063,11 +1066,15 @@ class User < ApplicationRecord
     end
   end
 
+  def can_view_all_unposted_delegate_reports?
+    can_admin_results? || wic_team? || appeals_committee?
+  end
+
   def can_view_delegate_report?(delegate_report)
     if delegate_report.posted?
       can_view_delegate_matters?
     else
-      can_edit_delegate_report?(delegate_report) || wic_team? || appeals_committee?
+      can_edit_delegate_report?(delegate_report) || can_view_all_unposted_delegate_reports?
     end
   end
 

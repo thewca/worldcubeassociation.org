@@ -319,6 +319,7 @@ export const adminTabs = (
     competitionInfo.status !== "unconfirmed" &&
     competitionInfo.status !== "confirmed";
   const resultsPosted = competitionInfo.status === "results_posted";
+  const isReportPosted = competitionInfo.report_posted_at !== null;
 
   const canUploadResults =
     isResultsAdminOrDelegate &&
@@ -407,7 +408,7 @@ export const adminTabs = (
         "/admin/check-existing-results",
         "List Checks",
       ),
-    permissions.canViewDelegateReport(competitionId) &&
+    permissions.canViewDelegateReport(competitionId, isReportPosted) &&
       railsLink(
         "competitions.nav.menu.delegate_report",
         "/report",

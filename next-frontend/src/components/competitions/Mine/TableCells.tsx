@@ -83,7 +83,7 @@ export function ReportTableCell({
     canAdministerCompetition,
   } = permissions;
 
-  if (!canViewDelegateReport(competitionId)) {
+  if (!canViewDelegateReport(competitionId, isReportPosted)) {
     return <Table.Cell />;
   }
 

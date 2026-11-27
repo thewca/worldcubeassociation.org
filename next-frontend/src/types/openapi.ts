@@ -1520,6 +1520,12 @@ export interface components {
              * @example 2025-07-06
              */
             end_date: string | null;
+            /**
+             * Format: date-time
+             * @description When the delegate report was posted, or null while it is unposted.
+             * @example 2025-07-10T14:00:00.000Z
+             */
+            report_posted_at: string | null;
             /** @enum {string} */
             scoretaking_software: "external" | "wca_live" | "internal";
             /** @example 123 */
@@ -2681,6 +2687,9 @@ export interface components {
                 scope: components["schemas"]["CompetitionPermissions"];
             };
             can_view_delegate_report: {
+                scope: components["schemas"]["CompetitionPermissions"];
+            };
+            can_view_unposted_delegate_report: {
                 scope: components["schemas"]["CompetitionPermissions"];
             };
             can_edit_delegate_report: {

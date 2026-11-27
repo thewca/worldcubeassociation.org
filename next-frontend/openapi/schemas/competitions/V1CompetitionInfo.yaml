@@ -12,6 +12,7 @@ required:
   - contact
   - start_date
   - end_date
+  - report_posted_at
   - scoretaking_software
   - number_of_bookmarks
   - competition_series_ids
@@ -64,6 +65,12 @@ properties:
     type: [string, "null"]
     format: date
     example: "2025-07-06"
+  report_posted_at:
+    type: [string, "null"]
+    format: date-time
+    description: >-
+      When the delegate report was posted, or null while it is unposted.
+    example: "2025-07-10T14:00:00.000Z"
   scoretaking_software:
     type: string
     enum: [external, wca_live, internal]

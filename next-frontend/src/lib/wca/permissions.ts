@@ -7,7 +7,10 @@ export interface PermissionFunctions {
   canAttendCompetition: (competition: string) => boolean;
   canOrganizeCompetitions: (competition: string) => boolean;
   canEditDelegateReport: (competition: string) => boolean;
-  canViewDelegateReport: (competition: string) => boolean;
+  canViewDelegateReport: (
+    competition: string,
+    isReportPosted: boolean,
+  ) => boolean;
   canCreateGroup: (group: string) => boolean;
   canEditGroup: (group: string) => boolean;
   canReadGroupCurrent: (group: string) => boolean;
@@ -90,12 +93,14 @@ export const hydrateUserPermissions = (
         rawPermissions.can_edit_delegate_report.scope,
       ),
     ),
-  canViewDelegateReport: (competition) =>
+  canViewDelegateReport: (competition, isReportPosted) =>
     Boolean(
       rawPermissions &&
       allOrSpecificScope(
         competition,
-        rawPermissions.can_view_delegate_report.scope,
+        isReportPosted
+          ? rawPermissions.can_view_delegate_report.scope
+          : rawPermissions.can_view_unposted_delegate_report.scope,
       ),
     ),
   canCreateGroup: (group) =>
