@@ -4,6 +4,11 @@ class Round < ApplicationRecord
   belongs_to :competition_event
   belongs_to :linked_round, optional: true, validate: true, touch: true
 
+  # see https://www.worldcubeassociation.org/regulations/#9v2
+  #   Checked on the round rather than on its LinkedRound, because a link is saved together with its first round,
+  #   before the final round has joined it.
+  validates :linked_round, absence: { message: "cannot include the final round of any championship" }, if: %i[linked_round? final_round_of_championship?]
+
   has_one :competition, through: :competition_event
   delegate :competition_id, to: :competition_event
 
@@ -160,6 +165,10 @@ class Round < ApplicationRecord
 
   def final_round?
     number == total_number_of_rounds
+  end
+
+  def final_round_of_championship?
+    final_round? && competition.any_championship?
   end
 
   def linked_round?

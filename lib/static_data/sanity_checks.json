@@ -495,5 +495,12 @@
     "topic": "Competitors advancing without a valid result in the source round",
     "comments": null,
     "query_file": "advanced_without_valid_source_result.sql"
+  },
+  {
+    "id": "75",
+    "sanity_check_category_id": "9",
+    "topic": "Dual Rounds that include the final round of a championship (Regulation 9v2)",
+    "comments": null,
+    "query_file": "dual_round_includes_championship_final.sql"
   }
 ]

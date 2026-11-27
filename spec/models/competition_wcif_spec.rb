@@ -1192,6 +1192,42 @@ RSpec.describe "Competition WCIF" do
         expect(round333_1.linked_round).to eq(round333_2.linked_round)
       end
 
+      it "refuses to link the final round of a championship" do
+        competition.championships.create!(championship_type: "world")
+
+        wcif_333_event = wcif["events"].find { |e| e["id"] == "333" }
+
+        # 333 has two rounds, so linking them puts the final into the Dual Round (Regulation 9v2)
+        wcif_333_event["rounds"][0]["linkedRounds"] = %w[333-r1 333-r2]
+        wcif_333_event["rounds"][1]["linkedRounds"] = %w[333-r1 333-r2]
+        wcif_333_event["rounds"][1]["participationRuleset"] = wcif_333_event["rounds"][0]["participationRuleset"]
+
+        # Going through `set_wcif!` (like the API does) so that the failed save is rolled back
+        expect { competition.set_wcif!(wcif, delegate) }
+          .to raise_error(ActiveRecord::RecordInvalid, /cannot include the final round of any championship/)
+
+        expect(LinkedRound.count).to be 0
+        expect(round333_1.reload.linked_round).to be_nil
+        expect(round333_2.reload.linked_round).to be_nil
+      end
+
+      it "refuses to remove the round after a Dual Round when that makes the Dual Round include the final" do
+        competition.championships.create!(championship_type: "world")
+        round333_2.update!(cutoff: sixty_second_2_attempt_cutoff)
+        round333_3 = create(:round, competition_event: event_333, number: 3, total_number_of_rounds: 3)
+        linked_round = create(:linked_round)
+        round333_1.update!(linked_round: linked_round, total_number_of_rounds: 3)
+        round333_2.update!(linked_round: linked_round, total_number_of_rounds: 3, participation_source: round333_1.participation_source, participation_condition: nil)
+
+        wcif_333_event = wcif["events"].find { |e| e["id"] == "333" }
+        wcif_333_event["rounds"] = wcif_333_event["rounds"].reject { it["id"] == round333_3.wcif_id }
+
+        expect { competition.set_wcif!(wcif, delegate) }
+          .to raise_error(ActiveRecord::RecordInvalid, /cannot include the final round of any championship/)
+
+        expect(round333_3.reload).to be_present
+      end
+
       it "unlinks rounds that had previously been linked" do
         # Synchronize cutoff to allow linking further down
         round333_2.update!(cutoff: sixty_second_2_attempt_cutoff)

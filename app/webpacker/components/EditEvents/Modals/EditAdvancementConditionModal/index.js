@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import _ from 'lodash';
-import { Form, Label } from 'semantic-ui-react';
+import { Form, Label, Message } from 'semantic-ui-react';
 import useInputState from '../../../../lib/hooks/useInputState';
 import { roundIdToString } from '../../../../lib/utils/wcif';
 import ButtonActivatedModal from '../ButtonActivatedModal';
-import { useDispatch } from '../../../../lib/providers/StoreProvider';
+import { useDispatch, useStore } from '../../../../lib/providers/StoreProvider';
 import { updateAdvancementCondition } from '../../store/actions';
 import AttemptResultField from '../../../EditResult/WCALive/AttemptResultField/AttemptResultField';
 import { matchResult } from '../../../../lib/utils/edit-events';
 import AdvancementTypeField from './AdvancementTypeInput';
 import MbldPointsField from '../../../EditResult/WCALive/AttemptResultField/MbldPointsField';
 import { v2RulesetToV1Condition } from '../../utils';
+import { regulationsUrl } from '../../../../lib/requests/routes.js.erb';
+import I18nHTMLTranslate from '../../../I18nHTMLTranslate';
 
 const MIN_ADVANCE_PERCENT = 1;
 const MAX_ADVANCE_PERCENT = 75;
@@ -133,6 +135,12 @@ export default function EditAdvancementConditionModal({
   wcifEvent, wcifRound, roundNumber, disabled,
 }) {
   const dispatch = useDispatch();
+  const { isChampionship } = useStore();
+
+  // Choosing "Dual Round" here links this round with the next one
+  //   (see `advanceReqToExplanationText`)
+  const isNextRoundFinal = roundNumber + 1 === wcifEvent.rounds.length;
+  const dualRoundWouldIncludeChampionshipFinal = isChampionship && isNextRoundFinal;
 
   const advancementCondition = v2RulesetToV1Condition(wcifRound, wcifEvent, roundNumber);
 
@@ -172,7 +180,16 @@ export default function EditAdvancementConditionModal({
         advancementType={type}
         onChange={setType}
         roundNumber={roundNumber}
+        dualRoundWouldIncludeChampionshipFinal={dualRoundWouldIncludeChampionshipFinal}
       />
+      {dualRoundWouldIncludeChampionshipFinal && (
+        <Message warning={type === 'dual'} visible>
+          <I18nHTMLTranslate
+            i18nKey="competitions.events.dual_round_championship_final_html"
+            options={{ round_number: roundNumber + 1, regulation_url: `${regulationsUrl}#9v2` }}
+          />
+        </Message>
+      )}
       <p>
         If you would like to use Dual Rounds, please make sure that
         the scoretaking software is configured as &apos;Integrated Live Results&apos;

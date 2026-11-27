@@ -90,6 +90,7 @@ export default function Wrapper({
   canUpdateEvents,
   canUpdateQualifications,
   scoretakingSoftware,
+  isChampionship,
   wcifEvents,
 }) {
   const normalizedEvents = normalizeWcifEvents(wcifEvents);
@@ -103,6 +104,7 @@ export default function Wrapper({
         canUpdateEvents,
         canUpdateQualifications,
         scoretakingSoftware,
+        isChampionship,
         wcifEvents: normalizedEvents,
         initialWcifEvents: normalizedEvents,
         unsavedChanges: false,
