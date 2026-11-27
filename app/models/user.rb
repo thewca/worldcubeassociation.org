@@ -1066,17 +1066,16 @@ class User < ApplicationRecord
     end
   end
 
+  def can_view_all_unposted_delegate_reports?
+    can_admin_results? || wic_team? || appeals_committee?
+  end
+
   def can_view_delegate_report?(delegate_report)
     if delegate_report.posted?
       can_view_delegate_matters?
     else
-      can_edit_delegate_report?(delegate_report) || wic_team? || appeals_committee?
+      can_edit_delegate_report?(delegate_report) || can_view_all_unposted_delegate_reports?
     end
-  end
-
-  # Mirrors the unposted branch of `can_view_delegate_report?`, minus the competition's own Delegates.
-  def can_view_all_unposted_delegate_reports?
-    can_admin_results? || wic_team? || appeals_committee?
   end
 
   def can_edit_delegate_report?(delegate_report)
