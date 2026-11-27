@@ -201,7 +201,7 @@ es-ES:
   activity:
     registration: Registro in situ | On-site registration
     checkin: Registro | Check-in
-    tutorial: Tutorial para nuevos competidores | Tutorial for new competitors
+    tutorial: Tutorial para debutantes | Tutorial for new competitors
     multi: >-
       Entrega de cubos para 3x3x3 Multi Ciega | Cube submission for 3x3x3
       Multi-Blind
@@ -386,7 +386,7 @@ es-ES:
         address: Dirección oficial
         bylaws: Estatutos
         directors_and_officers: >-
-          Lista de los principales miembros de la Junta Directiva y Oficiales y
+          Lista de los principales miembros de la Junta Directiva y Directivos, con
           sus cargos
         area_description: Descripción clara del área que cubierta
         past_and_current_activities: Informe de actividades relacionadas con la 
@@ -407,7 +407,7 @@ es-ES:
       status:
         delegate_regions:
           trainee_delegate: Delegado en prácticas
-          junior_delegate: Delegado Junior
+          junior_delegate: Delegado Júnior
           delegate: Delegado
           regional_delegate: Delegado Regional
           senior_delegate: Delegado Sénior
@@ -516,9 +516,8 @@ es-ES:
           Enlace completo al horario (por ejemplo,
           https://www.cubingusa.com/usnationals2016/schedule.php)
         equipment: >-
-          Cantidad y tipo de timers y displays utilizados en la competición. Por
-          favor, elimina las líneas relativas al material que no hayas
-          utilizado.
+          Cantidad y tipo de cronómetros y pantallas utilizados en la competición.
+          Por favor, elimina las líneas relativas al material que no hayas utilizado.
         summary: >-
           Los puntos mencionados anteriormente solo sirven de guía para un
           informe completo. Úsalos a tu discreción. ¡Por favor, elimina las
@@ -578,8 +577,8 @@ es-ES:
           Tiene que estar en formato PNG, con buena resolución y con fondo
           transparente
         email: >-
-          Debería ser una lista de correo electrónico que incluya a todos los
-          miembros de la Junta Directiva y Oficiales
+          Debería ser una lista de correo electrónico que incluya a todos los miembros
+          de la Junta Directiva y Directivos
         bylaws: Tiene que estar en formato PDF
         extra_file: >-
           Tiene que estar en formato PDF. Si necesitas añadir más archivos, por
@@ -833,7 +832,7 @@ es-ES:
       information: Información
       about: Acerca de la WCA
       documents: Documentos de la WCA
-      officers_and_board: Oficiales y Junta Directiva de la WCA
+      officers_and_board: Directivos y Junta Directiva de la WCA
       delegates: Delegados de la WCA
       organizations: Organizaciones Regionales
       translators: Traductores
@@ -909,14 +908,13 @@ es-ES:
     translators:
       title: Traductores
     officers_and_board:
-      title: Oficiales y Junta Directiva de la WCA
+      title: Directivos y Junta Directiva de la WCA
       officers_description: >-
-        Los Oficiales de la WCA gestionan tareas relacionadas con la condición
-        no lucrativa de la WCA. Estos Oficiales son elegidos por la Junta
-        Directiva de la WCA. El Director Ejecutivo es el CEO de la WCA, el
-        Presidente preside todas las reuniones de la Junta Directiva, el
-        Secretario administra los documentos de la organización y el Tesorero
-        maneja los asuntos financieros de la WCA.
+        Los Directivos de la WCA gestionan tareas relacionadas con la condición no
+        lucrativa de la WCA. Estos directivos son elegidos por la Junta Directiva
+        de la WCA. El Director Ejecutivo es el CEO de la WCA, el Presidente preside
+        todas las reuniones de la Junta Directiva, el Secretario administra los documentos
+        de la organización y el Tesorero maneja los asuntos financieros de la WCA.
       board_description: >-
         La Junta Directiva de la WCA es responsable de liderar la organización en
         general y de cumplir cualquier tarea que no sea realizada por otros Equipos
@@ -1439,8 +1437,8 @@ es-ES:
           Tu cabeza, aunque no necesariamente la cara completa, debería ser
           visible.
         '5': >-
-          El avatar no debería incluir texto superpuesto, stickers o filtros
-          artificiales,, incluyendo bordes.
+          El avatar no debería incluir texto superpuesto, pegatinas o filtros artificiales,
+          incluyendo bordes.
         '6': El avatar tiene que ser enviado en la orientación correcta.
         '7': >-
           El avatar no puede contener contenido ofensivo (por ejemplo, gestos
@@ -1557,7 +1555,7 @@ es-ES:
   user_groups:
     group_types:
       board: Junta Directiva de la WCA
-      officers: Oficiales de la WCA
+      officers: Directivos de la WCA
       translators: Traductores
   registrations:
     errors:
@@ -1592,9 +1590,9 @@ es-ES:
         una competición simultánea de FMC, en qué ubicación vas a competir).
     registration_info_people:
       newcomer:
-        one: nuevo
-        many: nuevos
-        other: nuevos
+        one: debutante
+        many: debutantes
+        other: debutante
       returner:
         one: repetidor
         many: repetidores
@@ -2037,7 +2035,7 @@ es-ES:
         competitors_entered: '%{competitors_live_results_entered}/%{total_competitors}
           introducidos'
         round_locked: bloqueada
-        first_timer: Nuevo
+        first_timer: Debutante
         edit: Editar
         results: Resultados
         registration: Registro
@@ -2253,13 +2251,13 @@ es-ES:
           competidores.
       guest_limit:
         one: Los competidores pueden traer como mucho un acompañante.
-        many: Los competidores pueden traer como mucho %{count} acompanates.
-        other: Los competidores pueden traer como mucho %{count} acompanates.
+        many: Los competidores pueden traer como mucho %{count} acompañantes.
+        other: Los competidores pueden traer como mucho %{count} acompañantes.
       event_limit:
         one: Los competidores se pueden registrar exactamente en una categoría.
-        many: Los competidores se pueden registrar como mucho en {count} 
+        many: Los competidores se pueden registrar como mucho en %{count} 
           categorías.
-        other: Los competidores se pueden registrar como mucho en {count} 
+        other: Los competidores se pueden registrar como mucho en %{count} 
           categorías.
       require_qualification: >-
         Los competidores solo se pueden registrar en las categorías para las que
@@ -2503,7 +2501,8 @@ es-ES:
           count: Número máximo de competidores
           reason: La razón para el límite de competidores
           auto_close_threshold: Umbral de cierre automático
-          newcomer_month_reserved_spots: Número de plazas reservadas para nuevos
+          newcomer_month_reserved_spots: Número de plazas reservadas para 
+            debutantes
           auto_accept_preference: Aceptar automáticamente los registros
           auto_accept_disable_threshold: Límite para aceptar automáticamente los
             registros
@@ -2555,8 +2554,8 @@ es-ES:
             se registren
         event_restrictions:
           forbid_newcomers:
-            enabled: No permitir el registro a nuevos
-            reason: Razones y detalles para no permitir registrarse a nuevos
+            enabled: No permitir el registro a debutantes
+            reason: Razones y detalles para no permitir registrarse a debutantes
           early_puzzle_submission:
             enabled: >-
               Me gustaría exigir a los competidores que entreguen los puzzles en
@@ -2645,7 +2644,7 @@ es-ES:
             de registros pagados. Déjalo en blanco para desactivarlo, ignóralo
             si no estás usando pagos integrados.
           newcomer_month_reserved_spots: >-
-            Solo permitido durante el Newcomer Month. Las plazas reservadas no
+            Solo permitido durante el Mes del Debutante. Las plazas reservadas no
             pueden ser más que la mitad del límite de competidores.
           auto_accept_preference: >-
             Esto activará un botón de «Aceptar automáticamente en bloque» en el
@@ -2742,8 +2741,8 @@ es-ES:
         event_restrictions:
           forbid_newcomers:
             reason: >-
-              Por favor, elabora aquí por qué no te gustaría que se registren
-              nuevos en tu competición. ¡Por favor, rellénalo en inglés!
+              Por favor, elabora aquí por qué no te gustaría que se registren debutantes
+              en tu competición. ¡Por favor, rellénalo en inglés!
           early_puzzle_submission:
             reason: >-
               Por favor, explica aquí por qué te gustaría requerir que los
@@ -3068,13 +3067,13 @@ es-ES:
         '-4012': No estás clasificado para competir en las categorías 
           seleccionadas
         '-4013': >-
-          No puedes aceptar un competidor no nuevo si solo quedan plazas
-          reservadas para nuevos
+          No puedes aceptar un competidor no debutante si solo quedan plazas reservadas
+          para debutantes
         '-4014': Ya estás registrado en esta competición.
         '-4015': >-
-          Por favor, introduce una cantidad razonada de acompañantes o ponte en
-          contacto con los organizadores si necesitas traer una cantidad
-          extraordinaria de acompanates.
+          Por favor, introduce una cantidad razonada de acompañantes o ponte en contacto
+          con los organizadores si necesitas traer una cantidad extraordinaria de
+          acompañantes.
         '-6001': El pago a través de la WCA no está activado en esta competición
         '-6002': Tienes que completar tu registro antes de pagar
         '-6003': >-
@@ -3121,9 +3120,10 @@ es-ES:
       use_wca_registration: La competición tiene que usar el sistema de registro
         de la WCA
       newcomer_month_reservations_percentage: no se pueden reservar más del 50% 
-        de las plazas para nuevos
+        de las plazas para debutantes
       newcomer_month_reservations_available: >-
-        El número de plazas reservadas para nuevos supera el número de plazas reservables
+        El número de plazas reservadas para debutantes supera el número de plazas
+        reservables
       invalid_name_message: >-
         tiene que terminar con un año y solo puede contener caracteres
         alfanuméricos, guiones (-), ampersands (&), puntos (.), dos puntos (:),
@@ -3371,7 +3371,7 @@ es-ES:
         payment_view: Configurar pagos
         admin_view: Vista de administrador
         tabs: Administrar pestañas
-        newcomer_checks: Comprobaciones de nuevos
+        newcomer_checks: Comprobaciones de debutantes
         submit_results: Enviar resultados
         upload_scrambles: Subir mezclas
         delegate_report: Informe del Delegado
@@ -3908,13 +3908,13 @@ es-ES:
         de la WCA es responsable de garantizar que todas las Competiciones de la WCA
         se desarrollen de acuerdo con el Propósito, los Valores y el Reglamento de
         la WCA. La WCA diferencia entre <strong>Delegados Sénior</strong>, <strong>Delegados
-        Regionales</strong>, <strong>Delegados</strong>, <strong>Delegados Junior</strong>
+        Regionales</strong>, <strong>Delegados</strong>, <strong>Delegados Júnior</strong>
         y <strong>Delegados en prácticas</strong> %{see_link}.</p> <p>Además de las
         responsabilidades de un Delegado de la WCA, un Delegado Sénior o un Delegado
         Regional es responsable de gestionar los Delegados de la WCA de su área y
         puede ser contactado por cualquier miembro de la comunidad por cuestiones
         relacionadas con su región.</p> <p>Los nuevos Delegados figuran ostentan inicialmente
-        el cargo título de Delegados Junior; posteriormente, se les pide que demuestren
+        el cargo título de Delegados Júnior; posteriormente, se les pide que demuestren
         su competencia en la gestión de Competiciones de la WCA antes de ser ascendidos
         a Delegados de la WCA.</p> <p>Los Delegados en prácticas están siendo entrenados
         para ser Delegados de la WCA y solo pueden supervisar competiciones en las
@@ -3948,7 +3948,7 @@ es-ES:
       El WQAC ha publicado varios documentos para la comunidad, puedes
       descargarlos a continuación.
     competitor_tutorial: Tutorial de competidor
-    judge_tutorial: Tutorial de hacer de juez para nuevos
+    judge_tutorial: Tutorial de hacer de juez para debutantes
     competition_templates: Plantillas de competición
     certificates: Plantillas de certificados del WCT
     orga_handbook: Manual del Organizador
@@ -4508,9 +4508,9 @@ es-ES:
         es un error, por favor corrígelo. En caso contrario, deja una nota al
         WRT al respecto explicando la situación.
       empty_gender_warning: >-
-        El género del nuevo %{name} está vacío. Valores válidos para este campo
-        son «Femenino», «Masculino», y «Otro». Por favor, deja una nota al WRT
-        al respecto explicando la situación.
+        El género del debutante %{name} está vacío. Valores válidos para este campo
+        son «Femenino», «Masculino», y «Otro». Por favor, deja una nota al WRT al
+        respecto explicando la situación.
       non_matching_name_warning: >-
         El nombre «%{name}» de %{wca_id} no coincide con el registrado en la base
         de datos de la WCA («%{expected_name}»). 
@@ -4520,10 +4520,9 @@ es-ES:
         esto es un error, por favor corrígelo. En caso contrario, deja una nota
         al WRT al respecto explicando la situación.
       multiple_newcomers_with_same_name_warning: >-
-        Hay múltiples competidores nuevos con el mismo nombre exacto: %{name}.
-        Por favor, asegúrate de que los resultados son correctos para estos
-        competidores y que todos los resultados están asignados correctamente a
-        su ID.
+        Hay múltiples competidores debutantes con el mismo nombre exacto: %{name}.
+        Por favor, asegúrate de que los resultados son correctos para estos competidores
+        y que todos los resultados están asignados correctamente a su ID.
       wrong_parenthesis_type_error: >-
         El paréntesis utilizado en «%{name}» es un carácter irregular, por favor
         reemplázalo con un paréntesis regular «(» o «)» y con espacios
@@ -4759,10 +4758,10 @@ es-ES:
       recommender_required: Selecciona al menos un Delegado que te recomiende.
       invalid_recommender: Uno o más Delegados recomendadores seleccionados ya 
         no son elegibles para la región seleccionada.
-      spoken_delegate_required: Selecciona al menos un Delegado Junior o 
+      spoken_delegate_required: Selecciona al menos un Delegado Júnior o 
         Delegado con quien hayas hablado.
       invalid_spoken_delegate: Uno o más Delegados seleccionados con quienes has
-        hablado ya no son Delegados Junior o Delegados activos en la región 
+        hablado ya no son Delegados Júnior o Delegados activos en la región 
         seleccionada.
       declarations_required: Tienes que confirmar todas las declaraciones.
       business_involvement_required: Selecciona si estás involucrado en un 
@@ -4770,9 +4769,9 @@ es-ES:
       business_involvement_explanation_required: Explica cuál es tu relación con
         el negocio relacionado con el speedcubing.
     form:
-      spoken_delegates: ¿Con qué Delegados Junior o Delegados has hablado sobre 
+      spoken_delegates: ¿Con qué Delegados Júnior o Delegados has hablado sobre 
         convertirte en Delegado en prácticas?
-      recommenders: ¿Qué Delegados Junior o Delegados de tu región han aceptado 
+      recommenders: ¿Qué Delegados Júnior o Delegados de tu región han aceptado 
         recomendarte como candidato para el rol de Delegado en prácticas?
       declaration_and_basic_information: Declaración e información básica
       name: Nombre
