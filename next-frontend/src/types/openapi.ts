@@ -1543,6 +1543,8 @@ export interface components {
                 id: number;
                 name: string;
             }[];
+            /** @description Whether the list of competitors is public yet. True once registration has opened, or as soon as anyone besides the organizers and delegates has an accepted registration. */
+            can_show_competitors_page: boolean;
             events: {
                 /**
                  * @example [

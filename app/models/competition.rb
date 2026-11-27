@@ -2361,6 +2361,7 @@ class Competition < ApplicationRecord
       "competition_series_ids" => part_of_competition_series? ? series_competitions.visible.ids : [],
       "championship_types" => championships.map(&:championship_type),
       "tabs" => tabs.as_json(only: %w[id name]),
+      "can_show_competitors_page" => can_show_competitors_page?,
       "events" => {
         "event_ids" => event_ids,
         "main_event_id" => main_event_id,
