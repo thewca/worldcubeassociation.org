@@ -101,8 +101,9 @@ properties:
   can_show_competitors_page:
     type: boolean
     description: >-
-      Whether the list of competitors is public yet. True once registration has opened, or
-      as soon as anyone besides the organizers and delegates has an accepted registration.
+      Whether the list of competitors is public yet. To account for multiple registration
+      periods, this is true once when registration is open, or if there is any non-delegate/
+      non-organizer registration which has been accepted.
   events:
     type: object
     required: [event_ids, main_event_id]
