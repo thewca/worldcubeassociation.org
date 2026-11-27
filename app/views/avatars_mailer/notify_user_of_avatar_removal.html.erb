@@ -9,6 +9,14 @@
   </p>
 <% end %>
 
+<% if @avatar_picture.present? %>
+  <p>
+    This is the picture that was removed:
+    <br>
+    <%= image_tag @avatar_picture.url, alt: @avatar_picture.filename, style: "max-width: 300px; max-height: 300px;" %>
+  </p>
+<% end %>
+
 <p>Please provide a more suitable picture.</p>
 
 <p>Regards, WCA Results Team</p>

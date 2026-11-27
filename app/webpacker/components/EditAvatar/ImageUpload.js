@@ -28,6 +28,7 @@ function ImageUpload({
   const [checkboxError, setCheckboxError] = useState(false);
 
   const [reasonForDeletion, setReasonForDeletion] = useInputState();
+  const [includesAvatarPicture, setIncludesAvatarPicture] = useCheckboxState(true);
 
   const submitAvatar = (evt) => {
     evt.preventDefault();
@@ -46,9 +47,10 @@ function ImageUpload({
   const removeAvatar = (evt) => {
     evt.preventDefault();
 
-    onAvatarDeleted(reasonForDeletion, () => {
+    onAvatarDeleted(reasonForDeletion, includesAvatarPicture, () => {
       setIsRemoving(false);
       setReasonForDeletion(null);
+      setIncludesAvatarPicture(true);
     });
   };
 
@@ -118,6 +120,11 @@ function ImageUpload({
               placeholder={I18n.t('users.edit.remove_avatar_reason')}
               value={reasonForDeletion}
               onChange={setReasonForDeletion}
+            />
+            <Form.Checkbox
+              label={I18n.t('users.edit.include_avatar_picture_in_email')}
+              checked={includesAvatarPicture}
+              onChange={setIncludesAvatarPicture}
             />
             <Form.Button negative icon>
               <Icon name="trash" />
