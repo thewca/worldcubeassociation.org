@@ -376,6 +376,7 @@ export interface Config {
     'about-us-page': AboutUsPage;
     'privacy-page': PrivacyPage;
     'disclaimer-page': DisclaimerPage;
+    'translation-disclaimer': TranslationDisclaimer;
     'speedcubing-history-page': SpeedcubingHistoryPage;
     'about-regulations-page': AboutRegulationsPage;
     'documents-page': DocumentsPage;
@@ -392,6 +393,7 @@ export interface Config {
     'about-us-page': AboutUsPageSelect<false> | AboutUsPageSelect<true>;
     'privacy-page': PrivacyPageSelect<false> | PrivacyPageSelect<true>;
     'disclaimer-page': DisclaimerPageSelect<false> | DisclaimerPageSelect<true>;
+    'translation-disclaimer': TranslationDisclaimerSelect<false> | TranslationDisclaimerSelect<true>;
     'speedcubing-history-page': SpeedcubingHistoryPageSelect<false> | SpeedcubingHistoryPageSelect<true>;
     'about-regulations-page': AboutRegulationsPageSelect<false> | AboutRegulationsPageSelect<true>;
     'documents-page': DocumentsPageSelect<false> | DocumentsPageSelect<true>;
@@ -2036,6 +2038,55 @@ export interface DisclaimerPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "translation-disclaimer".
+ */
+export interface TranslationDisclaimer {
+  id: string;
+  /**
+   * Languages whose translations are complete enough that the disclaimer is not shown. It is never shown for English.
+   */
+  hiddenLocales?:
+    | (
+        | 'en'
+        | 'ca'
+        | 'cs'
+        | 'da'
+        | 'de'
+        | 'eo'
+        | 'es-ES'
+        | 'es-419'
+        | 'eu'
+        | 'fi'
+        | 'fr'
+        | 'fr-CA'
+        | 'hr'
+        | 'hu'
+        | 'id'
+        | 'it'
+        | 'ja'
+        | 'kk'
+        | 'ko'
+        | 'nl'
+        | 'pl'
+        | 'pt'
+        | 'pt-BR'
+        | 'ro'
+        | 'ru'
+        | 'sk'
+        | 'sl'
+        | 'sv'
+        | 'th'
+        | 'uk'
+        | 'vi'
+        | 'zh-CN'
+        | 'zh-TW'
+      )[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "speedcubing-history-page".
  */
 export interface SpeedcubingHistoryPage {
@@ -2925,6 +2976,16 @@ export interface DisclaimerPageSelect<T extends boolean = true> {
               blockName?: T;
             };
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "translation-disclaimer_select".
+ */
+export interface TranslationDisclaimerSelect<T extends boolean = true> {
+  hiddenLocales?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

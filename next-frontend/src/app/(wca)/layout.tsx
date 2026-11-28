@@ -10,6 +10,7 @@ import { ThemeProvider } from "@wrksz/themes/next";
 import { appFont } from "@/styles/fonts";
 import NextTopLoader from "nextjs-toploader";
 import BetaDisclaimer from "@/components/BetaDisclaimer";
+import TranslationDisclaimer from "@/components/TranslationDisclaimer";
 import Loading from "@/components/ui/loading";
 import NavbarSkeleton from "./navbar-skeleton";
 import FooterSkeleton from "./footer-skeleton";
@@ -78,6 +79,9 @@ export default async function RootLayout({
                       </ClientOnly>
                     )}
                   </WithLocale>
+                </Suspense>
+                <Suspense>
+                  <TranslationDisclaimer />
                 </Suspense>
                 <Suspense fallback={<NavbarSkeleton />}>
                   <WithLocale>
