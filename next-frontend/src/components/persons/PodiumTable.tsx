@@ -113,7 +113,8 @@ async function PodiumResultRow({
   return (
     <Table.Row>
       <Table.Cell>
-        <EventIcon eventId={result.event_id} /> {t(`events.${result.event_id}`)}
+        <EventIcon eventId={result.event_id} t={t} />{" "}
+        {t(`events.${result.event_id}`)}
       </Table.Cell>
       <Table.Cell>{result.pos}</Table.Cell>
       <Table.Cell>

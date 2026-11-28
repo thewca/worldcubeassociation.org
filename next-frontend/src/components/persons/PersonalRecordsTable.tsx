@@ -103,7 +103,7 @@ const PersonalRecordsTable: React.FC<RecordsProps> = async ({ records }) => {
                   <Table.Row key={event}>
                     <Table.Cell paddingStart={4}>
                       <HStack>
-                        <EventIcon eventId={event} fontSize="2xl" />
+                        <EventIcon eventId={event} fontSize="2xl" t={t} />
                         <Text fontWeight="medium">{eventObject.name}</Text>
                       </HStack>
                     </Table.Cell>

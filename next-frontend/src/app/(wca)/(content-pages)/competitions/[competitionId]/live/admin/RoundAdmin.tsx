@@ -23,8 +23,8 @@ export default function RoundAdmin({
 }: {
   competitionId: string;
 }) {
-  const { rounds } = useAllRoundsInfo();
   const { t } = useT();
+  const { rounds } = useAllRoundsInfo();
 
   const roundsById = _.groupBy(rounds, (d) => parseActivityCode(d.id).eventId);
 
@@ -47,7 +47,7 @@ export default function RoundAdmin({
               <Card.Body alignItems="baseline">
                 <Card.Title>
                   <HStack>
-                    <EventIcon eventId={eventId} fontSize="2xl" />
+                    <EventIcon eventId={eventId} fontSize="2xl" t={t} />
                     {events.byId[eventId].name}
                   </HStack>
                 </Card.Title>

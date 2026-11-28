@@ -21,9 +21,10 @@ import _333ohIcon from "@/components/icons/events/_333ohIcon";
 import _444bfIcon from "@/components/icons/events/_444bfIcon";
 import _555bfIcon from "@/components/icons/events/_555bfIcon";
 
-import events from "@/lib/wca/data/events";
-
 import type { ComponentPropsWithoutRef } from "react";
+import { Tooltip } from "./ui/tooltip";
+import { Center } from "@chakra-ui/react";
+import { TFunction } from "i18next";
 
 const eventIconMap = {
   "333": _333Icon,
@@ -57,13 +58,31 @@ type EventIconIntrinsicProps = ComponentPropsWithoutRef<EventIconIntrinsic>;
 
 type EventIconProps = {
   eventId: string;
+  disabledLabel?: string;
+  fullWidth?: boolean;
+  t: TFunction;
 } & EventIconIntrinsicProps;
 
-const EventIcon = ({ eventId, ...iconIntrinsicProps }: EventIconProps) => {
+const EventIcon = ({
+  eventId,
+  disabledLabel,
+  fullWidth,
+  t,
+  ...iconIntrinsicProps
+}: EventIconProps) => {
   const IconComponent = eventIconMap[eventId as EventIconId];
   if (!IconComponent) return null;
+  const eventName = t(`events.${eventId}`);
 
-  return <IconComponent {...iconIntrinsicProps} />;
+  return (
+    <EventTooltip
+      eventName={eventName}
+      disabledLabel={disabledLabel}
+      fullWidth={fullWidth}
+    >
+      <IconComponent {...iconIntrinsicProps} />
+    </EventTooltip>
+  );
 };
 
 // Chakra hides icons from assistive tech by default, which is right for most of our call sites:
@@ -71,15 +90,49 @@ const EventIcon = ({ eventId, ...iconIntrinsicProps }: EventIconProps) => {
 //   This is for the icons that stand alone and have to carry the name themselves.
 export const LabelledEventIcon = ({
   eventId,
+  disabledLabel,
+  fullWidth,
+  t,
   ...iconIntrinsicProps
-}: EventIconProps) => (
-  <EventIcon
-    eventId={eventId}
-    role="img"
-    aria-hidden={false}
-    aria-label={events.byId[eventId]?.name}
-    {...iconIntrinsicProps}
-  />
-);
+}: EventIconProps) => {
+  const eventName = t(`events.${eventId}`);
+  return (
+    <EventIcon
+      eventId={eventId}
+      role="img"
+      aria-hidden={false}
+      aria-label={eventName}
+      t={t}
+      fullWidth={fullWidth}
+      disabledLabel={disabledLabel}
+      {...iconIntrinsicProps}
+    />
+  );
+};
+
+function EventTooltip({
+  eventName,
+  disabledLabel,
+  fullWidth,
+  children,
+}: {
+  eventName: string;
+  disabledLabel?: string;
+  fullWidth?: boolean;
+  children: React.ReactNode;
+}) {
+  const dimension = fullWidth ? "full" : undefined;
+  return (
+    <Tooltip
+      content={disabledLabel ?? eventName}
+      closeDelay={20}
+      openDelay={20}
+    >
+      <Center w={dimension} h={dimension}>
+        {children}
+      </Center>
+    </Tooltip>
+  );
+}
 
 export default EventIcon;

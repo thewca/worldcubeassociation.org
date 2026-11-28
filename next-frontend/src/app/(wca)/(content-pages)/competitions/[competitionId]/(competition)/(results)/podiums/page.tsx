@@ -37,7 +37,7 @@ export default async function PodiumsPage({
                 alignItems="center"
                 gap="2"
               >
-                <EventIcon eventId={podium.event_id} />
+                <EventIcon eventId={podium.event_id} t={t} />
                 {events.byId[podium.event_id].name}
               </Heading>
               {/* Already ordered by `global_pos`, which is the position a podium is decided on. */}

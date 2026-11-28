@@ -352,6 +352,7 @@ export async function EventCard({
                   ? "green.solid"
                   : "currentColor"
               }
+              t={t}
             />
           ))}
         </Wrap>

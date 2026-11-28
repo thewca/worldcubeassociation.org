@@ -9,8 +9,8 @@ import {
   Fieldset,
   RadioCard,
   VisuallyHidden,
-  Wrap,
   Stack,
+  Grid,
 } from "@chakra-ui/react";
 import { useT } from "@/lib/i18n/useI18n";
 import { Tooltip } from "@/components/ui/tooltip";
@@ -26,6 +26,12 @@ interface SingleEventSelectorProps {
   eventButtonsCompact?: boolean;
 }
 
+const commonControlStyle = {
+  p: 0,
+  justifyContent: "center",
+  alignItems: "center",
+};
+
 export function SingleEventSelector({
   title,
   eventList = WCA_EVENT_IDS,
@@ -34,6 +40,8 @@ export function SingleEventSelector({
   disabled,
   eventButtonsCompact = false,
 }: SingleEventSelectorProps) {
+  const { t } = useT();
+  const lgSize = eventButtonsCompact ? "16" : "14";
   const selectEvent = (e: MouseEvent<HTMLDivElement>) => {
     const { target } = e;
 
@@ -48,13 +56,22 @@ export function SingleEventSelector({
     <RadioCard.Root
       disabled={disabled}
       size={eventButtonsCompact ? "sm" : undefined}
-      orientation="vertical"
+      orientation="horizontal"
       align="center"
       value={selectedEvent}
       onClick={selectEvent}
+      w="full"
     >
       {title && <RadioCard.Label>{title}</RadioCard.Label>}
-      <Wrap justify="center">
+      <Grid
+        gap="2"
+        justifyContent="space-evenly"
+        templateColumns={{
+          base: "repeat(auto-fill, {sizes.8})",
+          lg: `repeat(auto-fill, {sizes.${lgSize}})`,
+        }}
+        w="full"
+      >
         {eventList.map((eventId) => {
           return (
             <RadioCard.Item
@@ -62,16 +79,23 @@ export function SingleEventSelector({
               colorPalette="green"
               disabled={disabled}
               value={eventId}
-              maxW="16"
+              maxW={{ base: "8", lg: eventButtonsCompact ? "16" : "14" }}
+              aspectRatio="1"
             >
               <RadioCard.ItemHiddenInput />
-              <RadioCard.ItemControl>
-                <LabelledEventIcon fontSize="2xl" eventId={eventId} />
+              <RadioCard.ItemControl {...commonControlStyle}>
+                <LabelledEventIcon
+                  fontSize="3xl"
+                  eventId={eventId}
+                  p={{ base: 1, lg: eventButtonsCompact ? 1 : 0 }}
+                  fullWidth
+                  t={t}
+                />
               </RadioCard.ItemControl>
             </RadioCard.Item>
           );
         })}
-      </Wrap>
+      </Grid>
     </RadioCard.Root>
   );
 }
@@ -100,56 +124,67 @@ export function MultiEventSelector({
   const { t } = useT();
 
   return (
-    <CheckboxGroup disabled={disabled} flexDirection="row" flexWrap="wrap">
-      {eventList.map((eventId) => {
-        const currentEventSelected = selectedEvents.includes(eventId);
-        const currentEventDisabled = eventsDisabled.includes(eventId);
+    <CheckboxGroup disabled={disabled}>
+      <Grid
+        gap="2"
+        justifyContent="space-evenly"
+        templateColumns="repeat(auto-fill, {sizes.12})"
+      >
+        {eventList.map((eventId) => {
+          const currentEventSelected = selectedEvents.includes(eventId);
+          const currentEventDisabled = eventsDisabled.includes(eventId);
 
-        const isDisabled =
-          disabled ||
-          (!currentEventSelected && selectedEvents.length >= maxEvents) ||
-          currentEventDisabled;
+          const isDisabled =
+            disabled ||
+            (!currentEventSelected && selectedEvents.length >= maxEvents) ||
+            currentEventDisabled;
 
-        return (
-          <CheckboxCard.Root
-            key={eventId}
-            variant="surface"
-            colorPalette="green"
-            align="center"
-            disabled={isDisabled}
-            size={eventButtonsCompact ? "sm" : undefined}
-            checked={currentEventSelected}
-            onCheckedChange={() => onEventClick(eventId)}
-            maxW="16"
-            cursor={isDisabled ? "not-allowed" : "pointer"}
-          >
-            <CheckboxCard.HiddenInput />
-            <CheckboxCard.Control>
-              <CheckboxCard.Content>
-                <Tooltip
-                  content={
-                    currentEventDisabled
-                      ? disabledText(eventId)
-                      : t(`events.${eventId}`)
-                  }
-                  openDelay={200}
+          return (
+            <CheckboxCard.Root
+              key={eventId}
+              variant="surface"
+              colorPalette="green"
+              align="center"
+              disabled={isDisabled}
+              size={eventButtonsCompact ? "sm" : undefined}
+              checked={currentEventSelected}
+              onCheckedChange={() => onEventClick(eventId)}
+              w="12"
+              flex="none"
+              aspectRatio="1"
+              cursor={isDisabled ? "not-allowed" : "pointer"}
+            >
+              <CheckboxCard.HiddenInput />
+              <CheckboxCard.Control
+                {...commonControlStyle}
+                alignItems="stretch"
+              >
+                <CheckboxCard.Content
+                  justifyContent="center"
+                  alignItems="center"
                 >
                   <EventIcon
                     eventId={eventId}
-                    fontSize="2xl"
+                    fontSize="3xl"
+                    t={t}
                     color={currentEventDisabled ? "#FFBBBB" : undefined}
+                    disabledLabel={
+                      currentEventDisabled ? disabledText(eventId) : undefined
+                    }
+                    p={{ base: 1, lg: 0 }}
+                    fullWidth
                   />
-                </Tooltip>
-                <VisuallyHidden>
-                  <CheckboxCard.Label>
-                    {t(`events.${eventId}`)}
-                  </CheckboxCard.Label>
-                </VisuallyHidden>
-              </CheckboxCard.Content>
-            </CheckboxCard.Control>
-          </CheckboxCard.Root>
-        );
-      })}
+                  <VisuallyHidden>
+                    <CheckboxCard.Label>
+                      {t(`events.${eventId}`)}
+                    </CheckboxCard.Label>
+                  </VisuallyHidden>
+                </CheckboxCard.Content>
+              </CheckboxCard.Control>
+            </CheckboxCard.Root>
+          );
+        })}
+      </Grid>
     </CheckboxGroup>
   );
 }
